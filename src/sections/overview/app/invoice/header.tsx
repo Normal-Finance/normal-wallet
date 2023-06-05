@@ -41,7 +41,7 @@ export default function Header() {
         <Box sx={{ flexShrink: 0 }}>
           <Button
             component={RouterLink}
-            href={''}
+            href="https://www.google.com"
             variant="contained"
             startIcon={<Iconify icon="mingcute:send-fill" />}
           >
@@ -50,7 +50,7 @@ export default function Header() {
 
           <Button
             component={RouterLink}
-            href={''}
+            href="https://www.google.com"
             variant="contained"
             startIcon={<Iconify icon="mingcute:qrcode-2-line" />}
           >

@@ -23,16 +23,6 @@ export const navConfig = [
         items: [{ title: 'Payment', path: paths.payment }],
       },
       {
-        subheader: 'Concepts',
-        items: [
-          { title: 'Shop', path: paths.product.root },
-          { title: 'Product', path: paths.product.demo.details },
-          { title: 'Checkout', path: paths.product.checkout },
-          { title: 'Posts', path: paths.post.root },
-          { title: 'Post', path: paths.post.demo.details },
-        ],
-      },
-      {
         subheader: 'Error',
         items: [
           { title: 'Page 403', path: paths.page403 },

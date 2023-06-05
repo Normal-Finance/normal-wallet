@@ -9,16 +9,6 @@ import 'yet-another-react-lightbox/styles.css';
 import 'yet-another-react-lightbox/plugins/captions.css';
 import 'yet-another-react-lightbox/plugins/thumbnails.css';
 
-// map
-import 'mapbox-gl/dist/mapbox-gl.css';
-
-// editor
-import 'react-quill/dist/quill.snow.css';
-
-// slick-carousel
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
-
 // lazy image
 import 'react-lazy-load-image-component/src/effects/blur.css';
 
@@ -40,10 +30,9 @@ import { SettingsProvider, SettingsDrawer } from 'src/components/settings';
 // ----------------------------------------------------------------------
 
 export const metadata = {
-  title: 'Minimal UI Kit',
-  description:
-    'The starting point for your next project with Minimal UI Kit, built on the newest version of Material-UI ©, ready to be customized to your style',
-  keywords: 'react,material,kit,application,dashboard,admin,template',
+  title: 'Normal Wallet',
+  description: 'An ERC-4337 smart wallet with 90%+ cheaper gas and extendable functionality ',
+  keywords: '',
   themeColor: '#000000',
   manifest: '/manifest.json',
   icons: [

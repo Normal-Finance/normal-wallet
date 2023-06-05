@@ -11,11 +11,11 @@ import { _appFeatured, _appAuthors, _appInstalled, _appRelated, _appInvoices } f
 // components
 import { useSettingsContext } from 'src/components/settings';
 //
+import { Typography } from '@mui/material';
+import { InvoiceListView } from 'src/sections/overview/app/invoice/view';
 import AppWidgetSummary from '../app-widget-summary';
 import AppCurrentDownload from '../app-current-download';
-import { Typography } from '@mui/material';
 import BookingCheckInWidgets from '../booking-check-in-widgets';
-import { InvoiceListView } from 'src/sections/overview/app/invoice/view';
 
 // ----------------------------------------------------------------------
 
