@@ -1,6 +1,6 @@
 import { IWalletConnectSession } from '@walletconnect/legacy-types';
 import LegacySignClient from '@walletconnect/client';
-import { EIP155_SIGNING_METHODS } from 'src/data/EIP155Data.js';
+import { EIP155_SIGNING_METHODS } from 'src/data/EIP155Data';
 import ModalStore from 'src/store/ModalStore';
 
 export let legacySignClient: LegacySignClient;

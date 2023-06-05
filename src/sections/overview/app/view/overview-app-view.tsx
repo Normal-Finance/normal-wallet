@@ -152,27 +152,6 @@ export default function OverviewAppView() {
         <Grid xs={12}>
           <InvoiceListView />
         </Grid>
-
-        {/* <div>
-
-
-              <FileManagerPanel
-                title="Recent Files"
-                link={paths.dashboard.fileManager}
-                onOpen={upload.onTrue}
-                sx={{ mt: 2 }}
-              />
-
-              <Stack spacing={2}>
-                {_files.slice(0, 5).map((file) => (
-                  <FileRecentItem
-                    key={file.id}
-                    file={file}
-                    onDelete={() => console.info('DELETE', file.id)}
-                  />
-                ))}
-              </Stack>
-            </div> */}
       </Grid>
     </Container>
   );

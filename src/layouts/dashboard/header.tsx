@@ -4,6 +4,9 @@ import Stack from '@mui/material/Stack';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
+
+import { ConnectWallet } from '@thirdweb-dev/react';
+
 // theme
 import { bgBlur } from 'src/theme/css';
 // hooks
@@ -17,7 +20,6 @@ import { useSettingsContext } from 'src/components/settings';
 import { HEADER, NAV } from '../config-layout';
 import {
   Searchbar,
-  AccountPopover,
   SettingsButton,
   LanguagePopover,
   ContactsPopover,
@@ -72,7 +74,13 @@ export default function Header({ onOpenNav }: Props) {
 
         <SettingsButton />
 
-        <AccountPopover />
+        <ConnectWallet
+          dropdownPosition={{
+            align: 'center',
+            side: 'bottom',
+          }}
+          btnTitle="Connect"
+        />
       </Stack>
     </>
   );

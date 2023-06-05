@@ -24,7 +24,7 @@ import {
   magicLink,
   smartWallet,
 } from '@thirdweb-dev/react';
-import { Goerli, Ethereum } from '@thirdweb-dev/chains';
+// import { Goerli, Ethereum } from '@thirdweb-dev/chains';
 // redux
 import ReduxProvider from 'src/redux/redux-provider';
 // locales
@@ -85,7 +85,7 @@ export default function RootLayout({ children }: Props) {
     <html lang="en" className={primaryFont.className}>
       <body>
         <ThirdwebProvider
-          activeChain={Ethereum}
+          // activeChain={}
           autoConnect
           supportedWallets={[
             smartWallet({

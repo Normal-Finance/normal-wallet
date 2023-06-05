@@ -20,6 +20,7 @@ const icon = (name: string) => (
 
 const ICONS = {
   banking: icon('ic_banking'),
+  account: icon('ic_user'),
 };
 
 // ----------------------------------------------------------------------
@@ -33,7 +34,10 @@ export function useNavData() {
       // ----------------------------------------------------------------------
       {
         subheader: t('wallet'),
-        items: [{ title: t('home'), path: paths.dashboard.root, icon: ICONS.banking }],
+        items: [
+          { title: t('home'), path: paths.dashboard.root, icon: ICONS.banking },
+          { title: t('settings'), path: paths.dashboard.user.account, icon: ICONS.account },
+        ],
       },
     ],
     [t]
