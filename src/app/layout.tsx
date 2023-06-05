@@ -13,7 +13,18 @@ import 'yet-another-react-lightbox/plugins/thumbnails.css';
 import 'react-lazy-load-image-component/src/effects/blur.css';
 
 // ----------------------------------------------------------------------
-
+// moralis
+import Moralis from 'moralis';
+// thirdweb
+import {
+  ThirdwebProvider,
+  metamaskWallet,
+  coinbaseWallet,
+  walletConnect,
+  magicLink,
+  smartWallet,
+} from '@thirdweb-dev/react';
+import { Goerli, Ethereum } from '@thirdweb-dev/chains';
 // redux
 import ReduxProvider from 'src/redux/redux-provider';
 // locales
@@ -26,6 +37,7 @@ import ProgressBar from 'src/components/progress-bar';
 import MotionLazy from 'src/components/animate/motion-lazy';
 import SnackbarProvider from 'src/components/snackbar/snackbar-provider';
 import { SettingsProvider, SettingsDrawer } from 'src/components/settings';
+import { MORALIS_API_KEY, THIRDWEB, WALLET_CONNECT } from 'src/config-global';
 
 // ----------------------------------------------------------------------
 
@@ -65,33 +77,55 @@ type Props = {
 };
 
 export default function RootLayout({ children }: Props) {
+  Moralis.start({
+    apiKey: MORALIS_API_KEY,
+  });
+
   return (
     <html lang="en" className={primaryFont.className}>
       <body>
-        <ReduxProvider>
-          <LocalizationProvider>
-            <SettingsProvider
-              defaultSettings={{
-                themeMode: 'light', // 'light' | 'dark'
-                themeDirection: 'ltr', //  'rtl' | 'ltr'
-                themeContrast: 'default', // 'default' | 'bold'
-                themeLayout: 'vertical', // 'vertical' | 'horizontal' | 'mini'
-                themeColorPresets: 'default', // 'default' | 'cyan' | 'purple' | 'blue' | 'orange' | 'red'
-                themeStretch: false,
-              }}
-            >
-              <ThemeProvider>
-                <MotionLazy>
-                  <SnackbarProvider>
-                    <SettingsDrawer />
-                    <ProgressBar />
-                    {children}
-                  </SnackbarProvider>
-                </MotionLazy>
-              </ThemeProvider>
-            </SettingsProvider>
-          </LocalizationProvider>
-        </ReduxProvider>
+        <ThirdwebProvider
+          activeChain={Ethereum}
+          autoConnect
+          supportedWallets={[
+            smartWallet({
+              factoryAddress: THIRDWEB.factoryAddress,
+              thirdwebApiKey: THIRDWEB.apiKey,
+              gasless: false,
+              personalWallets: [
+                metamaskWallet(),
+                coinbaseWallet(),
+                walletConnect({ projectId: WALLET_CONNECT.projectId }),
+                magicLink({ apiKey: WALLET_CONNECT.relayUrl, emailLogin: true, smsLogin: true }),
+              ],
+            }),
+          ]}
+        >
+          <ReduxProvider>
+            <LocalizationProvider>
+              <SettingsProvider
+                defaultSettings={{
+                  themeMode: 'light', // 'light' | 'dark'
+                  themeDirection: 'ltr', //  'rtl' | 'ltr'
+                  themeContrast: 'default', // 'default' | 'bold'
+                  themeLayout: 'vertical', // 'vertical' | 'horizontal' | 'mini'
+                  themeColorPresets: 'default', // 'default' | 'cyan' | 'purple' | 'blue' | 'orange' | 'red'
+                  themeStretch: false,
+                }}
+              >
+                <ThemeProvider>
+                  <MotionLazy>
+                    <SnackbarProvider>
+                      <SettingsDrawer />
+                      <ProgressBar />
+                      {children}
+                    </SnackbarProvider>
+                  </MotionLazy>
+                </ThemeProvider>
+              </SettingsProvider>
+            </LocalizationProvider>
+          </ReduxProvider>
+        </ThirdwebProvider>
       </body>
     </html>
   );

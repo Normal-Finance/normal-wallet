@@ -1,9 +1,15 @@
 'use client';
 
+import { useState, useEffect } from 'react';
+
 // @mui
 import { useTheme } from '@mui/material/styles';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Unstable_Grid2';
+
+import useWebSocket, { ReadyState } from 'react-use-websocket';
+import { useAddress } from '@thirdweb-dev/react';
+
 // hooks
 import { useMockedUser } from 'src/hooks/use-mocked-user';
 // _mock
@@ -17,14 +23,71 @@ import AppWidgetSummary from '../app-widget-summary';
 import AppCurrentDownload from '../app-current-download';
 import BookingCheckInWidgets from '../booking-check-in-widgets';
 
+import useInitialization from 'src/hooks/walletConnect/useInitialization';
+import useWalletConnectEventsManager from 'src/hooks/walletConnect/useWalletConnectEventsManager';
+import { createLegacySignClient } from 'src/utils/walletConnect/LegacyWalletConnectUtil';
+
 // ----------------------------------------------------------------------
 
-export default function OverviewAppView() {
-  const { user } = useMockedUser();
+const socketUrl = 'wss://phus4hn141.execute-api.us-east-2.amazonaws.com/dev';
 
+export default function OverviewAppView() {
   const theme = useTheme();
 
   const settings = useSettingsContext();
+
+  const [messageHistory, setMessageHistory] = useState([]);
+  const [appState, setAppState] = useState({
+    connection: {},
+    transaction: {},
+    batch: {},
+    update: {},
+  });
+
+  const { sendMessage, sendJsonMessage, lastMessage, lastJsonMessage, readyState, getWebSocket } =
+    useWebSocket(socketUrl, {
+      onOpen: () => console.log('opened'),
+      onClose: () => console.log('closed'),
+      onError: (e) => console.error(e),
+      shouldReconnect: (closeEvent) => true,
+    });
+
+  useEffect(() => {
+    if (lastMessage !== null) {
+      setMessageHistory((prev) => prev.concat(lastMessage));
+
+      // parse the message
+      const { eventName, data }: any = lastMessage;
+      setAppState({ ...appState, [eventName]: data });
+    }
+  }, [appState, lastMessage, setMessageHistory]);
+
+  const connectionStatus = {
+    [ReadyState.CONNECTING]: 'Connecting',
+    [ReadyState.OPEN]: 'Open',
+    [ReadyState.CLOSING]: 'Closing',
+    [ReadyState.CLOSED]: 'Closed',
+    [ReadyState.UNINSTANTIATED]: 'Uninstantiated',
+  }[readyState];
+
+  /** OTHER */
+  const address = useAddress();
+  const isConnected = address === '' || address === undefined;
+
+  const balance = 0;
+  const emptyBalance = balance === 0;
+
+  const { themeStretch } = useSettingsContext();
+
+  // WalletConnect
+  // Step 1 - Initialize wallets and wallet connect client
+  const initialized = useInitialization();
+
+  // Step 2 - Once initialized, set up wallet connect event manager
+  useWalletConnectEventsManager(initialized);
+
+  // Backwards compatibility only - create a legacy v1 SignClient instance.
+  createLegacySignClient();
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'xl'}>
