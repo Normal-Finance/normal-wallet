@@ -13,8 +13,6 @@ import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hook';
 // hooks
 import { useMockedUser } from 'src/hooks/use-mocked-user';
-// auth
-import { useAuthContext } from 'src/auth/hooks';
 // components
 import { varHover } from 'src/components/animate';
 import { useSnackbar } from 'src/components/snackbar';
@@ -44,7 +42,7 @@ export default function AccountPopover() {
 
   const { user } = useMockedUser();
 
-  const { logout } = useAuthContext();
+  // const { logout } = useAuthContext();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -52,7 +50,7 @@ export default function AccountPopover() {
 
   const handleLogout = async () => {
     try {
-      await logout();
+      // await logout();
       popover.onClose();
       router.replace('/');
     } catch (error) {

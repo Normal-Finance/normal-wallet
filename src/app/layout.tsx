@@ -36,11 +36,6 @@ import ProgressBar from 'src/components/progress-bar';
 import MotionLazy from 'src/components/animate/motion-lazy';
 import SnackbarProvider from 'src/components/snackbar/snackbar-provider';
 import { SettingsProvider, SettingsDrawer } from 'src/components/settings';
-// auth
-import { AuthProvider, AuthConsumer } from 'src/auth/context/jwt';
-// import { AuthProvider, AuthConsumer } from 'src/auth/context/auth0';
-// import { AuthProvider, AuthConsumer } from 'src/auth/context/amplify';
-// import { AuthProvider, AuthConsumer } from 'src/auth/context/firebase';
 
 // ----------------------------------------------------------------------
 
@@ -84,7 +79,6 @@ export default function RootLayout({ children }: Props) {
   return (
     <html lang="en" className={primaryFont.className}>
       <body>
-        <AuthProvider>
           <ReduxProvider>
             <LocalizationProvider>
               <SettingsProvider
@@ -102,14 +96,13 @@ export default function RootLayout({ children }: Props) {
                     <SnackbarProvider>
                       <SettingsDrawer />
                       <ProgressBar />
-                      <AuthConsumer>{children}</AuthConsumer>
+                      {children}
                     </SnackbarProvider>
                   </MotionLazy>
                 </ThemeProvider>
               </SettingsProvider>
             </LocalizationProvider>
           </ReduxProvider>
-        </AuthProvider>
       </body>
     </html>
   );
