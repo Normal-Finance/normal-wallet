@@ -1,6 +1,6 @@
 {
-  "name": "Minimal UI",
-  "short_name": "Minimal UI",
+  "name": "Normal Wallet",
+  "short_name": "Normal",
   "display": "standalone",
   "start_url": "/",
   "theme_color": "#000000",

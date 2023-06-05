@@ -1,9 +1,8 @@
 {
-  "name": "@minimal-kit/next-ts",
-  "author": "Minimals",
-  "version": "5.0.0",
-  "description": "Next & TypeScript",
-  "private": true,
+  "name": "normal-wallet",
+  "author": "Normal Finance, Inc.",
+  "version": "0.1.0",
+  "description": "An ERC-4337 smart wallet with 90%+ cheaper gas and extendable functionality ",
   "scripts": {
     "dev": "next dev -p 8081",
     "start": "next start",
