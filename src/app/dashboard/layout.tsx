@@ -10,7 +10,5 @@ type Props = {
 };
 
 export default function Layout({ children }: Props) {
-  return (
-      <DashboardLayout>{children}</DashboardLayout>
-  );
+  return <DashboardLayout>{children}</DashboardLayout>;
 }

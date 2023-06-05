@@ -20,9 +20,7 @@ export const navConfig = [
     children: [
       {
         subheader: 'Other',
-        items: [
-          { title: 'Payment', path: paths.payment },
-        ],
+        items: [{ title: 'Payment', path: paths.payment }],
       },
       {
         subheader: 'Concepts',
