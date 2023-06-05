@@ -107,15 +107,5 @@ export const paths = {
         edit: `${ROOTS.DASHBOARD}/job/${MOCK_ID}/edit`,
       },
     },
-    tour: {
-      root: `${ROOTS.DASHBOARD}/tour`,
-      new: `${ROOTS.DASHBOARD}/tour/new`,
-      details: (id: string) => `${ROOTS.DASHBOARD}/tour/${id}`,
-      edit: (id: string) => `${ROOTS.DASHBOARD}/tour/${id}/edit`,
-      demo: {
-        details: `${ROOTS.DASHBOARD}/tour/${MOCK_ID}`,
-        edit: `${ROOTS.DASHBOARD}/tour/${MOCK_ID}/edit`,
-      },
-    },
   },
 };

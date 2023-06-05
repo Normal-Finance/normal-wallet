@@ -123,19 +123,6 @@ export function useNavData() {
             ],
           },
 
-          // BLOG
-          {
-            title: t('blog'),
-            path: paths.dashboard.post.root,
-            icon: ICONS.blog,
-            children: [
-              { title: t('list'), path: paths.dashboard.post.root },
-              { title: t('details'), path: paths.dashboard.post.demo.details },
-              { title: t('create'), path: paths.dashboard.post.new },
-              { title: t('edit'), path: paths.dashboard.post.demo.edit },
-            ],
-          },
-
           // JOB
           {
             title: t('job'),
@@ -146,19 +133,6 @@ export function useNavData() {
               { title: t('details'), path: paths.dashboard.job.demo.details },
               { title: t('create'), path: paths.dashboard.job.new },
               { title: t('edit'), path: paths.dashboard.job.demo.edit },
-            ],
-          },
-
-          // TOUR
-          {
-            title: t('tour'),
-            path: paths.dashboard.tour.root,
-            icon: ICONS.tour,
-            children: [
-              { title: t('list'), path: paths.dashboard.tour.root },
-              { title: t('details'), path: paths.dashboard.tour.demo.details },
-              { title: t('create'), path: paths.dashboard.tour.new },
-              { title: t('edit'), path: paths.dashboard.tour.demo.edit },
             ],
           },
 
