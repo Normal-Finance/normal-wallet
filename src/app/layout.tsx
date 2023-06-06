@@ -70,7 +70,8 @@ type Props = {
 
 export default function RootLayout({ children }: Props) {
   Moralis.start({
-    apiKey: MORALIS_API_KEY,
+    apiKey:
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub25jZSI6ImM5NWM3YmIxLTEyNjMtNDY4NS05NzZjLTI2NjE1ZmJhMzFjYyIsIm9yZ0lkIjoiMjA5MjI2IiwidXNlcklkIjoiMjA4ODk4IiwidHlwZUlkIjoiZjQyZmNkYTctOTgxNS00OWY0LWI3NjQtYjYxZjIzNjM4ODYxIiwidHlwZSI6IlBST0pFQ1QiLCJpYXQiOjE2ODQyMDk4NTUsImV4cCI6NDgzOTk2OTg1NX0.IfF8qDjubFvNBy2tOlEQbElPS-YJ1sksIKT5X6hCoiY',
   });
 
   return (

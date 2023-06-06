@@ -17,14 +17,14 @@ import { useRouter } from 'src/routes/hook';
 // hooks
 import { useBoolean } from 'src/hooks/use-boolean';
 // types
-import { IInvoice } from 'src/types/invoice';
+import { IWallet } from 'src/types/wallet';
 // components
 import Iconify from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  invoice: IInvoice;
+  invoice: IWallet;
   currentStatus: string;
   onChangeStatus: (event: React.ChangeEvent<HTMLInputElement>) => void;
   statusOptions: {

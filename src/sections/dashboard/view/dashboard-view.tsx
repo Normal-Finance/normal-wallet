@@ -2,6 +2,9 @@
 
 import { useState, useEffect, useCallback } from 'react';
 
+// moralis
+import { useEvmNativeBalance, useEvmWalletTokenBalances } from '@moralisweb3/next';
+
 // @mui
 import { useTheme } from '@mui/material/styles';
 import { Container, Typography } from '@mui/material';
@@ -9,10 +12,6 @@ import Grid from '@mui/material/Unstable_Grid2';
 
 // redux
 import { useDispatch, useSelector } from 'src/redux/store';
-
-// moralis
-import Moralis from 'moralis';
-import { EvmChain } from '@moralisweb3/common-evm-utils';
 
 // hooks
 import { useSettingsContext } from 'src/components/settings';
@@ -25,28 +24,34 @@ import useWalletConnectEventsManager from 'src/hooks/walletConnect/useWalletConn
 import { createLegacySignClient } from 'src/utils/walletConnect/LegacyWalletConnectUtil';
 
 // components
-import Statistics from '../statistics';
-import Wallet from '../wallet';
 import Connect from '../onboard/connect';
 import Deposit from '../onboard/deposit';
 import GetStarted from '../onboard/get-started';
 import { useWebsocketContext } from 'src/contexts/WebsocketContext';
+import Header from '../wallet/header/header';
+import Dapps from '../wallet/dapps/dapps';
+import Balances from '../wallet/balances/balances';
+import SummaryWidget from '../statistics/summary-widget';
+import RealtimeWidgets from '../statistics/realtime-widgets';
 
 // ----------------------------------------------------------------------
 
 export default function DashboardView() {
   /** HOOKS */
+  const theme = useTheme();
   const settings = useSettingsContext();
   const address = useAddress();
 
+  const { data: nativeBalance } = useEvmNativeBalance({ address: address || '' });
+  const { data: tokenBalances } = useEvmWalletTokenBalances({ address: address || '' });
+
   /** STATE */
   const [loading, setLoading] = useState(false);
-  const [appState, setAppState] = useState<any>();
 
   /** CONSTANTS */
-  const isConnected = address === '' || address === undefined;
+  const connected = address === '' || address === undefined;
 
-  const { transaction, batch } = useSelector((state) => state.state);
+  const { connections, transactions, batches } = useSelector((state) => state.state);
 
   const { getState } = useWebsocketContext();
 
@@ -58,26 +63,15 @@ export default function DashboardView() {
     getStateCallback();
   }, [getStateCallback]);
 
+  const sumValues = (obj: object) => {
+    if (obj) return Object.values(obj).reduce((a, b) => a + b, 0) || 0;
+    else return 0;
+  };
+
+  const totalTransactions = sumValues(transactions);
+  const totalBatches = sumValues(batches);
+
   /** FUNCTIONS */
-
-  // useEffect(() => {
-  //   if (isConnected) {
-  //     getBalances();
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [isConnected]);
-
-  // async function getBalances() {
-  //   const { balance: nativeBalance } = await Moralis.EvmApi.balance.getNativeBalance({
-  //     chain: EvmChain.ETHEREUM,
-  //     address,
-  //   });
-
-  //   const walletTokenBalances = await Moralis.EvmApi.token.getWalletTokenBalances({
-  //     address,
-  //     chain: EvmChain.ETHEREUM,
-  //   });
-  // }
 
   /** WALLET_CONNECT */
   // const initialized = useInitialization();
@@ -96,18 +90,96 @@ export default function DashboardView() {
       </Typography>
 
       <Grid container spacing={3}>
-        {appState && <Statistics appState={appState} loading={loading} />}
+        <Grid xs={12} md={4}>
+          <SummaryWidget
+            title="Total Transactions"
+            percent={0}
+            total={totalTransactions}
+            chart={{
+              series: [8, 9, 31, 8, 16, 37, 8, 33, 46, 31],
+            }}
+          />
+        </Grid>
 
-        {!isConnected && <Connect />}
-        {isConnected && (
+        <Grid xs={12} md={4}>
+          <SummaryWidget
+            title="Total Batches"
+            percent={0}
+            total={totalBatches}
+            chart={{
+              colors: [theme.palette.info.light, theme.palette.info.main],
+              series: [8, 9, 31, 8, 16, 37, 8, 33, 46, 31],
+            }}
+          />
+        </Grid>
+
+        <Grid xs={12} md={4}>
+          <SummaryWidget
+            title="Total Savings"
+            percent={-0.1}
+            total={totalTransactions * 2.5}
+            chart={{
+              colors: [theme.palette.warning.light, theme.palette.warning.main],
+              series: [8, 9, 31, 8, 16, 37, 8, 33, 46, 31],
+            }}
+          />
+        </Grid>
+
+        <Grid xs={12}>
+          <RealtimeWidgets
+            chart={{
+              series: [
+                {
+                  label: 'Clients',
+                  percent: connections?.TOTAL || 0,
+                  total: connections?.TOTAL || 0,
+                },
+                {
+                  label: 'New transactions',
+                  percent: transactions?.NEW || 0,
+                  total: transactions?.NEW || 0,
+                },
+                {
+                  label: 'Pending transactions',
+                  percent: transactions?.PENDING || 0,
+                  total: transactions?.PENDING || 0,
+                },
+              ],
+            }}
+          />
+        </Grid>
+
+        {/* {!connected && <Connect />}
+        {connected && (
           <>
-            {/* {emptyBalance && <Deposit address={address} />}
+            {emptyBalance && <Deposit address={address} />}
 
-            {!emptyBalance && <GetStarted />} */}
+            {!emptyBalance && <GetStarted />}
           </>
-        )}
+        )} */}
 
-        {/* <Wallet isConnected={true} address='' emptyBalance={false} /> */}
+        {/* {address && <Wallet address={address || ''} emptyBalance={false} connected={connected} />} */}
+        {address && (
+          <Grid xs={12}>
+            <Header
+              address={address || ''}
+              nativeBalance={nativeBalance?.balance.ether || '0'}
+              tokenBalances={tokenBalances}
+              connected={connected}
+            />
+
+            <Dapps />
+            {/* onConnect={onConnect} connections={[]} onDisconnect={} */}
+
+            {tokenBalances && (
+              <Balances
+                nativeBalance={nativeBalance?.balance.ether || '0'}
+                tokenBalances={tokenBalances}
+                connected={connected}
+              />
+            )}
+          </Grid>
+        )}
       </Grid>
     </Container>
   );

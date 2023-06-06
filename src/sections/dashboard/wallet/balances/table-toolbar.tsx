@@ -2,16 +2,16 @@ import { useCallback } from 'react';
 // @mui
 import Stack from '@mui/material/Stack';
 import MenuItem from '@mui/material/MenuItem';
-import Checkbox from '@mui/material/Checkbox';
+// import Checkbox from '@mui/material/Checkbox';
 import TextField from '@mui/material/TextField';
-import InputLabel from '@mui/material/InputLabel';
+// import InputLabel from '@mui/material/InputLabel';
 import IconButton from '@mui/material/IconButton';
-import FormControl from '@mui/material/FormControl';
+// import FormControl from '@mui/material/FormControl';
 import InputAdornment from '@mui/material/InputAdornment';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+// import OutlinedInput from '@mui/material/OutlinedInput';
+// import Select, { SelectChangeEvent } from '@mui/material/Select';
 // types
-import { IInvoiceTableFilters, IInvoiceTableFilterValue } from 'src/types/invoice';
+import { IWalletTableFilters, IWalletTableFilterValue } from 'src/types/wallet';
 // components
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
@@ -19,18 +19,18 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 // ----------------------------------------------------------------------
 
 type Props = {
-  filters: IInvoiceTableFilters;
-  onFilters: (name: string, value: IInvoiceTableFilterValue) => void;
+  filters: IWalletTableFilters;
+  onFilters: (name: string, value: IWalletTableFilterValue) => void;
   //
-  serviceOptions: string[];
+  // serviceOptions: string[];
 };
 
 export default function TableToolbar({
   filters,
   onFilters,
-  //
-  serviceOptions,
-}: Props) {
+}: //
+// serviceOptions,
+Props) {
   const popover = usePopover();
 
   const handleFilterName = useCallback(
@@ -40,15 +40,15 @@ export default function TableToolbar({
     [onFilters]
   );
 
-  const handleFilterService = useCallback(
-    (event: SelectChangeEvent<string[]>) => {
-      onFilters(
-        'service',
-        typeof event.target.value === 'string' ? event.target.value.split(',') : event.target.value
-      );
-    },
-    [onFilters]
-  );
+  // const handleFilterService = useCallback(
+  //   (event: SelectChangeEvent<string[]>) => {
+  //     onFilters(
+  //       'service',
+  //       typeof event.target.value === 'string' ? event.target.value.split(',') : event.target.value
+  //     );
+  //   },
+  //   [onFilters]
+  // );
 
   return (
     <>
@@ -64,7 +64,7 @@ export default function TableToolbar({
           pr: { xs: 2.5, md: 1 },
         }}
       >
-        <FormControl
+        {/* <FormControl
           sx={{
             flexShrink: 0,
             width: { xs: 1, md: 180 },
@@ -87,14 +87,14 @@ export default function TableToolbar({
               </MenuItem>
             ))}
           </Select>
-        </FormControl>
+        </FormControl> */}
 
         <Stack direction="row" alignItems="center" spacing={2} flexGrow={1} sx={{ width: 1 }}>
           <TextField
             fullWidth
             value={filters.name}
             onChange={handleFilterName}
-            placeholder="Search customer or invoice number..."
+            placeholder="Search by name or symbol..."
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">

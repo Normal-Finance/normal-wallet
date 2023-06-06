@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import { useState } from 'react';
 import QRCode from 'react-qr-code';
 // @mui
@@ -12,17 +11,17 @@ import {
   IconButton,
 } from '@mui/material';
 // components
-import Iconify from '../../components/iconify';
+import Iconify from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
 
-AddressQRCode.propTypes = {
-  open: PropTypes.bool,
-  onClose: PropTypes.func,
-  address: PropTypes.string,
+type Props = {
+  open: boolean;
+  address: string;
+  onClose: any;
 };
 
-export default function Receive({ open, onClose, address }) {
+export default function Receive({ open, address, onClose }: Props) {
   const handleCopy = () => {};
 
   return (

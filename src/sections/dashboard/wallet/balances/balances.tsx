@@ -27,7 +27,7 @@ import { fTimestamp } from 'src/utils/format-time';
 // _mock
 import { _files, _invoices, INVOICE_SERVICE_OPTIONS } from 'src/_mock';
 // types
-import { IInvoice, IInvoiceTableFilters, IInvoiceTableFilterValue } from 'src/types/invoice';
+import { IWallet, IWalletTableFilters, IWalletTableFilterValue } from 'src/types/wallet';
 // components
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
@@ -47,19 +47,17 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 //
-import TableRow from './table-row';
+import MyTableRow from './table-row';
 import TableToolbar from './table-toolbar';
 import TableFiltersResult from './table-filters-result';
+import { Erc20Value } from 'moralis/common-evm-utils';
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'invoiceNumber', label: 'Customer' },
-  { id: 'createDate', label: 'Create' },
-  { id: 'dueDate', label: 'Due' },
-  { id: 'price', label: 'Amount' },
-  { id: 'sent', label: 'Sent', align: 'center' },
-  { id: 'status', label: 'Status' },
+  { id: 'token', label: 'Token' },
+  { id: 'balance', label: 'Balance' },
+  { id: 'price', label: 'Price' },
   { id: '' },
 ];
 
@@ -67,13 +65,17 @@ const defaultFilters = {
   name: '',
   service: [],
   status: 'all',
-  startDate: null,
-  endDate: null,
 };
 
 // ----------------------------------------------------------------------
 
-export default function Balances() {
+type Props = {
+  nativeBalance: string;
+  tokenBalances: any;
+  connected: boolean;
+};
+
+export default function Balances({ nativeBalance, tokenBalances, connected }: Props) {
   const theme = useTheme();
 
   const settings = useSettingsContext();
@@ -84,17 +86,14 @@ export default function Balances() {
 
   const confirm = useBoolean();
 
-  const [tableData, setTableData] = useState(_invoices);
+  const [tableData, setTableData] = useState(tokenBalances);
 
   const [filters, setFilters] = useState(defaultFilters);
-
-  const dateError = isDateError(filters.startDate, filters.endDate);
 
   const dataFiltered = applyFilter({
     inputData: tableData,
     comparator: getComparator(table.order, table.orderBy),
     filters,
-    dateError,
   });
 
   const dataInPage = dataFiltered.slice(
@@ -104,36 +103,21 @@ export default function Balances() {
 
   const denseHeight = table.dense ? 56 : 76;
 
-  const canReset =
-    !!filters.name ||
-    !!filters.service.length ||
-    filters.status !== 'all' ||
-    (!!filters.startDate && !!filters.endDate);
+  const canReset = !!filters.name || !!filters.service.length || filters.status !== 'all';
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
   const getInvoiceLength = (status: string) =>
-    tableData.filter((item) => item.status === status).length;
+    tableData.filter((item: any) => item.status === status).length;
 
   const getTotalAmount = (status: string) =>
     sumBy(
-      tableData.filter((item) => item.status === status),
+      tableData.filter((item: any) => item.status === status),
       'totalAmount'
     );
 
-  const getPercentByStatus = (status: string) =>
-    (getInvoiceLength(status) / tableData.length) * 100;
-
-  const TABS = [
-    { value: 'all', label: 'All', color: 'default', count: tableData.length },
-    { value: 'paid', label: 'Paid', color: 'success', count: getInvoiceLength('paid') },
-    { value: 'pending', label: 'Pending', color: 'warning', count: getInvoiceLength('pending') },
-    { value: 'overdue', label: 'Overdue', color: 'error', count: getInvoiceLength('overdue') },
-    { value: 'draft', label: 'Draft', color: 'default', count: getInvoiceLength('draft') },
-  ] as const;
-
   const handleFilters = useCallback(
-    (name: string, value: IInvoiceTableFilterValue) => {
+    (name: string, value: IWalletTableFilterValue) => {
       table.onResetPage();
       setFilters((prevState) => ({
         ...prevState,
@@ -143,37 +127,9 @@ export default function Balances() {
     [table]
   );
 
-  const handleDeleteRow = useCallback(
-    (id: string) => {
-      const deleteRow = tableData.filter((row) => row.id !== id);
-      setTableData(deleteRow);
-
-      table.onUpdatePageDeleteRow(dataInPage.length);
-    },
-    [dataInPage.length, table, tableData]
-  );
-
-  const handleDeleteRows = useCallback(() => {
-    const deleteRows = tableData.filter((row) => !table.selected.includes(row.id));
-    setTableData(deleteRows);
-
-    table.onUpdatePageDeleteRows({
-      totalRows: tableData.length,
-      totalRowsInPage: dataInPage.length,
-      totalRowsFiltered: dataFiltered.length,
-    });
-  }, [dataFiltered.length, dataInPage.length, table, tableData]);
-
   const handleEditRow = useCallback(
     (id: string) => {
-      router.push(paths.dashboard.invoice.edit(id));
-    },
-    [router]
-  );
-
-  const handleViewRow = useCallback(
-    (id: string) => {
-      router.push(paths.dashboard.invoice.details(id));
+      // router.push(paths.dashboard.invoice.edit(id));
     },
     [router]
   );
@@ -192,39 +148,11 @@ export default function Balances() {
   return (
     <>
       <Card>
-        <Tabs
-          value={filters.status}
-          onChange={handleFilterStatus}
-          sx={{
-            px: 2.5,
-            boxShadow: `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
-          }}
-        >
-          {TABS.map((tab) => (
-            <Tab
-              key={tab.value}
-              value={tab.value}
-              label={tab.label}
-              iconPosition="end"
-              icon={
-                <Label
-                  variant={
-                    ((tab.value === 'all' || tab.value === filters.status) && 'filled') || 'soft'
-                  }
-                  color={tab.color}
-                >
-                  {tab.count}
-                </Label>
-              }
-            />
-          ))}
-        </Tabs>
-
         <TableToolbar
           filters={filters}
           onFilters={handleFilters}
           //
-          serviceOptions={INVOICE_SERVICE_OPTIONS.map((option) => option.name)}
+          // serviceOptions={INVOICE_SERVICE_OPTIONS.map((option) => option.name)}
         />
 
         {canReset && (
@@ -247,7 +175,7 @@ export default function Balances() {
             onSelectAllRows={(checked) =>
               table.onSelectAllRows(
                 checked,
-                tableData.map((row) => row.id)
+                tableData.map((row: any) => row.id)
               )
             }
             action={
@@ -269,12 +197,6 @@ export default function Balances() {
                     <Iconify icon="solar:printer-minimalistic-bold" />
                   </IconButton>
                 </Tooltip>
-
-                <Tooltip title="Delete">
-                  <IconButton color="primary" onClick={confirm.onTrue}>
-                    <Iconify icon="solar:trash-bin-trash-bold" />
-                  </IconButton>
-                </Tooltip>
               </Stack>
             }
           />
@@ -291,7 +213,7 @@ export default function Balances() {
                 onSelectAllRows={(checked) =>
                   table.onSelectAllRows(
                     checked,
-                    tableData.map((row) => row.id)
+                    tableData.map((row: any) => row.id)
                   )
                 }
               />
@@ -303,14 +225,12 @@ export default function Balances() {
                     table.page * table.rowsPerPage + table.rowsPerPage
                   )
                   .map((row) => (
-                    <TableRow
+                    <MyTableRow
                       key={row.id}
                       row={row}
                       selected={table.selected.includes(row.id)}
                       onSelectRow={() => table.onSelectRow(row.id)}
-                      onViewRow={() => handleViewRow(row.id)}
                       onEditRow={() => handleEditRow(row.id)}
-                      onDeleteRow={() => handleDeleteRow(row.id)}
                     />
                   ))}
 
@@ -336,29 +256,6 @@ export default function Balances() {
           onChangeDense={table.onChangeDense}
         />
       </Card>
-
-      <ConfirmDialog
-        open={confirm.value}
-        onClose={confirm.onFalse}
-        title="Delete"
-        content={
-          <>
-            Are you sure want to delete <strong> {table.selected.length} </strong> items?
-          </>
-        }
-        action={
-          <Button
-            variant="contained"
-            color="error"
-            onClick={() => {
-              handleDeleteRows();
-              confirm.onFalse();
-            }}
-          >
-            Delete
-          </Button>
-        }
-      />
     </>
   );
 }
@@ -369,14 +266,12 @@ function applyFilter({
   inputData,
   comparator,
   filters,
-  dateError,
 }: {
-  inputData: IInvoice[];
+  inputData: any[];
   comparator: (a: any, b: any) => number;
-  filters: IInvoiceTableFilters;
-  dateError: boolean;
+  filters: IWalletTableFilters;
 }) {
-  const { name, status, service, startDate, endDate } = filters;
+  const { name, status, service } = filters;
 
   const stabilizedThis = inputData.map((el, index) => [el, index] as const);
 
@@ -390,9 +285,9 @@ function applyFilter({
 
   if (name) {
     inputData = inputData.filter(
-      (invoice) =>
-        invoice.invoiceNumber.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        invoice.invoiceTo.name.toLowerCase().indexOf(name.toLowerCase()) !== -1
+      (token: any) =>
+        token.name.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        token.symbol.toLowerCase().indexOf(name.toLowerCase()) !== -1
     );
   }
 
@@ -402,18 +297,8 @@ function applyFilter({
 
   if (service.length) {
     inputData = inputData.filter((invoice) =>
-      invoice.items.some((filterItem) => service.includes(filterItem.service))
+      invoice.items.some((filterItem: any) => service.includes(filterItem.service))
     );
-  }
-
-  if (!dateError) {
-    if (startDate && endDate) {
-      inputData = inputData.filter(
-        (invoice) =>
-          fTimestamp(invoice.createDate) >= fTimestamp(startDate) &&
-          fTimestamp(invoice.createDate) <= fTimestamp(endDate)
-      );
-    }
   }
 
   return inputData;

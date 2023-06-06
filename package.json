@@ -22,6 +22,7 @@
     "@hello-pangea/dnd": "^16.2.0",
     "@hookform/resolvers": "^3.1.0",
     "@iconify/react": "^4.1.0",
+    "@moralisweb3/next": "^2.22.1",
     "@mui/base": "^5.0.0-beta.3",
     "@mui/lab": "^5.0.0-alpha.132",
     "@mui/material": "^5.13.3",

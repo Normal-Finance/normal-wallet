@@ -9,25 +9,25 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { fShortenNumber, fCurrency } from 'src/utils/format-number';
 // components
 import Iconify from 'src/components/iconify';
-import { RouterLink } from 'src/routes/components';
 import Receive from './modals/Receive';
+import { useState } from 'react';
+import Send from './modals/Send';
 
 // ----------------------------------------------------------------------
 
-// type Props = {
-//   icon: string;
-//   title: string;
-//   total: number;
-//   percent: number;
-//   price: number;
-//   color?: string;
-// };
+type Props = {
+  address: string;
+  // totalBalance: number;
+  nativeBalance: string;
+  tokenBalances: any;
+  connected: boolean;
+};
 
-export default function Header() {
-  const balance = 123.45;
-
+export default function Header({ address, nativeBalance, tokenBalances, connected }: Props) {
   const [openSend, setOpenSend] = useState(false);
   const [openReceive, setOpenReceive] = useState(false);
+
+  // const totalBalance =
 
   const handleOpenSend = () => {
     setOpenSend(true);
@@ -54,32 +54,35 @@ export default function Header() {
           </Typography>
 
           <Typography variant="body1" gutterBottom>
-            {balance}
+            Coming soon
           </Typography>
         </Box>
 
         <Box sx={{ flexShrink: 0 }}>
           {/* Send */}
           <Button
-            // component={RouterLink}
             variant="contained"
             startIcon={<Iconify icon="mingcute:send-fill" />}
             onClick={handleOpenSend}
           >
             Send
           </Button>
-          <Send open={openSend} balances={balances} onClose={handleCloseSend} />
+          <Send
+            open={openSend}
+            nativeBalance={nativeBalance}
+            tokenBalances={tokenBalances}
+            onClose={handleCloseSend}
+          />
 
           {/* Receive */}
           <Button
-            // component={RouterLink}
             variant="contained"
             startIcon={<Iconify icon="mingcute:qrcode-2-line" />}
             onClick={handleOpenReceive}
           >
             Receive
           </Button>
-          <Receive open={openReceive} onClose={handleCloseReceive} address={address} />
+          <Receive open={openReceive} address={address} onClose={handleCloseReceive} />
         </Box>
       </Stack>
     </Box>

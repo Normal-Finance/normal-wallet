@@ -2,22 +2,26 @@ import { IErrorType } from './error';
 
 // ----------------------------------------------------------------------
 
-export type ITransaction = {
+export type IConnections = {
+  TOTAL: number;
+};
+
+export type ITransactions = {
   NEW: number;
   PENDING: number;
   COMPLETED: number;
 };
 
-export type IBatch = {
+export type IBatches = {
   INIT: number;
   PENDING: number;
   COMPLETED: number;
 };
 
 export type IStateState = {
-  connection: any;
-  transaction: ITransaction;
-  batch: IBatch;
+  connections: IConnections;
+  transactions: ITransactions;
+  batches: IBatches;
   appStatus: {
     loading: boolean;
     empty: boolean;

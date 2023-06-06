@@ -9,23 +9,47 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { fShortenNumber, fCurrency } from 'src/utils/format-number';
 // components
 import Iconify from 'src/components/iconify';
-import { RouterLink } from 'src/routes/components';
-import { Card } from '@mui/material';
+import { Card, Divider, IconButton } from '@mui/material';
 import ConnectionCard from './connection-card';
-import { _files } from 'src/_mock';
+import Scrollbar from 'src/components/scrollbar/scrollbar';
+import { useState } from 'react';
+
+// utils
+import { createLegacySignClient } from 'src/utils/walletConnect/LegacyWalletConnectUtil';
+import { parseUri } from '@walletconnect/utils';
+import { signClient } from 'src/utils/walletConnect/WalletConnectUtil';
 
 // ----------------------------------------------------------------------
 
-// type Props = {
-//   icon: string;
-//   title: string;
-//   total: number;
-//   percent: number;
-//   price: number;
-//   color?: string;
-// };
+type Props = {
+  // onConnect: any;
+  // connections: any[];
+  // onDisconnect: any;
+};
 
-export default function Dapps() {
+export default function Dapps({}: Props) {
+  const [loading, setLoading] = useState(false);
+
+  const onConnect = async (uri: string) => {
+    try {
+      setLoading(true);
+      const { version } = parseUri(uri);
+      console.log(version);
+
+      // Route the provided URI to the v1 SignClient if URI version indicates it, else use v2.
+      if (version === 1) {
+        createLegacySignClient({ uri });
+      } else {
+        await signClient.pair({ uri });
+      }
+    } catch (err) {
+      alert(err);
+    } finally {
+      // setUri('');
+      setLoading(false);
+    }
+  };
+
   return (
     <Card
       sx={{
@@ -38,17 +62,17 @@ export default function Dapps() {
           divider={<Divider orientation="vertical" flexItem sx={{ borderStyle: 'dashed' }} />}
           sx={{ py: 2 }}
         >
-          <IconButton color="primary">
+          {/* <IconButton color="primary" onClick={onConnect}>
             <Iconify icon="eva:plus-fill" />
           </IconButton>
 
-          {_files.slice(0, 3).map((file) => (
+          {connections.map((connection: any) => (
             <ConnectionCard
-              key={file.id}
-              file={file}
-              onDelete={() => console.info('DELETE', file.id)}
+              key={connection.id}
+              file={connection}
+              onDelete={onDisconnect}
             />
-          ))}
+          ))} */}
         </Stack>
       </Scrollbar>
     </Card>

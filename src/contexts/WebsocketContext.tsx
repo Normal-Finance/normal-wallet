@@ -1,3 +1,5 @@
+'use client';
+
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import useWebSocket, { ReadyState } from 'react-use-websocket';
 

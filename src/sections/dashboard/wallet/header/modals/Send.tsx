@@ -1,5 +1,3 @@
-import PropTypes from 'prop-types';
-
 import * as Yup from 'yup';
 // form
 import { useForm } from 'react-hook-form';
@@ -18,27 +16,20 @@ import {
 } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // components
-import { RHFTextField, RHFSelect, FormProvider } from 'src/components/hook-form';
-import { NETWORK_OPTIONS } from '../wallet/Balances';
-import Iconify from 'src/components/iconify/Iconify';
+import FormProvider from 'src/components/hook-form';
+import { RHFTextField, RHFSelect } from 'src/components/hook-form';
+import Iconify from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
 
-// type Props = {
-//   icon: string;
-//   title: string;
-//   total: number;
-//   percent: number;
-//   price: number;
-//   color?: string;
-// };
 type Props = {
   open: boolean;
-  balances: any;
-  onClose: Function;
+  nativeBalance: string;
+  tokenBalances: any;
+  onClose: any;
 };
 
-export default function SendForm({ open, balances, onClose }: Props) {
+export default function Send({ open, nativeBalance, tokenBalances, onClose }: Props) {
   const EventSchema = Yup.object().shape({
     network: Yup.string().required('Network is required'),
     tokens: Yup.array().of(Yup.string()).required(),
@@ -65,11 +56,13 @@ export default function SendForm({ open, balances, onClose }: Props) {
     formState: { isSubmitting },
   } = methods;
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: any) => {
     // ...
   };
 
   const values = watch();
+
+  const NETWORK_OPTIONS: any = [];
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
@@ -92,7 +85,7 @@ export default function SendForm({ open, balances, onClose }: Props) {
             InputLabelProps={{ shrink: true }}
             SelectProps={{ native: false, sx: { textTransform: 'capitalize' } }}
           >
-            {NETWORK_OPTIONS.map((network, index) => (
+            {NETWORK_OPTIONS.map((network: any, index: any) => (
               <MenuItem
                 key={index}
                 value={network.value}

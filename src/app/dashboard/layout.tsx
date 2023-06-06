@@ -9,7 +9,7 @@ import {
   magicLink,
   smartWallet,
 } from '@thirdweb-dev/react';
-// import { Goerli, Ethereum } from '@thirdweb-dev/chains';
+import { Goerli, Ethereum } from '@thirdweb-dev/chains';
 import { THIRDWEB, WALLET_CONNECT } from 'src/config-global';
 
 // components
@@ -24,7 +24,7 @@ type Props = {
 export default function Layout({ children }: Props) {
   return (
     <ThirdwebProvider
-      // activeChain={}
+      activeChain={Goerli}
       autoConnect
       supportedWallets={[
         smartWallet({
