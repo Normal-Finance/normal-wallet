@@ -1,9 +1,7 @@
 import { combineReducers } from 'redux';
-import { persistReducer } from 'redux-persist';
 import createWebStorage from 'redux-persist/lib/storage/createWebStorage';
 // slices
-// import mailReducer from './slices/mail';
-import productReducer from './slices/product';
+import stateReducer from './slices/state';
 
 // ----------------------------------------------------------------------
 
@@ -28,15 +26,6 @@ export const rootPersistConfig = {
   keyPrefix: 'redux-',
   whitelist: [],
 };
-
-const productPersistConfig = {
-  key: 'product',
-  storage,
-  keyPrefix: 'redux-',
-  whitelist: ['checkout'],
-};
-
 export const rootReducer = combineReducers({
-  // calendar: calendarReducer,
-  product: persistReducer(productPersistConfig, productReducer),
+  state: stateReducer,
 });

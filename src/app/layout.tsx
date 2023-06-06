@@ -15,16 +15,7 @@ import 'react-lazy-load-image-component/src/effects/blur.css';
 // ----------------------------------------------------------------------
 // moralis
 import Moralis from 'moralis';
-// thirdweb
-import {
-  ThirdwebProvider,
-  metamaskWallet,
-  coinbaseWallet,
-  walletConnect,
-  magicLink,
-  smartWallet,
-} from '@thirdweb-dev/react';
-// import { Goerli, Ethereum } from '@thirdweb-dev/chains';
+
 // redux
 import ReduxProvider from 'src/redux/redux-provider';
 // locales
@@ -37,7 +28,8 @@ import ProgressBar from 'src/components/progress-bar';
 import MotionLazy from 'src/components/animate/motion-lazy';
 import SnackbarProvider from 'src/components/snackbar/snackbar-provider';
 import { SettingsProvider, SettingsDrawer } from 'src/components/settings';
-import { MORALIS_API_KEY, THIRDWEB, WALLET_CONNECT } from 'src/config-global';
+import { MORALIS_API_KEY } from 'src/config-global';
+import { WebsocketContextProvider } from 'src/contexts/WebsocketContext';
 
 // ----------------------------------------------------------------------
 
@@ -84,24 +76,8 @@ export default function RootLayout({ children }: Props) {
   return (
     <html lang="en" className={primaryFont.className}>
       <body>
-        <ThirdwebProvider
-          // activeChain={}
-          autoConnect
-          supportedWallets={[
-            smartWallet({
-              factoryAddress: THIRDWEB.factoryAddress,
-              thirdwebApiKey: THIRDWEB.apiKey,
-              gasless: false,
-              personalWallets: [
-                metamaskWallet(),
-                coinbaseWallet(),
-                walletConnect({ projectId: WALLET_CONNECT.projectId }),
-                magicLink({ apiKey: WALLET_CONNECT.relayUrl, emailLogin: true, smsLogin: true }),
-              ],
-            }),
-          ]}
-        >
-          <ReduxProvider>
+        <ReduxProvider>
+          <WebsocketContextProvider>
             <LocalizationProvider>
               <SettingsProvider
                 defaultSettings={{
@@ -124,8 +100,8 @@ export default function RootLayout({ children }: Props) {
                 </ThemeProvider>
               </SettingsProvider>
             </LocalizationProvider>
-          </ReduxProvider>
-        </ThirdwebProvider>
+          </WebsocketContextProvider>
+        </ReduxProvider>
       </body>
     </html>
   );

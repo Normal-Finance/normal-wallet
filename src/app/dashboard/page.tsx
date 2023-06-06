@@ -1,5 +1,5 @@
 // sections
-import { OverviewAppView } from 'src/sections/overview/app/view';
+import { DashboardView } from 'src/sections/dashboard/view';
 
 // ----------------------------------------------------------------------
 
@@ -8,5 +8,5 @@ export const metadata = {
 };
 
 export default function OverviewAppPage() {
-  return <OverviewAppView />;
+  return <DashboardView />;
 }
