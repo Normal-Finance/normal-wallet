@@ -12,40 +12,37 @@ import {
   Avatar,
   Dialog,
   Typography,
-  InputAdornment,
 } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // components
 import FormProvider from 'src/components/hook-form';
 import { RHFTextField, RHFSelect } from 'src/components/hook-form';
-import Iconify from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
 
 type Props = {
   open: boolean;
-  nativeBalance: string;
+  nativeBalance: number;
   tokenBalances: any;
   onClose: any;
 };
 
 export default function Send({ open, nativeBalance, tokenBalances, onClose }: Props) {
+  const hasETH = nativeBalance > 0;
+  const canSend = hasETH || tokenBalances.length > 0;
+  
   const EventSchema = Yup.object().shape({
-    network: Yup.string().required('Network is required'),
-    tokens: Yup.array().of(Yup.string()).required(),
-    amounts: Yup.array().of(Yup.string()).required(),
-    denominations: Yup.array().of(Yup.string()).required(),
-    address: Yup.string().required(),
+    asset: Yup.string().required('Asset is required'),
+    amount: Yup.array().of(Yup.string()).required('Amount is required'),
+    toAddress: Yup.string().required('To address is required'),
   });
 
   const methods = useForm({
     resolver: yupResolver(EventSchema),
     defaultValues: {
-      network: 'Ethereum',
-      tokens: [],
-      amounts: [],
-      denominations: [],
-      address: '',
+      asset: 'Ethereum',
+      amount: 0,
+      toAddress: '',
     },
   });
 
@@ -62,7 +59,6 @@ export default function Send({ open, nativeBalance, tokenBalances, onClose }: Pr
 
   const values = watch();
 
-  const NETWORK_OPTIONS: any = [];
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
@@ -77,18 +73,19 @@ export default function Send({ open, nativeBalance, tokenBalances, onClose }: Pr
         </Stack>
 
         <Stack sx={{ p: 2.5 }}>
-          {/* Network */}
+          {!canSend && ()}
+
+          {canSend && (<>
+          {/* Asset */}
           <RHFSelect
-            name="provider"
-            label="Provider"
+            name="asset"
+            label="Asset"
             size="small"
             InputLabelProps={{ shrink: true }}
             SelectProps={{ native: false, sx: { textTransform: 'capitalize' } }}
           >
-            {NETWORK_OPTIONS.map((network: any, index: any) => (
-              <MenuItem
-                key={index}
-                value={network.value}
+            {hasETH && (<MenuItem
+                value={'ETH'}
                 sx={{
                   mx: 1,
                   my: 0.5,
@@ -97,30 +94,44 @@ export default function Send({ open, nativeBalance, tokenBalances, onClose }: Pr
                   textTransform: 'capitalize',
                 }}
               >
-                {/* <Avatar
-                src={`/assets/walletProviders/${WalletProviders[provider]
-                  .toUpperCase()
-                  .replace(/ /g, '_')
-                  .replace('.', '_')}.png`}
-                sx={{ width: 20, height: 20, mr: 1 }}
-              /> */}
-                {network.label}
-              </MenuItem>
-            ))}
+                ETH
+              </MenuItem>)}
+            {tokenBalances.map((tokenBalance: any, index: any) => {
+              const { value, token } = tokenBalance.toJSON();
+              
+              return (
+                <MenuItem
+                  key={index}
+                  value={token.value}
+                  sx={{
+                    mx: 1,
+                    my: 0.5,
+                    borderRadius: 0.75,
+                    typography: 'body2',
+                    textTransform: 'capitalize',
+                  }}
+                >
+                  {token?.name} {value + ' ' + token?.symbol}
+                </MenuItem>
+              )
+            } )}
           </RHFSelect>
 
-          {/* Address */}
+            {/* Amount */}
           <RHFTextField
-            name="address"
+              name="amount"
+              label="Amount"
+              placeholder="Enter amount"
+              type="number"
+            />
+
+          {/* To Address */}
+          <RHFTextField
+            name="toAddress"
             label="Address"
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <Iconify icon="eva:people-outline" sx={{ color: 'text.disabled' }} />
-                </InputAdornment>
-              ),
-            }}
           />
+          </>)}
+          
         </Stack>
 
         <DialogActions>

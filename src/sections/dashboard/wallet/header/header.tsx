@@ -69,7 +69,7 @@ export default function Header({ address, nativeBalance, tokenBalances, connecte
           </Button>
           <Send
             open={openSend}
-            nativeBalance={nativeBalance}
+            nativeBalance={parseFloat(nativeBalance)}
             tokenBalances={tokenBalances}
             onClose={handleCloseSend}
           />
