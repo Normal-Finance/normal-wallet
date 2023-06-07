@@ -9,7 +9,7 @@ export const allLangs = [
     label: 'English',
     value: 'en',
     systemValue: enUS,
-    icon: 'flagpack:gb-nir',
+    icon: 'flagpack:us',
   },
   {
     label: 'French',

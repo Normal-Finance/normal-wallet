@@ -14,18 +14,12 @@ import Iconify from 'src/components/iconify';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 //
-import AccountGeneral from '../account-general';
 import AccountBilling from '../account-billing';
 import AccountNotifications from '../account-notifications';
 
 // ----------------------------------------------------------------------
 
 const TABS = [
-  {
-    value: 'general',
-    label: 'General',
-    icon: <Iconify icon="solar:user-id-bold" width={24} />,
-  },
   {
     value: 'billing',
     label: 'Billing',
@@ -55,8 +49,7 @@ export default function AccountView() {
         heading="Account"
         links={[
           { name: 'Dashboard', href: paths.dashboard.root },
-          { name: 'User', href: paths.dashboard.user.root },
-          { name: 'Account' },
+          { name: 'Settings', href: paths.dashboard.user.account },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },
@@ -74,8 +67,6 @@ export default function AccountView() {
           <Tab key={tab.value} label={tab.label} icon={tab.icon} value={tab.value} />
         ))}
       </Tabs>
-
-      {currentTab === 'general' && <AccountGeneral />}
 
       {currentTab === 'billing' && (
         <AccountBilling

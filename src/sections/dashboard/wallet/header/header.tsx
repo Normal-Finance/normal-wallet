@@ -58,7 +58,7 @@ export default function Header({ address, nativeBalance, tokenBalances, connecte
           </Typography>
         </Box>
 
-        <Box sx={{ flexShrink: 0 }}>
+        <Stack direction="row" alignItems="center" spacing={1}>
           {/* Send */}
           <Button
             variant="contained"
@@ -83,7 +83,7 @@ export default function Header({ address, nativeBalance, tokenBalances, connecte
             Receive
           </Button>
           <Receive open={openReceive} address={address} onClose={handleCloseReceive} />
-        </Box>
+        </Stack>
       </Stack>
     </Box>
   );

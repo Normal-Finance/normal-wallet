@@ -77,7 +77,7 @@ export default function NotificationsPopover() {
   const renderHead = (
     <Stack direction="row" alignItems="center" sx={{ py: 2, pl: 2.5, pr: 1, minHeight: 68 }}>
       <Typography variant="h6" sx={{ flexGrow: 1 }}>
-        Notifications
+        Notifications <Typography component="span">(Coming soon)</Typography>
       </Typography>
 
       {!!totalUnRead && (
@@ -146,7 +146,8 @@ export default function NotificationsPopover() {
         color={drawer.value ? 'primary' : 'default'}
         onClick={drawer.onTrue}
       >
-        <Badge badgeContent={totalUnRead} color="error">
+        <Badge badgeContent={0} color="error">
+          {/* <Badge badgeContent={totalUnRead} color="error"> */}
           <Iconify icon="solar:bell-bing-bold-duotone" width={24} />
         </Badge>
       </IconButton>
@@ -166,7 +167,7 @@ export default function NotificationsPopover() {
 
         <Divider />
 
-        <Stack
+        {/* <Stack
           direction="row"
           alignItems="center"
           justifyContent="space-between"
@@ -186,7 +187,7 @@ export default function NotificationsPopover() {
           <Button fullWidth size="large">
             View All
           </Button>
-        </Box>
+        </Box> */}
       </Drawer>
     </>
   );

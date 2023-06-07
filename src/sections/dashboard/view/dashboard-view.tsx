@@ -49,7 +49,8 @@ export default function DashboardView() {
   const [loading, setLoading] = useState(false);
 
   /** CONSTANTS */
-  const connected = address === '' || address === undefined;
+  const disconnected = address == '';
+  const zeroBalance = nativeBalance?.balance.ether == '0' || tokenBalances?.length === 0;
 
   const { connections, transactions, batches } = useSelector((state) => state.state);
 
@@ -86,7 +87,7 @@ export default function DashboardView() {
           mb: { xs: 3, md: 5 },
         }}
       >
-        Hi, Welcome back 👋
+        Hey, Welcome back 👋
       </Typography>
 
       <Grid container spacing={3}>
@@ -149,36 +150,39 @@ export default function DashboardView() {
           />
         </Grid>
 
-        {/* {!connected && <Connect />}
-        {connected && (
+        {disconnected && <Connect />}
+        {!disconnected && (
           <>
-            {emptyBalance && <Deposit address={address} />}
-
-            {!emptyBalance && <GetStarted />}
-          </>
-        )} */}
-
-        {/* {address && <Wallet address={address || ''} emptyBalance={false} connected={connected} />} */}
-        {address && (
-          <Grid xs={12}>
-            <Header
-              address={address || ''}
-              nativeBalance={nativeBalance?.balance.ether || '0'}
+            {/* {zeroBalance && ( */}
+            <Deposit
+              nativeBalance={parseFloat(nativeBalance?.balance.ether || '0')}
               tokenBalances={tokenBalances}
-              connected={connected}
             />
+            {/* )} */}
+            {!zeroBalance && (
+              <>
+                <Grid xs={12}>
+                  <Header
+                    address={address || ''}
+                    nativeBalance={nativeBalance?.balance.ether || '0'}
+                    tokenBalances={tokenBalances}
+                    connected={!disconnected}
+                  />
 
-            <Dapps />
-            {/* onConnect={onConnect} connections={[]} onDisconnect={} */}
+                  <Dapps />
+                  {/* onConnect={onConnect} connections={[]} onDisconnect={} */}
 
-            {tokenBalances && (
-              <Balances
-                nativeBalance={nativeBalance?.balance.ether || '0'}
-                tokenBalances={tokenBalances}
-                connected={connected}
-              />
+                  {tokenBalances && (
+                    <Balances
+                      nativeBalance={nativeBalance?.balance.ether || '0'}
+                      tokenBalances={tokenBalances}
+                      connected={!disconnected}
+                    />
+                  )}
+                </Grid>
+              </>
             )}
-          </Grid>
+          </>
         )}
       </Grid>
     </Container>

@@ -46,13 +46,13 @@ export default function SettingsDrawer() {
         Settings
       </Typography>
 
-      <Tooltip title="Reset">
+      {/* <Tooltip title="Reset">
         <IconButton onClick={settings.onReset}>
           <Badge color="error" variant="dot" invisible={!settings.canReset}>
             <Iconify icon="solar:restart-bold" />
           </Badge>
         </IconButton>
-      </Tooltip>
+      </Tooltip> */}
 
       <IconButton onClick={settings.onClose}>
         <Iconify icon="mingcute:close-line" />
@@ -179,7 +179,7 @@ export default function SettingsDrawer() {
         <Stack spacing={3} sx={{ p: 3 }}>
           {renderMode}
 
-          {renderContrast}
+          {/* {renderContrast}
 
           {renderDirection}
 
@@ -187,11 +187,11 @@ export default function SettingsDrawer() {
 
           {renderStretch}
 
-          {renderPresets}
+          {renderPresets} */}
         </Stack>
       </Scrollbar>
 
-      <FullScreenOption />
+      {/* <FullScreenOption /> */}
     </Drawer>
   );
 }

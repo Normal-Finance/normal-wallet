@@ -18,6 +18,7 @@ import { useState } from 'react';
 import { createLegacySignClient } from 'src/utils/walletConnect/LegacyWalletConnectUtil';
 import { parseUri } from '@walletconnect/utils';
 import { signClient } from 'src/utils/walletConnect/WalletConnectUtil';
+import ConnectDapp from './modals/ConnectDapp';
 
 // ----------------------------------------------------------------------
 
@@ -29,6 +30,17 @@ type Props = {
 
 export default function Dapps({}: Props) {
   const [loading, setLoading] = useState(false);
+  const [openConnect, setOpenConnect] = useState(false);
+
+  const handleOpenConnect = () => {
+    setOpenConnect(true);
+  };
+
+  const handleCloseConnect = () => {
+    setOpenConnect(false);
+  };
+
+  const connections: any = [];
 
   const onConnect = async (uri: string) => {
     try {
@@ -50,31 +62,51 @@ export default function Dapps({}: Props) {
     }
   };
 
+  const onDisconnect = async (uri: string) => {
+    try {
+      setLoading(true);
+
+      signClient.disconnect({ topic: '' });
+    } catch (err) {
+      alert(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <Card
-      sx={{
-        mb: { xs: 3, md: 5 },
-      }}
-    >
+    <>
       <Scrollbar>
         <Stack
           direction="row"
           divider={<Divider orientation="vertical" flexItem sx={{ borderStyle: 'dashed' }} />}
           sx={{ py: 2 }}
         >
-          {/* <IconButton color="primary" onClick={onConnect}>
-            <Iconify icon="eva:plus-fill" />
-          </IconButton>
+          {/* Button */}
+          {connections.length > 0 ? (
+            <IconButton color="info" aria-label="add new dapp" onClick={handleOpenConnect}>
+              <Iconify icon="eva:plus-fill" />
+            </IconButton>
+          ) : (
+            <Button
+              variant="contained"
+              size="large"
+              color="info"
+              startIcon={<Iconify icon="eva:plus-fill" />}
+              onClick={handleOpenConnect}
+            >
+              Connect Dapps
+            </Button>
+          )}
 
           {connections.map((connection: any) => (
-            <ConnectionCard
-              key={connection.id}
-              file={connection}
-              onDelete={onDisconnect}
-            />
-          ))} */}
+            <ConnectionCard key={connection.id} file={connection} onDelete={onDisconnect} />
+          ))}
         </Stack>
       </Scrollbar>
-    </Card>
+
+      {/* Modal */}
+      <ConnectDapp open={openConnect} onClose={handleCloseConnect} onSubmit={onConnect} />
+    </>
   );
 }
