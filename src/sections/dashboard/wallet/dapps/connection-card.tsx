@@ -10,10 +10,7 @@ import Stack, { StackProps } from '@mui/material/Stack';
 // hooks
 import { useBoolean } from 'src/hooks/use-boolean';
 import { useResponsive } from 'src/hooks/use-responsive';
-import { useCopyToClipboard } from 'src/hooks/use-copy-to-clipboard';
 // utils
-import { fData } from 'src/utils/format-number';
-import { fDateTime } from 'src/utils/format-time';
 // types
 import { IFileManager } from 'src/types/file';
 // components
@@ -26,34 +23,18 @@ import FileThumbnail from 'src/components/file-thumbnail';
 // ----------------------------------------------------------------------
 
 interface Props extends StackProps {
-  file: IFileManager | any;
-  onDelete: VoidFunction;
+  connection: any;
+  onDisconnect: VoidFunction;
 }
 
-export default function ConnectionCard({ file, onDelete, sx, ...other }: Props) {
+export default function ConnectionCard({ connection, onDisconnect, sx, ...other }: Props) {
   const { enqueueSnackbar } = useSnackbar();
-  console.log(file);
-
-  const { copy } = useCopyToClipboard();
 
   const smUp = useResponsive('up', 'sm');
 
-  const [inviteEmail, setInviteEmail] = useState('');
-
   const popover = usePopover();
 
-  const share = useBoolean();
-
   const details = useBoolean();
-
-  const handleChangeInvite = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    setInviteEmail(event.target.value);
-  }, []);
-
-  // const handleCopy = useCallback(() => {
-  //   enqueueSnackbar('Copied!');
-  //   copy(file.url);
-  // }, [copy, enqueueSnackbar, file.url]);
 
   const renderAction = (
     <Box
@@ -80,14 +61,13 @@ export default function ConnectionCard({ file, onDelete, sx, ...other }: Props) 
   const renderText = (
     <ListItemText
       onClick={details.onTrue}
-      primary={file.session.peerMeta.name}
+      primary={connection.session.peerMeta.name}
       secondary={
         <>
-          {file.session.peerMeta.description}
+          {connection.session.peerMeta.description}
           <Box
             sx={{ mx: 0.75, width: 2, height: 2, borderRadius: '50%', bgcolor: 'currentColor' }}
           />
-          {/* {fDateTime(file.modifiedAt)} */}
         </>
       }
       primaryTypographyProps={{
@@ -143,11 +123,11 @@ export default function ConnectionCard({ file, onDelete, sx, ...other }: Props) 
         <MenuItem
           onClick={() => {
             popover.onClose();
-            onDelete();
+            onDisconnect();
           }}
           sx={{ color: 'error.main' }}
         >
-          <Iconify icon="solar:trash-bin-trash-bold" />
+          {/* <Iconify icon="solar:trash-bin-trash-bold" /> */}
           Disconnect
         </MenuItem>
       </CustomPopover>

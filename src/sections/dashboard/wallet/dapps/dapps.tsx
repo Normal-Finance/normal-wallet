@@ -69,7 +69,7 @@ export default function Dapps({ connections, connect, disconnect, isWcConnecting
           )}
 
           {connections.map((connection: any) => (
-            <ConnectionCard key={connection.id} file={connection} onDelete={disconnect} />
+            <ConnectionCard key={connection.id} connection={connection} onDisconnect={disconnect} />
           ))}
         </Stack>
       </Scrollbar>

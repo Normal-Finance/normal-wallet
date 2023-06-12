@@ -227,18 +227,9 @@ export default function useWalletConnectV2({
                 proposerPublicKey: params.proposer.publicKey,
                 session: { peerMeta: proposer.metadata },
                 namespacedChainIds: usedChains,
-                proposal,
+                proposal: proposal,
               })
             );
-            // dispatch({
-            //   type: 'connectedNewSession',
-            //   pairingTopic: params.pairingTopic,
-            //   sessionTopic: approveResult.topic,
-            //   proposerPublicKey: params.proposer.publicKey,
-            //   session: { peerMeta: proposer.metadata },
-            //   namespacedChainIds: usedChains,
-            //   proposal
-            // })
           })
           .catch((err: any) => {
             setIsConnecting(false);
@@ -365,10 +356,7 @@ export default function useWalletConnectV2({
             };
             setRequests((prev: any) => [...prev, request]);
             if (WC2_VERBOSE) console.log('WC2 request added :', request);
-            dispatch(requestAdded({ request }));
-            // dispatch({
-            //   type: 'requestAdded', request
-            // })
+            dispatch(requestAdded({ request: request }));
           }
         }
       } else {
@@ -402,10 +390,6 @@ export default function useWalletConnectV2({
           });
       }
       dispatch(disconnected({ connectionId: connectionToDelete.connectionId }));
-      // dispatch({
-      //   type: 'disconnected',
-      //   connectionId: connectionToDelete.connectionId
-      // })
     },
     [client, dispatch, getConnectionFromSessionTopic]
   );

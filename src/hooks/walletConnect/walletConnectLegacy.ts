@@ -11,6 +11,7 @@ import { IWalletConnectSession } from '@walletconnect/legacy-types';
 
 import { UNISWAP_PERMIT_EXCEPTIONS, WC1_SUPPORTED_METHODS } from './wcConsts';
 import {
+  updateConnections,
   batchRequestsAdded,
   connectedNewSession,
   disconnected,
@@ -63,7 +64,7 @@ export default function useWalletConnectLegacy({
   // Side effects that will run on every state change/rerender
   const maybeUpdateSessions = () => {
     // restore connectors and update the ones that are stale
-    let updateConnections = false;
+    let _updateConnections = false;
     connections.forEach(({ connectionId, isOffline }: any) => {
       if (connectors[connectionId]) {
         const connector = connectors[connectionId];
@@ -75,25 +76,25 @@ export default function useWalletConnectLegacy({
         ) {
           // NOTE: in case isOffline is different, we do not need to do this, but we're gonna leave that just in case the session is outdated anyway
           connector.updateSession({ accounts: [account], chainId });
-          updateConnections = true;
+          _updateConnections = true;
         }
       }
     });
 
-    // setStateStorage(state)
     setRequests((currRe: any) => [...currRe, ...requests]);
 
-    if (updateConnections)
-      dispatch({
-        type: 'updateConnections',
-        connections: connections
-          .filter(({ connectionId }: any) => connectors[connectionId])
-          .map(({ connectionId }: any) => ({
-            connectionId,
-            session: connectors[connectionId].session,
-            isOffline: checkIsOffline(connectionId),
-          })),
-      });
+    if (_updateConnections)
+      dispatch(
+        updateConnections({
+          connections: connections
+            .filter(({ connectionId }: any) => connectors[connectionId])
+            .map(({ connectionId }: any) => ({
+              connectionId,
+              session: connectors[connectionId].session,
+              isOffline: checkIsOffline(connectionId),
+            })),
+        })
+      );
   };
   useEffect(maybeUpdateSessions, [account, chainId, setRequests]);
   // we need this so we can invoke the latest version from any event handler
@@ -110,11 +111,6 @@ export default function useWalletConnectLegacy({
       }
       let connector: any;
       try {
-        // connector = connectors[connectionIdentifier] = new WalletConnectCore({
-        //   connectorOpts,
-        //   cryptoLib,
-        //   sessionStorage: noopSessionStorage
-        // })
         if (connectionIdentifier) {
           deleteCachedLegacySession();
           connector = new LegacySignClient({ uri: connectionIdentifier });
@@ -314,19 +310,6 @@ export default function useWalletConnectLegacy({
           );
           return;
         }
-        //FutureProof? WC does not implement it yet
-        //   if (payload.method === 'wallet_switchEthereumChain') {
-        //     const supportedNetwork = allNetworks.find(a => a.chainId === parseInt(payload.params[0].chainId, 16))
-
-        //     if (supportedNetwork) {
-        //       setNetwork(supportedNetwork.chainId)
-        //       connector.approveRequest({ id: payload.id, result: { chainId: supportedNetwork.chainId } })
-        //     } else {
-        //       //Graceful error for user
-        //       console.log(`dApp asked to switch to an unsupported chain: ${payload.params[0]?.chainId}`, { error: true })
-        //       connector.rejectRequest({ id: payload.id, error: { message: 'Unsupported chain' } })
-        //     }
-        //   }
 
         const wrongAcc =
           (payload.method === 'eth_sendTransaction' &&
@@ -354,7 +337,7 @@ export default function useWalletConnectLegacy({
               dateAdded: new Date().valueOf(),
               type: payload.method,
               connectionId: connectionIdentifier,
-              txn,
+              txn: txn,
               chainId: connector.session?.chainId,
               account: connector.session?.accounts[0],
               notification: true,
