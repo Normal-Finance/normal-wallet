@@ -1,4 +1,4 @@
-import { EIP155_CHAINS, EIP155_SIGNING_METHODS, TEIP155Chain } from 'src/data/EIP155Data.js';
+import { EIP155_CHAINS, EIP155_SIGNING_METHODS, TEIP155Chain } from 'src/data/EIP155Data';
 // import { eip155Addresses, eip155Wallets } from '../utils/EIP155WalletUtil'
 import {
   getSignParamsMessage,
@@ -23,7 +23,7 @@ export async function approveEIP155Request(
       'No web3 support detected in your browser: if you created this account through MetaMask, please install it.'
     );
   const provider = new providers.Web3Provider(window.ethereum, 'any');
-  const wallet = provider.getSigner('0x7D504D497b0ca5386F640aDeA2bb86441462d109');
+  const wallet = provider.getSigner('0x56CB44C27cAf76AdE499F68F12baF1c8ca9e73A5');
 
   switch (request.method) {
     case EIP155_SIGNING_METHODS.PERSONAL_SIGN:

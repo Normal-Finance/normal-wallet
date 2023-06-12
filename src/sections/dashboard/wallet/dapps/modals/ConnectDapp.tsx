@@ -21,7 +21,7 @@ export default function ConnectDapp({ open, onClose, onSubmit }: Props) {
   };
 
   const handleSubmit = async () => {
-    await onSubmit(uri);
+    await onSubmit({ uri: uri });
     setUri('');
     onClose();
   };
@@ -42,22 +42,15 @@ export default function ConnectDapp({ open, onClose, onSubmit }: Props) {
           Do not close this window while connecting. Have a question? Follow this <a>guide</a>.
         </Typography>
 
-        <TextField
-          value={uri}
-          onChange={handleUri}
-          placeholder="QR code or link"
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <Iconify icon="eva:cast-fill" sx={{ color: 'text.disabled' }} />
-              </InputAdornment>
-            ),
-          }}
-        />
+        <TextField value={uri} onChange={handleUri} placeholder="Paste link here" />
 
         <Button variant="contained" size="large" disabled={uri === ''} onClick={handleSubmit}>
           Connect
         </Button>
+
+        <Typography variant="body1">
+          Looking for step-by-step instructions? <br /> Watch this video.
+        </Typography>
       </Stack>
     </Dialog>
   );

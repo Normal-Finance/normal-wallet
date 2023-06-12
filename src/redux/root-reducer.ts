@@ -2,6 +2,8 @@ import { combineReducers } from 'redux';
 import createWebStorage from 'redux-persist/lib/storage/createWebStorage';
 // slices
 import stateReducer from './slices/state';
+import wcLegacyReducer from './slices/wcLegacy';
+import wcV2Reducer from './slices/wcV2';
 
 // ----------------------------------------------------------------------
 
@@ -24,8 +26,10 @@ export const rootPersistConfig = {
   key: 'root',
   storage,
   keyPrefix: 'redux-',
-  whitelist: [],
+  whitelist: ['state', 'wcLegacy', 'wcV2'],
 };
 export const rootReducer = combineReducers({
   state: stateReducer,
+  wcLegacy: wcLegacyReducer,
+  wcV2: wcV2Reducer,
 });

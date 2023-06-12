@@ -12,7 +12,7 @@ import Iconify from 'src/components/iconify';
 import { Card, Divider, IconButton } from '@mui/material';
 import ConnectionCard from './connection-card';
 import Scrollbar from 'src/components/scrollbar/scrollbar';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 
 // utils
 import { createLegacySignClient } from 'src/utils/walletConnect/LegacyWalletConnectUtil';
@@ -23,12 +23,13 @@ import ConnectDapp from './modals/ConnectDapp';
 // ----------------------------------------------------------------------
 
 type Props = {
-  // onConnect: any;
-  // connections: any[];
-  // onDisconnect: any;
+  connections: any[];
+  connect: any;
+  disconnect: any;
+  isWcConnecting: boolean;
 };
 
-export default function Dapps({}: Props) {
+export default function Dapps({ connections, connect, disconnect, isWcConnecting }: Props) {
   const [loading, setLoading] = useState(false);
   const [openConnect, setOpenConnect] = useState(false);
 
@@ -40,39 +41,7 @@ export default function Dapps({}: Props) {
     setOpenConnect(false);
   };
 
-  const connections: any = [];
-
-  const onConnect = async (uri: string) => {
-    try {
-      setLoading(true);
-      const { version } = parseUri(uri);
-      console.log(version);
-
-      // Route the provided URI to the v1 SignClient if URI version indicates it, else use v2.
-      if (version === 1) {
-        createLegacySignClient({ uri });
-      } else {
-        await signClient.pair({ uri });
-      }
-    } catch (err) {
-      alert(err);
-    } finally {
-      // setUri('');
-      setLoading(false);
-    }
-  };
-
-  const onDisconnect = async (uri: string) => {
-    try {
-      setLoading(true);
-
-      signClient.disconnect({ topic: '' });
-    } catch (err) {
-      alert(err);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const isLegacyWC = ({ bridge }: any) => /https:\/\/bridge.walletconnect.org/g.test(bridge);
 
   return (
     <>
@@ -100,13 +69,13 @@ export default function Dapps({}: Props) {
           )}
 
           {connections.map((connection: any) => (
-            <ConnectionCard key={connection.id} file={connection} onDelete={onDisconnect} />
+            <ConnectionCard key={connection.id} file={connection} onDelete={disconnect} />
           ))}
         </Stack>
       </Scrollbar>
 
       {/* Modal */}
-      <ConnectDapp open={openConnect} onClose={handleCloseConnect} onSubmit={onConnect} />
+      <ConnectDapp open={openConnect} onClose={handleCloseConnect} onSubmit={connect} />
     </>
   );
 }

@@ -1,17 +1,17 @@
 import { useSnapshot } from 'valtio';
 import { Dialog } from '@mui/material';
 
-import ModalStore from '../store/ModalStore.ts';
-import SessionProposalModal from '../views/SessionProposalModal.tsx';
+import ModalStore from 'src/store/ModalStore';
+import SessionProposalModal from 'src/sections/walletConnect/SessionProposalModal';
 
-import SessionSendTransactionModal from '../views/SessionSendTransactionModal.tsx';
-import SessionRequestModal from '../views/SessionSignModal.tsx';
-import SessionSignTypedDataModal from '../views/SessionSignTypedDataModal.tsx';
-import SessionUnsuportedMethodModal from '../views/SessionUnsuportedMethodModal.tsx';
-import LegacySessionProposalModal from '../views/LegacySessionProposalModal.tsx';
-import LegacySessionSignModal from '../views/LegacySessionSignModal.tsx';
-import LegacySessionSignTypedDataModal from '../views/LegacySessionSignTypedDataModal.tsx';
-import LegacySessionSendTransactionModal from '../views/LegacySessionSendTransactionModal.tsx';
+import SessionSendTransactionModal from 'src/sections/walletConnect/SessionSendTransactionModal';
+import SessionRequestModal from 'src/sections/walletConnect/SessionSignModal';
+import SessionSignTypedDataModal from 'src/sections/walletConnect/SessionSignTypedDataModal';
+import SessionUnsuportedMethodModal from 'src/sections/walletConnect/SessionUnsuportedMethodModal';
+import LegacySessionProposalModal from 'src/sections/walletConnect/LegacySessionProposalModal';
+import LegacySessionSignModal from 'src/sections/walletConnect/LegacySessionSignModal';
+import LegacySessionSignTypedDataModal from 'src/sections/walletConnect/LegacySessionSignTypedDataModal';
+import LegacySessionSendTransactionModal from 'src/sections/walletConnect/LegacySessionSendTransactionModal';
 
 export default function Modal() {
   const { open, view } = useSnapshot(ModalStore.state);

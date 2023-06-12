@@ -11,7 +11,7 @@ import { fShortenNumber, fCurrency } from 'src/utils/format-number';
 import Iconify from 'src/components/iconify';
 import Receive from './modals/Receive';
 import { useState } from 'react';
-import Send from './modals/Send';
+// import Send from './modals/Send';
 
 // ----------------------------------------------------------------------
 
@@ -67,12 +67,12 @@ export default function Header({ address, nativeBalance, tokenBalances, connecte
           >
             Send
           </Button>
-          <Send
+          {/* <Send
             open={openSend}
             nativeBalance={parseFloat(nativeBalance)}
             tokenBalances={tokenBalances}
             onClose={handleCloseSend}
-          />
+          /> */}
 
           {/* Receive */}
           <Button

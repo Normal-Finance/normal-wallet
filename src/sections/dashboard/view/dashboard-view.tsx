@@ -26,13 +26,16 @@ import { createLegacySignClient } from 'src/utils/walletConnect/LegacyWalletConn
 // components
 import Connect from '../onboard/connect';
 import Deposit from '../onboard/deposit';
-import GetStarted from '../onboard/get-started';
 import { useWebsocketContext } from 'src/contexts/WebsocketContext';
 import Header from '../wallet/header/header';
 import Dapps from '../wallet/dapps/dapps';
 import Balances from '../wallet/balances/balances';
 import SummaryWidget from '../statistics/summary-widget';
 import RealtimeWidgets from '../statistics/realtime-widgets';
+import Modal from 'src/components/walletConnect/Modal';
+
+import useWalletConnect from 'src/hooks/useWalletConnect';
+import { useLocalStorage } from 'src/hooks/use-local-storage';
 
 // ----------------------------------------------------------------------
 
@@ -54,15 +57,15 @@ export default function DashboardView() {
 
   const { connections, transactions, batches } = useSelector((state) => state.state);
 
-  const { getState } = useWebsocketContext();
+  // const { getState } = useWebsocketContext();
 
-  const getStateCallback = useCallback(() => {
-    getState();
-  }, []);
+  // const getStateCallback = useCallback(() => {
+  //   getState();
+  // }, []);
 
-  useEffect(() => {
-    getStateCallback();
-  }, [getStateCallback]);
+  // useEffect(() => {
+  //   getStateCallback();
+  // }, [getStateCallback]);
 
   const sumValues = (obj: object) => {
     if (obj) return Object.values(obj).reduce((a, b) => a + b, 0) || 0;
@@ -78,6 +81,21 @@ export default function DashboardView() {
   // const initialized = useInitialization();
   // useWalletConnectEventsManager(initialized);
   // createLegacySignClient();
+
+  const [allRequests, setRequests] = useState([]);
+  const {
+    connections: _connections,
+    connect,
+    disconnect,
+    isConnecting,
+    requests: wcRequests,
+    resolveMany: wcResolveMany,
+  } = useWalletConnect({
+    account: '0x7D504D497b0ca5386F640aDeA2bb86441462d109',
+    chainId: '5',
+    useStorage: useLocalStorage,
+    setRequests: setRequests,
+  });
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'xl'}>
@@ -159,7 +177,7 @@ export default function DashboardView() {
               tokenBalances={tokenBalances}
             />
             {/* )} */}
-            {!zeroBalance && (
+            {zeroBalance && (
               <>
                 <Grid xs={12}>
                   <Header
@@ -169,7 +187,13 @@ export default function DashboardView() {
                     connected={!disconnected}
                   />
 
-                  <Dapps />
+                  <Dapps
+                    connections={_connections}
+                    connect={connect}
+                    disconnect={disconnect}
+                    isWcConnecting={isConnecting}
+                  />
+                  <Modal />
                   {/* onConnect={onConnect} connections={[]} onDisconnect={} */}
 
                   {tokenBalances && (

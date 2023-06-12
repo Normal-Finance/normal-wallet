@@ -26,12 +26,13 @@ import FileThumbnail from 'src/components/file-thumbnail';
 // ----------------------------------------------------------------------
 
 interface Props extends StackProps {
-  file: IFileManager;
+  file: IFileManager | any;
   onDelete: VoidFunction;
 }
 
 export default function ConnectionCard({ file, onDelete, sx, ...other }: Props) {
   const { enqueueSnackbar } = useSnackbar();
+  console.log(file);
 
   const { copy } = useCopyToClipboard();
 
@@ -49,10 +50,10 @@ export default function ConnectionCard({ file, onDelete, sx, ...other }: Props) 
     setInviteEmail(event.target.value);
   }, []);
 
-  const handleCopy = useCallback(() => {
-    enqueueSnackbar('Copied!');
-    copy(file.url);
-  }, [copy, enqueueSnackbar, file.url]);
+  // const handleCopy = useCallback(() => {
+  //   enqueueSnackbar('Copied!');
+  //   copy(file.url);
+  // }, [copy, enqueueSnackbar, file.url]);
 
   const renderAction = (
     <Box
@@ -79,14 +80,14 @@ export default function ConnectionCard({ file, onDelete, sx, ...other }: Props) 
   const renderText = (
     <ListItemText
       onClick={details.onTrue}
-      primary={file.name}
+      primary={file.session.peerMeta.name}
       secondary={
         <>
-          {fData(file.size)}
+          {file.session.peerMeta.description}
           <Box
             sx={{ mx: 0.75, width: 2, height: 2, borderRadius: '50%', bgcolor: 'currentColor' }}
           />
-          {fDateTime(file.modifiedAt)}
+          {/* {fDateTime(file.modifiedAt)} */}
         </>
       }
       primaryTypographyProps={{
@@ -126,7 +127,7 @@ export default function ConnectionCard({ file, onDelete, sx, ...other }: Props) 
         }}
         {...other}
       >
-        <FileThumbnail file={file.type} sx={{ width: 36, height: 36, mr: 1 }} />
+        {/* <FileThumbnail file={file.type} sx={{ width: 36, height: 36, mr: 1 }} /> */}
 
         {renderText}
 
