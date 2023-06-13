@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState } from 'react';
 
 // moralis
 import { useEvmNativeBalance, useEvmWalletTokenBalances } from '@moralisweb3/next';
@@ -11,22 +11,18 @@ import { Container, Typography } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 
 // redux
-import { useDispatch, useSelector } from 'src/redux/store';
+import { useSelector } from 'src/redux/store';
 
 // hooks
 import { useSettingsContext } from 'src/components/settings';
 
 import { useAddress } from '@thirdweb-dev/react';
-import useInitialization from 'src/hooks/walletConnect/useInitialization';
-import useWalletConnectEventsManager from 'src/hooks/walletConnect/useWalletConnectEventsManager';
 
 // utils
-import { createLegacySignClient } from 'src/utils/walletConnect/LegacyWalletConnectUtil';
 
 // components
 import Connect from '../onboard/connect';
 import Deposit from '../onboard/deposit';
-import { useWebsocketContext } from 'src/contexts/WebsocketContext';
 import Header from '../wallet/header/header';
 import Dapps from '../wallet/dapps/dapps';
 import Balances from '../wallet/balances/balances';
@@ -75,14 +71,7 @@ export default function DashboardView() {
   const totalTransactions = sumValues(transactions);
   const totalBatches = sumValues(batches);
 
-  /** FUNCTIONS */
-
-  /** WALLET_CONNECT */
-  // const initialized = useInitialization();
-  // useWalletConnectEventsManager(initialized);
-  // createLegacySignClient();
-
-  const [allRequests, setRequests] = useState([]);
+  const [allRequests, setRequests] = useState<any>([]);
   const {
     connections: _connections,
     connect,

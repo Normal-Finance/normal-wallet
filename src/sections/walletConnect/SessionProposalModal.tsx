@@ -6,10 +6,8 @@ import SessionProposalChainCard from 'src/components/walletConnect/SessionPropos
 import ModalStore from 'src/store/ModalStore';
 // import { eip155Addresses } from '@/utils/EIP155WalletUtil'
 import { isEIP155Chain } from 'src/utils/walletConnect/HelperUtil';
-import { signClient } from 'src/utils/walletConnect/WalletConnectUtil';
 import { Button, Divider, Modal, Typography } from '@mui/material';
-import { SessionTypes } from '@walletconnect/types';
-import { getSdkError } from '@walletconnect/utils';
+// import { SessionTypes } from '@walletconnect/types';
 import { Fragment, useState } from 'react';
 
 export default function SessionProposalModal() {
@@ -18,6 +16,8 @@ export default function SessionProposalModal() {
 
   // Get proposal data and wallet address from store
   const proposal = ModalStore.state.data?.proposal;
+  const onApprove = ModalStore.state.data?.onApprove;
+  const onReject = ModalStore.state.data?.onReject;
 
   // Ensure proposal is defined
   if (!proposal) {
@@ -46,39 +46,17 @@ export default function SessionProposalModal() {
   }
 
   // Hanlde approve action, construct session namespace
-  async function onApprove() {
+  async function _onApprove() {
     if (proposal) {
-      const namespaces: SessionTypes.Namespaces = {};
-      Object.keys(requiredNamespaces).forEach((key) => {
-        const accounts: string[] = [];
-        requiredNamespaces[key].chains?.map((chain) => {
-          selectedAccounts[key].map((acc) => accounts.push(`${chain}:${acc}`));
-        });
-        namespaces[key] = {
-          accounts,
-          chains: key.includes(':') ? [key] : requiredNamespaces[key].chains,
-          methods: requiredNamespaces[key].methods,
-          events: requiredNamespaces[key].events,
-        };
-      });
-
-      const { acknowledged } = await signClient.approve({
-        id,
-        relayProtocol: relays[0].protocol,
-        namespaces,
-      });
-      await acknowledged();
+      onApprove();
     }
     ModalStore.close();
   }
 
   // Hanlde reject action
-  async function onReject() {
+  async function _onReject() {
     if (proposal) {
-      await signClient.reject({
-        id,
-        reason: getSdkError('USER_REJECTED_METHODS'),
-      });
+      await onReject();
     }
     ModalStore.close();
   }
@@ -119,13 +97,13 @@ export default function SessionProposalModal() {
       </RequestModalContainer>
 
       <div>
-        <Button color="error" onClick={onReject}>
+        <Button color="error" onClick={_onReject}>
           Reject
         </Button>
 
         <Button
           color="success"
-          onClick={onApprove}
+          onClick={_onApprove}
           // disabled={!hasSelected}
           // css={{ opacity: hasSelected ? 1 : 0.4 }}
         >

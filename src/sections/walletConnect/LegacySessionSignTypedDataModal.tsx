@@ -6,12 +6,7 @@ import RequesDetailsCard from 'src/components/walletConnect/RequestDetalilsCard'
 import RequestMethodCard from 'src/components/walletConnect/RequestMethodCard';
 import RequestModalContainer from 'src/components/walletConnect/RequestModalContainer';
 import ModalStore from 'src/store/ModalStore';
-import {
-  approveEIP155Request,
-  rejectEIP155Request,
-} from 'src/utils/walletConnect/EIP155RequestHandlerUtil';
 import { getSignTypedDataParamsData } from 'src/utils/walletConnect/HelperUtil';
-import { legacySignClient } from 'src/utils/walletConnect/LegacyWalletConnectUtil';
 import { Button, Divider, Modal, Typography } from '@mui/material';
 import { Fragment } from 'react';
 
@@ -19,6 +14,10 @@ export default function LegacySessionSignTypedDataModal() {
   // Get request and wallet data from store
   const requestEvent = ModalStore.state.data?.legacyCallRequestEvent;
   const requestSession = ModalStore.state.data?.legacyRequestSession;
+  const chainId = ModalStore.state.data?.chainId;
+  const protocol = ModalStore.state.data?.protocol;
+  const onApprove = ModalStore.state.data?.onApprove;
+  const onReject = ModalStore.state.data?.onReject;
 
   // Ensure request and wallet are defined
   if (!requestEvent || !requestSession) {
@@ -26,53 +25,10 @@ export default function LegacySessionSignTypedDataModal() {
   }
 
   // Get required request data
-  const { id, method, params } = requestEvent;
+  const { method, params } = requestEvent;
 
   // Get data
   const data = getSignTypedDataParamsData(params);
-
-  // Handle approve action (logic varies based on request method)
-  async function onApprove() {
-    if (requestEvent) {
-      const response = await approveEIP155Request({
-        id,
-        topic: '',
-        params: { request: { method, params }, chainId: '1' },
-        context: undefined,
-      });
-
-      if ('error' in response) {
-        legacySignClient.rejectRequest({
-          id,
-          error: response.error,
-        });
-      } else {
-        legacySignClient.approveRequest({
-          id,
-          result: response.result,
-        });
-      }
-
-      ModalStore.close();
-    }
-  }
-
-  // Handle reject action
-  async function onReject() {
-    if (requestEvent) {
-      const { error } = rejectEIP155Request({
-        id,
-        topic: '',
-        params: { request: { method, params }, chainId: '1' },
-        context: undefined,
-      });
-      legacySignClient.rejectRequest({
-        id,
-        error,
-      });
-      ModalStore.close();
-    }
-  }
 
   return (
     <Fragment>
@@ -81,10 +37,7 @@ export default function LegacySessionSignTypedDataModal() {
 
         <Divider />
 
-        <RequesDetailsCard
-          chains={['eip155:' + legacySignClient.chainId]}
-          protocol={legacySignClient.protocol}
-        />
+        <RequesDetailsCard chains={['eip155:' + chainId]} protocol={protocol} />
 
         <Divider />
 

@@ -66,23 +66,13 @@ const slice = createSlice({
       );
 
       state.connections = filteredConnections;
-      // return {
-      //   ...state,
-      //   connections: filteredConnections
-      // }
     },
     requestAdded(state, action) {
       if (state.requests.find(({ id }: any) => id === action.payload.request.id)) return;
-      // return { ...state }
       else state.requests = [...state.requests, action.payload.request];
-      // return { ...state, requests: [...state.requests, action.request] }
     },
     requestsResolved(state, action) {
       state.requests = state.requests.filter((x: any) => !action.payload.ids.includes(x.id));
-      // return {
-      //   ...state,
-      //   requests: state.requests.filter(x => !action.ids.includes(x.id))
-      // }
     },
   },
 });

@@ -15,6 +15,10 @@ interface ModalData {
   };
   legacyCallRequestEvent?: { id: number; method: string; params: any[] };
   legacyRequestSession?: IWalletConnectSession;
+  onApprove?: any;
+  onReject?: any;
+  chainId?: any;
+  protocol?: any;
 }
 
 interface State {

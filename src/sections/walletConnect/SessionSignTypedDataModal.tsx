@@ -7,17 +7,14 @@ import RequesDetailsCard from 'src/components/walletConnect/RequestDetalilsCard'
 import RequestMethodCard from 'src/components/walletConnect/RequestMethodCard';
 import RequestModalContainer from 'src/components/walletConnect/RequestModalContainer';
 import ModalStore from 'src/store/ModalStore';
-import {
-  approveEIP155Request,
-  rejectEIP155Request,
-} from 'src/utils/walletConnect/EIP155RequestHandlerUtil';
 import { getSignTypedDataParamsData } from 'src/utils/walletConnect/HelperUtil';
-import { signClient } from 'src/utils/walletConnect/WalletConnectUtil';
 
 export default function SessionSignTypedDataModal() {
   // Get request and wallet data from store
   const requestEvent = ModalStore.state.data?.requestEvent;
   const requestSession = ModalStore.state.data?.requestSession;
+  const onApprove = ModalStore.state.data?.onApprove;
+  const onReject = ModalStore.state.data?.onReject;
 
   // Ensure request and wallet are defined
   if (!requestEvent || !requestSession) {
@@ -30,30 +27,6 @@ export default function SessionSignTypedDataModal() {
 
   // Get data
   const data = getSignTypedDataParamsData(request.params);
-
-  // Handle approve action (logic varies based on request method)
-  async function onApprove() {
-    if (requestEvent) {
-      const response = await approveEIP155Request(requestEvent);
-      await signClient.respond({
-        topic,
-        response,
-      });
-      ModalStore.close();
-    }
-  }
-
-  // Handle reject action
-  async function onReject() {
-    if (requestEvent) {
-      const response = rejectEIP155Request(requestEvent);
-      await signClient.respond({
-        topic,
-        response,
-      });
-      ModalStore.close();
-    }
-  }
 
   return (
     <Fragment>

@@ -15,9 +15,6 @@ import Scrollbar from 'src/components/scrollbar/scrollbar';
 import { useCallback, useState } from 'react';
 
 // utils
-import { createLegacySignClient } from 'src/utils/walletConnect/LegacyWalletConnectUtil';
-import { parseUri } from '@walletconnect/utils';
-import { signClient } from 'src/utils/walletConnect/WalletConnectUtil';
 import ConnectDapp from './modals/ConnectDapp';
 
 // ----------------------------------------------------------------------
@@ -40,8 +37,6 @@ export default function Dapps({ connections, connect, disconnect, isWcConnecting
   const handleCloseConnect = () => {
     setOpenConnect(false);
   };
-
-  const isLegacyWC = ({ bridge }: any) => /https:\/\/bridge.walletconnect.org/g.test(bridge);
 
   return (
     <>

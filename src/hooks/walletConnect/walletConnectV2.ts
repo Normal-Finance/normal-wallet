@@ -1,30 +1,33 @@
-import { useCallback, useEffect, useReducer, useRef, useState } from 'react';
-// import { useToasts } from 'hooks/toasts'
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 // redux
 import { useDispatch, useSelector } from 'src/redux/store';
+import { connectedNewSession, disconnected, requestsResolved } from 'src/redux/slices/wcV2';
 
-// import { SignClient } from '@walletconnect/sign-client'
+// walletconnect
 import SignClient from '@walletconnect/sign-client';
+import { getSdkError } from '@walletconnect/utils';
 import { formatJsonRpcError, formatJsonRpcResult } from '@json-rpc-tools/utils';
 
+// consts
 import {
-  UNISWAP_PERMIT_EXCEPTIONS,
   DEFAULT_EIP155_METHODS,
   DEFAULT_EIP155_EVENTS,
   WC2_SUPPORTED_METHODS,
+  EIP155_SIGNING_METHODS,
+  EIP155_CHAINS,
 } from './wcConsts';
-// import networks from 'consts/networks'
-import { ethers } from 'ethers';
 import { WALLET_CONNECT } from 'src/config-global';
-import {
-  connectedNewSession,
-  disconnected,
-  requestAdded,
-  requestsResolved,
-} from 'src/redux/slices/wcV2';
 
-const STORAGE_KEY = 'wc2_state';
+// components
+import { useSnackbar } from 'src/components/snackbar';
+
+import ModalStore from 'src/store/ModalStore';
+import {
+  approveEIP155Request,
+  rejectEIP155Request,
+} from 'src/utils/walletConnect/EIP155RequestHandlerUtil';
+
 const WC2_VERBOSE = process.env.REACT_APP_WC2_VERBOSE || 0;
 
 export default function useWalletConnectV2({
@@ -33,29 +36,32 @@ export default function useWalletConnectV2({
   clearWcClipboard,
   setRequests,
 }: any) {
+  /** HOOKS */
+  const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
+
   // This is needed cause of the WalletConnect event handlers
   const stateRef: any = useRef();
   stateRef.current = { account, chainId };
 
+  /** REDUX */
   const { connections, requests } = useSelector((state) => state.wcV2);
-  const dispatch = useDispatch();
 
+  /** STATE */
   const [initialized, setInitialized] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
   const [client, setClient] = useState<any>(null);
-
-  // const { console.log } = useToasts()
 
   const onInitialize = useCallback(async () => {
     try {
       SignClient.init({
         logger: 'debug',
-        projectId: WALLET_CONNECT.projectId, // TODO
+        projectId: WALLET_CONNECT.projectId,
         relayUrl: 'wss://relay.walletconnect.com',
         metadata: {
           name: 'Normal Wallet',
-          description: 'Normal Wallet, non custodial smart wallet',
-          url: 'https://wallet.ambire.com/',
+          description: 'Normal Wallet, An Ethereum smart wallet',
+          url: 'https://normalwallet.io/',
           icons: ['https://wallet.ambire.com/logo192.png'],
         },
       }).then((signClient: any) => {
@@ -63,13 +69,13 @@ export default function useWalletConnectV2({
         if (typeof signClient === 'undefined') {
           throw new Error('Client is not initialized');
         }
-        if (WC2_VERBOSE) console.log('WC2 signClient initialized');
+        if (WC2_VERBOSE) enqueueSnackbar('WC2 signClient initialized');
         setInitialized(true);
       });
     } catch (err) {
       setInitialized(false);
       alert(err);
-      console.log(err);
+      enqueueSnackbar(err);
     }
   }, []);
 
@@ -83,7 +89,7 @@ export default function useWalletConnectV2({
   const connect = useCallback(
     async (connectorOpts: any) => {
       if (!client) {
-        if (WC2_VERBOSE) console.log('WC2: Client not initialized');
+        if (WC2_VERBOSE) enqueueSnackbar('WC2: Client not initialized', { variant: 'error' });
         return;
       }
 
@@ -92,16 +98,16 @@ export default function useWalletConnectV2({
 
       const existingPair = client?.pairing.values.find((p: any) => p.topic === pairingTopic);
       if (existingPair) {
-        if (WC2_VERBOSE) console.log('WC2: Pairing already active');
+        if (WC2_VERBOSE) enqueueSnackbar('WC2: Pairing already active', { variant: 'error' });
         return;
       }
 
       setIsConnecting(true);
       try {
         let res = await client.pair({ uri: connectorOpts.uri });
-        if (WC2_VERBOSE) console.log('pairing result', res);
+        if (WC2_VERBOSE) enqueueSnackbar('pairing result', res);
       } catch (e) {
-        console.log(e.message);
+        enqueueSnackbar(e.message, { variant: 'error' });
       }
     },
     [client, setIsConnecting]
@@ -112,7 +118,8 @@ export default function useWalletConnectV2({
       // connector might not be there, either cause we disconnected before,
       // or cause we failed to connect in the first place
       if (!client) {
-        if (WC2_VERBOSE) console.log('WC2 disconnect: Client not initialized');
+        if (WC2_VERBOSE)
+          enqueueSnackbar('WC2 disconnect: Client not initialized', { variant: 'error' });
 
         dispatch(disconnected({ connectionId }));
         return;
@@ -124,7 +131,8 @@ export default function useWalletConnectV2({
         const session = client.session.values.find(
           (a: any) => a.peer.publicKey === connection.proposerPublicKey
         );
-        if (WC2_VERBOSE) console.log('WC2 disconnect (connection, session)', connection, session);
+        if (WC2_VERBOSE)
+          enqueueSnackbar(`WC2 disconnect (${connection}, ${session})`, { variant: 'error' });
 
         if (session) {
           client.disconnect({ topic: session.topic });
@@ -146,7 +154,7 @@ export default function useWalletConnectV2({
             response,
           };
           client.respond(respObj).catch((err: any) => {
-            console.log(err.message, { error: true });
+            enqueueSnackbar(err.message, { variant: 'error' });
           });
         } else {
           const response = formatJsonRpcError(id, resolution.message);
@@ -156,7 +164,7 @@ export default function useWalletConnectV2({
               response,
             })
             .catch((err: any) => {
-              console.log(err.message, { error: true });
+              enqueueSnackbar(err.message, { variant: 'error' });
             });
         }
       }
@@ -174,13 +182,13 @@ export default function useWalletConnectV2({
       const { id, params } = proposal;
       const { proposer, requiredNamespaces, relays } = params;
 
-      const supportedChains = ['eip155:1', 'eip155:5'];
+      const supportedChains: any = [];
       const usedChains: any = [];
-      // networks.forEach(n => {
-      //   if (!supportedChains.includes(n.chainId)) {
-      //     supportedChains.push('eip155:' + n.chainId)
-      //   }
-      // })
+      Object.keys(EIP155_CHAINS).forEach((n) => {
+        if (!supportedChains.includes(n)) {
+          supportedChains.push(n);
+        }
+      });
       const unsupportedChains: any = [];
       requiredNamespaces.eip155?.chains.forEach((chainId: any) => {
         if (supportedChains.includes(chainId)) {
@@ -190,8 +198,10 @@ export default function useWalletConnectV2({
         }
       });
       if (unsupportedChains.length) {
-        console.log(`Chains not supported ${unsupportedChains.join(',')}`, { error: true });
-        if (WC2_VERBOSE) console.log('WC2 : Proposal rejected');
+        enqueueSnackbar(`Chains not supported ${unsupportedChains.join(',')}`, {
+          variant: 'error',
+        });
+        if (WC2_VERBOSE) enqueueSnackbar('WC2 : Proposal rejected');
         return client.reject({ proposal });
       }
 
@@ -210,31 +220,43 @@ export default function useWalletConnectV2({
 
       clearWcClipboard();
       if (!existingClientSession) {
-        if (WC2_VERBOSE) console.log('WC2 Approving client', namespaces);
-        client
-          .approve({
-            id,
-            relayProtocol: relays[0].protocol,
-            namespaces,
-          })
-          .then((approveResult: any) => {
-            if (WC2_VERBOSE) console.log('WC2 Approve result', approveResult);
-            setIsConnecting(false);
-            dispatch(
-              connectedNewSession({
-                pairingTopic: params.pairingTopic,
-                sessionTopic: approveResult.topic,
-                proposerPublicKey: params.proposer.publicKey,
-                session: { peerMeta: proposer.metadata },
-                namespacedChainIds: usedChains,
-                proposal: proposal,
+        if (WC2_VERBOSE) enqueueSnackbar('WC2 Approving client ' + namespaces);
+
+        ModalStore.open('SessionProposalModal', {
+          proposal,
+          onApprove: () => {
+            client
+              .approve({
+                id,
+                relayProtocol: relays[0].protocol,
+                namespaces,
               })
-            );
-          })
-          .catch((err: any) => {
-            setIsConnecting(false);
-            console.error('WC2 Error : ', err.message);
-          });
+              .then((approveResult: any) => {
+                if (WC2_VERBOSE) enqueueSnackbar('WC2 Approve result ' + approveResult);
+                setIsConnecting(false);
+                dispatch(
+                  connectedNewSession({
+                    pairingTopic: params.pairingTopic,
+                    sessionTopic: approveResult.topic,
+                    proposerPublicKey: params.proposer.publicKey,
+                    session: { peerMeta: proposer.metadata },
+                    namespacedChainIds: usedChains,
+                    proposal: proposal,
+                  })
+                );
+              })
+              .catch((err: any) => {
+                setIsConnecting(false);
+                console.error('WC2 Error : ', err.message);
+              });
+          },
+          onReject: async () => {
+            await client.reject({
+              id,
+              reason: getSdkError('USER_REJECTED_METHODS'),
+            });
+          },
+        });
       } else {
         setIsConnecting(false);
       }
@@ -244,7 +266,7 @@ export default function useWalletConnectV2({
 
   const onSessionRequest = useCallback(
     async (requestEvent: any) => {
-      if (WC2_VERBOSE) console.log('session_request', requestEvent);
+      if (WC2_VERBOSE) enqueueSnackbar('session_request', requestEvent);
       const { id, topic, params } = requestEvent;
       const { request: wcRequest } = params;
 
@@ -255,113 +277,118 @@ export default function useWalletConnectV2({
 
       if (namespace !== 'eip155') {
         const err = `Namespace "${namespace}" not compatible`;
-        console.log(err, { error: true });
+        enqueueSnackbar(err, { variant: 'error' });
         await client
           .respond({
             topic: requestEvent.topic,
             response: formatJsonRpcError(requestEvent.id, err),
           })
           .catch((err: any) => {
-            console.log(err.message, { error: true });
+            enqueueSnackbar(err.message, { variant: 'error' });
           });
         return;
       }
 
       if (WC2_SUPPORTED_METHODS.includes(wcRequest.method)) {
-        let txn;
-        let requestAccount;
         let method = wcRequest.method;
-        if (WC2_VERBOSE) console.log('requestEvent.request.method', method);
+        if (WC2_VERBOSE) enqueueSnackbar('requestEvent.request.method', method);
 
         const connection = getConnectionFromSessionTopic(topic);
         if (connection) {
-          const dappName = connection.session?.peerMeta?.name || '';
-          if (method === 'personal_sign' || wcRequest.method === 'eth_sign') {
-            txn = wcRequest.params[wcRequest.method === 'personal_sign' ? 0 : 1];
-            requestAccount = wcRequest.params[wcRequest.method === 'personal_sign' ? 1 : 0];
-          } else if (method === 'eth_sendTransaction') {
-            requestAccount = wcRequest.params[0].from;
-            txn = wcRequest.params[0];
-          } else if (method === 'eth_signTypedData') {
-            requestAccount = wcRequest.params[0];
-            txn = JSON.parse(wcRequest.params[1]);
+          const { topic, params } = requestEvent;
+          const { request } = params;
+          const requestSession = client.session.get(topic);
 
-            if (txn.primaryType === 'MetaTransaction') {
-              // either this, either declaring a method var, ONLY for this case
-              method = 'eth_sendTransaction';
-              txn = [
-                {
-                  to: txn.domain.verifyingContract,
-                  from: txn.message.from,
-                  data: txn.message.functionSignature,
-                  value: txn.message.value || '0x0',
-                },
-              ];
-            }
-          } else if (method === 'eth_signTypedData_v4') {
-            requestAccount = wcRequest.params[0];
-            txn = JSON.parse(wcRequest.params[1]);
-
-            // Dealing with Erc20 Permits
-            if (txn.primaryType === 'Permit') {
-              // If Uniswap, reject the permit and expect a graceful fallback (receiving approve eth_sendTransaction afterwards)
-              if (
-                UNISWAP_PERMIT_EXCEPTIONS.some((ex) =>
-                  dappName.toLowerCase().includes(ex.toLowerCase())
-                )
-              ) {
-                const response = formatJsonRpcError(id, {
-                  message: 'Method not found: ' + method,
-                  code: -32601,
-                });
-                client
-                  .respond({
-                    topic: topic,
-                    response,
-                  })
-                  .catch((err: any) => {
-                    console.log(err.message, { error: true });
-                  });
-
-                return;
-              } else {
-                console.log(
-                  `dApp tried to sign a token permit which does not support Smart Wallets`,
-                  { error: true }
-                );
-                return;
-              }
-            }
-          }
-
-          if (txn && ethers.utils.isAddress(requestAccount)) {
-            const request = {
-              id,
-              type: method,
-              dateAdded: new Date().valueOf(),
-              connectionId: connection.pairingTopic,
-              txn,
-              chainId,
-              topic,
-              account: ethers.utils.getAddress(requestAccount),
-              notification: true,
-              dapp: connection.session?.peerMeta
-                ? {
-                    name: connection.session.peerMeta.name,
-                    description: connection.session.peerMeta.description,
-                    icons: connection.session.peerMeta.icons,
-                    url: connection.session.peerMeta.url,
+          switch (request.method) {
+            case EIP155_SIGNING_METHODS.ETH_SIGN:
+            case EIP155_SIGNING_METHODS.PERSONAL_SIGN:
+              return ModalStore.open('SessionSignModal', {
+                requestEvent,
+                requestSession,
+                onApprove: async () => {
+                  if (requestEvent) {
+                    const response = await approveEIP155Request(requestEvent);
+                    await client.respond({
+                      topic,
+                      response,
+                    });
+                    ModalStore.close();
                   }
-                : null,
-            };
-            setRequests((prev: any) => [...prev, request]);
-            if (WC2_VERBOSE) console.log('WC2 request added :', request);
-            dispatch(requestAdded({ request: request }));
+                },
+                onReject: async () => {
+                  if (requestEvent) {
+                    const response = rejectEIP155Request(requestEvent);
+                    await client.respond({
+                      topic,
+                      response,
+                    });
+                    ModalStore.close();
+                  }
+                },
+              });
+
+            case EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA:
+            case EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA_V3:
+            case EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA_V4:
+              return ModalStore.open('SessionSignTypedDataModal', {
+                requestEvent,
+                requestSession,
+                onApprove: async () => {
+                  const response = await approveEIP155Request(requestEvent);
+                  await client.respond({
+                    topic,
+                    response,
+                  });
+                  ModalStore.close();
+                },
+                onReject: async () => {
+                  const response = rejectEIP155Request(requestEvent);
+                  await client.respond({
+                    topic,
+                    response,
+                  });
+                  ModalStore.close();
+                },
+              });
+
+            case EIP155_SIGNING_METHODS.ETH_SEND_TRANSACTION:
+            case EIP155_SIGNING_METHODS.ETH_SIGN_TRANSACTION:
+              return ModalStore.open('SessionSendTransactionModal', {
+                requestEvent,
+                requestSession,
+                onApprove: async (setLoading: any) => {
+                  if (requestEvent) {
+                    // setLoading();
+                    const response = await approveEIP155Request(requestEvent);
+                    await client.respond({
+                      topic,
+                      response,
+                    });
+                    ModalStore.close();
+                  }
+                },
+                onReject: async () => {
+                  if (requestEvent) {
+                    const response = rejectEIP155Request(requestEvent);
+                    await client.respond({
+                      topic,
+                      response,
+                    });
+                    ModalStore.close();
+                  }
+                },
+              });
+
+            default:
+              return ModalStore.open('SessionUnsuportedMethodModal', {
+                requestEvent,
+                requestSession,
+              });
           }
         }
       } else {
         const err = `Method "${wcRequest.method}" not supported`;
-        console.log(err, { error: true });
+        enqueueSnackbar(err, { variant: 'error' });
         await client.respond({
           topic,
           response: formatJsonRpcError(requestEvent.id, err),
@@ -400,12 +427,10 @@ export default function useWalletConnectV2({
 
   //rerun for every state change
   useEffect(() => {
-    localStorage[STORAGE_KEY] = JSON.stringify({ connections, requests });
-
     if (client) {
       // updating active connections
       client.session.values.forEach((session: any) => {
-        if (WC2_VERBOSE) console.log('WC2 updating session', session);
+        if (WC2_VERBOSE) enqueueSnackbar('WC2 updating session', session);
         const connection = connections.find((c: any) => c.sessionTopics.includes(session.topic));
         if (connection) {
           const namespaces = {
@@ -422,14 +447,14 @@ export default function useWalletConnectV2({
               namespaces,
             })
             .then((updateResult: any) => {
-              if (WC2_VERBOSE) console.log('WC2 Updated ', updateResult);
+              if (WC2_VERBOSE) enqueueSnackbar('WC2 Updated ', updateResult);
             })
             .catch((err: any) => {
-              console.log('WC2 Update Error: ' + err.message, session);
+              enqueueSnackbar('WC2 Update Error: ' + err.message, session);
             });
         } else {
           if (WC2_VERBOSE)
-            console.log('WC2 : session topic not found in connections ' + session.topic);
+            enqueueSnackbar('WC2 : session topic not found in connections ' + session.topic);
         }
       });
     }
@@ -446,6 +471,10 @@ export default function useWalletConnectV2({
       client.on('session_proposal', onSessionProposal);
       client.on('session_request', onSessionRequest);
       client.on('session_delete', onSessionDelete);
+
+      client.on('session_ping', (data: any) => console.log('ping', data));
+      client.on('session_event', (data: any) => console.log('event', data));
+      client.on('session_update', (data: any) => console.log('update', data));
 
       return () => {
         client.removeListener('session_proposal', onSessionProposal);

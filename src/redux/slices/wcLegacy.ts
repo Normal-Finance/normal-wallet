@@ -38,7 +38,6 @@ const slice = createSlice({
     batchRequestsAdded(state, action) {
       if (state.requests.find(({ id }: any) => id === action.payload.batchRequest.id + ':0'))
         return;
-      // return { ...state }
 
       const newRequests = [];
       for (let ix in action.payload.batchRequest.txns) {
@@ -62,9 +61,7 @@ const slice = createSlice({
     },
     requestAdded(state, action) {
       if (state.requests.find(({ id }: any) => id === action.payload.request.id)) return;
-      // return { ...state }
       else state.requests = [...state.requests, action.payload.request];
-      // return { ...state, requests: [...state.requests, action.request] }
     },
     requestsResolved(state, action) {
       state.requests = state.requests.filter((x: any) => !action.payload.ids.includes(x.id));

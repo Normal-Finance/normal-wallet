@@ -3,7 +3,7 @@ import { Typography } from '@mui/material';
 import { ProposalTypes } from '@walletconnect/types';
 
 import ChainCard from 'src/components/walletConnect/ChainCard';
-import { EIP155_MAINNET_CHAINS, EIP155_TEST_CHAINS } from 'src/data/EIP155Data';
+import { EIP155_MAINNET_CHAINS, EIP155_TEST_CHAINS } from 'src/hooks/walletConnect/wcConsts';
 import { formatChainName } from 'src/utils/walletConnect/HelperUtil';
 
 /**

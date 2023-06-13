@@ -1,4 +1,8 @@
-import { EIP155_CHAINS, EIP155_SIGNING_METHODS, TEIP155Chain } from 'src/data/EIP155Data';
+import {
+  EIP155_CHAINS,
+  EIP155_SIGNING_METHODS,
+  TEIP155Chain,
+} from 'src/hooks/walletConnect/wcConsts';
 // import { eip155Addresses, eip155Wallets } from '../utils/EIP155WalletUtil'
 import {
   getSignParamsMessage,

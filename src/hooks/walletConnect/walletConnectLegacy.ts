@@ -1,28 +1,30 @@
-import { useCallback, useEffect, useReducer, useRef, useState } from 'react';
-// import { useToasts } from 'hooks/toasts'
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 // redux
 import { useDispatch, useSelector } from 'src/redux/store';
-
-// import WalletConnectCore from 'walletconnect-legacy-core'
-// import * as cryptoLib from 'walletconnect-legacy-iso-crypto'
-import LegacySignClient from '@walletconnect/client';
-import { IWalletConnectSession } from '@walletconnect/legacy-types';
-
-import { UNISWAP_PERMIT_EXCEPTIONS, WC1_SUPPORTED_METHODS } from './wcConsts';
 import {
   updateConnections,
-  batchRequestsAdded,
   connectedNewSession,
   disconnected,
-  requestAdded,
   requestsResolved,
 } from 'src/redux/slices/wcLegacy';
 
-const noop = () => null;
-const noopSessionStorage = { setSession: noop, getSession: noop, removeSession: noop };
+// walletconnect
+import LegacySignClient from '@walletconnect/client';
+import { IWalletConnectSession } from '@walletconnect/legacy-types';
 
-const STORAGE_KEY = 'wc1_state';
+// consts
+import { EIP155_SIGNING_METHODS } from './wcConsts';
+
+// components
+import { useSnackbar } from 'src/components/snackbar';
+import ModalStore from 'src/store/ModalStore';
+import { getSdkError } from '@walletconnect/utils';
+import {
+  approveEIP155Request,
+  rejectEIP155Request,
+} from 'src/utils/walletConnect/EIP155RequestHandlerUtil';
+
 const SESSION_TIMEOUT = 10000;
 
 let connectors: any = {};
@@ -50,15 +52,19 @@ export default function useWalletConnectLegacy({
   useStorage,
   setRequests,
 }: any) {
+  /** HOOKS */
   //   const { networks } = useToasts()
+  const { enqueueSnackbar } = useSnackbar();
+  const dispatch = useDispatch();
 
   // This is needed cause of the WalletConnect event handlers
   const stateRef: any = useRef();
   stateRef.current = { account, chainId };
 
+  /** REDUX */
   const { connections, requests } = useSelector((state) => state.wcLegacy);
-  const dispatch = useDispatch();
 
+  /** STATE */
   const [isConnecting, setIsConnecting] = useState(false);
 
   // Side effects that will run on every state change/rerender
@@ -106,10 +112,10 @@ export default function useWalletConnectLegacy({
       const connectionIdentifier = connectorOpts.uri;
 
       if (connectors[connectionIdentifier]) {
-        console.log('dApp already connected');
+        enqueueSnackbar('dApp already connected', { variant: 'error' });
         return connectors[connectionIdentifier];
       }
-      let connector: any;
+      let connector: LegacySignClient | any;
       try {
         if (connectionIdentifier) {
           deleteCachedLegacySession();
@@ -124,16 +130,18 @@ export default function useWalletConnectLegacy({
         }
       } catch (e) {
         console.error(e);
-        console.log(`Unable to connect to ${connectionIdentifier}: ${e.message}`, { error: true });
+        enqueueSnackbar(`Unable to connect to ${connectionIdentifier}: ${e.message}`, {
+          variant: 'error',
+        });
         return null;
       }
 
       const onError = (err: any) => {
-        console.log(
+        enqueueSnackbar(
           `WalletConnect error: ${
             connector.session && connector.session.peerMeta && connector.session.peerMeta.name
           } ${err.message || err}`,
-          { error: true }
+          { variant: 'error' }
         );
         console.error('WC1 error', err);
       };
@@ -147,10 +155,12 @@ export default function useWalletConnectLegacy({
               'this dApp is using an old version of WalletConnect - please tell them to upgrade!'
             : 'perhaps the link has expired? Refresh the dApp and try again.';
           if (!connector.session.peerMeta)
-            console.log(`Unable to get session from dApp - ${suggestion}`, { error: true });
+            enqueueSnackbar(`Unable to get session from dApp - ${suggestion}`, {
+              variant: 'error',
+            });
         }, SESSION_TIMEOUT);
 
-      connector.on('session_request', async (error: any, payload: any) => {
+      connector.on('session_request', (error: any, payload: any) => {
         if (error) {
           onError(error);
           return;
@@ -158,50 +168,61 @@ export default function useWalletConnectLegacy({
 
         setIsConnecting(true);
 
-        // Clear the "dApp tool too long to connect" timeout
-        clearTimeout(sessionTimeout);
+        ModalStore.open('LegacySessionProposalModal', {
+          legacyProposal: payload,
+          onApprove: (selectedAccounts: any) => {
+            if (payload) {
+              connector.approveSession({
+                accounts: selectedAccounts['eip155'],
+                chainId: chainId ?? 1,
+              });
+            }
+            ModalStore.close();
 
-        await wait(1000);
+            /** ---- */
 
-        // sessionStart is used to check if dApp disconnected immediately
-        sessionStart = Date.now();
-        connector.approveSession({
-          accounts: [stateRef.current.account],
-          chainId: stateRef.current.chainId,
+            // On a session request, remove WC uri from the clipboard.
+            // Otherwise, in the case the user disconnects himself from the dApp, but still having the previous WC uri in the clipboard,
+            // then the app will try to connect him with the already invalidated WC uri.
+            clearWcClipboard();
+
+            // We need to make sure that we are connected to the dApp successfully,
+            // before keeping the session as connected via `connectedNewSession` dispatch.
+            // We had a case with www.chargedefi.fi, where we were immediately disconnected on a session_request,
+            // because of unsupported network selected on our end,
+            // but still storing the session in the state as a successful connection, which resulted in app crashes.
+            if (!connector.connected) {
+              setIsConnecting(false);
+
+              return;
+            }
+          },
+          onReject: () => {
+            if (payload) {
+              connector.rejectSession(getSdkError('USER_REJECTED_METHODS'));
+            }
+            ModalStore.close();
+
+            /** ---- */
+
+            // It's safe to read .session right after approveSession because 1) approveSession itself normally stores the session itself
+            // 2) connector.session is a getter that re-reads private properties of the connector; those properties are updated immediately at approveSession
+            dispatch(
+              connectedNewSession({
+                connectionId: connectorOpts.uri,
+                //uri: connectionIdentifier,// TODO check if we still need that
+                session: connector.session,
+              })
+            );
+
+            enqueueSnackbar('Successfully connected to ' + connector.session.peerMeta.name);
+
+            setIsConnecting(false);
+          },
         });
-
-        await wait(1000);
-
-        // On a session request, remove WC uri from the clipboard.
-        // Otherwise, in the case the user disconnects himself from the dApp, but still having the previous WC uri in the clipboard,
-        // then the app will try to connect him with the already invalidated WC uri.
-        clearWcClipboard();
-
-        // We need to make sure that we are connected to the dApp successfully,
-        // before keeping the session as connected via `connectedNewSession` dispatch.
-        // We had a case with www.chargedefi.fi, where we were immediately disconnected on a session_request,
-        // because of unsupported network selected on our end,
-        // but still storing the session in the state as a successful connection, which resulted in app crashes.
-        if (!connector.connected) {
-          setIsConnecting(false);
-
-          return;
-        }
-
-        // It's safe to read .session right after approveSession because 1) approveSession itself normally stores the session itself
-        // 2) connector.session is a getter that re-reads private properties of the connector; those properties are updated immediately at approveSession
-        dispatch(
-          connectedNewSession({
-            connectionId: connectorOpts.uri,
-            //uri: connectionIdentifier,// TODO check if we still need that
-            session: connector.session,
-          })
-        );
-
-        console.log('Successfully connected to ' + connector.session.peerMeta.name);
-
-        setIsConnecting(false);
       });
+
+      connector.on('error', onError);
 
       connector.on('transport_error', (error: any, payload: any) => {
         console.error('WC1: transport error', payload);
@@ -221,144 +242,16 @@ export default function useWalletConnectLegacy({
           return;
         }
 
-        if (!WC1_SUPPORTED_METHODS.includes(payload.method)) {
-          console.log(`dApp requested unsupported method: ${payload.method}`, { error: true });
-          connector.rejectRequest({
-            id: payload.id,
-            error: { message: 'Method not found: ' + payload.method, code: -32601 },
-          });
-          return;
-        }
-
-        const dappName = connector.session?.peerMeta?.name || '';
-
-        // @TODO: refactor into wcRequestHandler
-        // Opensea "unlock currency" hack; they use a stupid MetaTransactions system built into WETH on Polygon
-        // There's no point of this because the user has to sign it separately as a tx anyway; but more importantly,
-        // it breaks Ambire and other smart wallets cause it relies on ecrecover and does not depend on EIP1271
-        let txn = payload.params[0];
-        if (payload.method === 'eth_signTypedData') {
-          // @TODO: try/catch the JSON parse?
-          const signPayload = JSON.parse(payload.params[1]);
-          payload = {
-            ...payload,
-            method: 'eth_signTypedData',
-          };
-          txn = signPayload;
-          if (signPayload.primaryType === 'MetaTransaction') {
-            payload = {
-              ...payload,
-              method: 'eth_sendTransaction',
-            };
-            txn = [
-              {
-                to: signPayload.domain.verifyingContract,
-                from: signPayload.message.from,
-                data: signPayload.message.functionSignature, // @TODO || data?
-                value: signPayload.message.value || '0x0',
-              },
-            ];
-          }
-        }
-        if (payload.method === 'eth_signTypedData_v4') {
-          // @TODO: try/catch the JSON parse?
-          const signPayload = JSON.parse(payload.params[1]);
-          payload = {
-            ...payload,
-            method: 'eth_signTypedData_v4',
-          };
-          txn = signPayload;
-          // Dealing with Erc20 Permits
-          if (signPayload.primaryType === 'Permit') {
-            // If Uniswap, reject the permit and expect a graceful fallback (receiving approve eth_sendTransaction afterwards)
-            if (
-              UNISWAP_PERMIT_EXCEPTIONS.some((ex) =>
-                dappName.toLowerCase().includes(ex.toLowerCase())
-              )
-            ) {
-              connector.rejectRequest({
-                id: payload.id,
-                error: { message: 'Method not found: ' + payload.method, code: -32601 },
-              });
-              return;
-            } else {
-              console.log(
-                `dApp tried to sign a token permit which does not support Smart Wallets`,
-                { error: true }
-              );
-              return;
-            }
-          }
-        }
-        if (
-          payload.method === 'gs_multi_send' ||
-          payload.method === 'ambire_sendBatchTransaction'
-        ) {
-          dispatch(
-            batchRequestsAdded({
-              batchRequest: {
-                id: payload.id,
-                dateAdded: new Date().valueOf(),
-                type: payload.method,
-                connectionId: connectionIdentifier,
-                txns: payload.params,
-                chainId: connector.session?.chainId,
-                account: connector.session?.accounts[0],
-                notification: true,
-              },
-            })
-          );
-          return;
-        }
-
-        const wrongAcc =
-          (payload.method === 'eth_sendTransaction' &&
-            payload.params[0] &&
-            payload.params[0].from &&
-            payload.params[0].from.toLowerCase() !==
-              connector.session?.accounts[0].toLowerCase()) ||
-          (payload.method === 'eth_sign' &&
-            payload.params[1] &&
-            payload.params[1].toLowerCase() !== connector.session?.accounts[0].toLowerCase());
-        if (wrongAcc) {
-          console.log(`dApp sent a request for the wrong account: ${payload.params[0].from}`, {
-            error: true,
-          });
-          connector.rejectRequest({
-            id: payload.id,
-            error: { message: 'Sent a request for the wrong account' },
-          });
-          return;
-        }
-        dispatch(
-          requestAdded({
-            request: {
-              id: payload.id,
-              dateAdded: new Date().valueOf(),
-              type: payload.method,
-              connectionId: connectionIdentifier,
-              txn: txn,
-              chainId: connector.session?.chainId,
-              account: connector.session?.accounts[0],
-              notification: true,
-              dapp: connector.session?.peerMeta
-                ? {
-                    name: connector.session.peerMeta.name,
-                    description: connector.session.peerMeta.description,
-                    icons: connector.session.peerMeta.icons,
-                    url: connector.session.peerMeta.url,
-                  }
-                : null,
-            },
-          })
-        );
+        onCallRequest(connector, payload);
       });
 
-      connector.on('disconnect', (error: any, payload: any) => {
+      connector.on('disconnect', async (error: any, payload: any) => {
         if (error) {
           onError(error);
           return;
         }
+
+        deleteCachedLegacySession();
 
         clearTimeout(sessionTimeout);
         // NOTE the dispatch() will cause double rerender when we trigger a disconnect,
@@ -372,18 +265,16 @@ export default function useWalletConnectLegacy({
         // NOTE: this event might be invoked 2 times when the dApp itself disconnects
         // currently we don't dedupe that
         if (sessionStart && Date.now() - sessionStart < SESSION_TIMEOUT) {
-          console.log(
+          enqueueSnackbar(
             'dApp disconnected immediately - perhaps it does not support the current network?',
-            { error: true }
+            { variant: 'error' }
           );
         } else {
-          console.log(
+          enqueueSnackbar(
             `${connector.session?.peerMeta.name} disconnected: ${payload.params[0].message}`
           );
         }
       });
-
-      connector.on('error', onError);
 
       return connector;
     },
@@ -435,6 +326,217 @@ export default function useWalletConnectLegacy({
     isConnecting,
   };
 }
+
+const onCallRequest = async (
+  connector: any,
+  payload: { id: number; method: string; params: any[] }
+) => {
+  switch (payload.method) {
+    case EIP155_SIGNING_METHODS.ETH_SIGN:
+    case EIP155_SIGNING_METHODS.PERSONAL_SIGN:
+      return ModalStore.open('LegacySessionSignModal', {
+        legacyCallRequestEvent: payload,
+        legacyRequestSession: connector.session,
+        chainId: connector.chainId,
+        protocol: connector.protocol,
+        onApprove: async () => {
+          if (payload) {
+            const { id, method, params } = payload;
+
+            const response: any = await approveEIP155Request({
+              id,
+              topic: '',
+              params: { request: { method, params }, chainId: '1' },
+              context: {
+                // undefined
+                verified: {
+                  origin: '',
+                  validation: 'UNKNOWN',
+                  verifyUrl: '',
+                },
+              },
+            });
+
+            if ('error' in response) {
+              connector.rejectRequest({
+                id,
+                error: response.error,
+              });
+            } else {
+              connector.approveRequest({
+                id,
+                result: response.result,
+              });
+            }
+
+            ModalStore.close();
+          }
+        },
+        onReject: () => {
+          if (payload) {
+            const { id, method, params } = payload;
+
+            const { error } = rejectEIP155Request({
+              id,
+              topic: '',
+              params: { request: { method, params }, chainId: '1' },
+              context: {
+                // undefined
+                verified: {
+                  origin: '',
+                  validation: 'UNKNOWN',
+                  verifyUrl: '',
+                },
+              },
+            });
+            connector.rejectRequest({
+              id,
+              error,
+            });
+            ModalStore.close();
+          }
+        },
+      });
+
+    case EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA:
+    case EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA_V3:
+    case EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA_V4:
+      return ModalStore.open('LegacySessionSignTypedDataModal', {
+        legacyCallRequestEvent: payload,
+        legacyRequestSession: connector.session,
+        onApprove: async () => {
+          if (payload) {
+            const { id, method, params } = payload;
+
+            const response: any = await approveEIP155Request({
+              id,
+              topic: '',
+              params: { request: { method, params }, chainId: '1' },
+              context: {
+                // undefined
+                verified: {
+                  origin: '',
+                  validation: 'UNKNOWN',
+                  verifyUrl: '',
+                },
+              },
+            });
+
+            if ('error' in response) {
+              connector.rejectRequest({
+                id,
+                error: response.error,
+              });
+            } else {
+              connector.approveRequest({
+                id,
+                result: response.result,
+              });
+            }
+
+            ModalStore.close();
+          }
+        },
+        onReject: () => {
+          if (payload) {
+            const { id, method, params } = payload;
+
+            const { error } = rejectEIP155Request({
+              id,
+              topic: '',
+              params: { request: { method, params }, chainId: '1' },
+              context: {
+                // undefined
+                verified: {
+                  origin: '',
+                  validation: 'UNKNOWN',
+                  verifyUrl: '',
+                },
+              },
+            });
+            connector.rejectRequest({
+              id,
+              error,
+            });
+            ModalStore.close();
+          }
+        },
+      });
+
+    case EIP155_SIGNING_METHODS.ETH_SEND_TRANSACTION:
+    case EIP155_SIGNING_METHODS.ETH_SIGN_TRANSACTION:
+      return ModalStore.open('LegacySessionSendTransactionModal', {
+        legacyCallRequestEvent: payload,
+        legacyRequestSession: connector.session,
+        chainId: connector.chainId,
+        protocol: connector.protocol,
+        onApprove: async () => {
+          if (payload) {
+            const { id, method, params } = payload;
+
+            const response: any = await approveEIP155Request({
+              id,
+              topic: '',
+              params: { request: { method, params }, chainId: '1' },
+              context: {
+                // undefined
+                verified: {
+                  origin: '',
+                  validation: 'UNKNOWN',
+                  verifyUrl: '',
+                },
+              },
+            });
+
+            if ('error' in response) {
+              connector.rejectRequest({
+                id,
+                error: response.error,
+              });
+            } else {
+              connector.approveRequest({
+                id,
+                result: response.result,
+              });
+            }
+
+            ModalStore.close();
+          }
+        },
+        onReject: () => {
+          if (payload) {
+            const { id, method, params } = payload;
+
+            const { error } = rejectEIP155Request({
+              id,
+              topic: '',
+              params: { request: { method, params }, chainId: '1' },
+              context: {
+                // undefined
+                verified: {
+                  origin: '',
+                  validation: 'UNKNOWN',
+                  verifyUrl: '',
+                },
+              },
+            });
+            connector.rejectRequest({
+              id,
+              error,
+            });
+            ModalStore.close();
+          }
+        },
+      });
+
+    default:
+      alert(`${payload.method} is not supported for WalletConnect v1`);
+      connector.rejectRequest({
+        id: payload.id,
+        error: { message: 'Method not found: ' + payload.method, code: -32601 },
+      });
+  }
+};
 
 function getCachedLegacySession(): IWalletConnectSession | undefined {
   if (typeof window === 'undefined') return;

@@ -7,11 +7,6 @@ import RequesDetailsCard from 'src/components/walletConnect/RequestDetalilsCard'
 import RequestMethodCard from 'src/components/walletConnect/RequestMethodCard';
 import RequestModalContainer from 'src/components/walletConnect/RequestModalContainer';
 import ModalStore from 'src/store/ModalStore';
-import {
-  approveEIP155Request,
-  rejectEIP155Request,
-} from 'src/utils/walletConnect/EIP155RequestHandlerUtil';
-import { signClient } from 'src/utils/walletConnect/WalletConnectUtil';
 
 export default function SessionSendTransactionModal() {
   const [loading, setLoading] = useState(false);
@@ -19,6 +14,8 @@ export default function SessionSendTransactionModal() {
   // Get request and wallet data from store
   const requestEvent = ModalStore.state.data?.requestEvent;
   const requestSession = ModalStore.state.data?.requestSession;
+  const onApprove = ModalStore.state.data?.onApprove;
+  const onReject = ModalStore.state.data?.onReject;
 
   // Ensure request and wallet are defined
   if (!requestEvent || !requestSession) {
@@ -30,31 +27,6 @@ export default function SessionSendTransactionModal() {
   const { topic, params } = requestEvent;
   const { request, chainId } = params;
   const transaction = request.params[0];
-
-  // Handle approve action
-  async function onApprove() {
-    if (requestEvent) {
-      setLoading(true);
-      const response = await approveEIP155Request(requestEvent);
-      await signClient.respond({
-        topic,
-        response,
-      });
-      ModalStore.close();
-    }
-  }
-
-  // Handle reject action
-  async function onReject() {
-    if (requestEvent) {
-      const response = rejectEIP155Request(requestEvent);
-      await signClient.respond({
-        topic,
-        response,
-      });
-      ModalStore.close();
-    }
-  }
 
   return (
     <Fragment>
@@ -79,7 +51,7 @@ export default function SessionSendTransactionModal() {
         <Button color="error" onClick={onReject} disabled={loading}>
           Reject
         </Button>
-        <Button color="success" onClick={onApprove} disabled={loading}>
+        <Button color="success" onClick={onApprove(setLoading(true))} disabled={loading}>
           {loading ? <CircularProgress size="sm" color="success" /> : 'Approve'}
         </Button>
       </div>

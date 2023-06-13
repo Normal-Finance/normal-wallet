@@ -6,9 +6,7 @@ import RequestModalContainer from 'src/components/walletConnect/RequestModalCont
 import ModalStore from 'src/store/ModalStore';
 // import { eip155Addresses } from 'src/utils/EIP155WalletUtil'
 import { isEIP155Chain } from 'src/utils/walletConnect/HelperUtil';
-import { legacySignClient } from 'src/utils/walletConnect/LegacyWalletConnectUtil';
 import { Button, Divider, Modal, Typography } from '@mui/material';
-import { getSdkError } from '@walletconnect/utils';
 import { Fragment, useState } from 'react';
 
 export default function LegacySessionProposalModal() {
@@ -17,6 +15,8 @@ export default function LegacySessionProposalModal() {
 
   // Get proposal data and wallet address from store
   const proposal = ModalStore.state.data?.legacyProposal;
+  const onApprove = ModalStore.state.data?.onApprove;
+  const onReject = ModalStore.state.data?.onReject;
 
   // Ensure proposal is defined
   if (!proposal) {
@@ -42,25 +42,6 @@ export default function LegacySessionProposalModal() {
         [chain]: [...prevChainAddresses, account],
       }));
     }
-  }
-
-  // Hanlde approve action, construct session namespace
-  async function onApprove() {
-    if (proposal) {
-      legacySignClient.approveSession({
-        accounts: selectedAccounts['eip155'],
-        chainId: chainId ?? 1,
-      });
-    }
-    ModalStore.close();
-  }
-
-  // Handle reject action
-  function onReject() {
-    if (proposal) {
-      legacySignClient.rejectSession(getSdkError('USER_REJECTED_METHODS'));
-    }
-    ModalStore.close();
   }
 
   // Render account selection checkboxes based on chain
@@ -102,7 +83,7 @@ export default function LegacySessionProposalModal() {
         >
           Approve
         </Button> */}
-        <Button color="success" disabled={!hasSelected} onClick={onApprove}>
+        <Button color="success" disabled={!hasSelected} onClick={onApprove(selectedAccounts)}>
           Approve
         </Button>
         {/* </Modal.Footer> */}

@@ -1,15 +1,19 @@
 import { useMemo, useEffect, useCallback } from 'react';
-// import { useToasts } from 'hooks/toasts'
 import useWalletConnectV2 from 'src/hooks/walletConnect/walletConnectV2';
 import useWalletConnectLegacy from 'src/hooks/walletConnect/walletConnectLegacy';
-// import { isFirefox } from 'lib/isFirefox'
+import { isFirefox } from 'src/utils/isFirefox';
+
+// components
+import { useSnackbar } from 'src/components/snackbar';
 
 export default function useWalletConnect({ account, chainId, useStorage, setRequests }) {
-  //   const { console.log } = useToasts()
+  /** HOOKS */
+  const { enqueueSnackbar } = useSnackbar();
 
-  const clipboardError = (e) => console.log('non-fatal clipboard/walletconnect err:', e.message);
+  const clipboardError = (e) =>
+    enqueueSnackbar('non-fatal clipboard/walletconnect err: ' + e.message, { variant: 'error' });
   const getClipboardText = useCallback(async () => {
-    // if (isFirefox()) return false
+    if (isFirefox()) return false;
 
     try {
       return await navigator.clipboard.readText();
@@ -106,7 +110,7 @@ export default function useWalletConnect({ account, chainId, useStorage, setRequ
       } else if (connectorOpts.uri.match(/^wc:([a-f0-9-]+)@1/)) {
         connectLegacy(connectorOpts);
       } else {
-        console.log('Invalid WalletConnect uri', { error: true });
+        enqueueSnackbar('Invalid WalletConnect uri', { variant: 'error' });
       }
     },
     [connectV2, connectLegacy]
@@ -138,7 +142,7 @@ export default function useWalletConnect({ account, chainId, useStorage, setRequ
 
     if (!wcUri) return;
     if (!wcUri.includes('key=') && !wcUri.includes('symKey='))
-      return console.log('Invalid WalletConnect uri', { error: true });
+      return enqueueSnackbar('Invalid WalletConnect uri', { variant: 'error' });
 
     if (wcUri) connect({ uri: wcUri });
   }, [account, connect]);
@@ -148,10 +152,11 @@ export default function useWalletConnect({ account, chainId, useStorage, setRequ
     // window.wcConnect = uri => connect({ uri })
 
     // @TODO on focus and on user action
-    const clipboardError = (e) => console.log('non-fatal clipboard/walletconnect err:', e.message);
+    const clipboardError = (e) =>
+      enqueueSnackbar('non-fatal clipboard/walletconnect err:' + e.message, { variant: 'error' });
     const tryReadClipboard = async () => {
       if (!account) return;
-      // if (isFirefox()) return
+      if (isFirefox()) return;
       if (document.visibilityState !== 'visible') return;
 
       try {

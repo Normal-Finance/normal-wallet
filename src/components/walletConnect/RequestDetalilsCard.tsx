@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { EIP155_CHAINS, TEIP155Chain } from 'src/data/EIP155Data';
+import { EIP155_CHAINS, TEIP155Chain } from 'src/hooks/walletConnect/wcConsts';
 import { Divider, Typography } from '@mui/material';
 import { Fragment } from 'react';
 

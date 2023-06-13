@@ -1,5 +1,5 @@
 import { utils } from 'ethers';
-import { EIP155_CHAINS, TEIP155Chain } from 'src/data/EIP155Data';
+import { EIP155_CHAINS, TEIP155Chain } from 'src/hooks/walletConnect/wcConsts';
 
 /**
  * Truncates string (in the middle) via given lenght value
