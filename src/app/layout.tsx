@@ -13,8 +13,6 @@ import 'yet-another-react-lightbox/plugins/thumbnails.css';
 import 'react-lazy-load-image-component/src/effects/blur.css';
 
 // ----------------------------------------------------------------------
-// moralis
-import Moralis from 'moralis';
 
 // redux
 import ReduxProvider from 'src/redux/redux-provider';
@@ -28,7 +26,6 @@ import ProgressBar from 'src/components/progress-bar';
 import MotionLazy from 'src/components/animate/motion-lazy';
 import SnackbarProvider from 'src/components/snackbar/snackbar-provider';
 import { SettingsProvider, SettingsDrawer } from 'src/components/settings';
-import { MORALIS_API_KEY } from 'src/config-global';
 import { WebsocketContextProvider } from 'src/contexts/WebsocketContext';
 
 // ----------------------------------------------------------------------
@@ -69,11 +66,6 @@ type Props = {
 };
 
 export default function RootLayout({ children }: Props) {
-  Moralis.start({
-    apiKey:
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub25jZSI6ImM5NWM3YmIxLTEyNjMtNDY4NS05NzZjLTI2NjE1ZmJhMzFjYyIsIm9yZ0lkIjoiMjA5MjI2IiwidXNlcklkIjoiMjA4ODk4IiwidHlwZUlkIjoiZjQyZmNkYTctOTgxNS00OWY0LWI3NjQtYjYxZjIzNjM4ODYxIiwidHlwZSI6IlBST0pFQ1QiLCJpYXQiOjE2ODQyMDk4NTUsImV4cCI6NDgzOTk2OTg1NX0.IfF8qDjubFvNBy2tOlEQbElPS-YJ1sksIKT5X6hCoiY',
-  });
-
   return (
     <html lang="en" className={primaryFont.className}>
       <body>

@@ -63,8 +63,8 @@ export default function Dapps({ connections, connect, disconnect, isWcConnecting
             </Button>
           )}
 
-          {connections.map((connection: any) => (
-            <ConnectionCard key={connection.id} connection={connection} onDisconnect={disconnect} />
+          {connections.map((connection: any, index: any) => (
+            <ConnectionCard key={index} connection={connection} onDisconnect={disconnect} />
           ))}
         </Stack>
       </Scrollbar>

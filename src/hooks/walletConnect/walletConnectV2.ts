@@ -55,7 +55,7 @@ export default function useWalletConnectV2({
   const onInitialize = useCallback(async () => {
     try {
       SignClient.init({
-        logger: 'debug',
+        logger: process.env.NODE_ENV === 'production' ? 'silent' : 'debug',
         projectId: WALLET_CONNECT.projectId,
         relayUrl: 'wss://relay.walletconnect.com',
         metadata: {
