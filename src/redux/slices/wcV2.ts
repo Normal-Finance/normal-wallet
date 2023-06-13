@@ -1,16 +1,9 @@
-// import sum from 'lodash/sum';
-// import uniq from 'lodash/uniq';
-// import uniqBy from 'lodash/uniqBy';
-import { createSlice, Dispatch } from '@reduxjs/toolkit';
-// utils
-// import axios, { API_ENDPOINTS } from 'src/utils/axios';
-// import { IStateState } from 'src/types/state';
+import { createSlice } from '@reduxjs/toolkit';
 
 // ----------------------------------------------------------------------
 
 const initialState: any = {
   connections: [],
-  requests: [],
 };
 
 const slice = createSlice({
@@ -39,10 +32,6 @@ const slice = createSlice({
         });
 
         state.connections = [...updatedConnections];
-        // return {
-        //   ...state,
-        //   connections: [...updatedConnections]
-        // }
       } else {
         return {
           ...state,
@@ -67,13 +56,6 @@ const slice = createSlice({
 
       state.connections = filteredConnections;
     },
-    requestAdded(state, action) {
-      if (state.requests.find(({ id }: any) => id === action.payload.request.id)) return;
-      else state.requests = [...state.requests, action.payload.request];
-    },
-    requestsResolved(state, action) {
-      state.requests = state.requests.filter((x: any) => !action.payload.ids.includes(x.id));
-    },
   },
 });
 
@@ -81,24 +63,4 @@ const slice = createSlice({
 export default slice.reducer;
 
 // Actions
-export const {
-  updateConnections,
-  connectedNewSession,
-  disconnected,
-  requestAdded,
-  requestsResolved,
-} = slice.actions;
-
-// ----------------------------------------------------------------------
-
-// export function getProducts() {
-//   return async (dispatch: Dispatch) => {
-//     dispatch(slice.actions.getProductsStart());
-//     try {
-//       const response = await axios.get(API_ENDPOINTS.product.list);
-//       dispatch(slice.actions.getProductsSuccess(response.data.products));
-//     } catch (error) {
-//       dispatch(slice.actions.getProductsFailure(error));
-//     }
-//   };
-// }
+export const { updateConnections, connectedNewSession, disconnected } = slice.actions;

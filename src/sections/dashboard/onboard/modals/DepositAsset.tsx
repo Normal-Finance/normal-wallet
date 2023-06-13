@@ -11,19 +11,18 @@ import {
   InputAdornment,
   Avatar,
 } from '@mui/material';
-// components
 
 // ----------------------------------------------------------------------
 
 type Props = {
   open: boolean;
-  asset: any;
-  smartWalletAddress: string;
+  token: any;
+  toAddress: string;
   onClose: any;
 };
 
-export default function DepositAsset({ open, asset, smartWalletAddress, onClose }: Props) {
-  const { contract } = useContract(asset.token_address);
+export default function DepositAsset({ open, token, toAddress, onClose }: Props) {
+  const { contract } = useContract(token.token_address);
   const { mutate: transferTokens, isLoading, error } = useTransferToken(contract);
 
   const [amount, setAmount] = useState('');
@@ -33,7 +32,7 @@ export default function DepositAsset({ open, asset, smartWalletAddress, onClose 
   };
 
   const selectMax = () => {
-    setAmount(asset.balance);
+    setAmount(token.balance);
   };
 
   return (
@@ -44,13 +43,13 @@ export default function DepositAsset({ open, asset, smartWalletAddress, onClose 
         justifyContent="space-between"
         sx={{ pt: 2.5, px: 2.5 }}
       >
-        <Avatar src={asset.logo} sx={{ width: 48, height: 48 }} />
-        <Typography variant="h6"> {asset.name} </Typography>
+        <Avatar src={token.logo} sx={{ width: 48, height: 48 }} />
+        <Typography variant="h6"> {token.name} </Typography>
       </Stack>
 
       <Stack sx={{ p: 2.5 }}>
         <Typography variant="body1">
-          {asset.balance / asset.decimals} {asset.symbol}
+          {token.balance / token.decimals} {token.symbol}
         </Typography>
 
         <TextField
@@ -68,20 +67,16 @@ export default function DepositAsset({ open, asset, smartWalletAddress, onClose 
           }}
         />
         <Web3Button
-          contractAddress={asset.token_address}
+          contractAddress={token.token_address}
           action={() =>
             transferTokens({
-              to: smartWalletAddress, // Address to transfer to
+              to: toAddress, // Address to transfer to
               amount, // Amount to transfer
             })
           }
         >
-          Transfer
-        </Web3Button>
-
-        {/* <Button variant="contained" size="large" disabled={amount === ''} onClick={handleSubmit}>
           Deposit
-        </Button> */}
+        </Web3Button>
       </Stack>
     </Dialog>
   );

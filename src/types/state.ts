@@ -2,7 +2,7 @@ import { IErrorType } from './error';
 
 // ----------------------------------------------------------------------
 
-export type IConnections = {
+export type IClients = {
   TOTAL: number;
 };
 
@@ -19,7 +19,7 @@ export type IBatches = {
 };
 
 export type IStateState = {
-  connections: IConnections;
+  clients: IClients;
   transactions: ITransactions;
   batches: IBatches;
   appStatus: {

@@ -3,39 +3,22 @@
 import sumBy from 'lodash/sumBy';
 import { useState, useCallback } from 'react';
 // @mui
-import { useTheme, alpha } from '@mui/material/styles';
-import Tab from '@mui/material/Tab';
-import Tabs from '@mui/material/Tabs';
+import { useTheme } from '@mui/material/styles';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
-import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
-import Divider from '@mui/material/Divider';
-import Tooltip from '@mui/material/Tooltip';
-import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
-import IconButton from '@mui/material/IconButton';
 import TableContainer from '@mui/material/TableContainer';
 // routes
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hook';
-import { RouterLink } from 'src/routes/components';
 // hooks
 import { useBoolean } from 'src/hooks/use-boolean';
 // utils
-import { fTimestamp } from 'src/utils/format-time';
-// _mock
-import { _files, _invoices, INVOICE_SERVICE_OPTIONS } from 'src/_mock';
 // types
-import { IWallet, IWalletTableFilters, IWalletTableFilterValue } from 'src/types/wallet';
+import { IWalletTableFilters, IWalletTableFilterValue } from 'src/types/wallet';
 // components
-import Label from 'src/components/label';
-import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
-import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
-import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
-import { isDateError } from 'src/components/custom-date-range-picker';
 import {
   useTable,
   getComparator,
@@ -43,21 +26,18 @@ import {
   TableNoData,
   TableEmptyRows,
   TableHeadCustom,
-  TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table';
 //
 import MyTableRow from './table-row';
 import TableToolbar from './table-toolbar';
 import TableFiltersResult from './table-filters-result';
-import { Erc20Value } from 'moralis/common-evm-utils';
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
   { id: 'token', label: 'Token' },
   { id: 'balance', label: 'Balance' },
-  { id: 'price', label: 'Price' },
   { id: '' },
 ];
 
@@ -70,21 +50,12 @@ const defaultFilters = {
 // ----------------------------------------------------------------------
 
 type Props = {
-  nativeBalance: string;
+  nativeBalance: number;
   tokenBalances: any;
-  connected: boolean;
 };
 
-export default function Balances({ nativeBalance, tokenBalances, connected }: Props) {
-  const theme = useTheme();
-
-  const settings = useSettingsContext();
-
-  const router = useRouter();
-
+export default function Balances({ nativeBalance, tokenBalances }: Props) {
   const table = useTable({ defaultOrderBy: 'createDate' });
-
-  const confirm = useBoolean();
 
   const [tableData, setTableData] = useState(tokenBalances);
 
@@ -96,25 +67,11 @@ export default function Balances({ nativeBalance, tokenBalances, connected }: Pr
     filters,
   });
 
-  const dataInPage = dataFiltered.slice(
-    table.page * table.rowsPerPage,
-    table.page * table.rowsPerPage + table.rowsPerPage
-  );
-
   const denseHeight = table.dense ? 56 : 76;
 
   const canReset = !!filters.name || !!filters.service.length || filters.status !== 'all';
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
-
-  const getInvoiceLength = (status: string) =>
-    tableData.filter((item: any) => item.status === status).length;
-
-  const getTotalAmount = (status: string) =>
-    sumBy(
-      tableData.filter((item: any) => item.status === status),
-      'totalAmount'
-    );
 
   const handleFilters = useCallback(
     (name: string, value: IWalletTableFilterValue) => {
@@ -125,13 +82,6 @@ export default function Balances({ nativeBalance, tokenBalances, connected }: Pr
       }));
     },
     [table]
-  );
-
-  const handleEditRow = useCallback(
-    (id: string) => {
-      // router.push(paths.dashboard.invoice.edit(id));
-    },
-    [router]
   );
 
   const handleFilterStatus = useCallback(
@@ -168,39 +118,6 @@ export default function Balances({ nativeBalance, tokenBalances, connected }: Pr
         )}
 
         <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
-          <TableSelectedAction
-            dense={table.dense}
-            numSelected={table.selected.length}
-            rowCount={tableData.length}
-            onSelectAllRows={(checked) =>
-              table.onSelectAllRows(
-                checked,
-                tableData.map((row: any) => row.id)
-              )
-            }
-            action={
-              <Stack direction="row">
-                <Tooltip title="Sent">
-                  <IconButton color="primary">
-                    <Iconify icon="iconamoon:send-fill" />
-                  </IconButton>
-                </Tooltip>
-
-                <Tooltip title="Download">
-                  <IconButton color="primary">
-                    <Iconify icon="eva:download-outline" />
-                  </IconButton>
-                </Tooltip>
-
-                <Tooltip title="Print">
-                  <IconButton color="primary">
-                    <Iconify icon="solar:printer-minimalistic-bold" />
-                  </IconButton>
-                </Tooltip>
-              </Stack>
-            }
-          />
-
           <Scrollbar>
             <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 800 }}>
               <TableHeadCustom
@@ -208,30 +125,30 @@ export default function Balances({ nativeBalance, tokenBalances, connected }: Pr
                 orderBy={table.orderBy}
                 headLabel={TABLE_HEAD}
                 rowCount={tableData.length}
-                numSelected={table.selected.length}
                 onSort={table.onSort}
-                onSelectAllRows={(checked) =>
-                  table.onSelectAllRows(
-                    checked,
-                    tableData.map((row: any) => row.id)
-                  )
-                }
               />
 
               <TableBody>
+                {nativeBalance > 0 && (
+                  <MyTableRow
+                    key={'ETH'}
+                    row={{
+                      balance: nativeBalance,
+                      logo: 'https://assets.coingecko.com/coins/images/279/small/ethereum.png?1595348880',
+                      name: 'Ethereum',
+                      decimals: 1,
+                      symbol: 'ETH',
+                      token_address: '0x2170Ed0880ac9A755fd29B2688956BD959F933F8',
+                    }}
+                  />
+                )}
                 {dataFiltered
                   .slice(
                     table.page * table.rowsPerPage,
                     table.page * table.rowsPerPage + table.rowsPerPage
                   )
                   .map((row) => (
-                    <MyTableRow
-                      key={row.id}
-                      row={row}
-                      selected={table.selected.includes(row.id)}
-                      onSelectRow={() => table.onSelectRow(row.id)}
-                      onEditRow={() => handleEditRow(row.id)}
-                    />
+                    <MyTableRow key={row.id} row={row} />
                   ))}
 
                 <TableEmptyRows

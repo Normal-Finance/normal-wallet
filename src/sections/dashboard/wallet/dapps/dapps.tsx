@@ -1,20 +1,13 @@
+import { useState } from 'react';
+
 // @mui
-import { alpha } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
+import { Divider, IconButton, Stack, Button } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
-// utils
-import { fShortenNumber, fCurrency } from 'src/utils/format-number';
+
 // components
 import Iconify from 'src/components/iconify';
-import { Card, Divider, IconButton } from '@mui/material';
 import ConnectionCard from './connection-card';
 import Scrollbar from 'src/components/scrollbar/scrollbar';
-import { useCallback, useState } from 'react';
-
-// utils
 import ConnectDapp from './modals/ConnectDapp';
 
 // ----------------------------------------------------------------------
@@ -27,16 +20,13 @@ type Props = {
 };
 
 export default function Dapps({ connections, connect, disconnect, isWcConnecting }: Props) {
-  const [loading, setLoading] = useState(false);
   const [openConnect, setOpenConnect] = useState(false);
 
-  const handleOpenConnect = () => {
-    setOpenConnect(true);
-  };
+  const handleOpenConnect = () => setOpenConnect(true);
 
-  const handleCloseConnect = () => {
-    setOpenConnect(false);
-  };
+  const handleCloseConnect = () => setOpenConnect(false);
+
+  if (isWcConnecting) return <CircularProgress />;
 
   return (
     <>

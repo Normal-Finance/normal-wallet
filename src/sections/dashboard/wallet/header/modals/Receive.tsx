@@ -1,17 +1,11 @@
-import { useState } from 'react';
 import QRCode from 'react-qr-code';
+
 // @mui
-import {
-  Stack,
-  Dialog,
-  Button,
-  TextField,
-  Typography,
-  InputAdornment,
-  IconButton,
-} from '@mui/material';
+import { Stack, Dialog, Typography, IconButton } from '@mui/material';
+
 // components
 import Iconify from 'src/components/iconify';
+import { useCopyToClipboard } from 'src/hooks/use-copy-to-clipboard';
 
 // ----------------------------------------------------------------------
 
@@ -22,7 +16,9 @@ type Props = {
 };
 
 export default function Receive({ open, address, onClose }: Props) {
-  const handleCopy = () => {};
+  const { copy } = useCopyToClipboard();
+
+  const handleCopyAddress = () => copy(address);
 
   return (
     <Dialog fullWidth maxWidth="xs" open={open} onClose={onClose}>
@@ -45,7 +41,7 @@ export default function Receive({ open, address, onClose }: Props) {
 
         <Typography variant="body1">Your Normal Address</Typography>
 
-        <Typography variant="body1" onClick={handleCopy}>
+        <Typography variant="body1" onClick={handleCopyAddress}>
           {address} <Iconify icon="eva:copy-outline" sx={{ color: 'text.disabled' }} />
         </Typography>
       </Stack>

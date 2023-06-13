@@ -9,13 +9,15 @@ import { IStateState } from 'src/types/state';
 // ----------------------------------------------------------------------
 
 const initialState: IStateState = {
-  connection: null,
-  transaction: {
+  clients: {
+    TOTAL: 0,
+  },
+  transactions: {
     NEW: 0,
     PENDING: 0,
     COMPLETED: 0,
   },
-  batch: {
+  batches: {
     INIT: 0,
     PENDING: 0,
     COMPLETED: 0,
@@ -34,8 +36,8 @@ const slice = createSlice({
     getStateSuccess(state, action) {
       const { transaction, batch } = action.payload;
 
-      state.transaction = transaction;
-      state.batch = batch;
+      state.transactions = transaction;
+      state.batches = batch;
 
       state.appStatus.loading = false;
       state.appStatus.error = null;
@@ -48,17 +50,3 @@ export default slice.reducer;
 
 // Actions
 export const { getStateSuccess } = slice.actions;
-
-// ----------------------------------------------------------------------
-
-// export function getProducts() {
-//   return async (dispatch: Dispatch) => {
-//     dispatch(slice.actions.getProductsStart());
-//     try {
-//       const response = await axios.get(API_ENDPOINTS.product.list);
-//       dispatch(slice.actions.getProductsSuccess(response.data.products));
-//     } catch (error) {
-//       dispatch(slice.actions.getProductsFailure(error));
-//     }
-//   };
-// }

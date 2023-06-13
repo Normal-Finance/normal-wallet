@@ -1,9 +1,7 @@
-import PropTypes from 'prop-types';
 import { useState } from 'react';
+
 // @mui
-import { Stack, Dialog, Button, TextField, Typography, InputAdornment } from '@mui/material';
-// components
-import Iconify from 'src/components/iconify';
+import { Stack, Dialog, Button, TextField, Typography } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
@@ -16,9 +14,7 @@ type Props = {
 export default function ConnectDapp({ open, onClose, onSubmit }: Props) {
   const [uri, setUri] = useState('');
 
-  const handleUri = (event: any) => {
-    setUri(event.target.value);
-  };
+  const handleUri = (event: any) => setUri(event.target.value);
 
   const handleSubmit = async () => {
     await onSubmit({ uri: uri });

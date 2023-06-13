@@ -29,11 +29,6 @@ export default function TableFiltersResult({
   results,
   ...other
 }: Props) {
-  // const handleRemoveService = (inputValue: string) => {
-  //   const newValue = filters.service.filter((item: any) => item !== inputValue);
-  //   onFilters('service', newValue);
-  // };
-
   const handleRemoveStatus = () => {
     onFilters('status', 'all');
   };
@@ -48,19 +43,6 @@ export default function TableFiltersResult({
       </Box>
 
       <Stack flexGrow={1} spacing={1} direction="row" flexWrap="wrap" alignItems="center">
-        {/* {!!filters.service.length && (
-          <Block label="Service:">
-            {filters.service.map((item: any) => (
-              <Chip
-                key={item}
-                label={item}
-                size="small"
-                onDelete={() => handleRemoveService(item)}
-              />
-            ))}
-          </Block>
-        )} */}
-
         {filters.status !== 'all' && (
           <Block label="Status:">
             <Chip size="small" label={filters.status} onDelete={handleRemoveStatus} />

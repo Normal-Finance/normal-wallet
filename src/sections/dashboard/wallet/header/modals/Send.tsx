@@ -30,7 +30,7 @@ type Props = {
 export default function Send({ open, nativeBalance, tokenBalances, onClose }: Props) {
   const hasETH = nativeBalance > 0;
   const canSend = hasETH || tokenBalances.length > 0;
-  
+
   const EventSchema = Yup.object().shape({
     asset: Yup.string().required('Asset is required'),
     amount: Yup.array().of(Yup.string()).required('Amount is required'),
@@ -40,7 +40,7 @@ export default function Send({ open, nativeBalance, tokenBalances, onClose }: Pr
   const methods = useForm({
     resolver: yupResolver(EventSchema),
     defaultValues: {
-      asset: 'Ethereum',
+      asset: '',
       amount: 0,
       toAddress: '',
     },
@@ -59,7 +59,6 @@ export default function Send({ open, nativeBalance, tokenBalances, onClose }: Pr
 
   const values = watch();
 
-
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Dialog fullWidth maxWidth="xs" open={open} onClose={onClose}>
@@ -73,65 +72,60 @@ export default function Send({ open, nativeBalance, tokenBalances, onClose }: Pr
         </Stack>
 
         <Stack sx={{ p: 2.5 }}>
-          {!canSend && ()}
+          {!canSend && <h1>Unable to send crypto.</h1>}
 
-          {canSend && (<>
-          {/* Asset */}
-          <RHFSelect
-            name="asset"
-            label="Asset"
-            size="small"
-            InputLabelProps={{ shrink: true }}
-            SelectProps={{ native: false, sx: { textTransform: 'capitalize' } }}
-          >
-            {hasETH && (<MenuItem
-                value={'ETH'}
-                sx={{
-                  mx: 1,
-                  my: 0.5,
-                  borderRadius: 0.75,
-                  typography: 'body2',
-                  textTransform: 'capitalize',
-                }}
+          {canSend && (
+            <>
+              {/* Asset */}
+              <RHFSelect
+                name="asset"
+                label="Asset"
+                size="small"
+                InputLabelProps={{ shrink: true }}
+                SelectProps={{ native: false, sx: { textTransform: 'capitalize' } }}
               >
-                ETH
-              </MenuItem>)}
-            {tokenBalances.map((tokenBalance: any, index: any) => {
-              const { value, token } = tokenBalance.toJSON();
-              
-              return (
-                <MenuItem
-                  key={index}
-                  value={token.value}
-                  sx={{
-                    mx: 1,
-                    my: 0.5,
-                    borderRadius: 0.75,
-                    typography: 'body2',
-                    textTransform: 'capitalize',
-                  }}
-                >
-                  {token?.name} {value + ' ' + token?.symbol}
-                </MenuItem>
-              )
-            } )}
-          </RHFSelect>
+                {hasETH && (
+                  <MenuItem
+                    value={'ETH'}
+                    sx={{
+                      mx: 1,
+                      my: 0.5,
+                      borderRadius: 0.75,
+                      typography: 'body2',
+                      textTransform: 'capitalize',
+                    }}
+                  >
+                    ETH
+                  </MenuItem>
+                )}
+                {tokenBalances.map((tokenBalance: any, index: any) => {
+                  const { value, token } = tokenBalance.toJSON();
 
-            {/* Amount */}
-          <RHFTextField
-              name="amount"
-              label="Amount"
-              placeholder="Enter amount"
-              type="number"
-            />
+                  return (
+                    <MenuItem
+                      key={index}
+                      value={token.value}
+                      sx={{
+                        mx: 1,
+                        my: 0.5,
+                        borderRadius: 0.75,
+                        typography: 'body2',
+                        textTransform: 'capitalize',
+                      }}
+                    >
+                      {token?.name} {value + ' ' + token?.symbol}
+                    </MenuItem>
+                  );
+                })}
+              </RHFSelect>
 
-          {/* To Address */}
-          <RHFTextField
-            name="toAddress"
-            label="Address"
-          />
-          </>)}
-          
+              {/* Amount */}
+              <RHFTextField name="amount" label="Amount" placeholder="Enter amount" type="number" />
+
+              {/* To Address */}
+              <RHFTextField name="toAddress" label="Address" />
+            </>
+          )}
         </Stack>
 
         <DialogActions>

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 // redux
 import { useDispatch, useSelector } from 'src/redux/store';
-import { connectedNewSession, disconnected, requestsResolved } from 'src/redux/slices/wcV2';
+import { connectedNewSession, disconnected } from 'src/redux/slices/wcV2';
 
 // walletconnect
 import SignClient from '@walletconnect/sign-client';
@@ -30,12 +30,7 @@ import {
 
 const WC2_VERBOSE = process.env.REACT_APP_WC2_VERBOSE || 0;
 
-export default function useWalletConnectV2({
-  account,
-  chainId,
-  clearWcClipboard,
-  setRequests,
-}: any) {
+export default function useWalletConnectV2({ account, chainId, clearWcClipboard }: any) {
   /** HOOKS */
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
@@ -45,7 +40,7 @@ export default function useWalletConnectV2({
   stateRef.current = { account, chainId };
 
   /** REDUX */
-  const { connections, requests } = useSelector((state) => state.wcV2);
+  const { connections } = useSelector((state) => state.wcV2);
 
   /** STATE */
   const [initialized, setInitialized] = useState(false);
@@ -143,34 +138,6 @@ export default function useWalletConnectV2({
     },
     [client, connections]
   );
-
-  const resolveMany = (ids: any, resolution: any) => {
-    requests.forEach(({ id, topic }: any) => {
-      if (ids.includes(id)) {
-        if (resolution.success) {
-          const response = formatJsonRpcResult(id, resolution.result);
-          const respObj = {
-            topic: topic,
-            response,
-          };
-          client.respond(respObj).catch((err: any) => {
-            enqueueSnackbar(err.message, { variant: 'error' });
-          });
-        } else {
-          const response = formatJsonRpcError(id, resolution.message);
-          client
-            .respond({
-              topic: topic,
-              response,
-            })
-            .catch((err: any) => {
-              enqueueSnackbar(err.message, { variant: 'error' });
-            });
-        }
-      }
-    });
-    dispatch(requestsResolved({ ids: ids }));
-  };
 
   ////////////////////////
   // SESSION HANDLERS START
@@ -395,7 +362,7 @@ export default function useWalletConnectV2({
         });
       }
     },
-    [client, getConnectionFromSessionTopic, setRequests]
+    [client, getConnectionFromSessionTopic]
   );
 
   const onSessionDelete = useCallback(
@@ -458,7 +425,7 @@ export default function useWalletConnectV2({
         }
       });
     }
-  }, [client, connections, requests, account, chainId]);
+  }, [client, connections, account, chainId]);
 
   useEffect(() => {
     if (initialized) return;
@@ -495,9 +462,7 @@ export default function useWalletConnectV2({
 
   return {
     connections: connections,
-    requests: requests,
     isConnecting,
-    resolveMany,
     connect,
     disconnect,
   };

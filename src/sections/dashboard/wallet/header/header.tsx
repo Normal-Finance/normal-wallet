@@ -1,33 +1,27 @@
+import { useState } from 'react';
+
 // @mui
-import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import CircularProgress from '@mui/material/CircularProgress';
-// utils
-import { fShortenNumber, fCurrency } from 'src/utils/format-number';
+
 // components
 import Iconify from 'src/components/iconify';
+import Send from './modals/Send';
 import Receive from './modals/Receive';
-import { useState } from 'react';
-// import Send from './modals/Send';
 
 // ----------------------------------------------------------------------
 
 type Props = {
   address: string;
-  // totalBalance: number;
-  nativeBalance: string;
+  nativeBalance: number;
   tokenBalances: any;
-  connected: boolean;
 };
 
-export default function Header({ address, nativeBalance, tokenBalances, connected }: Props) {
+export default function Header({ address, nativeBalance, tokenBalances }: Props) {
   const [openSend, setOpenSend] = useState(false);
   const [openReceive, setOpenReceive] = useState(false);
-
-  // const totalBalance =
 
   const handleOpenSend = () => {
     setOpenSend(true);
@@ -50,11 +44,7 @@ export default function Header({ address, nativeBalance, tokenBalances, connecte
       <Stack direction="row" alignItems="center">
         <Box sx={{ flexGrow: 1 }}>
           <Typography variant="h4" gutterBottom>
-            Total Balance
-          </Typography>
-
-          <Typography variant="body1" gutterBottom>
-            Coming soon
+            Normal Wallet
           </Typography>
         </Box>
 
@@ -67,12 +57,12 @@ export default function Header({ address, nativeBalance, tokenBalances, connecte
           >
             Send
           </Button>
-          {/* <Send
+          <Send
             open={openSend}
-            nativeBalance={parseFloat(nativeBalance)}
+            nativeBalance={nativeBalance}
             tokenBalances={tokenBalances}
             onClose={handleCloseSend}
-          /> */}
+          />
 
           {/* Receive */}
           <Button

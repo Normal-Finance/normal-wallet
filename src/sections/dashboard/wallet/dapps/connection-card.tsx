@@ -1,8 +1,6 @@
-import { useState, useCallback } from 'react';
 // @mui
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
-import Avatar from '@mui/material/Avatar';
 import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
 import ListItemText from '@mui/material/ListItemText';
@@ -10,14 +8,10 @@ import Stack, { StackProps } from '@mui/material/Stack';
 // hooks
 import { useBoolean } from 'src/hooks/use-boolean';
 import { useResponsive } from 'src/hooks/use-responsive';
-// utils
-// types
-import { IFileManager } from 'src/types/file';
 // components
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
-import FileThumbnail from 'src/components/file-thumbnail';
 //
 
 // ----------------------------------------------------------------------
@@ -48,10 +42,6 @@ export default function ConnectionCard({ connection, onDisconnect, sx, ...other 
         }),
       }}
     >
-      <IconButton color="primary" onClick={popover.onOpen}>
-        <Iconify icon="eva:external-link-fill" />
-      </IconButton>
-
       <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
         <Iconify icon="eva:more-vertical-fill" />
       </IconButton>
@@ -107,8 +97,6 @@ export default function ConnectionCard({ connection, onDisconnect, sx, ...other 
         }}
         {...other}
       >
-        {/* <FileThumbnail file={file.type} sx={{ width: 36, height: 36, mr: 1 }} /> */}
-
         {renderText}
 
         {renderAction}
@@ -127,7 +115,6 @@ export default function ConnectionCard({ connection, onDisconnect, sx, ...other 
           }}
           sx={{ color: 'error.main' }}
         >
-          {/* <Iconify icon="solar:trash-bin-trash-bold" /> */}
           Disconnect
         </MenuItem>
       </CustomPopover>

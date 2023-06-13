@@ -6,7 +6,7 @@ import { isFirefox } from 'src/utils/isFirefox';
 // components
 import { useSnackbar } from 'src/components/snackbar';
 
-export default function useWalletConnect({ account, chainId, useStorage, setRequests }) {
+export default function useWalletConnect({ account, chainId, useStorage }) {
   /** HOOKS */
   const { enqueueSnackbar } = useSnackbar();
 
@@ -36,15 +36,12 @@ export default function useWalletConnect({ account, chainId, useStorage, setRequ
     connect: connectLegacy,
     disconnect: disconnectLegacy,
     isConnecting: isConnectingLegacy,
-    requests: requestsLegacy,
-    resolveMany: resolveManyLegacy,
   } = useWalletConnectLegacy({
     account,
     clearWcClipboard,
     getClipboardText,
     chainId,
     useStorage,
-    setRequests,
   });
 
   const {
@@ -52,33 +49,12 @@ export default function useWalletConnect({ account, chainId, useStorage, setRequ
     connect: connectV2,
     disconnect: disconnectV2,
     isConnecting: isConnectingV2,
-    requests: requestsV2,
-    resolveMany: resolveManyV2,
   } = useWalletConnectV2({
     account,
     clearWcClipboard,
     getClipboardText,
     chainId,
-    setRequests,
   });
-
-  const requests = useMemo(
-    () => [
-      ...requestsLegacy.map((r) => {
-        return {
-          ...r,
-          wcVersion: 1,
-        };
-      }),
-      ...requestsV2.map((r) => {
-        return {
-          ...r,
-          wcVersion: 2,
-        };
-      }),
-    ],
-    [requestsLegacy, requestsV2]
-  );
 
   const connections = useMemo(
     () => [
@@ -97,11 +73,6 @@ export default function useWalletConnect({ account, chainId, useStorage, setRequ
     ],
     [connectionsLegacy, connectionsV2]
   );
-
-  const resolveMany = (ids, resolution) => {
-    resolveManyLegacy(ids, resolution);
-    resolveManyV2(ids, resolution);
-  };
 
   const connect = useCallback(
     (connectorOpts) => {
@@ -180,8 +151,6 @@ export default function useWalletConnect({ account, chainId, useStorage, setRequ
   return {
     connections: connections,
     isConnecting: isConnectingLegacy || isConnectingV2,
-    requests: requests,
-    resolveMany,
     connect,
     disconnect,
   };

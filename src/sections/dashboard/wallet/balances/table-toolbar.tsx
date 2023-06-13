@@ -2,14 +2,9 @@ import { useCallback } from 'react';
 // @mui
 import Stack from '@mui/material/Stack';
 import MenuItem from '@mui/material/MenuItem';
-// import Checkbox from '@mui/material/Checkbox';
 import TextField from '@mui/material/TextField';
-// import InputLabel from '@mui/material/InputLabel';
 import IconButton from '@mui/material/IconButton';
-// import FormControl from '@mui/material/FormControl';
 import InputAdornment from '@mui/material/InputAdornment';
-// import OutlinedInput from '@mui/material/OutlinedInput';
-// import Select, { SelectChangeEvent } from '@mui/material/Select';
 // types
 import { IWalletTableFilters, IWalletTableFilterValue } from 'src/types/wallet';
 // components
@@ -21,8 +16,6 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 type Props = {
   filters: IWalletTableFilters;
   onFilters: (name: string, value: IWalletTableFilterValue) => void;
-  //
-  // serviceOptions: string[];
 };
 
 export default function TableToolbar({
@@ -40,16 +33,6 @@ Props) {
     [onFilters]
   );
 
-  // const handleFilterService = useCallback(
-  //   (event: SelectChangeEvent<string[]>) => {
-  //     onFilters(
-  //       'service',
-  //       typeof event.target.value === 'string' ? event.target.value.split(',') : event.target.value
-  //     );
-  //   },
-  //   [onFilters]
-  // );
-
   return (
     <>
       <Stack
@@ -64,31 +47,6 @@ Props) {
           pr: { xs: 2.5, md: 1 },
         }}
       >
-        {/* <FormControl
-          sx={{
-            flexShrink: 0,
-            width: { xs: 1, md: 180 },
-          }}
-        >
-          <InputLabel>Service</InputLabel>
-
-          <Select
-            multiple
-            value={filters.service}
-            onChange={handleFilterService}
-            input={<OutlinedInput label="Service" />}
-            renderValue={(selected) => selected.map((value) => value).join(', ')}
-            sx={{ textTransform: 'capitalize' }}
-          >
-            {serviceOptions.map((option) => (
-              <MenuItem key={option} value={option}>
-                <Checkbox disableRipple size="small" checked={filters.service.includes(option)} />
-                {option}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl> */}
-
         <Stack direction="row" alignItems="center" spacing={2} flexGrow={1} sx={{ width: 1 }}>
           <TextField
             fullWidth

@@ -2,12 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 // redux
 import { useDispatch, useSelector } from 'src/redux/store';
-import {
-  updateConnections,
-  connectedNewSession,
-  disconnected,
-  requestsResolved,
-} from 'src/redux/slices/wcLegacy';
+import { updateConnections, connectedNewSession, disconnected } from 'src/redux/slices/wcLegacy';
 
 // walletconnect
 import LegacySignClient from '@walletconnect/client';
@@ -50,7 +45,6 @@ export default function useWalletConnectLegacy({
   chainId,
   clearWcClipboard,
   useStorage,
-  setRequests,
 }: any) {
   /** HOOKS */
   //   const { networks } = useToasts()
@@ -62,7 +56,7 @@ export default function useWalletConnectLegacy({
   stateRef.current = { account, chainId };
 
   /** REDUX */
-  const { connections, requests } = useSelector((state) => state.wcLegacy);
+  const { connections } = useSelector((state) => state.wcLegacy);
 
   /** STATE */
   const [isConnecting, setIsConnecting] = useState(false);
@@ -87,8 +81,6 @@ export default function useWalletConnectLegacy({
       }
     });
 
-    setRequests((currRe: any) => [...currRe, ...requests]);
-
     if (_updateConnections)
       dispatch(
         updateConnections({
@@ -102,7 +94,7 @@ export default function useWalletConnectLegacy({
         })
       );
   };
-  useEffect(maybeUpdateSessions, [account, chainId, setRequests]);
+  useEffect(maybeUpdateSessions, [account, chainId]);
   // we need this so we can invoke the latest version from any event handler
   stateRef.current.maybeUpdateSessions = maybeUpdateSessions;
 
@@ -291,23 +283,6 @@ export default function useWalletConnectLegacy({
     dispatch(disconnected({ connectionId: connectionId }));
   }, []);
 
-  const resolveMany = (ids: any, resolution: any) => {
-    if (ids === undefined) return;
-    requests.forEach(({ id, connectionId, isBatch }: any) => {
-      if (ids.includes(id)) {
-        const connector = connectors[connectionId];
-        if (!connector) return;
-        if (!isBatch || id.endsWith(':0')) {
-          let realId = isBatch ? id.substr(0, id.lastIndexOf(':')) : id;
-          if (resolution.success)
-            connector.approveRequest({ id: realId, result: resolution.result });
-          else connector.rejectRequest({ id: realId, error: { message: resolution.message } });
-        }
-      }
-    });
-    dispatch(requestsResolved({ ids: ids }));
-  };
-
   // Side effects on init
   useEffect(() => {
     connections.forEach(({ connectionId, session }: any) => {
@@ -319,8 +294,6 @@ export default function useWalletConnectLegacy({
 
   return {
     connections: connections,
-    requests: requests,
-    resolveMany,
     connect,
     disconnect,
     isConnecting,
