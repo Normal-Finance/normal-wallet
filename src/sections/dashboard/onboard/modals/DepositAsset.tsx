@@ -2,15 +2,7 @@ import { useState } from 'react';
 import { useContract, useTransferToken, Web3Button } from '@thirdweb-dev/react';
 
 // @mui
-import {
-  Stack,
-  Dialog,
-  Button,
-  TextField,
-  Typography,
-  InputAdornment,
-  Avatar,
-} from '@mui/material';
+import { Stack, Dialog, TextField, Typography, InputAdornment, Avatar } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
@@ -22,8 +14,13 @@ type Props = {
 };
 
 export default function DepositAsset({ open, token, toAddress, onClose }: Props) {
-  const { contract } = useContract(token.token_address);
-  const { mutate: transferTokens, isLoading, error } = useTransferToken(contract);
+  const {
+    token: { logo, name, symbol, contractAddress },
+    value,
+  } = token;
+
+  const { contract } = useContract(contractAddress);
+  const { mutate: transferTokens } = useTransferToken(contract);
 
   const [amount, setAmount] = useState('');
 
@@ -32,24 +29,29 @@ export default function DepositAsset({ open, token, toAddress, onClose }: Props)
   };
 
   const selectMax = () => {
-    setAmount(token.balance);
+    setAmount(value);
+  };
+
+  const handleOnClose = () => {
+    onClose();
+    setAmount('');
   };
 
   return (
-    <Dialog fullWidth maxWidth="xs" open={open} onClose={onClose}>
+    <Dialog fullWidth maxWidth="xs" open={open} onClose={handleOnClose}>
       <Stack
         direction="row"
         alignItems="center"
         justifyContent="space-between"
         sx={{ pt: 2.5, px: 2.5 }}
       >
-        <Avatar src={token.logo} sx={{ width: 48, height: 48 }} />
-        <Typography variant="h6"> {token.name} </Typography>
+        <Avatar src={logo} sx={{ width: 48, height: 48 }} />
+        <Typography variant="h6"> {name} </Typography>
       </Stack>
 
       <Stack sx={{ p: 2.5 }}>
-        <Typography variant="body1">
-          {token.balance / token.decimals} {token.symbol}
+        <Typography variant="body1" sx={{ mb: 2 }}>
+          {value + ' ' + symbol} available
         </Typography>
 
         <TextField
@@ -65,9 +67,11 @@ export default function DepositAsset({ open, token, toAddress, onClose }: Props)
               </InputAdornment>
             ),
           }}
+          sx={{ mb: 2 }}
         />
         <Web3Button
-          contractAddress={token.token_address}
+          contractAddress={contractAddress}
+          isDisabled={!amount}
           action={() =>
             transferTokens({
               to: toAddress, // Address to transfer to
@@ -75,7 +79,7 @@ export default function DepositAsset({ open, token, toAddress, onClose }: Props)
             })
           }
         >
-          Deposit
+          Deposit {symbol}
         </Web3Button>
       </Stack>
     </Dialog>

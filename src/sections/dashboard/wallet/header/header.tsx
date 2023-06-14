@@ -10,6 +10,7 @@ import Button from '@mui/material/Button';
 import Iconify from 'src/components/iconify';
 import Send from './modals/Send';
 import Receive from './modals/Receive';
+import { useSnackbar } from 'src/components/snackbar';
 
 // ----------------------------------------------------------------------
 
@@ -19,11 +20,16 @@ type Props = {
 };
 
 export default function Header({ nativeBalance, tokenBalances }: Props) {
+  const { enqueueSnackbar } = useSnackbar();
+
+  const canSend = nativeBalance > 0 || tokenBalances.length > 0;
+
   const [openSend, setOpenSend] = useState(false);
   const [openReceive, setOpenReceive] = useState(false);
 
   const handleOpenSend = () => {
-    setOpenSend(true);
+    if (canSend) setOpenSend(true);
+    else enqueueSnackbar('Wallet is empty, cannot send funds', { variant: 'error' });
   };
 
   const handleCloseSend = () => {
@@ -56,12 +62,14 @@ export default function Header({ nativeBalance, tokenBalances }: Props) {
           >
             Send
           </Button>
+          {/* {canSend &&  */}
           <Send
             open={openSend}
             nativeBalance={nativeBalance}
             tokenBalances={tokenBalances}
             onClose={handleCloseSend}
           />
+          {/* } */}
 
           {/* Receive */}
           <Button

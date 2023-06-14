@@ -1,9 +1,10 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 
 // moralis
 import { useEvmNativeBalance, useEvmWalletTokenBalances } from '@moralisweb3/next';
+// import { EvmChain } from 'moralis/common-evm-utils';
 
 // @mui
 import { useTheme } from '@mui/material/styles';
@@ -31,7 +32,6 @@ import WalletConnectModalHandler from 'src/components/walletConnect/WalletConnec
 import useWalletConnect from 'src/hooks/useWalletConnect';
 import { useLocalStorage } from 'src/hooks/use-local-storage';
 import { useWebsocketContext } from 'src/contexts/WebsocketContext';
-import { ReadyState } from 'react-use-websocket';
 import { useWalletContext } from 'src/contexts/WalletContext';
 
 // ----------------------------------------------------------------------
@@ -43,7 +43,7 @@ export default function DashboardView() {
 
   const { connectionStatus: websocketStatus } = useWebsocketContext();
 
-  const { personalWallet, smartWallet, smartWalletAddress } = useWalletContext();
+  const { connectionStatus, smartWalletAddress } = useWalletContext();
 
   /** REDUX */
   const { clients, transactions, batches } = useSelector((state) => state.state);
@@ -52,23 +52,29 @@ export default function DashboardView() {
   const [totalTransactions, setTotalTransactions] = useState();
   const [totalBatches, setTotalBatches] = useState();
 
-  const { data: nativeBalance } = useEvmNativeBalance({ address: smartWalletAddress });
-  const { data: tokenBalances } = useEvmWalletTokenBalances({ address: smartWalletAddress });
+  const { data: nativeBalance } = useEvmNativeBalance({
+    // chain: process.env.NEXT_PUBLIC_NODE_ENV === 'production' ? EvmChain.ETHEREUM : EvmChain.GOERLI,
+    address: smartWalletAddress,
+  });
+  const { data: tokenBalances } = useEvmWalletTokenBalances({
+    // chain: process.env.NEXT_PUBLIC_NODE_ENV === 'production' ? EvmChain.ETHEREUM : EvmChain.GOERLI,
+    address: smartWalletAddress,
+  });
   const { connections, connect, disconnect, isConnecting } = useWalletConnect({
     account: smartWalletAddress,
     chainId: '5',
     useStorage: useLocalStorage,
   });
 
-  // const { getState } = useWebsocketContext();
+  const { getState } = useWebsocketContext();
 
-  // const getStateCallback = useCallback(() => {
-  //   getState();
-  // }, []);
+  const getStateCallback = useCallback(() => {
+    getState();
+  }, []);
 
-  // useEffect(() => {
-  //   getStateCallback();
-  // }, [getStateCallback]);
+  useEffect(() => {
+    getStateCallback();
+  }, [getStateCallback]);
 
   useEffect(() => {
     if (transactions) setTotalTransactions(sumValues(transactions));
@@ -97,11 +103,11 @@ export default function DashboardView() {
 
       <Grid container spacing={3}>
         {/* Statistics */}
-        {websocketStatus === ReadyState.CONNECTING ||
-          (websocketStatus === ReadyState.CLOSING && <CircularProgress />)}
-        {websocketStatus === ReadyState.CLOSED ||
-          (websocketStatus === ReadyState.UNINSTANTIATED && <h1>Unable to connect to API.</h1>)}
-        {websocketStatus === ReadyState.OPEN && (
+        {websocketStatus === 'Connecting' ||
+          (websocketStatus === 'Closing' && <CircularProgress />)}
+        {websocketStatus === 'Closed' ||
+          (websocketStatus === 'Uninstantiated' && <h1>Unable to connect to API.</h1>)}
+        {websocketStatus === 'Open' && (
           <>
             <Grid xs={12} md={4}>
               <SummaryWidget
@@ -168,7 +174,7 @@ export default function DashboardView() {
         <Connect />
 
         {/* Wallet */}
-        {personalWallet && smartWallet && (
+        {connectionStatus === 'connected' && (
           <>
             {zeroBalance && <Deposit />}
 

@@ -37,7 +37,7 @@ const TABS = [
 export default function AccountView() {
   const settings = useSettingsContext();
 
-  const [currentTab, setCurrentTab] = useState('general');
+  const [currentTab, setCurrentTab] = useState('billing');
 
   const handleChangeTab = useCallback((event: React.SyntheticEvent, newValue: string) => {
     setCurrentTab(newValue);

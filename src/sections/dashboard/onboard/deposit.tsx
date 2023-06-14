@@ -4,6 +4,7 @@ import { Button, Card, Typography, Stack, Avatar, Box } from '@mui/material';
 
 // moralis
 import { useEvmNativeBalance, useEvmWalletTokenBalances } from '@moralisweb3/next';
+// import { EvmChain } from 'moralis/common-evm-utils';
 
 // utils
 import DepositAsset from './modals/DepositAsset';
@@ -13,10 +14,16 @@ import { useWalletContext } from 'src/contexts/WalletContext';
 type Props = {};
 
 export default function Deposit({}: Props) {
-  const { personalWallet, personalWalletAddress, smartWalletAddress } = useWalletContext();
+  const { personalWalletAddress, smartWalletAddress } = useWalletContext();
 
-  const { data: nativeBalance } = useEvmNativeBalance({ address: personalWalletAddress });
-  const { data: tokenBalances } = useEvmWalletTokenBalances({ address: personalWalletAddress });
+  const { data: nativeBalance } = useEvmNativeBalance({
+    // chain: process.env.NEXT_PUBLIC_NODE_ENV === 'production' ? EvmChain.ETHEREUM : EvmChain.GOERLI,
+    address: personalWalletAddress,
+  });
+  const { data: tokenBalances } = useEvmWalletTokenBalances({
+    // chain: process.env.NEXT_PUBLIC_NODE_ENV === 'production' ? EvmChain.ETHEREUM : EvmChain.GOERLI,
+    address: personalWalletAddress,
+  });
 
   const [selectedToken, setSelectedToken] = useState<any>();
   const [openDeposit, setOpenDeposit] = useState(false);
@@ -59,7 +66,12 @@ export default function Deposit({}: Props) {
             {/* Assets */}
             {nativeBalance.balance.ether > '0' && (
               <Stack direction="row" alignItems="center">
-                <Avatar src={''} sx={{ width: 48, height: 48 }} />
+                <Avatar
+                  src={
+                    'https://assets.coingecko.com/coins/images/279/small/ethereum.png?1595348880'
+                  }
+                  sx={{ width: 48, height: 48 }}
+                />
 
                 <Box sx={{ flexGrow: 1, ml: 2, minWidth: 100 }}>
                   <Typography variant="subtitle2" sx={{ mb: 0.5 }} noWrap>
@@ -102,7 +114,7 @@ export default function Deposit({}: Props) {
         {selectedToken && (
           <DepositAsset
             open={openDeposit}
-            token={selectedToken}
+            token={selectedToken?.toJSON()}
             toAddress={smartWalletAddress}
             onClose={handleCloseDeposit}
           />

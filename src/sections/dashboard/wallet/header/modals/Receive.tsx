@@ -7,6 +7,7 @@ import { Stack, Dialog, Typography, IconButton } from '@mui/material';
 import Iconify from 'src/components/iconify';
 import { useCopyToClipboard } from 'src/hooks/use-copy-to-clipboard';
 import { useWalletContext } from 'src/contexts/WalletContext';
+import { useSnackbar } from 'src/components/snackbar';
 
 // ----------------------------------------------------------------------
 
@@ -16,10 +17,15 @@ type Props = {
 };
 
 export default function Receive({ open, onClose }: Props) {
+  const { enqueueSnackbar } = useSnackbar();
   const { smartWalletAddress } = useWalletContext();
   const { copy } = useCopyToClipboard();
 
-  const handleCopyAddress = () => copy(smartWalletAddress);
+  const handleCopyAddress = async () => {
+    const success = await copy(smartWalletAddress);
+    if (success) enqueueSnackbar('Address copied', { variant: 'success' });
+    else enqueueSnackbar('Error copying address', { variant: 'error' });
+  };
 
   return (
     <Dialog fullWidth maxWidth="xs" open={open} onClose={onClose}>
@@ -42,8 +48,13 @@ export default function Receive({ open, onClose }: Props) {
 
         <Typography variant="body1">Your Normal Address</Typography>
 
-        <Typography variant="body1" onClick={handleCopyAddress}>
-          {smartWalletAddress} <Iconify icon="eva:copy-outline" sx={{ color: 'text.disabled' }} />
+        <Typography variant="body1">
+          {smartWalletAddress}{' '}
+          <Iconify
+            icon="eva:copy-outline"
+            onClick={handleCopyAddress}
+            sx={{ color: 'text.disabled' }}
+          />
         </Typography>
       </Stack>
     </Dialog>

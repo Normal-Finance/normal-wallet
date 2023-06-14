@@ -25,6 +25,7 @@ type Props = {
 export default function Layout({ children }: Props) {
   return (
     <ThirdwebProvider
+      // activeChain={Ethereum}
       activeChain={process.env.NODE_ENV === 'production' ? Ethereum : Goerli}
       autoConnect
       supportedWallets={[

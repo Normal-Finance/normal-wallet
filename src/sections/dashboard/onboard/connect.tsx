@@ -4,9 +4,9 @@ import { ConnectWallet } from '@thirdweb-dev/react';
 import { useWalletContext } from 'src/contexts/WalletContext';
 
 export default function Connect() {
-  const { personalWallet } = useWalletContext();
+  const { connectionStatus } = useWalletContext();
 
-  if (!personalWallet) {
+  if (connectionStatus !== 'connected') {
     return (
       <>
         <Typography variant="subtitle2" noWrap>

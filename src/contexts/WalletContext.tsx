@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
-import { WalletInstance, useWallet } from '@thirdweb-dev/react';
+import { WalletInstance, useWallet, useConnectionStatus } from '@thirdweb-dev/react';
 import { SmartWallet } from '@thirdweb-dev/wallets';
 import { Ethereum, Goerli } from '@thirdweb-dev/chains';
 import { THIRDWEB } from 'src/config-global';
@@ -11,6 +11,7 @@ type Props = {
   children: React.ReactNode;
 };
 type Context = {
+  connectionStatus: string;
   personalWallet: WalletInstance;
   smartWallet: SmartWallet;
   personalWalletAddress: string;
@@ -21,6 +22,7 @@ const WalletContext = createContext<Context | null>(null);
 
 export const WalletContextProvider = ({ children }: Props) => {
   const wallet = useWallet();
+  const connectionStatus = useConnectionStatus();
 
   const [personalWallet, setPersonalWallet] = useState<WalletInstance>();
   const [smartWallet, setSmartWallet] = useState<SmartWallet>();
@@ -69,6 +71,7 @@ export const WalletContextProvider = ({ children }: Props) => {
   return (
     <WalletContext.Provider
       value={{
+        connectionStatus,
         personalWallet: personalWallet as any,
         personalWalletAddress: personalWalletAddress as any,
         smartWallet: smartWallet as any,

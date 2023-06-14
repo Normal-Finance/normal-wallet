@@ -2,6 +2,11 @@ import * as Yup from 'yup';
 // form
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+
+// ethers
+import { ethers } from 'ethers';
+import { parseEther } from 'ethers/lib/utils';
+
 // @mui
 import {
   Box,
@@ -17,6 +22,9 @@ import { LoadingButton } from '@mui/lab';
 // components
 import FormProvider from 'src/components/hook-form';
 import { RHFTextField, RHFSelect } from 'src/components/hook-form';
+import { useWebsocketContext } from 'src/contexts/WebsocketContext';
+import { useWalletContext } from 'src/contexts/WalletContext';
+import { Erc20Value } from 'moralis/common-evm-utils';
 
 // ----------------------------------------------------------------------
 
@@ -27,20 +35,27 @@ type Props = {
   onClose: any;
 };
 
+type FormValues = {
+  token: number;
+  amount: string;
+  toAddress: string;
+};
+
 export default function Send({ open, nativeBalance, tokenBalances, onClose }: Props) {
-  const canSend = nativeBalance > 0 || tokenBalances.length > 0;
+  const { newTransaction } = useWebsocketContext();
+  const { smartWalletAddress } = useWalletContext();
 
   const EventSchema = Yup.object().shape({
-    asset: Yup.string().required('Asset is required'),
-    amount: Yup.array().of(Yup.string()).required('Amount is required'),
+    token: Yup.number().required('Token is required'),
+    amount: Yup.string().required('Amount is required'),
     toAddress: Yup.string().required('To address is required'),
   });
 
   const methods = useForm({
     resolver: yupResolver(EventSchema),
     defaultValues: {
-      asset: '',
-      amount: 0,
+      token: 0,
+      amount: '',
       toAddress: '',
     },
   });
@@ -52,8 +67,20 @@ export default function Send({ open, nativeBalance, tokenBalances, onClose }: Pr
     formState: { isSubmitting },
   } = methods;
 
-  const onSubmit = async (data: any) => {
-    // ...
+  const onSubmit = async (data: FormValues) => {
+    let tokenContractAddress;
+    if (data.token === -1) tokenContractAddress = '0x2170Ed0880ac9A755fd29B2688956BD959F933F8';
+    else if (data.token > 0)
+      tokenContractAddress = tokenBalances[data.token].toJSON().contractAddress;
+
+    const parsedValue = parseEther(data.amount);
+
+    const ABI = ['function transfer(address to, uint256 amount)'];
+    const iface = new ethers.utils.Interface(ABI);
+    const calldata = iface.encodeFunctionData('transfer', [data.toAddress, parsedValue]);
+
+    console.log({ smartWalletAddress, tokenContractAddress, parsedValue, calldata });
+    // newTransaction(smartWalletAddress, tokenContractAddress, parsedValue.toString(), calldata);
   };
 
   const values = watch();
@@ -71,60 +98,54 @@ export default function Send({ open, nativeBalance, tokenBalances, onClose }: Pr
         </Stack>
 
         <Stack sx={{ p: 2.5 }}>
-          {!canSend && <h1>Unable to send crypto.</h1>}
-
-          {canSend && (
-            <>
-              {/* Asset */}
-              <RHFSelect
-                name="asset"
-                label="Asset"
-                size="small"
-                InputLabelProps={{ shrink: true }}
-                SelectProps={{ native: false, sx: { textTransform: 'capitalize' } }}
+          {/* Token */}
+          <RHFSelect
+            name="token"
+            label="Token"
+            size="small"
+            InputLabelProps={{ shrink: true }}
+            SelectProps={{ native: false, sx: { textTransform: 'capitalize' } }}
+          >
+            {nativeBalance > 0 && (
+              <MenuItem
+                value={'ETH'}
+                sx={{
+                  mx: 1,
+                  my: 0.5,
+                  borderRadius: 0.75,
+                  typography: 'body2',
+                  textTransform: 'capitalize',
+                }}
               >
-                {nativeBalance > 0 && (
-                  <MenuItem
-                    value={'ETH'}
-                    sx={{
-                      mx: 1,
-                      my: 0.5,
-                      borderRadius: 0.75,
-                      typography: 'body2',
-                      textTransform: 'capitalize',
-                    }}
-                  >
-                    ETH
-                  </MenuItem>
-                )}
-                {tokenBalances.map((tokenBalance: any, index: any) => {
-                  const { value, token } = tokenBalance.toJSON();
+                ETH
+              </MenuItem>
+            )}
+            {tokenBalances.map((tokenBalance: any, index: any) => {
+              const { value, token } = tokenBalance.toJSON();
 
-                  return (
-                    <MenuItem
-                      key={index}
-                      value={token.value}
-                      sx={{
-                        mx: 1,
-                        my: 0.5,
-                        borderRadius: 0.75,
-                        typography: 'body2',
-                        textTransform: 'capitalize',
-                      }}
-                    >
-                      {token?.name} {value + ' ' + token?.symbol}
-                    </MenuItem>
-                  );
-                })}
-              </RHFSelect>
+              return (
+                <MenuItem
+                  key={index}
+                  value={token.value}
+                  sx={{
+                    mx: 1,
+                    my: 0.5,
+                    borderRadius: 0.75,
+                    typography: 'body2',
+                    textTransform: 'capitalize',
+                  }}
+                >
+                  {token?.name} {value + ' ' + token?.symbol}
+                </MenuItem>
+              );
+            })}
+          </RHFSelect>
 
-              {/* Amount */}
-              <RHFTextField name="amount" label="Amount" placeholder="Enter amount" type="number" />
+          {/* Amount */}
+          <RHFTextField name="amount" label="Amount" placeholder="Enter amount" type="number" />
 
-              {/* To Address */}
-              <RHFTextField name="toAddress" label="Address" />
-            </>
-          )}
+          {/* To Address */}
+          <RHFTextField name="toAddress" label="Address" />
         </Stack>
 
         <DialogActions>
