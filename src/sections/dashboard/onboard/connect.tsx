@@ -1,11 +1,12 @@
 // @mui
 import { Typography } from '@mui/material';
-import { useWallet, ConnectWallet } from '@thirdweb-dev/react';
+import { ConnectWallet } from '@thirdweb-dev/react';
+import { useWalletContext } from 'src/contexts/WalletContext';
 
 export default function Connect() {
-  const wallet = useWallet();
+  const { personalWallet } = useWalletContext();
 
-  if (!wallet) {
+  if (!personalWallet) {
     return (
       <>
         <Typography variant="subtitle2" noWrap>

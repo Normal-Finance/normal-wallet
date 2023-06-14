@@ -28,8 +28,7 @@ type Props = {
 };
 
 export default function Send({ open, nativeBalance, tokenBalances, onClose }: Props) {
-  const hasETH = nativeBalance > 0;
-  const canSend = hasETH || tokenBalances.length > 0;
+  const canSend = nativeBalance > 0 || tokenBalances.length > 0;
 
   const EventSchema = Yup.object().shape({
     asset: Yup.string().required('Asset is required'),
@@ -84,7 +83,7 @@ export default function Send({ open, nativeBalance, tokenBalances, onClose }: Pr
                 InputLabelProps={{ shrink: true }}
                 SelectProps={{ native: false, sx: { textTransform: 'capitalize' } }}
               >
-                {hasETH && (
+                {nativeBalance > 0 && (
                   <MenuItem
                     value={'ETH'}
                     sx={{

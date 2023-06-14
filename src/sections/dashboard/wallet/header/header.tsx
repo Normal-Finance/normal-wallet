@@ -14,12 +14,11 @@ import Receive from './modals/Receive';
 // ----------------------------------------------------------------------
 
 type Props = {
-  address: string;
   nativeBalance: number;
   tokenBalances: any;
 };
 
-export default function Header({ address, nativeBalance, tokenBalances }: Props) {
+export default function Header({ nativeBalance, tokenBalances }: Props) {
   const [openSend, setOpenSend] = useState(false);
   const [openReceive, setOpenReceive] = useState(false);
 
@@ -72,7 +71,7 @@ export default function Header({ address, nativeBalance, tokenBalances }: Props)
           >
             Receive
           </Button>
-          <Receive open={openReceive} address={address} onClose={handleCloseReceive} />
+          <Receive open={openReceive} onClose={handleCloseReceive} />
         </Stack>
       </Stack>
     </Box>

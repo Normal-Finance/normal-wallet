@@ -2,19 +2,21 @@ import { useState } from 'react';
 // @mui
 import { Button, Card, Typography, Stack, Avatar, Box } from '@mui/material';
 
+// moralis
+import { useEvmNativeBalance, useEvmWalletTokenBalances } from '@moralisweb3/next';
+
 // utils
 import DepositAsset from './modals/DepositAsset';
 import { Erc20Value } from 'moralis/common-evm-utils';
+import { useWalletContext } from 'src/contexts/WalletContext';
 
-type Props = {
-  address: string;
-  nativeBalance: number;
-  tokenBalances: any;
-};
+type Props = {};
 
-export default function Deposit({ address, nativeBalance, tokenBalances }: Props) {
-  const hasETH = nativeBalance > 0;
-  const numAssets = tokenBalances?.length + (hasETH ? 1 : 0);
+export default function Deposit({}: Props) {
+  const { personalWallet, personalWalletAddress, smartWalletAddress } = useWalletContext();
+
+  const { data: nativeBalance } = useEvmNativeBalance({ address: personalWalletAddress });
+  const { data: tokenBalances } = useEvmWalletTokenBalances({ address: personalWalletAddress });
 
   const [selectedToken, setSelectedToken] = useState<any>();
   const [openDeposit, setOpenDeposit] = useState(false);
@@ -36,71 +38,76 @@ export default function Deposit({ address, nativeBalance, tokenBalances }: Props
   };
 
   const handleSelectToken = (index: number) => {
-    setSelectedToken(tokenBalances[index]);
-    setOpenDeposit(true);
+    if (tokenBalances) {
+      setSelectedToken(tokenBalances[index]);
+      setOpenDeposit(true);
+    }
   };
 
-  return (
-    <>
-      <Card sx={{ p: 3 }}>
-        <Typography variant="subtitle2">
-          You have {numAssets} assets in your connected wallet (EOA)
-        </Typography>
+  if (nativeBalance && tokenBalances)
+    return (
+      <>
+        <Card sx={{ p: 3 }}>
+          <Typography variant="subtitle2">
+            You have {tokenBalances.length + (nativeBalance.balance.ether > '0' ? 1 : 0)} assets in
+            your connected wallet (EOA)
+          </Typography>
 
-        <Typography variant="body2">Migrate them to Normal to start saving</Typography>
+          <Typography variant="body2">Migrate them to Normal to start saving</Typography>
 
-        <Stack spacing={2} sx={{ mt: 2, mb: 1 }}>
-          {/* Assets */}
-          {hasETH && (
-            <Stack direction="row" alignItems="center">
-              <Avatar src={''} sx={{ width: 48, height: 48 }} />
-
-              <Box sx={{ flexGrow: 1, ml: 2, minWidth: 100 }}>
-                <Typography variant="subtitle2" sx={{ mb: 0.5 }} noWrap>
-                  {nativeBalance} ETH
-                </Typography>
-              </Box>
-
-              <Button variant="contained" color="warning" onClick={handleSelectNativeToken}>
-                Deposit
-              </Button>
-            </Stack>
-          )}
-
-          {tokenBalances.map((token: Erc20Value, index: number) => {
-            const { value, token: _token } = token.toJSON();
-
-            return (
-              <Stack direction="row" alignItems="center" key={index}>
-                <Avatar src={_token?.logo || ''} sx={{ width: 48, height: 48 }} />
+          <Stack spacing={2} sx={{ mt: 2, mb: 1 }}>
+            {/* Assets */}
+            {nativeBalance.balance.ether > '0' && (
+              <Stack direction="row" alignItems="center">
+                <Avatar src={''} sx={{ width: 48, height: 48 }} />
 
                 <Box sx={{ flexGrow: 1, ml: 2, minWidth: 100 }}>
                   <Typography variant="subtitle2" sx={{ mb: 0.5 }} noWrap>
-                    {value + ' ' + _token?.symbol}
+                    {nativeBalance.balance.ether} ETH
                   </Typography>
                 </Box>
 
-                <Button
-                  variant="contained"
-                  color="warning"
-                  onClick={() => handleSelectToken(index)}
-                >
+                <Button variant="contained" color="warning" onClick={handleSelectNativeToken}>
                   Deposit
                 </Button>
               </Stack>
-            );
-          })}
-        </Stack>
-      </Card>
+            )}
 
-      {selectedToken && (
-        <DepositAsset
-          open={openDeposit}
-          token={selectedToken}
-          toAddress={address}
-          onClose={handleCloseDeposit}
-        />
-      )}
-    </>
-  );
+            {tokenBalances.map((token: Erc20Value, index: number) => {
+              const { value, token: _token } = token.toJSON();
+
+              return (
+                <Stack direction="row" alignItems="center" key={index}>
+                  <Avatar src={_token?.logo || ''} sx={{ width: 48, height: 48 }} />
+
+                  <Box sx={{ flexGrow: 1, ml: 2, minWidth: 100 }}>
+                    <Typography variant="subtitle2" sx={{ mb: 0.5 }} noWrap>
+                      {value + ' ' + _token?.symbol}
+                    </Typography>
+                  </Box>
+
+                  <Button
+                    variant="contained"
+                    color="warning"
+                    onClick={() => handleSelectToken(index)}
+                  >
+                    Deposit
+                  </Button>
+                </Stack>
+              );
+            })}
+          </Stack>
+        </Card>
+
+        {selectedToken && (
+          <DepositAsset
+            open={openDeposit}
+            token={selectedToken}
+            toAddress={smartWalletAddress}
+            onClose={handleCloseDeposit}
+          />
+        )}
+      </>
+    );
+  else return <></>;
 }

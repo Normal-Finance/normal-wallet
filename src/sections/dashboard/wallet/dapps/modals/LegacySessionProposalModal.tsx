@@ -4,12 +4,14 @@ import ProjectInfoCard from 'src/components/walletConnect/ProjectInfoCard';
 import ProposalSelectSection from 'src/components/walletConnect/ProposalSelectSection';
 import RequestModalContainer from 'src/components/walletConnect/RequestModalContainer';
 import ModalStore from 'src/store/ModalStore';
-// import { eip155Addresses } from 'src/utils/EIP155WalletUtil'
 import { isEIP155Chain } from 'src/utils/walletConnect/HelperUtil';
 import { Button, Divider, Modal, Typography } from '@mui/material';
 import { Fragment, useState } from 'react';
+import { useWalletContext } from 'src/contexts/WalletContext';
 
 export default function LegacySessionProposalModal() {
+  const { smartWalletAddress } = useWalletContext();
+
   const [selectedAccounts, setSelectedAccounts] = useState<Record<string, string[]>>({});
   const hasSelected = Object.keys(selectedAccounts).length;
 
@@ -49,7 +51,7 @@ export default function LegacySessionProposalModal() {
     if (isEIP155Chain(chain)) {
       return (
         <ProposalSelectSection
-          addresses={['0x7D504D497b0ca5386F640aDeA2bb86441462d109']}
+          addresses={[smartWalletAddress]}
           selectedAddresses={selectedAccounts[chain]}
           onSelect={onSelectAccount}
           chain={chain}

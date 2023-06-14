@@ -16,9 +16,6 @@ import { useSelector } from 'src/redux/store';
 // hooks
 import { useSettingsContext } from 'src/components/settings';
 
-import { useAddress, useWallet } from '@thirdweb-dev/react';
-import { SmartWallet } from '@thirdweb-dev/wallets';
-
 // utils
 
 // components
@@ -35,25 +32,18 @@ import useWalletConnect from 'src/hooks/useWalletConnect';
 import { useLocalStorage } from 'src/hooks/use-local-storage';
 import { useWebsocketContext } from 'src/contexts/WebsocketContext';
 import { ReadyState } from 'react-use-websocket';
+import { useWalletContext } from 'src/contexts/WalletContext';
 
 // ----------------------------------------------------------------------
 
 export default function DashboardView() {
   /** HOOKS */
   const theme = useTheme();
-
-  const address = useAddress();
-  const wallet = useWallet();
-
   const settings = useSettingsContext();
+
   const { connectionStatus: websocketStatus } = useWebsocketContext();
-  const { data: nativeBalance } = useEvmNativeBalance({ address: address || '' });
-  const { data: tokenBalances } = useEvmWalletTokenBalances({ address: address || '' });
-  const { connections, connect, disconnect, isConnecting } = useWalletConnect({
-    account: address || '',
-    chainId: '5',
-    useStorage: useLocalStorage,
-  });
+
+  const { personalWallet, smartWallet, smartWalletAddress } = useWalletContext();
 
   /** REDUX */
   const { clients, transactions, batches } = useSelector((state) => state.state);
@@ -61,6 +51,14 @@ export default function DashboardView() {
   /** STATE */
   const [totalTransactions, setTotalTransactions] = useState();
   const [totalBatches, setTotalBatches] = useState();
+
+  const { data: nativeBalance } = useEvmNativeBalance({ address: smartWalletAddress });
+  const { data: tokenBalances } = useEvmWalletTokenBalances({ address: smartWalletAddress });
+  const { connections, connect, disconnect, isConnecting } = useWalletConnect({
+    account: smartWalletAddress,
+    chainId: '5',
+    useStorage: useLocalStorage,
+  });
 
   // const { getState } = useWebsocketContext();
 
@@ -170,21 +168,14 @@ export default function DashboardView() {
         <Connect />
 
         {/* Wallet */}
-        {wallet && wallet instanceof SmartWallet && address && (
+        {personalWallet && smartWallet && (
           <>
-            {zeroBalance && (
-              <Deposit
-                address={address}
-                nativeBalance={parseFloat(nativeBalance?.balance.ether || '0')}
-                tokenBalances={tokenBalances}
-              />
-            )}
+            {zeroBalance && <Deposit />}
 
             {zeroBalance && (
               <>
                 <Grid xs={12}>
                   <Header
-                    address={address}
                     nativeBalance={parseFloat(nativeBalance?.balance.ether || '0')}
                     tokenBalances={tokenBalances}
                   />
@@ -195,7 +186,6 @@ export default function DashboardView() {
                     disconnect={disconnect}
                     isWcConnecting={isConnecting}
                   />
-                  <WalletConnectModalHandler />
 
                   {tokenBalances && (
                     <Balances
@@ -203,6 +193,8 @@ export default function DashboardView() {
                       tokenBalances={tokenBalances}
                     />
                   )}
+
+                  <WalletConnectModalHandler />
                 </Grid>
               </>
             )}

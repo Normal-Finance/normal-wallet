@@ -7,7 +7,7 @@ import { connectedNewSession, disconnected } from 'src/redux/slices/wcV2';
 // walletconnect
 import SignClient from '@walletconnect/sign-client';
 import { getSdkError } from '@walletconnect/utils';
-import { formatJsonRpcError, formatJsonRpcResult } from '@json-rpc-tools/utils';
+import { formatJsonRpcError } from '@json-rpc-tools/utils';
 
 // consts
 import {
@@ -211,6 +211,8 @@ export default function useWalletConnectV2({ account, chainId, clearWcClipboard 
                     proposal: proposal,
                   })
                 );
+
+                ModalStore.close();
               })
               .catch((err: any) => {
                 setIsConnecting(false);
@@ -222,6 +224,7 @@ export default function useWalletConnectV2({ account, chainId, clearWcClipboard 
               id,
               reason: getSdkError('USER_REJECTED_METHODS'),
             });
+            ModalStore.close();
           },
         });
       } else {

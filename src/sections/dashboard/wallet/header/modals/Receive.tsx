@@ -6,19 +6,20 @@ import { Stack, Dialog, Typography, IconButton } from '@mui/material';
 // components
 import Iconify from 'src/components/iconify';
 import { useCopyToClipboard } from 'src/hooks/use-copy-to-clipboard';
+import { useWalletContext } from 'src/contexts/WalletContext';
 
 // ----------------------------------------------------------------------
 
 type Props = {
   open: boolean;
-  address: string;
   onClose: any;
 };
 
-export default function Receive({ open, address, onClose }: Props) {
+export default function Receive({ open, onClose }: Props) {
+  const { smartWalletAddress } = useWalletContext();
   const { copy } = useCopyToClipboard();
 
-  const handleCopyAddress = () => copy(address);
+  const handleCopyAddress = () => copy(smartWalletAddress);
 
   return (
     <Dialog fullWidth maxWidth="xs" open={open} onClose={onClose}>
@@ -37,12 +38,12 @@ export default function Receive({ open, address, onClose }: Props) {
       </Stack>
 
       <Stack sx={{ p: 2.5 }}>
-        <QRCode value={address} />
+        <QRCode value={smartWalletAddress} />
 
         <Typography variant="body1">Your Normal Address</Typography>
 
         <Typography variant="body1" onClick={handleCopyAddress}>
-          {address} <Iconify icon="eva:copy-outline" sx={{ color: 'text.disabled' }} />
+          {smartWalletAddress} <Iconify icon="eva:copy-outline" sx={{ color: 'text.disabled' }} />
         </Typography>
       </Stack>
     </Dialog>

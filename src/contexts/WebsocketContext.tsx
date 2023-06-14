@@ -17,7 +17,7 @@ type Context = {
   connectionStatus: ReadyState | string;
   messageHistory: any;
   getState: () => void;
-  newTransaction: (transaction: any) => void;
+  newTransaction: (account: string, target: string, value: string, calldata: string) => void;
   cancelTransaction: (transactionId: string) => void;
 };
 
@@ -67,6 +67,7 @@ export const WebsocketContextProvider = ({ children }: Props) => {
           break;
 
         case Events.NEW_TRANSACTION:
+          // TODO: parse respose and handle conditionally...requires payment, failed, success
           break;
 
         case Events.CANCEL_TRANSACTION:
@@ -83,8 +84,18 @@ export const WebsocketContextProvider = ({ children }: Props) => {
     sendJsonMessage({ action: Events.GET_STATE });
   };
 
-  const newTransaction = (transaction: any) => {
-    sendJsonMessage({ action: Events.NEW_TRANSACTION, message: { transaction: transaction } });
+  const newTransaction = (account: string, target: string, value: string, calldata: string) => {
+    sendJsonMessage({
+      action: Events.NEW_TRANSACTION,
+      message: {
+        transaction: {
+          account,
+          target,
+          value,
+          calldata,
+        },
+      },
+    });
   };
 
   const cancelTransaction = (transactionId: string) => {

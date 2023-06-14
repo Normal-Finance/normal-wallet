@@ -4,13 +4,15 @@ import ProposalSelectSection from 'src/components/walletConnect/ProposalSelectSe
 import RequestModalContainer from 'src/components/walletConnect/RequestModalContainer';
 import SessionProposalChainCard from 'src/components/walletConnect/SessionProposalChainCard';
 import ModalStore from 'src/store/ModalStore';
-// import { eip155Addresses } from '@/utils/EIP155WalletUtil'
 import { isEIP155Chain } from 'src/utils/walletConnect/HelperUtil';
 import { Button, Divider, Modal, Typography } from '@mui/material';
 // import { SessionTypes } from '@walletconnect/types';
 import { Fragment, useState } from 'react';
+import { useWalletContext } from 'src/contexts/WalletContext';
 
 export default function SessionProposalModal() {
+  const { smartWalletAddress } = useWalletContext();
+
   const [selectedAccounts, setSelectedAccounts] = useState<Record<string, string[]>>({});
   const hasSelected = Object.keys(selectedAccounts).length;
 
@@ -45,28 +47,12 @@ export default function SessionProposalModal() {
     }
   }
 
-  // Hanlde approve action, construct session namespace
-  async function _onApprove() {
-    if (proposal) {
-      onApprove();
-    }
-    ModalStore.close();
-  }
-
-  // Hanlde reject action
-  async function _onReject() {
-    if (proposal) {
-      await onReject();
-    }
-    ModalStore.close();
-  }
-
   // Render account selection checkboxes based on chain
   function renderAccountSelection(chain: string) {
     if (isEIP155Chain(chain)) {
       return (
         <ProposalSelectSection
-          addresses={['0x7D504D497b0ca5386F640aDeA2bb86441462d109']}
+          addresses={[smartWalletAddress]}
           selectedAddresses={selectedAccounts[chain]}
           onSelect={onSelectAccount}
           chain={chain}
@@ -97,14 +83,14 @@ export default function SessionProposalModal() {
       </RequestModalContainer>
 
       <div>
-        <Button color="error" onClick={_onReject}>
+        <Button color="error" onClick={onReject}>
           Reject
         </Button>
 
         <Button
           color="success"
-          onClick={_onApprove}
-          // disabled={!hasSelected}
+          onClick={onApprove}
+          disabled={!hasSelected}
           // css={{ opacity: hasSelected ? 1 : 0.4 }}
         >
           Approve

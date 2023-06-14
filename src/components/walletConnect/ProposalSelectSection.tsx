@@ -5,13 +5,6 @@ import AccountSelectCard from 'src/components/walletConnect/AccountSelectCard';
 /**
  * Types
  */
-// ProposalSelectSection.propTypes = {
-//   chain: PropTypes.string,
-//   addresses: string[],
-//   selectedAddresses: string[] | undefined,
-//   onSelect: (chain: string, address: string) => void,
-// };
-
 interface IProps {
   chain: string;
   addresses: string[];

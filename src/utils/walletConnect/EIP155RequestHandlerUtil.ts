@@ -1,19 +1,15 @@
 import {
-  EIP155_CHAINS,
+  // EIP155_CHAINS,
   EIP155_SIGNING_METHODS,
-  TEIP155Chain,
+  // TEIP155Chain,
 } from 'src/hooks/walletConnect/wcConsts';
-// import { eip155Addresses, eip155Wallets } from '../utils/EIP155WalletUtil'
-import {
-  getSignParamsMessage,
-  getSignTypedDataParamsData,
-  getWalletAddressFromParams,
-} from './HelperUtil';
+import { getSignParamsMessage, getSignTypedDataParamsData } from './HelperUtil';
 import { formatJsonRpcError, formatJsonRpcResult } from '@json-rpc-tools/utils';
-import { useContract, useContractWrite } from '@thirdweb-dev/react';
 import { SignClientTypes } from '@walletconnect/types';
 import { getSdkError } from '@walletconnect/utils';
-import { providers } from 'ethers';
+// import { providers } from 'ethers';
+import { useWalletContext } from 'src/contexts/WalletContext';
+import { useWebsocketContext } from 'src/contexts/WebsocketContext';
 
 export async function approveEIP155Request(
   requestEvent: SignClientTypes.EventArguments['session_request']
@@ -21,13 +17,19 @@ export async function approveEIP155Request(
   const { params, id } = requestEvent;
   const { chainId, request } = params;
 
-  // const wallet = eip155Wallets[getWalletAddressFromParams(eip155Addresses, params)]
   if (!window.ethereum)
     throw new Error(
       'No web3 support detected in your browser: if you created this account through MetaMask, please install it.'
     );
-  const provider = new providers.Web3Provider(window.ethereum, 'any');
-  const wallet = provider.getSigner('0x56CB44C27cAf76AdE499F68F12baF1c8ca9e73A5');
+  // const provider = new providers.Web3Provider(window.ethereum, 'any');
+  // const wallet = provider.getSigner('0x56CB44C27cAf76AdE499F68F12baF1c8ca9e73A5');
+  const { smartWallet, smartWalletAddress } = useWalletContext();
+  const wallet = await smartWallet.getSigner();
+
+  // TODO: does it need to be done this way?
+  // Then you can execute transactions directly
+  // const transaction = prepareTransaction();
+  // await wallet.execute(transaction);
 
   switch (request.method) {
     case EIP155_SIGNING_METHODS.PERSONAL_SIGN:
@@ -49,7 +51,7 @@ export async function approveEIP155Request(
         const { domain, types, message: data } = getSignTypedDataParamsData(request.params);
         // https://github.com/ethers-io/ethers.js/issues/687#issuecomment-714069471
         delete types.EIP712Domain;
-        const signedData = await wallet._signTypedData(domain, types, data);
+        const signedData = await (wallet as any)._signTypedData(domain, types, data);
         return formatJsonRpcResult(id, signedData);
       } catch (error: any) {
         console.error(error);
@@ -59,24 +61,17 @@ export async function approveEIP155Request(
 
     case EIP155_SIGNING_METHODS.ETH_SEND_TRANSACTION:
       try {
-        const provider = new providers.JsonRpcProvider(EIP155_CHAINS[chainId as TEIP155Chain].rpc);
+        // const provider = new providers.JsonRpcProvider(EIP155_CHAINS[chainId as TEIP155Chain].rpc);
         const sendTransaction = request.params[0];
 
-        /** START HERE */
-        const { contract } = useContract('0xD27DA5Ea086d3e89EB18CA30090647E3017524Bf');
-        const { mutate: submitTransaction, isLoading: submittingTransaction } = useContractWrite(
-          contract,
-          'submitTransaction'
+        const { newTransaction } = useWebsocketContext();
+        newTransaction(
+          smartWalletAddress,
+          sendTransaction.to,
+          sendTransaction.value,
+          sendTransaction.data
         );
-
-        const account = wallet._address;
-        const target = sendTransaction.to;
-        const value = sendTransaction.value;
-        const callData = sendTransaction.data;
-
-        submitTransaction({ args: [account, target, value, callData] });
         return;
-        /** END HERE */
 
         // const connectedWallet = wallet.connect(provider);
         // const { hash } = await connectedWallet.sendTransaction(sendTransaction);

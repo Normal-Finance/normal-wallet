@@ -10,7 +10,8 @@ import {
   smartWallet,
 } from '@thirdweb-dev/react';
 import { Goerli, Ethereum } from '@thirdweb-dev/chains';
-import { THIRDWEB, WALLET_CONNECT } from 'src/config-global';
+import { WALLET_CONNECT } from 'src/config-global';
+import { WalletContextProvider } from 'src/contexts/WalletContext';
 
 // components
 import DashboardLayout from 'src/layouts/dashboard';
@@ -24,23 +25,18 @@ type Props = {
 export default function Layout({ children }: Props) {
   return (
     <ThirdwebProvider
-      activeChain={Goerli}
+      activeChain={process.env.NODE_ENV === 'production' ? Ethereum : Goerli}
       autoConnect
       supportedWallets={[
-        smartWallet({
-          factoryAddress: THIRDWEB.factoryAddress,
-          thirdwebApiKey: THIRDWEB.apiKey,
-          gasless: false,
-          personalWallets: [
-            metamaskWallet(),
-            coinbaseWallet(),
-            walletConnect({ projectId: WALLET_CONNECT.projectId }),
-            magicLink({ apiKey: WALLET_CONNECT.relayUrl, emailLogin: true, smsLogin: true }),
-          ],
-        }),
+        metamaskWallet(),
+        coinbaseWallet(),
+        walletConnect({ projectId: WALLET_CONNECT.projectId }),
+        magicLink({ apiKey: WALLET_CONNECT.relayUrl, emailLogin: true, smsLogin: true }),
       ]}
     >
-      <DashboardLayout>{children}</DashboardLayout>
+      <WalletContextProvider>
+        <DashboardLayout>{children}</DashboardLayout>
+      </WalletContextProvider>
     </ThirdwebProvider>
   );
 }
