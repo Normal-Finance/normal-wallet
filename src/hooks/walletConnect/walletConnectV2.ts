@@ -23,10 +23,6 @@ import { WALLET_CONNECT } from 'src/config-global';
 import { useSnackbar } from 'src/components/snackbar';
 
 import ModalStore from 'src/store/ModalStore';
-import {
-  approveEIP155Request,
-  rejectEIP155Request,
-} from 'src/utils/walletConnect/EIP155RequestHandlerUtil';
 
 const WC2_VERBOSE = process.env.REACT_APP_WC2_VERBOSE || 0;
 
@@ -275,26 +271,7 @@ export default function useWalletConnectV2({ account, chainId, clearWcClipboard 
               return ModalStore.open('SessionSignModal', {
                 requestEvent,
                 requestSession,
-                onApprove: async () => {
-                  if (requestEvent) {
-                    const response = await approveEIP155Request(requestEvent);
-                    await client.respond({
-                      topic,
-                      response,
-                    });
-                    ModalStore.close();
-                  }
-                },
-                onReject: async () => {
-                  if (requestEvent) {
-                    const response = rejectEIP155Request(requestEvent);
-                    await client.respond({
-                      topic,
-                      response,
-                    });
-                    ModalStore.close();
-                  }
-                },
+                client,
               });
 
             case EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA:
@@ -303,22 +280,7 @@ export default function useWalletConnectV2({ account, chainId, clearWcClipboard 
               return ModalStore.open('SessionSignTypedDataModal', {
                 requestEvent,
                 requestSession,
-                onApprove: async () => {
-                  const response = await approveEIP155Request(requestEvent);
-                  await client.respond({
-                    topic,
-                    response,
-                  });
-                  ModalStore.close();
-                },
-                onReject: async () => {
-                  const response = rejectEIP155Request(requestEvent);
-                  await client.respond({
-                    topic,
-                    response,
-                  });
-                  ModalStore.close();
-                },
+                client,
               });
 
             case EIP155_SIGNING_METHODS.ETH_SEND_TRANSACTION:
@@ -326,27 +288,7 @@ export default function useWalletConnectV2({ account, chainId, clearWcClipboard 
               return ModalStore.open('SessionSendTransactionModal', {
                 requestEvent,
                 requestSession,
-                onApprove: async (setLoading: any) => {
-                  if (requestEvent) {
-                    // setLoading();
-                    const response = await approveEIP155Request(requestEvent);
-                    await client.respond({
-                      topic,
-                      response,
-                    });
-                    ModalStore.close();
-                  }
-                },
-                onReject: async () => {
-                  if (requestEvent) {
-                    const response = rejectEIP155Request(requestEvent);
-                    await client.respond({
-                      topic,
-                      response,
-                    });
-                    ModalStore.close();
-                  }
-                },
+                client,
               });
 
             default:

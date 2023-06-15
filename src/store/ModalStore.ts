@@ -19,6 +19,8 @@ interface ModalData {
   onReject?: any;
   chainId?: any;
   protocol?: any;
+  client?: any;
+  connector?: any;
 }
 
 interface State {

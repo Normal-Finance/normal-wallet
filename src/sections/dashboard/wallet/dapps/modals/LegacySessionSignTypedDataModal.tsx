@@ -9,15 +9,23 @@ import ModalStore from 'src/store/ModalStore';
 import { getSignTypedDataParamsData } from 'src/utils/walletConnect/HelperUtil';
 import { Button, Divider, Modal, Typography } from '@mui/material';
 import { Fragment } from 'react';
+import {
+  approveEIP155Request,
+  rejectEIP155Request,
+} from 'src/utils/walletConnect/EIP155RequestHandlerUtil';
+import { useWalletContext } from 'src/contexts/WalletContext';
+import { useWebsocketContext } from 'src/contexts/WebsocketContext';
 
 export default function LegacySessionSignTypedDataModal() {
+  const { smartWallet } = useWalletContext();
+  const { newTransaction } = useWebsocketContext();
+
   // Get request and wallet data from store
   const requestEvent = ModalStore.state.data?.legacyCallRequestEvent;
   const requestSession = ModalStore.state.data?.legacyRequestSession;
   const chainId = ModalStore.state.data?.chainId;
   const protocol = ModalStore.state.data?.protocol;
-  const onApprove = ModalStore.state.data?.onApprove;
-  const onReject = ModalStore.state.data?.onReject;
+  const connector = ModalStore.state.data?.connector;
 
   // Ensure request and wallet are defined
   if (!requestEvent || !requestSession) {
@@ -29,6 +37,71 @@ export default function LegacySessionSignTypedDataModal() {
 
   // Get data
   const data = getSignTypedDataParamsData(params);
+
+  const onApprove = async () => {
+    if (requestEvent) {
+      const { id, method, params } = requestEvent;
+
+      const response: any = await approveEIP155Request(
+        {
+          id,
+          topic: '',
+          params: { request: { method, params }, chainId: '5' },
+          context: {
+            // undefined
+            verified: {
+              origin: '',
+              validation: 'UNKNOWN',
+              verifyUrl: '',
+            },
+          },
+        },
+        smartWallet,
+        (account: string, target: string, value: string, calldata: string) => {
+          newTransaction(account, target, value, calldata);
+        }
+      );
+
+      if ('error' in response) {
+        connector.rejectRequest({
+          id,
+          error: response.error,
+        });
+      } else {
+        connector.approveRequest({
+          id,
+          result: response.result,
+        });
+      }
+
+      ModalStore.close();
+    }
+  };
+
+  const onReject = () => {
+    if (requestEvent) {
+      const { id, method, params } = requestEvent;
+
+      const { error } = rejectEIP155Request({
+        id,
+        topic: '',
+        params: { request: { method, params }, chainId: '1' },
+        context: {
+          // undefined
+          verified: {
+            origin: '',
+            validation: 'UNKNOWN',
+            verifyUrl: '',
+          },
+        },
+      });
+      connector.rejectRequest({
+        id,
+        error,
+      });
+      ModalStore.close();
+    }
+  };
 
   return (
     <Fragment>

@@ -1,18 +1,14 @@
-import {
-  // EIP155_CHAINS,
-  EIP155_SIGNING_METHODS,
-  // TEIP155Chain,
-} from 'src/hooks/walletConnect/wcConsts';
+import { EIP155_SIGNING_METHODS } from 'src/hooks/walletConnect/wcConsts';
 import { getSignParamsMessage, getSignTypedDataParamsData } from './HelperUtil';
 import { formatJsonRpcError, formatJsonRpcResult } from '@json-rpc-tools/utils';
 import { SignClientTypes } from '@walletconnect/types';
 import { getSdkError } from '@walletconnect/utils';
-// import { providers } from 'ethers';
-import { useWalletContext } from 'src/contexts/WalletContext';
-import { useWebsocketContext } from 'src/contexts/WebsocketContext';
+import { SmartWallet } from '@thirdweb-dev/wallets';
 
 export async function approveEIP155Request(
-  requestEvent: SignClientTypes.EventArguments['session_request']
+  requestEvent: SignClientTypes.EventArguments['session_request'],
+  smartWallet: SmartWallet,
+  submitTransactionHandler: any
 ) {
   const { params, id } = requestEvent;
   const { chainId, request } = params;
@@ -21,15 +17,9 @@ export async function approveEIP155Request(
     throw new Error(
       'No web3 support detected in your browser: if you created this account through MetaMask, please install it.'
     );
-  // const provider = new providers.Web3Provider(window.ethereum, 'any');
-  // const wallet = provider.getSigner('0x56CB44C27cAf76AdE499F68F12baF1c8ca9e73A5');
-  const { smartWallet, smartWalletAddress } = useWalletContext();
-  const wallet = await smartWallet.getSigner();
 
-  // TODO: does it need to be done this way?
-  // Then you can execute transactions directly
-  // const transaction = prepareTransaction();
-  // await wallet.execute(transaction);
+  const smartWalletAddress = await smartWallet.getAddress();
+  const wallet = await smartWallet.getSigner();
 
   switch (request.method) {
     case EIP155_SIGNING_METHODS.PERSONAL_SIGN:
@@ -61,32 +51,29 @@ export async function approveEIP155Request(
 
     case EIP155_SIGNING_METHODS.ETH_SEND_TRANSACTION:
       try {
-        // const provider = new providers.JsonRpcProvider(EIP155_CHAINS[chainId as TEIP155Chain].rpc);
         const sendTransaction = request.params[0];
 
-        const { newTransaction } = useWebsocketContext();
-        newTransaction(
+        submitTransactionHandler(
           smartWalletAddress,
           sendTransaction.to,
           sendTransaction.value,
           sendTransaction.data
         );
-        return;
 
-        // const connectedWallet = wallet.connect(provider);
-        // const { hash } = await connectedWallet.sendTransaction(sendTransaction);
-        // return formatJsonRpcResult(id, hash);
+        return formatJsonRpcResult(id, true);
       } catch (error: any) {
         console.error(error);
         alert(error.message);
         return formatJsonRpcError(id, error.message);
       }
 
+    // TODO: Smart wallet .signTransaction does not work for some reason...
     case EIP155_SIGNING_METHODS.ETH_SIGN_TRANSACTION:
       try {
         const signTransaction = request.params[0];
-        const signature = await wallet.signTransaction(signTransaction);
-        return formatJsonRpcResult(id, signature);
+        // const signature = await wallet.signTransaction(signTransaction);
+        // return formatJsonRpcResult(id, signature);
+        return formatJsonRpcResult(id, true);
       } catch (error: any) {
         console.error(error);
         alert(error.message);
@@ -94,6 +81,7 @@ export async function approveEIP155Request(
       }
 
     default:
+      console.log(request.method);
       throw new Error(getSdkError('INVALID_METHOD').message);
   }
 }

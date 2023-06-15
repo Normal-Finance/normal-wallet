@@ -15,10 +15,6 @@ import { EIP155_SIGNING_METHODS } from './wcConsts';
 import { useSnackbar } from 'src/components/snackbar';
 import ModalStore from 'src/store/ModalStore';
 import { getSdkError } from '@walletconnect/utils';
-import {
-  approveEIP155Request,
-  rejectEIP155Request,
-} from 'src/utils/walletConnect/EIP155RequestHandlerUtil';
 
 const SESSION_TIMEOUT = 10000;
 
@@ -312,63 +308,7 @@ const onCallRequest = async (
         legacyRequestSession: connector.session,
         chainId: connector.chainId,
         protocol: connector.protocol,
-        onApprove: async () => {
-          if (payload) {
-            const { id, method, params } = payload;
-
-            const response: any = await approveEIP155Request({
-              id,
-              topic: '',
-              params: { request: { method, params }, chainId: '1' },
-              context: {
-                // undefined
-                verified: {
-                  origin: '',
-                  validation: 'UNKNOWN',
-                  verifyUrl: '',
-                },
-              },
-            });
-
-            if ('error' in response) {
-              connector.rejectRequest({
-                id,
-                error: response.error,
-              });
-            } else {
-              connector.approveRequest({
-                id,
-                result: response.result,
-              });
-            }
-
-            ModalStore.close();
-          }
-        },
-        onReject: () => {
-          if (payload) {
-            const { id, method, params } = payload;
-
-            const { error } = rejectEIP155Request({
-              id,
-              topic: '',
-              params: { request: { method, params }, chainId: '1' },
-              context: {
-                // undefined
-                verified: {
-                  origin: '',
-                  validation: 'UNKNOWN',
-                  verifyUrl: '',
-                },
-              },
-            });
-            connector.rejectRequest({
-              id,
-              error,
-            });
-            ModalStore.close();
-          }
-        },
+        connector: connector,
       });
 
     case EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA:
@@ -377,63 +317,7 @@ const onCallRequest = async (
       return ModalStore.open('LegacySessionSignTypedDataModal', {
         legacyCallRequestEvent: payload,
         legacyRequestSession: connector.session,
-        onApprove: async () => {
-          if (payload) {
-            const { id, method, params } = payload;
-
-            const response: any = await approveEIP155Request({
-              id,
-              topic: '',
-              params: { request: { method, params }, chainId: '1' },
-              context: {
-                // undefined
-                verified: {
-                  origin: '',
-                  validation: 'UNKNOWN',
-                  verifyUrl: '',
-                },
-              },
-            });
-
-            if ('error' in response) {
-              connector.rejectRequest({
-                id,
-                error: response.error,
-              });
-            } else {
-              connector.approveRequest({
-                id,
-                result: response.result,
-              });
-            }
-
-            ModalStore.close();
-          }
-        },
-        onReject: () => {
-          if (payload) {
-            const { id, method, params } = payload;
-
-            const { error } = rejectEIP155Request({
-              id,
-              topic: '',
-              params: { request: { method, params }, chainId: '1' },
-              context: {
-                // undefined
-                verified: {
-                  origin: '',
-                  validation: 'UNKNOWN',
-                  verifyUrl: '',
-                },
-              },
-            });
-            connector.rejectRequest({
-              id,
-              error,
-            });
-            ModalStore.close();
-          }
-        },
+        connector: connector,
       });
 
     case EIP155_SIGNING_METHODS.ETH_SEND_TRANSACTION:
@@ -443,63 +327,7 @@ const onCallRequest = async (
         legacyRequestSession: connector.session,
         chainId: connector.chainId,
         protocol: connector.protocol,
-        onApprove: async () => {
-          if (payload) {
-            const { id, method, params } = payload;
-
-            const response: any = await approveEIP155Request({
-              id,
-              topic: '',
-              params: { request: { method, params }, chainId: '1' },
-              context: {
-                // undefined
-                verified: {
-                  origin: '',
-                  validation: 'UNKNOWN',
-                  verifyUrl: '',
-                },
-              },
-            });
-
-            if ('error' in response) {
-              connector.rejectRequest({
-                id,
-                error: response.error,
-              });
-            } else {
-              connector.approveRequest({
-                id,
-                result: response.result,
-              });
-            }
-
-            ModalStore.close();
-          }
-        },
-        onReject: () => {
-          if (payload) {
-            const { id, method, params } = payload;
-
-            const { error } = rejectEIP155Request({
-              id,
-              topic: '',
-              params: { request: { method, params }, chainId: '1' },
-              context: {
-                // undefined
-                verified: {
-                  origin: '',
-                  validation: 'UNKNOWN',
-                  verifyUrl: '',
-                },
-              },
-            });
-            connector.rejectRequest({
-              id,
-              error,
-            });
-            ModalStore.close();
-          }
-        },
+        connector: connector,
       });
 
     default:
