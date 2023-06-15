@@ -5,7 +5,6 @@ import Button from '@mui/material/Button';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 // hooks
-import { useMockedUser } from 'src/hooks/use-mocked-user';
 // routes
 import { paths } from 'src/routes/paths';
 // locales
@@ -16,8 +15,6 @@ import Label from 'src/components/label';
 // ----------------------------------------------------------------------
 
 export default function NavUpgrade() {
-  const { user } = useMockedUser();
-
   const { t } = useLocales();
 
   return (
@@ -30,7 +27,7 @@ export default function NavUpgrade() {
     >
       <Stack alignItems="center">
         <Box sx={{ position: 'relative' }}>
-          <Avatar src={user?.photoURL} alt={user?.displayName} sx={{ width: 48, height: 48 }} />
+          <Avatar src={''} alt={'Display name'} sx={{ width: 48, height: 48 }} />
           <Label
             color="success"
             variant="filled"
@@ -49,15 +46,15 @@ export default function NavUpgrade() {
 
         <Stack spacing={0.5} sx={{ mt: 1.5, mb: 2 }}>
           <Typography variant="subtitle2" noWrap>
-            {user?.displayName}
+            Display name
           </Typography>
 
           <Typography variant="body2" noWrap sx={{ color: 'text.disabled' }}>
-            {user?.email}
+            Email
           </Typography>
         </Stack>
 
-        <Button variant="contained" href={paths.minimalUI} target="_blank" rel="noopener">
+        <Button variant="contained" href={paths.root} target="_blank" rel="noopener">
           {t('upgrade_to_pro')}
         </Button>
       </Stack>

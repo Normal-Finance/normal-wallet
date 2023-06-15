@@ -23,7 +23,7 @@ type Props = {
   invoices: IUserAccountBillingHistory[];
 };
 
-export default function AccountBillingHistory({ invoices }: Props) {
+export default function SettingsBillingHistory({ invoices }: Props) {
   const showMore = useBoolean();
 
   return (

@@ -29,7 +29,7 @@ export const WebsocketContextProvider = ({ children }: Props) => {
     process.env.NEXT_PUBLIC_WEBSOCKET_URL ||
       'wss://phus4hn141.execute-api.us-east-2.amazonaws.com/dev'
   );
-  const [messageHistory, setMessageHistory] = useState([]);
+  const [messageHistory, setMessageHistory] = useState<any>([]);
 
   /** HOOKS */
   const dispatch = useDispatch();
@@ -56,7 +56,7 @@ export const WebsocketContextProvider = ({ children }: Props) => {
   /** FUNCTIONS */
   useEffect(() => {
     if (lastJsonMessage !== null) {
-      setMessageHistory((prev) => prev.concat(lastJsonMessage));
+      setMessageHistory((prev: any) => prev.concat(lastJsonMessage));
       console.log(lastJsonMessage);
 
       const { event, channelId, content }: any = lastJsonMessage;

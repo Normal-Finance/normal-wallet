@@ -7,15 +7,12 @@ import Tabs from '@mui/material/Tabs';
 import Container from '@mui/material/Container';
 // routes
 import { paths } from 'src/routes/paths';
-// _mock
-import { _userAbout, _userPlans, _userPayment, _userInvoices, _userAddressBook } from 'src/_mock';
 // components
 import Iconify from 'src/components/iconify';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 //
-import AccountBilling from '../account-billing';
-import AccountNotifications from '../account-notifications';
+import AccountBilling from '../settings-billing';
 
 // ----------------------------------------------------------------------
 
@@ -25,16 +22,11 @@ const TABS = [
     label: 'Billing',
     icon: <Iconify icon="solar:bill-list-bold" width={24} />,
   },
-  {
-    value: 'notifications',
-    label: 'Notifications',
-    icon: <Iconify icon="solar:bell-bing-bold" width={24} />,
-  },
 ];
 
 // ----------------------------------------------------------------------
 
-export default function AccountView() {
+export default function SettingsView() {
   const settings = useSettingsContext();
 
   const [currentTab, setCurrentTab] = useState('billing');
@@ -48,8 +40,8 @@ export default function AccountView() {
       <CustomBreadcrumbs
         heading="Account"
         links={[
-          { name: 'Dashboard', href: paths.dashboard.root },
-          { name: 'Settings', href: paths.dashboard.user.account },
+          { name: 'Dashboard', href: paths.root },
+          { name: 'Settings', href: paths.settings },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },
@@ -70,14 +62,16 @@ export default function AccountView() {
 
       {currentTab === 'billing' && (
         <AccountBilling
-          plans={_userPlans}
-          cards={_userPayment}
-          invoices={_userInvoices}
-          addressBook={_userAddressBook}
+          invoices={[
+            {
+              id: '1',
+              invoiceNumber: `INV-199${1}`,
+              createdAt: '14 Jun 2023',
+              price: 83.74,
+            },
+          ]}
         />
       )}
-
-      {currentTab === 'notifications' && <AccountNotifications />}
     </Container>
   );
 }

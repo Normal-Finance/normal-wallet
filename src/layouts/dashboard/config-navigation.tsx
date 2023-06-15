@@ -4,8 +4,6 @@ import { paths } from 'src/routes/paths';
 // locales
 import { useLocales } from 'src/locales';
 // components
-import Label from 'src/components/label';
-import Iconify from 'src/components/iconify';
 import SvgColor from 'src/components/svg-color';
 
 // ----------------------------------------------------------------------
@@ -35,8 +33,8 @@ export function useNavData() {
       {
         subheader: t('wallet'),
         items: [
-          { title: t('home'), path: paths.dashboard.root, icon: ICONS.banking },
-          { title: t('settings'), path: paths.dashboard.user.account, icon: ICONS.account },
+          { title: t('home'), path: paths.root, icon: ICONS.banking },
+          { title: t('settings'), path: paths.settings, icon: ICONS.account },
         ],
       },
     ],

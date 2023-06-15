@@ -22,6 +22,3 @@ export const THIRDWEB = {
   factoryAddress: process.env.NEXT_PUBLIC_THIRDWEB_FACTORY_ADDRESS || '',
   apiKey: process.env.NEXT_PUBLIC_THIRDWEB_API_KEY || '',
 };
-
-// ROOT PATH AFTER LOGIN SUCCESSFUL
-export const PATH_AFTER_LOGIN = paths.dashboard.root; // as '/dashboard'

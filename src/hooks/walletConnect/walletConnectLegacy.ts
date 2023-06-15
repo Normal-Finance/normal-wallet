@@ -36,12 +36,7 @@ const checkIsOffline = (connectionId: any) => {
   );
 };
 
-export default function useWalletConnectLegacy({
-  account,
-  chainId,
-  clearWcClipboard,
-  useStorage,
-}: any) {
+export default function useWalletConnectLegacy({ account, chainId, clearWcClipboard }: any) {
   /** HOOKS */
   //   const { networks } = useToasts()
   const { enqueueSnackbar } = useSnackbar();

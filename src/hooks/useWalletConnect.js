@@ -6,12 +6,13 @@ import { isFirefox } from 'src/utils/isFirefox';
 // components
 import { useSnackbar } from 'src/components/snackbar';
 
-export default function useWalletConnect({ account, chainId, useStorage }) {
+export default function useWalletConnect({ account, chainId }) {
   /** HOOKS */
   const { enqueueSnackbar } = useSnackbar();
 
   const clipboardError = (e) =>
     enqueueSnackbar('non-fatal clipboard/walletconnect err: ' + e.message, { variant: 'error' });
+
   const getClipboardText = useCallback(async () => {
     if (isFirefox()) return false;
 
@@ -41,7 +42,6 @@ export default function useWalletConnect({ account, chainId, useStorage }) {
     clearWcClipboard,
     getClipboardText,
     chainId,
-    useStorage,
   });
 
   const {
@@ -100,11 +100,6 @@ export default function useWalletConnect({ account, chainId, useStorage }) {
 
   // clipboard stuff
   useEffect(() => {
-    // if (initialWcURI) {
-    //   if (account) connect({ uri: initialWcURI })
-    //   else console.log('WalletConnect dApp connection request detected, please create an account and you will be connected to the dApp.', { timeout: 15000 })
-    // }
-
     if (typeof window === 'undefined' || !window.location.href.includes('/?uri=')) return;
 
     const uriRaw = window.location.href.split('/?uri=')[1];

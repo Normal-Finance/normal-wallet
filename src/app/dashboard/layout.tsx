@@ -7,7 +7,6 @@ import {
   coinbaseWallet,
   walletConnect,
   magicLink,
-  smartWallet,
 } from '@thirdweb-dev/react';
 import { Goerli, Ethereum } from '@thirdweb-dev/chains';
 import { WALLET_CONNECT } from 'src/config-global';
@@ -25,7 +24,6 @@ type Props = {
 export default function Layout({ children }: Props) {
   return (
     <ThirdwebProvider
-      // activeChain={Ethereum}
       activeChain={process.env.NODE_ENV === 'production' ? Ethereum : Goerli}
       autoConnect
       supportedWallets={[
