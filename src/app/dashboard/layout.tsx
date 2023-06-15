@@ -11,6 +11,7 @@ import {
 import { Goerli, Ethereum } from '@thirdweb-dev/chains';
 import { WALLET_CONNECT } from 'src/config-global';
 import { WalletContextProvider } from 'src/contexts/WalletContext';
+import { IntercomProvider } from 'src/utils/intercom/IntercomProvider';
 
 // components
 import DashboardLayout from 'src/layouts/dashboard';
@@ -33,9 +34,11 @@ export default function Layout({ children }: Props) {
         magicLink({ apiKey: WALLET_CONNECT.relayUrl, emailLogin: true, smsLogin: true }),
       ]}
     >
-      <WalletContextProvider>
-        <DashboardLayout>{children}</DashboardLayout>
-      </WalletContextProvider>
+      <IntercomProvider>
+        <WalletContextProvider>
+          <DashboardLayout>{children}</DashboardLayout>
+        </WalletContextProvider>
+      </IntercomProvider>
     </ThirdwebProvider>
   );
 }

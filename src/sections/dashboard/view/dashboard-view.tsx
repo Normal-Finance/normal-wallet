@@ -20,17 +20,15 @@ import { useSettingsContext } from 'src/components/settings';
 // utils
 
 // components
+import AnalyticsWidget from '../statistics/analytics-widget';
 import Connect from '../onboard/connect';
 import Deposit from '../onboard/deposit';
 import Header from '../wallet/header/header';
 import Dapps from '../wallet/dapps/dapps';
 import Balances from '../wallet/balances/balances';
-import SummaryWidget from '../statistics/summary-widget';
-import RealtimeWidgets from '../statistics/realtime-widgets';
 import WalletConnectModalHandler from 'src/components/walletConnect/WalletConnectModalHandler';
 
 import useWalletConnect from 'src/hooks/useWalletConnect';
-import { useLocalStorage } from 'src/hooks/use-local-storage';
 import { useWebsocketContext } from 'src/contexts/WebsocketContext';
 import { useWalletContext } from 'src/contexts/WalletContext';
 
@@ -63,7 +61,6 @@ export default function DashboardView() {
   const { connections, connect, disconnect, isConnecting } = useWalletConnect({
     account: smartWalletAddress,
     chainId: '5',
-    useStorage: useLocalStorage,
   });
 
   const { getState } = useWebsocketContext();
@@ -109,62 +106,38 @@ export default function DashboardView() {
           (websocketStatus === 'Uninstantiated' && <h1>Unable to connect to API.</h1>)}
         {websocketStatus === 'Open' && (
           <>
-            <Grid xs={12} md={4}>
-              <SummaryWidget
+            <Grid xs={12} sm={6} md={3}>
+              <AnalyticsWidget
+                title="Connected Clients"
+                total={clients?.TOTAL || 100}
+                color="info"
+                icon={<img alt="icon" src="/assets/icons/glass/ic_glass_users.png" />}
+              />
+            </Grid>
+
+            <Grid xs={12} sm={6} md={3}>
+              <AnalyticsWidget
+                title="Pending Transactions"
+                total={transactions?.NEW || 100}
+                color="warning"
+                icon={<img alt="icon" src="/assets/icons/glass/ic_glass_buy.png" />}
+              />
+            </Grid>
+
+            <Grid xs={12} sm={6} md={3}>
+              <AnalyticsWidget
                 title="Total Transactions"
-                percent={0}
-                total={totalTransactions || 0}
-                chart={{
-                  series: [8, 9, 31, 8, 16, 37, 8, 33, 46, 31],
-                }}
+                total={totalTransactions || 100}
+                color="error"
+                icon={<img alt="icon" src="/assets/icons/glass/ic_glass_message.png" />}
               />
             </Grid>
 
-            <Grid xs={12} md={4}>
-              <SummaryWidget
+            <Grid xs={12} sm={6} md={3}>
+              <AnalyticsWidget
                 title="Total Batches"
-                percent={0}
-                total={totalBatches || 0}
-                chart={{
-                  colors: [theme.palette.info.light, theme.palette.info.main],
-                  series: [8, 9, 31, 8, 16, 37, 8, 33, 46, 31],
-                }}
-              />
-            </Grid>
-
-            <Grid xs={12} md={4}>
-              <SummaryWidget
-                title="Total Savings"
-                percent={-0.1}
-                total={totalTransactions || 0 * 2.5}
-                chart={{
-                  colors: [theme.palette.warning.light, theme.palette.warning.main],
-                  series: [8, 9, 31, 8, 16, 37, 8, 33, 46, 31],
-                }}
-              />
-            </Grid>
-
-            <Grid xs={12}>
-              <RealtimeWidgets
-                chart={{
-                  series: [
-                    {
-                      label: 'Clients',
-                      percent: clients?.TOTAL || 0,
-                      total: clients?.TOTAL || 0,
-                    },
-                    {
-                      label: 'New transactions',
-                      percent: transactions?.NEW || 0,
-                      total: transactions?.NEW || 0,
-                    },
-                    {
-                      label: 'Pending transactions',
-                      percent: transactions?.PENDING || 0,
-                      total: transactions?.PENDING || 0,
-                    },
-                  ],
-                }}
+                total={totalBatches || 100}
+                icon={<img alt="icon" src="/assets/icons/glass/ic_glass_bag.png" />}
               />
             </Grid>
           </>

@@ -22,3 +22,18 @@ export const THIRDWEB = {
   factoryAddress: process.env.NEXT_PUBLIC_THIRDWEB_FACTORY_ADDRESS || '',
   apiKey: process.env.NEXT_PUBLIC_THIRDWEB_API_KEY || '',
 };
+
+export const INTERCOM = {
+  appId: process.env.NEXT_PUBLIC_INTERCOM_APP_ID || '',
+  privateKey: process.env.NEXT_PUBLIC_INTERCOM_PRIVATE_KEY || '',
+};
+
+export const APP_STUFF = {
+  paths: {
+    documentation: 'https://docs.normalwallet.io',
+    helpCenter: 'https://help.normalwallet.io',
+    twitter: 'https://twitter.com/normalfi',
+    discord: 'https://link.normalfinance.io/discord',
+    github: 'https://github.com/Normal-Finance',
+  },
+};

@@ -16,7 +16,8 @@ import { NavSectionVertical } from 'src/components/nav-section';
 //
 import { NAV } from '../config-layout';
 import { useNavData } from './config-navigation';
-import { NavToggleButton, NavUpgrade } from '../_common';
+import { NavAccount, NavToggleButton, NavUpgrade } from '../_common';
+import { Divider } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
@@ -50,7 +51,11 @@ export default function NavVertical({ openNav, onCloseNav }: Props) {
         },
       }}
     >
-      <Logo sx={{ mt: 3, ml: 4, mb: 1 }} />
+      <Logo full sx={{ mt: 3, ml: 4, mb: 1 }} />
+
+      <NavAccount />
+
+      <Divider sx={{ mt: 2 }} />
 
       <NavSectionVertical
         data={navData}

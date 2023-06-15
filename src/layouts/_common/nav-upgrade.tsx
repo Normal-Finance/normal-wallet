@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 // @mui
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
@@ -5,17 +6,29 @@ import Button from '@mui/material/Button';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 // hooks
-// routes
-import { paths } from 'src/routes/paths';
-// locales
-import { useLocales } from 'src/locales';
+import { useWalletContext } from 'src/contexts/WalletContext';
+import { boot, show } from 'src/utils/intercom/intercom';
+// utils
+import createUserHash from 'src/utils/intercom';
 // components
 import Label from 'src/components/label';
+import { APP_STUFF } from 'src/config-global';
 
 // ----------------------------------------------------------------------
 
 export default function NavUpgrade() {
-  const { t } = useLocales();
+  const { personalWalletAddress } = useWalletContext();
+
+  useEffect(() => {
+    if (personalWalletAddress) {
+      boot({
+        userId: personalWalletAddress,
+        userHash: createUserHash(personalWalletAddress),
+      });
+    } else {
+      boot();
+    }
+  }, [personalWalletAddress]);
 
   return (
     <Stack
@@ -27,7 +40,11 @@ export default function NavUpgrade() {
     >
       <Stack alignItems="center">
         <Box sx={{ position: 'relative' }}>
-          <Avatar src={''} alt={'Display name'} sx={{ width: 48, height: 48 }} />
+          <Avatar
+            src={'/logo/logo_single.png'}
+            alt={'Normal Logo'}
+            sx={{ width: 48, height: 48 }}
+          />
           <Label
             color="success"
             variant="filled"
@@ -40,23 +57,34 @@ export default function NavUpgrade() {
               borderBottomLeftRadius: 2,
             }}
           >
-            Free
+            Support
           </Label>
         </Box>
 
         <Stack spacing={0.5} sx={{ mt: 1.5, mb: 2 }}>
           <Typography variant="subtitle2" noWrap>
-            Display name
+            Need help?
           </Typography>
 
           <Typography variant="body2" noWrap sx={{ color: 'text.disabled' }}>
-            Email
+            We've got you covered
           </Typography>
         </Stack>
 
-        <Button variant="contained" href={paths.root} target="_blank" rel="noopener">
-          {t('upgrade_to_pro')}
-        </Button>
+        <Stack direction="row" alignItems="center" spacing={1}>
+          <Button
+            variant="contained"
+            href={APP_STUFF.paths.documentation}
+            target="_blank"
+            rel="noopener"
+          >
+            Read docs
+          </Button>
+
+          <Button variant="contained" onClick={show}>
+            Live chat
+          </Button>
+        </Stack>
       </Stack>
     </Stack>
   );
