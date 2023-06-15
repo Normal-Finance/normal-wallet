@@ -60,18 +60,7 @@ export default function SettingsView() {
         ))}
       </Tabs>
 
-      {currentTab === 'billing' && (
-        <AccountBilling
-          invoices={[
-            {
-              id: '1',
-              invoiceNumber: `INV-199${1}`,
-              createdAt: '14 Jun 2023',
-              price: 83.74,
-            },
-          ]}
-        />
-      )}
+      {currentTab === 'billing' && <AccountBilling />}
     </Container>
   );
 }

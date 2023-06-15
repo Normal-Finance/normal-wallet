@@ -29,6 +29,7 @@ export const INTERCOM = {
 };
 
 export const APP_STUFF = {
+  billingLink: process.env.NEXT_PUBLIC_NORMAL_WALLET_BILLING,
   paths: {
     documentation: 'https://docs.normalwallet.io',
     helpCenter: 'https://help.normalwallet.io',
