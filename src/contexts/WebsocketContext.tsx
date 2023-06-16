@@ -8,6 +8,7 @@ import { useDispatch } from 'src/redux/store';
 import { getStateSuccess } from 'src/redux/slices/state';
 
 import { Events } from 'src/types/websocket';
+import { useWalletContext } from './WalletContext';
 
 type Props = {
   children: React.ReactNode;
@@ -17,6 +18,7 @@ type Context = {
   connectionStatus: ReadyState | string;
   messageHistory: any;
   getState: () => void;
+  updateEmail: (email: string) => void;
   newTransaction: (account: string, target: string, value: string, calldata: string) => void;
   cancelTransaction: (transactionId: string) => void;
 };
@@ -33,6 +35,7 @@ export const WebsocketContextProvider = ({ children }: Props) => {
 
   /** HOOKS */
   const dispatch = useDispatch();
+  const { smartWallet, smartWalletAddress } = useWalletContext();
 
   const { sendJsonMessage, lastJsonMessage, readyState, getWebSocket } = useWebSocket(socketUrl, {
     onOpen: () => {
@@ -57,7 +60,6 @@ export const WebsocketContextProvider = ({ children }: Props) => {
   useEffect(() => {
     if (lastJsonMessage !== null) {
       setMessageHistory((prev: any) => prev.concat(lastJsonMessage));
-      console.log(lastJsonMessage);
 
       const { event, channelId, content }: any = lastJsonMessage;
 
@@ -80,29 +82,82 @@ export const WebsocketContextProvider = ({ children }: Props) => {
   }, [lastJsonMessage, setMessageHistory]);
 
   /** METHODS */
+
+  /**
+   * Fetches latest state of Normal
+   */
   const getState = () => {
     sendJsonMessage({ action: Events.GET_STATE });
   };
 
-  const newTransaction = (account: string, target: string, value: string, calldata: string) => {
-    sendJsonMessage({
-      action: Events.NEW_TRANSACTION,
-      message: {
+  /**
+   * Updates the user's email for Stripe
+   * @param email
+   */
+  const updateEmail = async (email: string) => {
+    if (smartWallet && smartWalletAddress) {
+      var message = { address: smartWalletAddress, email: email };
+      const signature = await smartWallet.signMessage(JSON.stringify(message));
+      sendJsonMessage({
+        action: Events.UPDATE_EMAIL,
+        message: {
+          ...message,
+          signature: signature,
+        },
+      });
+    }
+  };
+
+  /**
+   * Submits a new transaction for batching
+   * @param account
+   * @param target
+   * @param value
+   * @param calldata
+   */
+  const newTransaction = async (
+    account: string,
+    target: string,
+    value: string,
+    calldata: string
+  ) => {
+    if (smartWallet && smartWalletAddress) {
+      var message = {
+        address: smartWalletAddress,
         transaction: {
           account,
           target,
           value,
           calldata,
         },
-      },
-    });
+      };
+      const signature = await smartWallet.signMessage(JSON.stringify(message));
+      sendJsonMessage({
+        action: Events.NEW_TRANSACTION,
+        message: {
+          ...message,
+          signature: signature,
+        },
+      });
+    }
   };
 
-  const cancelTransaction = (transactionId: string) => {
-    sendJsonMessage({
-      action: Events.CANCEL_TRANSACTION,
-      message: { transactionId: transactionId },
-    });
+  /**
+   * Removes a transaction from batching
+   * @param transactionId
+   */
+  const cancelTransaction = async (transactionId: string) => {
+    if (smartWallet && smartWalletAddress) {
+      var message = { address: smartWalletAddress, transactionId: transactionId };
+      const signature = await smartWallet.signMessage(JSON.stringify(message));
+      sendJsonMessage({
+        action: Events.CANCEL_TRANSACTION,
+        message: {
+          ...message,
+          signature: signature,
+        },
+      });
+    }
   };
 
   return (
@@ -112,6 +167,7 @@ export const WebsocketContextProvider = ({ children }: Props) => {
         connectionStatus,
         messageHistory,
         getState,
+        updateEmail,
         newTransaction,
         cancelTransaction,
       }}
