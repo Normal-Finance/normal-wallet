@@ -11,6 +11,8 @@ import {
 import { Goerli, Ethereum } from '@thirdweb-dev/chains';
 import { WALLET_CONNECT } from 'src/config-global';
 import { IntercomProvider } from 'src/utils/intercom/IntercomProvider';
+import { WalletContextProvider } from 'src/contexts/WalletContext';
+import { WebsocketContextProvider } from 'src/contexts/WebsocketContext';
 
 // components
 import DashboardLayout from 'src/layouts/dashboard';
@@ -34,7 +36,11 @@ export default function Layout({ children }: Props) {
       ]}
     >
       <IntercomProvider>
-        <DashboardLayout>{children}</DashboardLayout>
+        <WalletContextProvider>
+          <WebsocketContextProvider>
+            <DashboardLayout>{children}</DashboardLayout>
+          </WebsocketContextProvider>
+        </WalletContextProvider>
       </IntercomProvider>
     </ThirdwebProvider>
   );

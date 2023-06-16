@@ -26,8 +26,6 @@ import ProgressBar from 'src/components/progress-bar';
 import MotionLazy from 'src/components/animate/motion-lazy';
 import SnackbarProvider from 'src/components/snackbar/snackbar-provider';
 import { SettingsProvider, SettingsDrawer } from 'src/components/settings';
-import { WalletContextProvider } from 'src/contexts/WalletContext';
-import { WebsocketContextProvider } from 'src/contexts/WebsocketContext';
 
 // ----------------------------------------------------------------------
 
@@ -71,32 +69,28 @@ export default function RootLayout({ children }: Props) {
     <html lang="en" className={primaryFont.className}>
       <body>
         <ReduxProvider>
-          <WalletContextProvider>
-            <WebsocketContextProvider>
-              <LocalizationProvider>
-                <SettingsProvider
-                  defaultSettings={{
-                    themeMode: 'light', // 'light' | 'dark'
-                    themeDirection: 'ltr', //  'rtl' | 'ltr'
-                    themeContrast: 'default', // 'default' | 'bold'
-                    themeLayout: 'vertical', // 'vertical' | 'horizontal' | 'mini'
-                    themeColorPresets: 'default', // 'default' | 'cyan' | 'purple' | 'blue' | 'orange' | 'red'
-                    themeStretch: false,
-                  }}
-                >
-                  <ThemeProvider>
-                    <MotionLazy>
-                      <SnackbarProvider>
-                        <SettingsDrawer />
-                        <ProgressBar />
-                        {children}
-                      </SnackbarProvider>
-                    </MotionLazy>
-                  </ThemeProvider>
-                </SettingsProvider>
-              </LocalizationProvider>
-            </WebsocketContextProvider>
-          </WalletContextProvider>
+          <LocalizationProvider>
+            <SettingsProvider
+              defaultSettings={{
+                themeMode: 'light', // 'light' | 'dark'
+                themeDirection: 'ltr', //  'rtl' | 'ltr'
+                themeContrast: 'default', // 'default' | 'bold'
+                themeLayout: 'vertical', // 'vertical' | 'horizontal' | 'mini'
+                themeColorPresets: 'default', // 'default' | 'cyan' | 'purple' | 'blue' | 'orange' | 'red'
+                themeStretch: false,
+              }}
+            >
+              <ThemeProvider>
+                <MotionLazy>
+                  <SnackbarProvider>
+                    <SettingsDrawer />
+                    <ProgressBar />
+                    {children}
+                  </SnackbarProvider>
+                </MotionLazy>
+              </ThemeProvider>
+            </SettingsProvider>
+          </LocalizationProvider>
         </ReduxProvider>
       </body>
     </html>
