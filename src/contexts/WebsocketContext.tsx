@@ -96,8 +96,11 @@ export const WebsocketContextProvider = ({ children }: Props) => {
    */
   const updateEmail = async (email: string) => {
     if (smartWallet && smartWalletAddress) {
-      var message = { address: smartWalletAddress, email: email };
-      const signature = await smartWallet.signMessage(JSON.stringify(message));
+      const payload = { email };
+      var message = { address: smartWalletAddress, payload };
+
+      const signature = await smartWallet.signMessage(JSON.stringify(payload));
+
       sendJsonMessage({
         action: Events.UPDATE_EMAIL,
         message: {
@@ -122,16 +125,14 @@ export const WebsocketContextProvider = ({ children }: Props) => {
     calldata: string
   ) => {
     if (smartWallet && smartWalletAddress) {
+      const payload = { account, target, value, calldata };
       var message = {
         address: smartWalletAddress,
-        transaction: {
-          account,
-          target,
-          value,
-          calldata,
-        },
+        payload,
       };
-      const signature = await smartWallet.signMessage(JSON.stringify(message));
+
+      const signature = await smartWallet.signMessage(JSON.stringify(payload));
+
       sendJsonMessage({
         action: Events.NEW_TRANSACTION,
         message: {
@@ -148,8 +149,11 @@ export const WebsocketContextProvider = ({ children }: Props) => {
    */
   const cancelTransaction = async (transactionId: string) => {
     if (smartWallet && smartWalletAddress) {
-      var message = { address: smartWalletAddress, transactionId: transactionId };
+      const payload = { transactionId };
+      var message = { address: smartWalletAddress, payload };
+
       const signature = await smartWallet.signMessage(JSON.stringify(message));
+
       sendJsonMessage({
         action: Events.CANCEL_TRANSACTION,
         message: {
