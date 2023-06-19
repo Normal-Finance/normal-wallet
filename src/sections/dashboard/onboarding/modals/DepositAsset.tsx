@@ -69,13 +69,15 @@ export default function DepositAsset({ open, token, toAddress, onClose }: Props)
           }}
           sx={{ mb: 2 }}
         />
+
+        {/* TODO: button stuck in loading state for some reason */}
         <Web3Button
           contractAddress={contractAddress}
-          isDisabled={!amount}
+          isDisabled={amount === ''}
           action={() =>
             transferTokens({
-              to: toAddress, // Address to transfer to
-              amount, // Amount to transfer
+              to: toAddress,
+              amount,
             })
           }
         >

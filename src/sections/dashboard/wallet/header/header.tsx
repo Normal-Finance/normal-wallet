@@ -22,7 +22,7 @@ type Props = {
 export default function Header({ nativeBalance, tokenBalances }: Props) {
   const { enqueueSnackbar } = useSnackbar();
 
-  const canSend = nativeBalance > 0 || tokenBalances.length > 0;
+  const canSend = nativeBalance > 0 || tokenBalances?.length > 0;
 
   const [openSend, setOpenSend] = useState(false);
   const [openReceive, setOpenReceive] = useState(false);
@@ -51,6 +51,10 @@ export default function Header({ nativeBalance, tokenBalances }: Props) {
           <Typography variant="h4" gutterBottom>
             Normal Wallet
           </Typography>
+
+          <Typography variant="body1" gutterBottom>
+            Total balance: coming soon
+          </Typography>
         </Box>
 
         <Stack direction="row" alignItems="center" spacing={1}>
@@ -62,14 +66,14 @@ export default function Header({ nativeBalance, tokenBalances }: Props) {
           >
             Send
           </Button>
-          {/* {canSend &&  */}
-          <Send
-            open={openSend}
-            nativeBalance={nativeBalance}
-            tokenBalances={tokenBalances}
-            onClose={handleCloseSend}
-          />
-          {/* } */}
+          {canSend && (
+            <Send
+              open={openSend}
+              nativeBalance={nativeBalance}
+              tokenBalances={tokenBalances}
+              onClose={handleCloseSend}
+            />
+          )}
 
           {/* Receive */}
           <Button

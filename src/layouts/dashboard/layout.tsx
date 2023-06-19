@@ -81,7 +81,7 @@ export default function DashboardLayout({ children }: Props) {
 
         <Main>
           {children}
-          <Footer />
+          {/* <Footer /> */}
         </Main>
       </Box>
     </>

@@ -70,6 +70,7 @@ export default function Header({ onOpenNav }: Props) {
             side: 'bottom',
           }}
           btnTitle="Connect"
+          theme={settings.themeMode}
         />
       </Stack>
     </>

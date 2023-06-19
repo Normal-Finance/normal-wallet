@@ -2,7 +2,8 @@ export const enum Events {
   CONNECT = 'connect',
   DISCONNECT = 'disconnect',
   GET_STATE = 'getState',
-  UPDATE_EMAIL = 'updateEmail',
+  GET_BILLING_STATUS = 'getBillingStatus',
+  UPDATE_BILLING = 'updateBilling',
   NEW_TRANSACTION = 'newTransaction',
   CANCEL_TRANSACTION = 'cancelTransaction',
 }

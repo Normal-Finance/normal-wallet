@@ -10,6 +10,7 @@ import { bgGradient } from 'src/theme/css';
 import { fShortenNumber } from 'src/utils/format-number';
 // theme
 import { ColorSchema } from 'src/theme/palette';
+import { Skeleton } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
@@ -17,6 +18,7 @@ interface Props extends CardProps {
   title: string;
   total: number;
   icon: React.ReactNode;
+  loading: boolean;
   color?: ColorSchema;
 }
 
@@ -25,6 +27,7 @@ export default function AnalyticsWidget({
   total,
   icon,
   color = 'primary',
+  loading,
   sx,
   ...other
 }: Props) {
@@ -50,7 +53,7 @@ export default function AnalyticsWidget({
     >
       {icon && <Box sx={{ width: 64, height: 64, mb: 1 }}>{icon}</Box>}
 
-      <Typography variant="h3">{fShortenNumber(total)}</Typography>
+      <Typography variant="h3">{loading ? <Skeleton /> : fShortenNumber(total)}</Typography>
 
       <Typography variant="subtitle2" sx={{ opacity: 0.64 }}>
         {title}

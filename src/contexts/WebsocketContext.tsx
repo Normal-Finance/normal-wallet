@@ -5,7 +5,7 @@ import useWebSocket, { ReadyState } from 'react-use-websocket';
 
 // redux
 import { useDispatch } from 'src/redux/store';
-import { getStateSuccess } from 'src/redux/slices/state';
+import { getBillingSuccess, getStateSuccess } from 'src/redux/slices/state';
 
 import { Events } from 'src/types/websocket';
 import { useWalletContext } from './WalletContext';
@@ -18,7 +18,8 @@ type Context = {
   connectionStatus: ReadyState | string;
   messageHistory: any;
   getState: () => void;
-  updateEmail: (email: string) => void;
+  getBillingStatus: () => void;
+  updateBilling: (email: string) => void;
   newTransaction: (account: string, target: string, value: string, calldata: string) => void;
   cancelTransaction: (transactionId: string) => void;
 };
@@ -68,6 +69,10 @@ export const WebsocketContextProvider = ({ children }: Props) => {
           dispatch(getStateSuccess(content));
           break;
 
+        case Events.GET_BILLING_STATUS:
+          dispatch(getBillingSuccess(content));
+          break;
+
         case Events.NEW_TRANSACTION:
           // TODO: parse respose and handle conditionally...requires payment, failed, success
           break;
@@ -90,11 +95,15 @@ export const WebsocketContextProvider = ({ children }: Props) => {
     sendJsonMessage({ action: Events.GET_STATE });
   };
 
+  const getBillingStatus = () => {
+    sendJsonMessage({ action: Events.GET_BILLING_STATUS });
+  };
+
   /**
    * Updates the user's email for Stripe
    * @param email
    */
-  const updateEmail = async (email: string) => {
+  const updateBilling = async (email: string) => {
     if (smartWallet && smartWalletAddress) {
       const payload = { email };
       var message = { address: smartWalletAddress, payload };
@@ -102,7 +111,7 @@ export const WebsocketContextProvider = ({ children }: Props) => {
       const signature = await smartWallet.signMessage(JSON.stringify(payload));
 
       sendJsonMessage({
-        action: Events.UPDATE_EMAIL,
+        action: Events.UPDATE_BILLING,
         message: {
           ...message,
           signature: signature,
@@ -171,7 +180,8 @@ export const WebsocketContextProvider = ({ children }: Props) => {
         connectionStatus,
         messageHistory,
         getState,
-        updateEmail,
+        getBillingStatus,
+        updateBilling,
         newTransaction,
         cancelTransaction,
       }}

@@ -1,24 +1,17 @@
 'use client';
 
-import sumBy from 'lodash/sumBy';
 import { useState, useCallback } from 'react';
 // @mui
-import { useTheme } from '@mui/material/styles';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
-// routes
-import { paths } from 'src/routes/paths';
-import { useRouter } from 'src/routes/hook';
 // hooks
-import { useBoolean } from 'src/hooks/use-boolean';
 // utils
 // types
 import { IWalletTableFilters, IWalletTableFilterValue } from 'src/types/wallet';
 // components
 import Scrollbar from 'src/components/scrollbar';
-import { useSettingsContext } from 'src/components/settings';
 import {
   useTable,
   getComparator,
@@ -32,6 +25,7 @@ import {
 import MyTableRow from './table-row';
 import TableToolbar from './table-toolbar';
 import TableFiltersResult from './table-filters-result';
+import { Skeleton, CardHeader } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
@@ -50,11 +44,13 @@ const defaultFilters = {
 // ----------------------------------------------------------------------
 
 type Props = {
+  loading: boolean;
+  error: boolean;
   nativeBalance: number;
   tokenBalances: any;
 };
 
-export default function Balances({ nativeBalance, tokenBalances }: Props) {
+export default function Balances({ loading, error, nativeBalance, tokenBalances }: Props) {
   const table = useTable({ defaultOrderBy: 'createDate' });
 
   const [tableData, setTableData] = useState(tokenBalances);
@@ -95,83 +91,89 @@ export default function Balances({ nativeBalance, tokenBalances }: Props) {
     setFilters(defaultFilters);
   }, []);
 
+  if (error)
+    return (
+      <Card>
+        <CardHeader title="Balances" subheader="There was an error loading your wallet balances" />
+      </Card>
+    );
+
   return (
     <>
+      {/* skeleton load */}
       <Card>
-        <TableToolbar
-          filters={filters}
-          onFilters={handleFilters}
-          //
-          // serviceOptions={INVOICE_SERVICE_OPTIONS.map((option) => option.name)}
-        />
+        {loading ? (
+          <Skeleton />
+        ) : (
+          <>
+            <TableToolbar filters={filters} onFilters={handleFilters} />
 
-        {canReset && (
-          <TableFiltersResult
-            filters={filters}
-            onFilters={handleFilters}
-            //
-            onResetFilters={handleResetFilters}
-            //
-            results={dataFiltered.length}
-            sx={{ p: 2.5, pt: 0 }}
-          />
-        )}
-
-        <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
-          <Scrollbar>
-            <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 800 }}>
-              <TableHeadCustom
-                order={table.order}
-                orderBy={table.orderBy}
-                headLabel={TABLE_HEAD}
-                rowCount={tableData.length}
-                onSort={table.onSort}
+            {canReset && (
+              <TableFiltersResult
+                filters={filters}
+                onFilters={handleFilters}
+                onResetFilters={handleResetFilters}
+                results={dataFiltered.length}
+                sx={{ p: 2.5, pt: 0 }}
               />
+            )}
 
-              <TableBody>
-                {nativeBalance > 0 && (
-                  <MyTableRow
-                    key={'ETH'}
-                    row={{
-                      balance: nativeBalance,
-                      logo: 'https://assets.coingecko.com/coins/images/279/small/ethereum.png?1595348880',
-                      name: 'Ethereum',
-                      decimals: 1,
-                      symbol: 'ETH',
-                      token_address: '0x2170Ed0880ac9A755fd29B2688956BD959F933F8',
-                    }}
+            <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
+              <Scrollbar>
+                <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 800 }}>
+                  <TableHeadCustom
+                    order={table.order}
+                    orderBy={table.orderBy}
+                    headLabel={TABLE_HEAD}
+                    rowCount={tableData.length}
+                    onSort={table.onSort}
                   />
-                )}
-                {dataFiltered
-                  .slice(
-                    table.page * table.rowsPerPage,
-                    table.page * table.rowsPerPage + table.rowsPerPage
-                  )
-                  .map((row) => (
-                    <MyTableRow key={row.id} row={row} />
-                  ))}
 
-                <TableEmptyRows
-                  height={denseHeight}
-                  emptyRows={emptyRows(table.page, table.rowsPerPage, tableData.length)}
-                />
+                  <TableBody>
+                    {nativeBalance > 0 && (
+                      <MyTableRow
+                        key={'ETH'}
+                        row={{
+                          balance: nativeBalance,
+                          logo: 'https://assets.coingecko.com/coins/images/279/small/ethereum.png?1595348880',
+                          name: 'Ethereum',
+                          decimals: 1,
+                          symbol: 'ETH',
+                          token_address: '0x2170Ed0880ac9A755fd29B2688956BD959F933F8',
+                        }}
+                      />
+                    )}
+                    {dataFiltered
+                      .slice(
+                        table.page * table.rowsPerPage,
+                        table.page * table.rowsPerPage + table.rowsPerPage
+                      )
+                      .map((row) => (
+                        <MyTableRow key={row.id} row={row} />
+                      ))}
 
-                <TableNoData notFound={notFound} />
-              </TableBody>
-            </Table>
-          </Scrollbar>
-        </TableContainer>
+                    <TableEmptyRows
+                      height={denseHeight}
+                      emptyRows={emptyRows(table.page, table.rowsPerPage, tableData.length)}
+                    />
 
-        <TablePaginationCustom
-          count={dataFiltered.length}
-          page={table.page}
-          rowsPerPage={table.rowsPerPage}
-          onPageChange={table.onChangePage}
-          onRowsPerPageChange={table.onChangeRowsPerPage}
-          //
-          dense={table.dense}
-          onChangeDense={table.onChangeDense}
-        />
+                    <TableNoData notFound={notFound} />
+                  </TableBody>
+                </Table>
+              </Scrollbar>
+            </TableContainer>
+
+            <TablePaginationCustom
+              count={dataFiltered.length}
+              page={table.page}
+              rowsPerPage={table.rowsPerPage}
+              onPageChange={table.onChangePage}
+              onRowsPerPageChange={table.onChangeRowsPerPage}
+              dense={table.dense}
+              onChangeDense={table.onChangeDense}
+            />
+          </>
+        )}
       </Card>
     </>
   );

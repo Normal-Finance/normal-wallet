@@ -17,6 +17,11 @@ const initialState: IStateState = {
     PENDING: 0,
     COMPLETED: 0,
   },
+  billing: {
+    emailExists: false,
+    paymentMethods: 0,
+    failedCharges: 0,
+  },
   appStatus: {
     loading: false,
     empty: false,
@@ -37,6 +42,14 @@ const slice = createSlice({
       state.appStatus.loading = false;
       state.appStatus.error = null;
     },
+    getBillingSuccess(state, action) {
+      const { billing } = action.payload;
+
+      state.billing = billing;
+
+      state.appStatus.loading = false;
+      state.appStatus.error = null;
+    },
   },
 });
 
@@ -44,4 +57,4 @@ const slice = createSlice({
 export default slice.reducer;
 
 // Actions
-export const { getStateSuccess } = slice.actions;
+export const { getStateSuccess, getBillingSuccess } = slice.actions;
