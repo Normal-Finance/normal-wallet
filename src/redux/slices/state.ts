@@ -1,54 +1,102 @@
-import { createSlice, Dispatch } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import { IStateState } from 'src/types/state';
+import keyBy from 'lodash/keyBy';
 
 // ----------------------------------------------------------------------
 
 const initialState: IStateState = {
-  clients: {
-    TOTAL: 0,
-  },
+  loading: false,
+  error: null,
+
+  clients: 0,
   transactions: {
     NEW: 0,
+    REVERTED: 0,
     PENDING: 0,
     COMPLETED: 0,
+    FAILED: 0,
   },
   batches: {
-    INIT: 0,
     PENDING: 0,
     COMPLETED: 0,
+    FAILED: 0,
   },
+
   billing: {
-    emailExists: false,
+    email: '',
     paymentMethods: 0,
     failedCharges: 0,
   },
-  appStatus: {
-    loading: false,
-    empty: false,
-    error: null,
-  },
+
+  userTransactions: {},
 };
 
 const slice = createSlice({
   name: 'state',
   initialState,
   reducers: {
-    getStateSuccess(state, action) {
+    /** BASIC */
+    updateLoading(state, action) {
+      state.loading = action.payload.loading;
+    },
+    hasError(state, action) {
+      state.error = action.payload.error;
+    },
+
+    /** STATE */
+    updateState(state, action) {
       const { transaction, batch } = action.payload;
 
       state.transactions = transaction;
       state.batches = batch;
 
-      state.appStatus.loading = false;
-      state.appStatus.error = null;
+      state.loading = false;
+      state.error = null;
     },
-    getBillingSuccess(state, action) {
+
+    /** CLIENTS */
+    updateClients(state, action) {
+      const { value } = action.payload;
+      state.clients = value;
+    },
+    incrementClients(state) {
+      state.clients += 1;
+    },
+    decrementClients(state) {
+      state.clients -= 1;
+    },
+
+    /** BILLING */
+    updateBilling(state, action) {
       const { billing } = action.payload;
 
       state.billing = billing;
 
-      state.appStatus.loading = false;
-      state.appStatus.error = null;
+      state.loading = false;
+      state.error = null;
+    },
+    updateEmail(state, action) {
+      const { email } = action.payload;
+
+      state.billing.email = email;
+    },
+
+    /** USER TRANSACTIONS */
+    updateUserTransactions(state, action) {
+      const { transactions } = action.payload;
+
+      const keyedTransactions = keyBy(transactions, 'transactionId');
+      state.userTransactions = keyedTransactions;
+    },
+    newTransaction(state, action) {
+      const { transaction } = action.payload;
+
+      state.userTransactions[transaction.transactionId] = transaction;
+    },
+    cancelTransaction(state, action) {
+      const { transactionId } = action.payload;
+
+      delete state.userTransactions[transactionId];
     },
   },
 });
@@ -57,4 +105,16 @@ const slice = createSlice({
 export default slice.reducer;
 
 // Actions
-export const { getStateSuccess, getBillingSuccess } = slice.actions;
+export const {
+  updateLoading,
+  hasError,
+  updateState,
+  updateClients,
+  incrementClients,
+  decrementClients,
+  updateBilling,
+  updateEmail,
+  updateUserTransactions,
+  newTransaction,
+  cancelTransaction,
+} = slice.actions;

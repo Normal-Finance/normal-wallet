@@ -33,6 +33,7 @@ import { useWalletContext } from 'src/contexts/WalletContext';
 import Onboarding from '../onboarding';
 import FailedPaymentAlert from '../failed-payment-alert';
 import { APP_STUFF } from 'src/config-global';
+import TransactionsOverview from '../transactions';
 
 // ----------------------------------------------------------------------
 
@@ -41,12 +42,14 @@ export default function DashboardView() {
   const theme = useTheme();
   const settings = useSettingsContext();
 
-  const { connectionStatus: websocketStatus, getState, getBillingStatus } = useWebsocketContext();
+  const { connectionStatus: websocketStatus, getState } = useWebsocketContext();
 
   const { connectionStatus, smartWalletAddress } = useWalletContext();
 
   /** REDUX */
-  const { clients, transactions, batches, billing } = useSelector((state) => state.state);
+  const { clients, transactions, batches, billing, userTransactions } = useSelector(
+    (state) => state.state
+  );
 
   /** STATE */
   const [totalTransactions, setTotalTransactions] = useState();
@@ -75,14 +78,13 @@ export default function DashboardView() {
     chainId: '5',
   });
 
-  const getStateAndBillingCallback = useCallback(() => {
+  const getStateCallback = useCallback(() => {
     getState();
-    getBillingStatus();
   }, []);
 
   useEffect(() => {
-    getStateAndBillingCallback();
-  }, [getStateAndBillingCallback]);
+    getStateCallback();
+  }, [getStateCallback]);
 
   useEffect(() => {
     if (transactions) setTotalTransactions(sumValues(transactions));
@@ -98,7 +100,7 @@ export default function DashboardView() {
   /** CONSTANTS */
   const onboardingActiveStep = (): number => {
     // if (!smartWalletFunded) return 0;
-    // else if (!billing.emailExists) return 1;
+    // else if (!billing.email) return 1;
     // else if (billing.paymentMethods > 0) return 2;
     // else return -1;
     return 0;
@@ -132,9 +134,9 @@ export default function DashboardView() {
             <Grid xs={12} sm={6} md={3}>
               <AnalyticsWidget
                 title="Connected Clients"
-                total={clients?.TOTAL || 100}
+                total={clients || 100}
                 color="info"
-                loading={websocketStatus !== 'Open' || clients?.TOTAL === null}
+                loading={websocketStatus !== 'Open' || clients === null}
                 icon={<img alt="icon" src="/assets/icons/glass/ic_glass_users.png" />}
               />
             </Grid>
@@ -193,7 +195,14 @@ export default function DashboardView() {
         {connectionStatus === 'connected' && (
           <>
             {/* Onboarding */}
-            {onboardingActiveStep() >= 0 && <Onboarding _activeStep={onboardingActiveStep()} />}
+            {onboardingActiveStep() >= 0 && <Onboarding activeStep={onboardingActiveStep()} />}
+
+            {/* Live User Transactions */}
+            {Object.keys(userTransactions).length > 0 && (
+              <Grid xs={12} md={6} lg={8}>
+                <TransactionsOverview transactions={userTransactions} />
+              </Grid>
+            )}
 
             {/* Wallet */}
             {smartWalletFunded && (

@@ -4,6 +4,8 @@ import { useForm } from 'react-hook-form';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { Card, CardHeader, Stack, InputAdornment } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
+// redux
+import { useSelector } from 'src/redux/store';
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
@@ -19,10 +21,13 @@ type Props = {};
 
 export default function UpdateEmail({}: Props) {
   const { enqueueSnackbar } = useSnackbar();
-  const { updateBilling } = useWebsocketContext();
+  const { updateEmail } = useWebsocketContext();
+
+  /** REDUX */
+  const { billing } = useSelector((state) => state.state);
 
   const defaultValues = {
-    email: '',
+    email: billing.email,
   };
 
   const methods = useForm({
@@ -37,7 +42,7 @@ export default function UpdateEmail({}: Props) {
   const onSubmit = useCallback(
     async (data: FormValuesProps) => {
       try {
-        await updateBilling(data.email);
+        await updateEmail(data.email);
         enqueueSnackbar('Email updated!');
       } catch (error) {
         console.error(error);
@@ -58,7 +63,6 @@ export default function UpdateEmail({}: Props) {
           <Stack spacing={3} sx={{ p: 3 }}>
             <RHFTextField
               name={'Email'}
-              placeholder="youremail@gmail.com"
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">

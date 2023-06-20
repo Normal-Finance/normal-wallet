@@ -1,37 +1,34 @@
 import { IErrorType } from './error';
+import { Transaction } from './transaction';
 
 // ----------------------------------------------------------------------
 
-export type IClients = {
-  TOTAL: number;
-};
-
 export type ITransactions = {
   NEW: number;
+  REVERTED: number;
   PENDING: number;
   COMPLETED: number;
+  FAILED: number;
 };
 
 export type IBatches = {
-  INIT: number;
   PENDING: number;
   COMPLETED: number;
+  FAILED: number;
 };
 
 export type IBilling = {
-  emailExists: boolean;
+  email: string;
   paymentMethods: number;
   failedCharges: number;
 };
 
 export type IStateState = {
-  clients: IClients;
+  loading: boolean;
+  error: IErrorType;
+  clients: number;
   transactions: ITransactions;
   batches: IBatches;
   billing: IBilling;
-  appStatus: {
-    loading: boolean;
-    empty: boolean;
-    error: IErrorType;
-  };
+  userTransactions: Record<string, Transaction>;
 };

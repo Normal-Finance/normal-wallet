@@ -5,7 +5,17 @@ import useWebSocket, { ReadyState } from 'react-use-websocket';
 
 // redux
 import { useDispatch } from 'src/redux/store';
-import { getBillingSuccess, getStateSuccess } from 'src/redux/slices/state';
+import {
+  updateClients,
+  incrementClients,
+  decrementClients,
+  updateState,
+  updateBilling,
+  updateEmail,
+  updateUserTransactions,
+  newTransaction,
+  cancelTransaction,
+} from 'src/redux/slices/state';
 
 import { Events } from 'src/types/websocket';
 import { useWalletContext } from './WalletContext';
@@ -18,9 +28,9 @@ type Context = {
   connectionStatus: ReadyState | string;
   messageHistory: any;
   getState: () => void;
-  getBillingStatus: () => void;
-  updateBilling: (email: string) => void;
+  updateEmail: (email: string) => void;
   newTransaction: (account: string, target: string, value: string, calldata: string) => void;
+  updateTransactionPriority: (transactionId: string) => void;
   cancelTransaction: (transactionId: string) => void;
 };
 
@@ -28,7 +38,7 @@ const WebsocketContext = createContext<Context | null>(null);
 
 export const WebsocketContextProvider = ({ children }: Props) => {
   /** STATE */
-  const [socketUrl, setSocketUrl] = useState(
+  const [socketUrl] = useState(
     process.env.NEXT_PUBLIC_WEBSOCKET_URL ||
       'wss://phus4hn141.execute-api.us-east-2.amazonaws.com/dev'
   );
@@ -38,9 +48,8 @@ export const WebsocketContextProvider = ({ children }: Props) => {
   const dispatch = useDispatch();
   const { smartWallet, smartWalletAddress } = useWalletContext();
 
-  const { sendJsonMessage, lastJsonMessage, readyState, getWebSocket } = useWebSocket(socketUrl, {
+  const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(socketUrl, {
     onOpen: () => {
-      console.log('opened');
       sendJsonMessage({ action: 'getState', message: '' });
     },
     onClose: () => console.log('closed'),
@@ -62,26 +71,55 @@ export const WebsocketContextProvider = ({ children }: Props) => {
     if (lastJsonMessage !== null) {
       setMessageHistory((prev: any) => prev.concat(lastJsonMessage));
 
-      const { event, channelId, content }: any = lastJsonMessage;
+      const { event, data, error }: any = lastJsonMessage;
 
-      switch (event) {
-        case Events.GET_STATE:
-          dispatch(getStateSuccess(content));
-          break;
+      if (error) {
+      } else {
+        switch (event) {
+          case Events.SUBSCRIBE:
+            dispatch(incrementClients());
 
-        case Events.GET_BILLING_STATUS:
-          dispatch(getBillingSuccess(content));
-          break;
+            break;
 
-        case Events.NEW_TRANSACTION:
-          // TODO: parse respose and handle conditionally...requires payment, failed, success
-          break;
+          case Events.UNSUBSCRIBE:
+            dispatch(decrementClients());
 
-        case Events.CANCEL_TRANSACTION:
-          break;
+            break;
 
-        default:
-          break;
+          case Events.GET_STATE:
+            const { clients, state, transactions, billing } = data;
+
+            dispatch(updateClients({ value: clients }));
+            dispatch(updateState({ state }));
+            if (billing) dispatch(updateBilling({ billing }));
+            dispatch(updateUserTransactions({ transactions }));
+
+            break;
+
+          case Events.UPDATE_EMAIL:
+            const { customer } = data;
+
+            dispatch(updateEmail({ email: customer.email }));
+
+            break;
+
+          case Events.NEW_TRANSACTION:
+            const { transaction } = data;
+
+            dispatch(newTransaction({ transaction }));
+
+            break;
+
+          case Events.CANCEL_TRANSACTION:
+            const { transactionId } = data;
+
+            dispatch(cancelTransaction({ transactionId }));
+
+            break;
+
+          default:
+            break;
+        }
       }
     }
   }, [lastJsonMessage, setMessageHistory]);
@@ -91,27 +129,35 @@ export const WebsocketContextProvider = ({ children }: Props) => {
   /**
    * Fetches latest state of Normal
    */
-  const getState = () => {
-    sendJsonMessage({ action: Events.GET_STATE });
-  };
+  const _getState = async () => {
+    const payload = 'Hello world';
+    let message = { address: smartWalletAddress || '', payload };
 
-  const getBillingStatus = () => {
-    sendJsonMessage({ action: Events.GET_BILLING_STATUS });
+    let signature = '';
+    if (smartWallet) signature = await smartWallet.signMessage(payload);
+
+    sendJsonMessage({
+      action: Events.GET_STATE,
+      message: {
+        ...message,
+        signature: signature,
+      },
+    });
   };
 
   /**
    * Updates the user's email for Stripe
    * @param email
    */
-  const updateBilling = async (email: string) => {
+  const _updateEmail = async (email: string) => {
     if (smartWallet && smartWalletAddress) {
       const payload = { email };
-      var message = { address: smartWalletAddress, payload };
+      let message = { address: smartWalletAddress, payload };
 
       const signature = await smartWallet.signMessage(JSON.stringify(payload));
 
       sendJsonMessage({
-        action: Events.UPDATE_BILLING,
+        action: Events.UPDATE_EMAIL,
         message: {
           ...message,
           signature: signature,
@@ -127,7 +173,7 @@ export const WebsocketContextProvider = ({ children }: Props) => {
    * @param value
    * @param calldata
    */
-  const newTransaction = async (
+  const _newTransaction = async (
     account: string,
     target: string,
     value: string,
@@ -135,7 +181,7 @@ export const WebsocketContextProvider = ({ children }: Props) => {
   ) => {
     if (smartWallet && smartWalletAddress) {
       const payload = { account, target, value, calldata };
-      var message = {
+      let message = {
         address: smartWalletAddress,
         payload,
       };
@@ -153,13 +199,34 @@ export const WebsocketContextProvider = ({ children }: Props) => {
   };
 
   /**
+   *
+   * @param transactionId
+   */
+  const _updateTransactionPriority = async (transactionId: string) => {
+    if (smartWallet && smartWalletAddress) {
+      const payload = { transactionId };
+      let message = { address: smartWalletAddress, payload };
+
+      const signature = await smartWallet.signMessage(JSON.stringify(message));
+
+      sendJsonMessage({
+        action: Events.UPDATE_TRANSACTION_PRIORITY,
+        message: {
+          ...message,
+          signature: signature,
+        },
+      });
+    }
+  };
+
+  /**
    * Removes a transaction from batching
    * @param transactionId
    */
-  const cancelTransaction = async (transactionId: string) => {
+  const _cancelTransaction = async (transactionId: string) => {
     if (smartWallet && smartWalletAddress) {
       const payload = { transactionId };
-      var message = { address: smartWalletAddress, payload };
+      let message = { address: smartWalletAddress, payload };
 
       const signature = await smartWallet.signMessage(JSON.stringify(message));
 
@@ -179,11 +246,11 @@ export const WebsocketContextProvider = ({ children }: Props) => {
         socketUrl,
         connectionStatus,
         messageHistory,
-        getState,
-        getBillingStatus,
-        updateBilling,
-        newTransaction,
-        cancelTransaction,
+        getState: _getState,
+        updateEmail: _updateEmail,
+        newTransaction: _newTransaction,
+        updateTransactionPriority: _updateTransactionPriority,
+        cancelTransaction: _cancelTransaction,
       }}
     >
       {children}
