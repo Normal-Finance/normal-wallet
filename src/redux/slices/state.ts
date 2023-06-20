@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { IStateState } from 'src/types/state';
 import keyBy from 'lodash/keyBy';
+import { Priority } from 'src/types/transaction';
 
 // ----------------------------------------------------------------------
 
@@ -93,6 +94,15 @@ const slice = createSlice({
 
       state.userTransactions[transaction.transactionId] = transaction;
     },
+    updateTransactionPriority(state, action) {
+      const { transactionId } = action.payload;
+
+      const updatedPriority =
+        state.userTransactions[transactionId].priority === Priority.GTC
+          ? Priority.GTC
+          : Priority.INSTANT;
+      state.userTransactions[transactionId].priority = updatedPriority;
+    },
     cancelTransaction(state, action) {
       const { transactionId } = action.payload;
 
@@ -116,5 +126,6 @@ export const {
   updateEmail,
   updateUserTransactions,
   newTransaction,
+  updateTransactionPriority,
   cancelTransaction,
 } = slice.actions;

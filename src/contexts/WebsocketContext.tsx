@@ -15,6 +15,7 @@ import {
   updateUserTransactions,
   newTransaction,
   cancelTransaction,
+  updateTransactionPriority,
 } from 'src/redux/slices/state';
 
 import { Events } from 'src/types/websocket';
@@ -110,8 +111,14 @@ export const WebsocketContextProvider = ({ children }: Props) => {
 
             break;
 
+          case Events.UPDATE_TRANSACTION_PRIORITY:
+            if (data.updated)
+              dispatch(updateTransactionPriority({ transactionId: data.transactionId }));
+
+            break;
+
           case Events.CANCEL_TRANSACTION:
-            const { transactionId } = data;
+            let { transactionId } = data;
 
             dispatch(cancelTransaction({ transactionId }));
 
