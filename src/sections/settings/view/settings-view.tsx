@@ -8,11 +8,14 @@ import Container from '@mui/material/Container';
 // routes
 import { paths } from 'src/routes/paths';
 // components
+import { useSnackbar } from 'src/components/snackbar';
 import Iconify from 'src/components/iconify';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 //
 import AccountBilling from '../settings-billing';
+import { useWalletContext } from 'src/contexts/WalletContext';
+import { redirect } from 'next/navigation';
 
 // ----------------------------------------------------------------------
 
@@ -28,12 +31,19 @@ const TABS = [
 
 export default function SettingsView() {
   const settings = useSettingsContext();
+  const { enqueueSnackbar } = useSnackbar();
+  const { connectionStatus } = useWalletContext();
 
   const [currentTab, setCurrentTab] = useState('billing');
 
   const handleChangeTab = useCallback((event: React.SyntheticEvent, newValue: string) => {
     setCurrentTab(newValue);
   }, []);
+
+  if (connectionStatus !== 'connected') {
+    enqueueSnackbar('Connect your wallet to view settings', { variant: 'info' });
+    return redirect(paths.root);
+  }
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
