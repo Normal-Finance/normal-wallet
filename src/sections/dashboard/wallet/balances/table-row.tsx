@@ -5,32 +5,29 @@ import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import Typography from '@mui/material/Typography';
 import ListItemText from '@mui/material/ListItemText';
-import { Erc20Value } from 'moralis/common-evm-utils';
+import { OwnedToken } from 'alchemy-sdk';
 // components
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  row: Erc20Value | any;
+  token: OwnedToken;
 };
 
-export default function MyTableRow({ row }: Props) {
-  const { value, token } = row.toJSON();
-
+export default function MyTableRow({ token }: Props) {
   return (
     <>
       <TableRow hover>
         <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
-          <Avatar src={token?.logo || ''} alt={token?.name} sx={{ mr: 2 }}>
-            {/* {name.charAt(0).toUpperCase()} */}
-            {token?.name}
+          <Avatar src={token.logo} alt={token.name} sx={{ mr: 2 }}>
+            {token.name}
           </Avatar>
 
           <ListItemText
             disableTypography
             primary={
               <Typography variant="body2" noWrap>
-                {token?.name}
+                {token.name}
               </Typography>
             }
             secondary={
@@ -40,13 +37,13 @@ export default function MyTableRow({ row }: Props) {
                 // onClick={onViewRow}
                 sx={{ color: 'text.disabled', cursor: 'pointer' }}
               >
-                {value + ' ' + token?.symbol}
+                {token.balance + ' ' + token.symbol}
               </Link>
             }
           />
         </TableCell>
 
-        <TableCell>{value}</TableCell>
+        <TableCell>{token.balance}</TableCell>
       </TableRow>
     </>
   );

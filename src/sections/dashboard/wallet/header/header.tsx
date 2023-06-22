@@ -11,18 +11,19 @@ import Iconify from 'src/components/iconify';
 import Send from './modals/Send';
 import Receive from './modals/Receive';
 import { useSnackbar } from 'src/components/snackbar';
+import { OwnedToken } from 'alchemy-sdk';
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  nativeBalance: number;
-  tokenBalances: any;
+  ethereumBalance: number;
+  tokenBalances: OwnedToken[];
 };
 
-export default function Header({ nativeBalance, tokenBalances }: Props) {
+export default function Header({ ethereumBalance, tokenBalances }: Props) {
   const { enqueueSnackbar } = useSnackbar();
 
-  const canSend = nativeBalance > 0 || tokenBalances?.length > 0;
+  const canSend = ethereumBalance > 0 || tokenBalances.length > 0;
 
   const [openSend, setOpenSend] = useState(false);
   const [openReceive, setOpenReceive] = useState(false);
@@ -69,7 +70,7 @@ export default function Header({ nativeBalance, tokenBalances }: Props) {
           {canSend && (
             <Send
               open={openSend}
-              nativeBalance={nativeBalance}
+              ethereumBalance={ethereumBalance}
               tokenBalances={tokenBalances}
               onClose={handleCloseSend}
             />

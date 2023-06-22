@@ -9,7 +9,7 @@ export const ASSETS_API = process.env.NEXT_PUBLIC_ASSETS_API;
 
 export const NORMAL_BATCHER_ADDRESS = process.env.NEXT_PUBLIC_BATCHER_ADDRESS;
 
-export const MORALIS_API_KEY = process.env.NEXT_PUBLIC_MORALIS_API_KEY;
+export const ALCHEMY_API_KEY = process.env.NEXT_PUBLIC_ALCHEMY_API_KEY;
 
 export const MAGIC_API_KEY = process.env.NEXT_PUBLIC_MAGIC_API_KEY;
 

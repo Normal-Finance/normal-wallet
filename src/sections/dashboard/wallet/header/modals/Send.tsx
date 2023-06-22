@@ -24,14 +24,14 @@ import FormProvider from 'src/components/hook-form';
 import { RHFTextField, RHFSelect } from 'src/components/hook-form';
 import { useWebsocketContext } from 'src/contexts/WebsocketContext';
 import { useWalletContext } from 'src/contexts/WalletContext';
-import { Erc20Value } from 'moralis/common-evm-utils';
+import { OwnedToken } from 'alchemy-sdk';
 
 // ----------------------------------------------------------------------
 
 type Props = {
   open: boolean;
-  nativeBalance: number;
-  tokenBalances: any;
+  ethereumBalance: number;
+  tokenBalances: OwnedToken[];
   onClose: any;
 };
 
@@ -41,7 +41,7 @@ type FormValues = {
   toAddress: string;
 };
 
-export default function Send({ open, nativeBalance, tokenBalances, onClose }: Props) {
+export default function Send({ open, ethereumBalance, tokenBalances, onClose }: Props) {
   const { newTransaction } = useWebsocketContext();
   const { smartWalletAddress } = useWalletContext();
 
@@ -70,8 +70,7 @@ export default function Send({ open, nativeBalance, tokenBalances, onClose }: Pr
   const onSubmit = async (data: FormValues) => {
     let tokenContractAddress;
     if (data.token === -1) tokenContractAddress = '0x2170Ed0880ac9A755fd29B2688956BD959F933F8';
-    else if (data.token > 0)
-      tokenContractAddress = tokenBalances[data.token].toJSON().contractAddress;
+    else if (data.token > 0) tokenContractAddress = tokenBalances[data.token].contractAddress;
 
     const parsedValue = parseEther(data.amount);
 
@@ -106,9 +105,9 @@ export default function Send({ open, nativeBalance, tokenBalances, onClose }: Pr
             InputLabelProps={{ shrink: true }}
             SelectProps={{ native: false, sx: { textTransform: 'capitalize' } }}
           >
-            {nativeBalance > 0 && (
+            {ethereumBalance > 0 && (
               <MenuItem
-                value={'ETH'}
+                value={-1}
                 sx={{
                   mx: 1,
                   my: 0.5,
@@ -120,13 +119,11 @@ export default function Send({ open, nativeBalance, tokenBalances, onClose }: Pr
                 ETH
               </MenuItem>
             )}
-            {tokenBalances.map((tokenBalance: any, index: any) => {
-              const { value, token } = tokenBalance.toJSON();
-
+            {tokenBalances.map((token: OwnedToken, index: any) => {
               return (
                 <MenuItem
                   key={index}
-                  value={token.value}
+                  value={index}
                   sx={{
                     mx: 1,
                     my: 0.5,
@@ -135,7 +132,7 @@ export default function Send({ open, nativeBalance, tokenBalances, onClose }: Pr
                     textTransform: 'capitalize',
                   }}
                 >
-                  {token?.name} {value + ' ' + token?.symbol}
+                  {token.name} {token.balance + ' ' + token.symbol}
                 </MenuItem>
               );
             })}

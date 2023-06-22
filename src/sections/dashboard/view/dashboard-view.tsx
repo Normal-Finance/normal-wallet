@@ -2,12 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react';
 
-// moralis
-import { useEvmNativeBalance, useEvmWalletTokenBalances } from '@moralisweb3/next';
-// import { EvmChain } from 'moralis/common-evm-utils';
-
 // @mui
-import { useTheme } from '@mui/material/styles';
 import { Button, CircularProgress, Container, Typography } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 
@@ -34,12 +29,12 @@ import Onboarding from '../onboarding';
 import FailedPaymentAlert from '../failed-payment-alert';
 import { APP_STUFF } from 'src/config-global';
 import TransactionsOverview from '../transactions';
+import { useAlchemyContext } from 'src/contexts/AlchemyContext';
 
 // ----------------------------------------------------------------------
 
 export default function DashboardView() {
   /** HOOKS */
-  const theme = useTheme();
   const settings = useSettingsContext();
 
   const { connectionStatus: websocketStatus, getState } = useWebsocketContext();
@@ -56,22 +51,7 @@ export default function DashboardView() {
   const [totalBatches, setTotalBatches] = useState(0);
   const [smartWalletFunded, setSmartWalletFunded] = useState(false);
 
-  const {
-    data: nativeBalance,
-    isFetching: loadingNativeBalance,
-    error: nativeBalanceError,
-  } = useEvmNativeBalance({
-    // chain: process.env.NEXT_PUBLIC_NODE_ENV === 'production' ? EvmChain.ETHEREUM : EvmChain.GOERLI,
-    address: smartWalletAddress,
-  });
-  const {
-    data: tokenBalances,
-    isFetching: loadingTokenBalances,
-    error: tokenBalancesError,
-  } = useEvmWalletTokenBalances({
-    // chain: process.env.NEXT_PUBLIC_NODE_ENV === 'production' ? EvmChain.ETHEREUM : EvmChain.GOERLI,
-    address: smartWalletAddress,
-  });
+  const { ethereumBalance, tokenBalances, loading: loadingBalances } = useAlchemyContext();
 
   const { connections, connect, disconnect, isConnecting } = useWalletConnect({
     account: smartWalletAddress,
@@ -96,10 +76,9 @@ export default function DashboardView() {
   }, [transactions, batches]);
 
   useEffect(() => {
-    if (nativeBalance?.balance.ether !== '0' || tokenBalances?.length === 0)
-      setSmartWalletFunded(true);
+    if (ethereumBalance > 0 || tokenBalances.length > 0) setSmartWalletFunded(true);
     else setSmartWalletFunded(false);
-  }, [nativeBalance, tokenBalances]);
+  }, [ethereumBalance, tokenBalances]);
 
   /** CONSTANTS */
   const onboardingActiveStep = (): number => {
@@ -211,10 +190,7 @@ export default function DashboardView() {
                 {smartWalletFunded && (
                   <>
                     <Grid xs={12}>
-                      <Header
-                        nativeBalance={parseFloat(nativeBalance?.balance.ether || '0')}
-                        tokenBalances={tokenBalances}
-                      />
+                      <Header ethereumBalance={ethereumBalance} tokenBalances={tokenBalances} />
 
                       <Dapps
                         connections={connections}
@@ -225,15 +201,14 @@ export default function DashboardView() {
                     </Grid>
 
                     <Grid xs={12}>
-                      {/* {nativeBalance?.balance.ether! > '0' ||
-                      (tokenBalances && ( */}
-                      <Balances
-                        loading={loadingNativeBalance || loadingTokenBalances}
-                        error={nativeBalanceError || tokenBalancesError}
-                        nativeBalance={parseFloat(nativeBalance?.balance.ether || '0')}
-                        tokenBalances={tokenBalances}
-                      />
-                      {/* ))} */}
+                      {smartWalletFunded && (
+                        <Balances
+                          loading={loadingBalances}
+                          error={false}
+                          ethereumBalance={ethereumBalance}
+                          tokenBalances={tokenBalances}
+                        />
+                      )}
 
                       <WalletConnectModalHandler />
                     </Grid>

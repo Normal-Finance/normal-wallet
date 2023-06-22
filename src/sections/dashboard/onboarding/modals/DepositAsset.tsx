@@ -3,21 +3,19 @@ import { useContract, useTransferToken, Web3Button } from '@thirdweb-dev/react';
 
 // @mui
 import { Stack, Dialog, TextField, Typography, InputAdornment, Avatar } from '@mui/material';
+import { OwnedToken } from 'alchemy-sdk';
 
 // ----------------------------------------------------------------------
 
 type Props = {
   open: boolean;
-  token: any;
+  token: OwnedToken;
   toAddress: string;
   onClose: any;
 };
 
 export default function DepositAsset({ open, token, toAddress, onClose }: Props) {
-  const {
-    token: { logo, name, symbol, contractAddress },
-    value,
-  } = token;
+  const { contractAddress, logo, name, symbol, balance } = token;
 
   const { contract } = useContract(contractAddress);
   const { mutate: transferTokens } = useTransferToken(contract);
@@ -29,7 +27,7 @@ export default function DepositAsset({ open, token, toAddress, onClose }: Props)
   };
 
   const selectMax = () => {
-    setAmount(value);
+    setAmount(balance || '');
   };
 
   const handleOnClose = () => {
@@ -51,7 +49,7 @@ export default function DepositAsset({ open, token, toAddress, onClose }: Props)
 
       <Stack sx={{ p: 2.5 }}>
         <Typography variant="body1" sx={{ mb: 2 }}>
-          {value + ' ' + symbol} available
+          {balance + ' ' + symbol} available
         </Typography>
 
         <TextField

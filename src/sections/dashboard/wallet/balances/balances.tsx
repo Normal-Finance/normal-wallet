@@ -26,6 +26,7 @@ import MyTableRow from './table-row';
 import TableToolbar from './table-toolbar';
 import TableFiltersResult from './table-filters-result';
 import { Skeleton, CardHeader } from '@mui/material';
+import { OwnedToken } from 'alchemy-sdk';
 
 // ----------------------------------------------------------------------
 
@@ -46,14 +47,24 @@ const defaultFilters = {
 type Props = {
   loading: boolean;
   error: boolean;
-  nativeBalance: number;
-  tokenBalances: any;
+  ethereumBalance: number;
+  tokenBalances: OwnedToken[];
 };
 
-export default function Balances({ loading, error, nativeBalance, tokenBalances }: Props) {
+export default function Balances({ loading, error, ethereumBalance, tokenBalances }: Props) {
   const table = useTable({ defaultOrderBy: 'createDate' });
 
-  const [tableData, setTableData] = useState(tokenBalances);
+  const ethereumToken: OwnedToken = {
+    contractAddress: '0x2170Ed0880ac9A755fd29B2688956BD959F933F8',
+    rawBalance: '', // TODO: ?
+    decimals: 1,
+    logo: 'https://assets.coingecko.com/coins/images/279/small/ethereum.png?1595348880',
+    name: 'Ethereum',
+    symbol: 'ETH',
+    balance: ethereumBalance.toString(),
+  };
+
+  const [tableData, setTableData] = useState([ethereumToken, ...tokenBalances]);
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -123,26 +134,15 @@ export default function Balances({ loading, error, nativeBalance, tokenBalances 
                   />
 
                   <TableBody>
-                    {nativeBalance > 0 && (
-                      <MyTableRow
-                        key={'ETH'}
-                        row={{
-                          balance: nativeBalance,
-                          logo: 'https://assets.coingecko.com/coins/images/279/small/ethereum.png?1595348880',
-                          name: 'Ethereum',
-                          decimals: 1,
-                          symbol: 'ETH',
-                          token_address: '0x2170Ed0880ac9A755fd29B2688956BD959F933F8',
-                        }}
-                      />
-                    )}
+                    {ethereumBalance > 0 && <MyTableRow key={'ETH'} token={ethereumToken} />}
+
                     {dataFiltered
                       .slice(
                         table.page * table.rowsPerPage,
                         table.page * table.rowsPerPage + table.rowsPerPage
                       )
-                      .map((row) => (
-                        <MyTableRow key={row.id} row={row} />
+                      .map((token, index) => (
+                        <MyTableRow key={index} token={token} />
                       ))}
 
                     <TableEmptyRows
@@ -179,7 +179,7 @@ function applyFilter({
   comparator,
   filters,
 }: {
-  inputData: any[];
+  inputData: OwnedToken[];
   comparator: (a: any, b: any) => number;
   filters: IWalletTableFilters;
 }) {
@@ -203,15 +203,15 @@ function applyFilter({
     );
   }
 
-  if (status !== 'all') {
-    inputData = inputData.filter((invoice) => invoice.status === status);
-  }
+  // if (status !== 'all') {
+  //   inputData = inputData.filter((invoice) => invoice.status === status);
+  // }
 
-  if (service.length) {
-    inputData = inputData.filter((invoice) =>
-      invoice.items.some((filterItem: any) => service.includes(filterItem.service))
-    );
-  }
+  // if (service.length) {
+  //   inputData = inputData.filter((invoice) =>
+  //     invoice.items.some((filterItem: any) => service.includes(filterItem.service))
+  //   );
+  // }
 
   return inputData;
 }
