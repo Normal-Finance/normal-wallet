@@ -74,6 +74,8 @@ export const WebsocketContextProvider = ({ children }: Props) => {
 
       const { event, data, error }: any = lastJsonMessage;
 
+      console.log({ event, data, error });
+
       if (error) {
       } else {
         switch (event) {
@@ -88,12 +90,34 @@ export const WebsocketContextProvider = ({ children }: Props) => {
             break;
 
           case Events.GET_STATE:
-            const { clients, state, transactions, billing } = data;
+            const {
+              clients: { data: clientsData, error: clientsError },
+              state: { data: stateData, error: stateError },
+              transactions: { data: transactionsData, error: transactionsError },
+              billing: { data: billingData, error: billingError },
+            } = data;
 
-            dispatch(updateClients({ value: clients }));
-            dispatch(updateState({ state }));
-            if (billing) dispatch(updateBilling({ billing }));
-            dispatch(updateUserTransactions({ transactions }));
+            // Clients
+            if (!clientsError) dispatch(updateClients({ clients: clientsData }));
+
+            // State
+            if (!stateError && stateData)
+              dispatch(updateState({ transaction: stateData.transaction, batch: stateData.batch }));
+
+            // Billing
+            if (!billingError && billingData && Object.keys(billingData).length > 0)
+              dispatch(updateBilling({ billing: billingData }));
+
+            // User Transactions
+            if (!transactionsError)
+              dispatch(updateUserTransactions({ transactions: transactionsData }));
+
+            break;
+
+          case Events.UPDATE_STATE:
+            var { batch, transaction } = data;
+
+            dispatch(updateState({ transaction, batch }));
 
             break;
 
@@ -105,7 +129,7 @@ export const WebsocketContextProvider = ({ children }: Props) => {
             break;
 
           case Events.NEW_TRANSACTION:
-            const { transaction } = data;
+            var { transaction } = data;
 
             dispatch(newTransaction({ transaction }));
 
@@ -141,7 +165,7 @@ export const WebsocketContextProvider = ({ children }: Props) => {
     let message = { address: smartWalletAddress || '', payload };
 
     let signature = '';
-    if (smartWallet) signature = await smartWallet.signMessage(payload);
+    // if (smartWallet) signature = await smartWallet.signMessage(payload);
 
     sendJsonMessage({
       action: Events.GET_STATE,
@@ -170,7 +194,7 @@ export const WebsocketContextProvider = ({ children }: Props) => {
           signature: signature,
         },
       });
-    }
+    } else alert('hey');
   };
 
   /**

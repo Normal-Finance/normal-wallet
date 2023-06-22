@@ -52,8 +52,8 @@ export default function DashboardView() {
   );
 
   /** STATE */
-  const [totalTransactions, setTotalTransactions] = useState();
-  const [totalBatches, setTotalBatches] = useState();
+  const [totalTransactions, setTotalTransactions] = useState(0);
+  const [totalBatches, setTotalBatches] = useState(0);
   const [smartWalletFunded, setSmartWalletFunded] = useState(false);
 
   const {
@@ -87,6 +87,10 @@ export default function DashboardView() {
   }, [getStateCallback]);
 
   useEffect(() => {
+    if (smartWalletAddress) getStateCallback();
+  }, [smartWalletAddress]);
+
+  useEffect(() => {
     if (transactions) setTotalTransactions(sumValues(transactions));
     if (batches) setTotalBatches(sumValues(batches));
   }, [transactions, batches]);
@@ -99,11 +103,10 @@ export default function DashboardView() {
 
   /** CONSTANTS */
   const onboardingActiveStep = (): number => {
-    // if (!smartWalletFunded) return 0;
-    // else if (!billing.email) return 1;
-    // else if (billing.paymentMethods > 0) return 2;
-    // else return -1;
-    return 0;
+    if (!smartWalletFunded) return 0;
+    else if (!billing.email) return 1;
+    else if (billing.paymentMethods == 0) return 2;
+    else return -1;
   };
 
   const sumValues = (obj: object) => {
@@ -134,7 +137,7 @@ export default function DashboardView() {
             <Grid xs={12} sm={6} md={3}>
               <AnalyticsWidget
                 title="Connected Clients"
-                total={clients || 100}
+                total={clients}
                 color="info"
                 loading={websocketStatus !== 'Open' || clients === null}
                 icon={<img alt="icon" src="/assets/icons/glass/ic_glass_users.png" />}
@@ -144,7 +147,7 @@ export default function DashboardView() {
             <Grid xs={12} sm={6} md={3}>
               <AnalyticsWidget
                 title="Pending Transactions"
-                total={transactions?.NEW || 100}
+                total={transactions?.NEW + transactions?.PENDING}
                 color="warning"
                 loading={websocketStatus !== 'Open' || transactions?.PENDING === null}
                 icon={<img alt="icon" src="/assets/icons/glass/ic_glass_buy.png" />}
@@ -154,7 +157,7 @@ export default function DashboardView() {
             <Grid xs={12} sm={6} md={3}>
               <AnalyticsWidget
                 title="Total Transactions"
-                total={totalTransactions || 100}
+                total={totalTransactions}
                 color="error"
                 loading={websocketStatus !== 'Open' || transactions === null}
                 icon={<img alt="icon" src="/assets/icons/glass/ic_glass_message.png" />}
@@ -164,7 +167,7 @@ export default function DashboardView() {
             <Grid xs={12} sm={6} md={3}>
               <AnalyticsWidget
                 title="Total Batches"
-                total={totalBatches || 100}
+                total={totalBatches}
                 loading={websocketStatus !== 'Open' || batches === null}
                 icon={<img alt="icon" src="/assets/icons/glass/ic_glass_bag.png" />}
               />
@@ -173,21 +176,19 @@ export default function DashboardView() {
         )}
 
         {/* Failed Payment Alert */}
-        {/* {billing.failedCharges > 0 && (
+        {billing.failedCharges > 0 && (
           <Grid xs={12} md={12}>
             <FailedPaymentAlert
-              title={`🚨 You have ${billing.failedCharges} failed payment${
-                billing.failedCharges > 1 && 's'
-              }`}
-              description="Please resolve this failed payment before submitting any new transactions."
+              title={'🚨 You have a failed payment'}
+              description="Please resolve before submitting any new transactions."
               action={
-                <Button variant="contained" color="primary" href={APP_STUFF.billingLink}>
+                <Button variant="contained" color="error" href={APP_STUFF.billingLink}>
                   Update payment methods
                 </Button>
               }
             />
           </Grid>
-        )} */}
+        )}
 
         {/* Get Started */}
         {connectionStatus !== 'connected' && <GetStarted />}
@@ -195,42 +196,50 @@ export default function DashboardView() {
         {connectionStatus === 'connected' && (
           <>
             {/* Onboarding */}
-            {onboardingActiveStep() >= 0 && <Onboarding activeStep={onboardingActiveStep()} />}
+            {onboardingActiveStep() >= 0 ? (
+              <Onboarding activeStep={onboardingActiveStep()} />
+            ) : (
+              <>
+                {/* Live User Transactions */}
+                {Object.keys(userTransactions).length > 0 && (
+                  <Grid xs={12}>
+                    <TransactionsOverview transactions={userTransactions} />
+                  </Grid>
+                )}
 
-            {/* Live User Transactions */}
-            {Object.keys(userTransactions).length > 0 && (
-              <Grid xs={12} md={6} lg={8}>
-                <TransactionsOverview transactions={userTransactions} />
-              </Grid>
-            )}
+                {/* Wallet */}
+                {smartWalletFunded && (
+                  <>
+                    <Grid xs={12}>
+                      <Header
+                        nativeBalance={parseFloat(nativeBalance?.balance.ether || '0')}
+                        tokenBalances={tokenBalances}
+                      />
 
-            {/* Wallet */}
-            {smartWalletFunded && (
-              <Grid xs={12}>
-                <Header
-                  nativeBalance={parseFloat(nativeBalance?.balance.ether || '0')}
-                  tokenBalances={tokenBalances}
-                />
+                      <Dapps
+                        connections={connections}
+                        connect={connect}
+                        disconnect={disconnect}
+                        isWcConnecting={isConnecting}
+                      />
+                    </Grid>
 
-                <Dapps
-                  connections={connections}
-                  connect={connect}
-                  disconnect={disconnect}
-                  isWcConnecting={isConnecting}
-                />
+                    <Grid xs={12}>
+                      {/* {nativeBalance?.balance.ether! > '0' ||
+                      (tokenBalances && ( */}
+                      <Balances
+                        loading={loadingNativeBalance || loadingTokenBalances}
+                        error={nativeBalanceError || tokenBalancesError}
+                        nativeBalance={parseFloat(nativeBalance?.balance.ether || '0')}
+                        tokenBalances={tokenBalances}
+                      />
+                      {/* ))} */}
 
-                {nativeBalance?.balance.ether! > '0' ||
-                  (tokenBalances && (
-                    <Balances
-                      loading={loadingNativeBalance || loadingTokenBalances}
-                      error={nativeBalanceError || tokenBalancesError}
-                      nativeBalance={parseFloat(nativeBalance?.balance.ether || '0')}
-                      tokenBalances={tokenBalances}
-                    />
-                  ))}
-
-                <WalletConnectModalHandler />
-              </Grid>
+                      <WalletConnectModalHandler />
+                    </Grid>
+                  </>
+                )}
+              </>
             )}
           </>
         )}
