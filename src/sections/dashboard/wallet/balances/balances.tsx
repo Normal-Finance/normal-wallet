@@ -80,13 +80,6 @@ export default function Balances({ loading, error, nativeBalance, tokenBalances 
     [table]
   );
 
-  const handleFilterStatus = useCallback(
-    (event: React.SyntheticEvent, newValue: string) => {
-      handleFilters('status', newValue);
-    },
-    [handleFilters]
-  );
-
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);
   }, []);

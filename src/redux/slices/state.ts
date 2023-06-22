@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { IStateState } from 'src/types/state';
 import keyBy from 'lodash/keyBy';
-import { Priority } from 'src/types/transaction';
+import { Priority, TransactionStatus } from 'src/types/transaction';
 
 // ----------------------------------------------------------------------
 
@@ -57,8 +57,8 @@ const slice = createSlice({
 
     /** CLIENTS */
     updateClients(state, action) {
-      const { value } = action.payload;
-      state.clients = value;
+      const { clients } = action.payload;
+      state.clients = clients;
     },
     incrementClients(state) {
       state.clients += 1;

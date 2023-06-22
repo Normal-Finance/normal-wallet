@@ -23,8 +23,8 @@ export default function FailedPaymentAlert({ title, description, action, img, ..
       sx={{
         ...bgGradient({
           direction: '135deg',
-          startColor: alpha(theme.palette.primary.light, 0.2),
-          endColor: alpha(theme.palette.primary.main, 0.2),
+          startColor: alpha(theme.palette.error.light, 0.2),
+          endColor: alpha(theme.palette.error.main, 0.2),
         }),
         height: { md: 1 },
         borderRadius: 2,

@@ -43,7 +43,7 @@ export default function UpdateBilling({}: Props) {
     async (data: FormValuesProps) => {
       try {
         await updateEmail(data.email);
-        enqueueSnackbar('Email updated!');
+        // enqueueSnackbar('Email updated!');
       } catch (error) {
         console.error(error);
         enqueueSnackbar('Error updating email', { variant: 'error' });
@@ -61,7 +61,7 @@ export default function UpdateBilling({}: Props) {
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
         <Stack spacing={3} sx={{ p: 3 }}>
           <RHFTextField
-            name={'Email'}
+            name={'email'}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">

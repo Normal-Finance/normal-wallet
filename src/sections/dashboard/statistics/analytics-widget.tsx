@@ -7,7 +7,7 @@ import { CardProps } from '@mui/material/Card';
 // theme
 import { bgGradient } from 'src/theme/css';
 // utils
-import { fShortenNumber } from 'src/utils/format-number';
+import { fNumber, fShortenNumber } from 'src/utils/format-number';
 // theme
 import { ColorSchema } from 'src/theme/palette';
 import { Skeleton } from '@mui/material';
@@ -53,7 +53,7 @@ export default function AnalyticsWidget({
     >
       {icon && <Box sx={{ width: 64, height: 64, mb: 1 }}>{icon}</Box>}
 
-      <Typography variant="h3">{loading ? <Skeleton /> : fShortenNumber(total)}</Typography>
+      <Typography variant="h3">{loading ? <Skeleton /> : fNumber(total)}</Typography>
 
       <Typography variant="subtitle2" sx={{ opacity: 0.64 }}>
         {title}

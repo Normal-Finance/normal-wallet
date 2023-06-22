@@ -62,7 +62,7 @@ export default function UpdateEmail({}: Props) {
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
           <Stack spacing={3} sx={{ p: 3 }}>
             <RHFTextField
-              name={'Email'}
+              name={'email'}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">

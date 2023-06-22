@@ -1,7 +1,7 @@
 import QRCode from 'react-qr-code';
 
 // @mui
-import { Stack, Dialog, Typography, IconButton } from '@mui/material';
+import { Stack, Dialog, Typography, Tooltip } from '@mui/material';
 
 // components
 import Iconify from 'src/components/iconify';
@@ -29,33 +29,26 @@ export default function Receive({ open, onClose }: Props) {
 
   return (
     <Dialog fullWidth maxWidth="xs" open={open} onClose={onClose}>
-      <Stack
-        direction="row"
-        alignItems="center"
-        sx={{
-          py: 2,
-          pl: 2.5,
-          pr: 1,
-        }}
-      >
-        <IconButton onClick={onClose}>
-          <Iconify icon="eva:close-fill" />
-        </IconButton>
-      </Stack>
-
-      <Stack sx={{ p: 2.5 }}>
+      <Stack sx={{ p: 2.5, alignItems: 'center' }}>
         <QRCode value={smartWalletAddress} />
 
-        <Typography variant="body1">Your Normal Address</Typography>
-
-        <Typography variant="body1">
-          {smartWalletAddress}{' '}
-          <Iconify
-            icon="eva:copy-outline"
-            onClick={handleCopyAddress}
-            sx={{ color: 'text.disabled' }}
-          />
+        <Typography variant="subtitle1" sx={{ mt: 2 }}>
+          Your Normal Address
         </Typography>
+
+        <Stack direction="row" alignItems="center" spacing={1}>
+          <Typography variant="body1" sx={{ mt: 1 }}>
+            {smartWalletAddress}
+          </Typography>
+
+          <Tooltip title="Copy Address">
+            <Iconify
+              icon="eva:copy-outline"
+              onClick={handleCopyAddress}
+              sx={{ color: 'text.disabled' }}
+            />
+          </Tooltip>
+        </Stack>
       </Stack>
     </Dialog>
   );
