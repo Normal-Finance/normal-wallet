@@ -51,7 +51,7 @@ export default function DashboardView() {
   const [totalBatches, setTotalBatches] = useState(0);
   const [smartWalletFunded, setSmartWalletFunded] = useState(false);
 
-  const { ethereumBalance, tokenBalances, loading: loadingBalances } = useAlchemyContext();
+  const { ethereumBalance, tokenBalances, loading: alchemyLoading } = useAlchemyContext();
 
   const { connections, connect, disconnect, isConnecting } = useWalletConnect({
     account: smartWalletAddress,
@@ -190,7 +190,7 @@ export default function DashboardView() {
                 {smartWalletFunded && (
                   <>
                     <Grid xs={12}>
-                      <Header ethereumBalance={ethereumBalance} tokenBalances={tokenBalances} />
+                      <Header loading={alchemyLoading} ethereumBalance={ethereumBalance} tokenBalances={tokenBalances} />
 
                       <Dapps
                         connections={connections}
@@ -203,7 +203,7 @@ export default function DashboardView() {
                     <Grid xs={12}>
                       {smartWalletFunded && (
                         <Balances
-                          loading={loadingBalances}
+                          loading={alchemyLoading}
                           error={false}
                           ethereumBalance={ethereumBalance}
                           tokenBalances={tokenBalances}

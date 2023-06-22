@@ -12,15 +12,17 @@ import Send from './modals/Send';
 import Receive from './modals/Receive';
 import { useSnackbar } from 'src/components/snackbar';
 import { OwnedToken } from 'alchemy-sdk';
+import { CircularProgress } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
 type Props = {
+  loading: boolean;
   ethereumBalance: number;
   tokenBalances: OwnedToken[];
 };
 
-export default function Header({ ethereumBalance, tokenBalances }: Props) {
+export default function Header({ loading, ethereumBalance, tokenBalances }: Props) {
   const { enqueueSnackbar } = useSnackbar();
 
   const canSend = ethereumBalance > 0 || tokenBalances.length > 0;
@@ -56,6 +58,8 @@ export default function Header({ ethereumBalance, tokenBalances }: Props) {
           <Typography variant="body1" gutterBottom>
             Total balance: coming soon
           </Typography>
+
+          {loading && <CircularProgress />}
         </Box>
 
         <Stack direction="row" alignItems="center" spacing={1}>

@@ -21,11 +21,14 @@ type Context = {
   alchemy: Alchemy | undefined;
   ethereumBalance: number;
   tokenBalances: OwnedToken[];
+  refresh: () => void;
   getEthereumBalanceOfAddress: (address: string) => Promise<number>;
   getTokenBalancesOfAddress: (address: string) => Promise<OwnedToken[]>;
   getFeeData: () => Promise<any>;
   getGasEstimate: (transaction: TransactionRequest) => Promise<any>;
 };
+
+const UPDATE_INTERVAL = 1000 * 60 * 3; // 3 minutes
 
 const AlchemyContext = createContext<Context | null>(null);
 
@@ -53,24 +56,28 @@ export const AlchemyContextProvider = ({ children }: Props) => {
   }, [alchemy]);
 
   useEffect(() => {
-    if (smartWalletAddress) {
-      setLoading(true);
-
-      getEthereumBalance();
-      getTokenBalances();
-      getAssetTransfers();
-
-      setLoading(false);
-    }
+    getBalancesAndTransfers();
   }, [smartWalletAddress]);
+
+  useEffect(() => {
+    const interval = setInterval(getBalancesAndTransfers, UPDATE_INTERVAL);
+    return () => clearInterval(interval);
+  }, []);
 
   /**
    * PRIVATE METHODS
    */
 
-  /**
-   *
-   */
+  async function getBalancesAndTransfers() {
+    if (smartWalletAddress) {
+      setLoading(true);
+      await getEthereumBalance();
+      await getTokenBalances();
+      await getAssetTransfers();
+      setLoading(false);
+    }
+  }
+
   async function getEthereumBalance() {
     const hexBalance = await alchemy?.core.getBalance(smartWalletAddress);
     let ethereum = 0;
@@ -78,9 +85,6 @@ export const AlchemyContextProvider = ({ children }: Props) => {
     setEthereumBalance(ethereum);
   }
 
-  /**
-   *
-   */
   async function getTokenBalances() {
     const tokens = await alchemy?.core.getTokensForOwner(smartWalletAddress);
     if (tokens) setTokenBalances(tokens.tokens);
@@ -111,6 +115,10 @@ export const AlchemyContextProvider = ({ children }: Props) => {
   /**
    * PUBLIC METHODS
    */
+
+  async function refresh() {
+    await getBalancesAndTransfers();
+  }
 
   /**
    *
@@ -150,6 +158,7 @@ export const AlchemyContextProvider = ({ children }: Props) => {
         alchemy,
         ethereumBalance,
         tokenBalances,
+        refresh,
         getEthereumBalanceOfAddress,
         getTokenBalancesOfAddress,
         getFeeData,
