@@ -20,6 +20,7 @@ import {
 
 import { Events } from 'src/types/websocket';
 import { useWalletContext } from './WalletContext';
+import { TransactionPriority } from 'src/types/transaction';
 
 type Props = {
   children: React.ReactNode;
@@ -30,7 +31,13 @@ type Context = {
   messageHistory: any;
   getState: () => void;
   updateEmail: (email: string) => void;
-  newTransaction: (account: string, target: string, value: string, calldata: string) => void;
+  newTransaction: (
+    account: string,
+    target: string,
+    value: string,
+    calldata: string,
+    priority: TransactionPriority
+  ) => void;
   updateTransactionPriority: (transactionId: string) => void;
   cancelTransaction: (transactionId: string) => void;
 };
@@ -203,15 +210,18 @@ export const WebsocketContextProvider = ({ children }: Props) => {
    * @param target
    * @param value
    * @param calldata
+   * @param priority
    */
   const _newTransaction = async (
     account: string,
     target: string,
     value: string,
-    calldata: string
+    calldata: string,
+    priority: TransactionPriority
   ) => {
     if (smartWallet && smartWalletAddress) {
-      const payload = { account, target, value, calldata };
+      const transaction = { account, target, value, calldata };
+      const payload = { transaction, priority };
       let message = {
         address: smartWalletAddress,
         payload,

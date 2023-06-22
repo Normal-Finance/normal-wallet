@@ -16,15 +16,25 @@ import { CodeBlock, codepen } from 'react-code-blocks';
 import { useWalletContext } from 'src/contexts/WalletContext';
 import { useWebsocketContext } from 'src/contexts/WebsocketContext';
 
+// redux
+import { useSelector } from 'src/redux/store';
+
 import ModalStore from 'src/store/ModalStore';
 import { EIP155_CHAINS, TEIP155Chain } from 'src/hooks/walletConnect/wcConsts';
 import {
   approveEIP155Request,
   rejectEIP155Request,
 } from 'src/utils/walletConnect/EIP155RequestHandlerUtil';
+import TransactionTypes from '../transaction-types';
+import { TransactionPriority } from 'src/types/transaction';
 
 export default function LegacySessionSendTransactionModal() {
+  const { transactions } = useSelector((state) => state.state);
+
   const [loading, setLoading] = useState(false);
+  const [selectedPriority, setSelectedPriority] = useState<TransactionPriority>(
+    TransactionPriority.GTC
+  );
 
   const { smartWallet } = useWalletContext();
   const { newTransaction } = useWebsocketContext();
@@ -53,6 +63,8 @@ export default function LegacySessionSendTransactionModal() {
     if (requestEvent) {
       const { id, method, params } = requestEvent;
 
+      setLoading(true);
+
       const response: any = await approveEIP155Request(
         {
           id,
@@ -68,8 +80,15 @@ export default function LegacySessionSendTransactionModal() {
           },
         },
         smartWallet,
-        (account: string, target: string, value: string, calldata: string) => {
-          newTransaction(account, target, value, calldata);
+        selectedPriority,
+        (
+          account: string,
+          target: string,
+          value: string,
+          calldata: string,
+          priority: TransactionPriority
+        ) => {
+          newTransaction(account, target, value, calldata, priority);
         }
       );
 
@@ -85,6 +104,7 @@ export default function LegacySessionSendTransactionModal() {
         });
       }
 
+      setLoading(false);
       ModalStore.close();
     }
   };
@@ -112,6 +132,10 @@ export default function LegacySessionSendTransactionModal() {
       });
       ModalStore.close();
     }
+  };
+
+  const onSelectTransactionType = (newValue: TransactionPriority) => {
+    setSelectedPriority(newValue);
   };
 
   return (
@@ -159,6 +183,16 @@ export default function LegacySessionSendTransactionModal() {
               ))}
             </Stack>
           </Stack>
+
+          <Divider />
+
+          {/* <transaction> will most likely not satisfy required input type */}
+          <TransactionTypes
+            newTransactions={transactions.NEW}
+            transaction={transaction}
+            selected={selectedPriority}
+            onSelect={onSelectTransactionType}
+          />
 
           <Divider />
         </Stack>

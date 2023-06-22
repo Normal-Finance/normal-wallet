@@ -1,4 +1,5 @@
-export const enum Priority {
+export const enum TransactionPriority {
+  TRADITIONAL = 'TRADITIONAL',
   INSTANT = 'INSTANT', // should be batched asap - prioritizes speed over batch size
   GTC = 'GTC', // should be executed with a full batch - prioritizes batch size over timing
 }
@@ -17,7 +18,7 @@ export type Transaction = {
   target: string;
   _value: string;
   calldata: string;
-  priority: Priority;
+  priority: TransactionPriority;
   current_status: TransactionStatus;
   batchId: string;
   createdAt: Date | string;

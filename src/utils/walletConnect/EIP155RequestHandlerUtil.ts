@@ -4,11 +4,19 @@ import { formatJsonRpcError, formatJsonRpcResult } from '@json-rpc-tools/utils';
 import { SignClientTypes } from '@walletconnect/types';
 import { getSdkError } from '@walletconnect/utils';
 import { SmartWallet } from '@thirdweb-dev/wallets';
+import { TransactionPriority } from 'src/types/transaction';
 
 export async function approveEIP155Request(
   requestEvent: SignClientTypes.EventArguments['session_request'],
   smartWallet: SmartWallet,
-  submitTransactionHandler: any
+  selectedPriority: TransactionPriority,
+  submitTransactionHandler: (
+    account: string,
+    target: string,
+    value: string,
+    calldata: string,
+    priority: TransactionPriority
+  ) => void
 ) {
   const { params, id } = requestEvent;
   const { chainId, request } = params;
@@ -51,16 +59,28 @@ export async function approveEIP155Request(
 
     case EIP155_SIGNING_METHODS.ETH_SEND_TRANSACTION:
       try {
-        const sendTransaction = request.params[0];
+        const transaction = request.params[0];
 
-        submitTransactionHandler(
-          smartWalletAddress,
-          sendTransaction.to,
-          sendTransaction.value,
-          sendTransaction.data
-        );
+        switch (selectedPriority) {
+          case TransactionPriority.TRADITIONAL:
+            const sentTransaction = await wallet.sendTransaction(transaction);
+            return formatJsonRpcResult(id, sentTransaction);
 
-        return formatJsonRpcResult(id, true);
+          case TransactionPriority.GTC:
+          case TransactionPriority.INSTANT:
+            submitTransactionHandler(
+              smartWalletAddress,
+              transaction.to,
+              transaction.value,
+              transaction.data,
+              selectedPriority
+            );
+
+            return formatJsonRpcResult(id, true);
+
+          default:
+            throw 'Unsupported Transaction Priority';
+        }
       } catch (error: any) {
         console.error(error);
         alert(error.message);
@@ -70,8 +90,8 @@ export async function approveEIP155Request(
     // TODO: Smart wallet .signTransaction does not work for some reason...
     case EIP155_SIGNING_METHODS.ETH_SIGN_TRANSACTION:
       try {
-        const signTransaction = request.params[0];
-        // const signature = await wallet.signTransaction(signTransaction);
+        // const transaction = request.params[0];
+        // const signature = await wallet.signTransaction(transaction);
         // return formatJsonRpcResult(id, signature);
         return formatJsonRpcResult(id, true);
       } catch (error: any) {

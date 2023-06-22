@@ -8,6 +8,7 @@ import {
   AssetTransfersResult,
   Network,
   OwnedToken,
+  TransactionRequest,
 } from 'alchemy-sdk';
 import { useWalletContext } from './WalletContext';
 import { ALCHEMY_API_KEY } from 'src/config-global';
@@ -22,6 +23,8 @@ type Context = {
   tokenBalances: OwnedToken[];
   getEthereumBalanceOfAddress: (address: string) => Promise<number>;
   getTokenBalancesOfAddress: (address: string) => Promise<OwnedToken[]>;
+  getFeeData: () => Promise<any>;
+  getGasEstimate: (transaction: TransactionRequest) => Promise<any>;
 };
 
 const AlchemyContext = createContext<Context | null>(null);
@@ -132,6 +135,14 @@ export const AlchemyContextProvider = ({ children }: Props) => {
     else return [];
   }
 
+  async function getFeeData() {
+    return await alchemy?.core.getFeeData();
+  }
+
+  async function getGasEstimate(transaction: TransactionRequest) {
+    return await alchemy?.core.estimateGas(transaction);
+  }
+
   return (
     <AlchemyContext.Provider
       value={{
@@ -141,6 +152,8 @@ export const AlchemyContextProvider = ({ children }: Props) => {
         tokenBalances,
         getEthereumBalanceOfAddress,
         getTokenBalancesOfAddress,
+        getFeeData,
+        getGasEstimate,
       }}
     >
       {children}
