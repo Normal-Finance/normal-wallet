@@ -47,11 +47,12 @@ export const AlchemyContextProvider = ({ children }: Props) => {
 
   useEffect(() => {
     if (!alchemy) {
-      const _alchemy = new Alchemy({
-        apiKey: ALCHEMY_API_KEY,
-        network: process.env.NODE_ENV === 'production' ? Network.ETH_MAINNET : Network.ETH_GOERLI,
-      });
-      setAlchemy(_alchemy);
+      setAlchemy(
+        new Alchemy({
+          apiKey: ALCHEMY_API_KEY,
+          network: process.env.NODE_ENV === 'production' ? Network.ETH_MAINNET : Network.ETH_GOERLI,
+        })
+      );
     }
   }, [alchemy]);
 
@@ -79,15 +80,20 @@ export const AlchemyContextProvider = ({ children }: Props) => {
   }
 
   async function getEthereumBalance() {
-    const hexBalance = await alchemy?.core.getBalance(smartWalletAddress);
-    let ethereum = 0;
-    if (hexBalance) ethereum = parseInt(hexBalance.toString(), 16) / Math.pow(10, 18);
-    setEthereumBalance(ethereum);
+    if (alchemy) {
+      const hexBalance = await alchemy.core.getBalance(smartWalletAddress);
+      let ethereum = 0;
+      if (hexBalance) ethereum = parseInt(hexBalance.toString(), 16) / Math.pow(10, 18);
+      setEthereumBalance(ethereum);
+    }
   }
 
   async function getTokenBalances() {
-    const tokens = await alchemy?.core.getTokensForOwner(smartWalletAddress);
-    if (tokens) setTokenBalances(tokens.tokens);
+    if (alchemy) {
+      const { tokens } = await alchemy.core.getTokensForOwner(smartWalletAddress);
+      if (tokens.length > 0)
+        setTokenBalances(tokens.filter((token) => parseFloat(token.balance!) > 0));
+    }
   }
 
   async function getAssetTransfers() {
@@ -126,10 +132,12 @@ export const AlchemyContextProvider = ({ children }: Props) => {
    * @returns
    */
   async function getEthereumBalanceOfAddress(address: string): Promise<number> {
-    const hexBalance = await alchemy?.core.getBalance(address);
-    let ethereum = 0;
-    if (hexBalance) ethereum = parseInt(hexBalance.toString(), 16) / Math.pow(10, 18);
-    return ethereum;
+    if (alchemy) {
+      const hexBalance = await alchemy.core.getBalance(address);
+      let ethereum = 0;
+      if (hexBalance) ethereum = parseInt(hexBalance.toString(), 16) / Math.pow(10, 18);
+      return ethereum;
+    } else return 0;
   }
 
   /**
@@ -138,9 +146,11 @@ export const AlchemyContextProvider = ({ children }: Props) => {
    * @returns
    */
   async function getTokenBalancesOfAddress(address: string): Promise<OwnedToken[]> {
-    const tokens = await alchemy?.core.getTokensForOwner(address);
-    if (tokens) return tokens.tokens;
-    else return [];
+    if (alchemy) {
+      const { tokens } = await alchemy.core.getTokensForOwner(address);
+      if (tokens.length > 0) return tokens.filter((token) => parseFloat(token.balance!) > 0);
+      else return [];
+    } else return [];
   }
 
   async function getFeeData() {
