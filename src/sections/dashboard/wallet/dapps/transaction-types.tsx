@@ -19,7 +19,7 @@ import { TransactionPriority } from 'src/types/transaction';
 
 type Props = {
   newTransactions: number;
-  transaction: TransactionRequest;
+  transaction: TransactionRequest | null;
   selected: string;
   onSelect: (newValue: TransactionPriority) => void;
 };
@@ -65,10 +65,11 @@ export default function TransactionTypes({
   ];
 
   useEffect(() => {
-    if (transaction) estimateGas();
+    if (transaction) estimateGas(transaction);
   }, [transaction]);
 
-  const estimateGas = async () => setTraditionalGasEstimate(await getGasEstimate(transaction));
+  const estimateGas = async (_transaction: TransactionRequest) =>
+    setTraditionalGasEstimate(await getGasEstimate(_transaction));
 
   const [traditionalGasEstimate, setTraditionalGasEstimate] = useState(null);
 

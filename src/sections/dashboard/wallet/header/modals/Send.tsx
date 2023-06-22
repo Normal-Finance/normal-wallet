@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+
 import * as Yup from 'yup';
 // form
 import { useForm } from 'react-hook-form';
@@ -6,6 +8,9 @@ import { yupResolver } from '@hookform/resolvers/yup';
 // ethers
 import { ethers } from 'ethers';
 import { parseEther } from 'ethers/lib/utils';
+
+// redux
+import { useSelector } from 'src/redux/store';
 
 // @mui
 import {
@@ -24,7 +29,9 @@ import FormProvider from 'src/components/hook-form';
 import { RHFTextField, RHFSelect } from 'src/components/hook-form';
 import { useWebsocketContext } from 'src/contexts/WebsocketContext';
 import { useWalletContext } from 'src/contexts/WalletContext';
-import { OwnedToken } from 'alchemy-sdk';
+import { OwnedToken, TransactionRequest } from 'alchemy-sdk';
+import { TransactionPriority } from 'src/types/transaction';
+import TransactionTypes from '../../dapps/transaction-types';
 
 // ----------------------------------------------------------------------
 
@@ -43,7 +50,18 @@ type FormValues = {
 
 export default function Send({ open, ethereumBalance, tokenBalances, onClose }: Props) {
   const { newTransaction } = useWebsocketContext();
-  const { smartWalletAddress } = useWalletContext();
+  const { smartWallet, smartWalletAddress } = useWalletContext();
+
+  const { transactions } = useSelector((state) => state.state);
+
+  const [transaction, setTransaction] = useState<TransactionRequest | null>(null);
+  const [selectedPriority, setSelectedPriority] = useState<TransactionPriority>(
+    TransactionPriority.GTC
+  );
+
+  const onSelectTransactionType = (newValue: TransactionPriority) => {
+    setSelectedPriority(newValue);
+  };
 
   const EventSchema = Yup.object().shape({
     token: Yup.number().required('Token is required'),
@@ -68,21 +86,58 @@ export default function Send({ open, ethereumBalance, tokenBalances, onClose }: 
   } = methods;
 
   const onSubmit = async (data: FormValues) => {
-    let tokenContractAddress;
-    if (data.token === -1) tokenContractAddress = '0x2170Ed0880ac9A755fd29B2688956BD959F933F8';
-    else if (data.token > 0) tokenContractAddress = tokenBalances[data.token].contractAddress;
+    if (smartWallet && transaction) {
+      switch (selectedPriority) {
+        case TransactionPriority.TRADITIONAL:
+          const sentTransaction = (await smartWallet.getSigner()).sendTransaction(transaction);
+          // TODO: push to userTransactions state?
 
-    const parsedValue = parseEther(data.amount);
+          break;
 
-    const ABI = ['function transfer(address to, uint256 amount)'];
-    const iface = new ethers.utils.Interface(ABI);
-    const calldata = iface.encodeFunctionData('transfer', [data.toAddress, parsedValue]);
+        case TransactionPriority.GTC:
+        case TransactionPriority.INSTANT:
+          newTransaction(
+            smartWalletAddress,
+            transaction.to!,
+            transaction.value!.toString(),
+            transaction.data as string,
+            selectedPriority
+          );
 
-    console.log({ smartWalletAddress, tokenContractAddress, parsedValue, calldata });
-    // newTransaction(smartWalletAddress, tokenContractAddress, parsedValue.toString(), calldata);
+          break;
+
+        default:
+          throw 'Unsupported Transaction Priority';
+      }
+    } else {
+      // TODO: enqueue
+    }
   };
 
   const values = watch();
+
+  useEffect(() => {
+    if (values.amount && values.toAddress) {
+      const tokenContractAddress =
+        values.token === -1
+          ? '0x2170Ed0880ac9A755fd29B2688956BD959F933F8'
+          : tokenBalances[values.token].contractAddress;
+
+      const value = parseEther(values.amount);
+
+      const abi = ['function transfer(address to, uint256 amount)'];
+      const iface = new ethers.utils.Interface(abi);
+      const calldata = iface.encodeFunctionData('transfer', [values.toAddress, value]);
+
+      let _transaction: TransactionRequest = {
+        to: tokenContractAddress,
+        from: smartWalletAddress,
+        data: calldata,
+        value,
+      };
+      setTransaction(_transaction);
+    }
+  }, [values]);
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
@@ -143,6 +198,14 @@ export default function Send({ open, ethereumBalance, tokenBalances, onClose }: 
 
           {/* To Address */}
           <RHFTextField name="toAddress" label="Address" />
+
+          {/* Gas Estimate and Priority Selection */}
+          <TransactionTypes
+            newTransactions={transactions.NEW}
+            transaction={transaction}
+            selected={selectedPriority}
+            onSelect={onSelectTransactionType}
+          />
         </Stack>
 
         <DialogActions>
