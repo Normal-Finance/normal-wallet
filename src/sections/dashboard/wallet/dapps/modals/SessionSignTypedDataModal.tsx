@@ -1,20 +1,26 @@
-import React, { Fragment } from 'react';
-import { Button, Divider, Modal, Typography } from '@mui/material';
-
+import {
+  Button,
+  Divider,
+  Typography,
+  Stack,
+  Dialog,
+  DialogTitle,
+  DialogActions,
+  DialogContent,
+  Avatar,
+  Chip,
+} from '@mui/material';
+import { CodeBlock, codepen } from 'react-code-blocks';
 import { useWalletContext } from 'src/contexts/WalletContext';
 import { useWebsocketContext } from 'src/contexts/WebsocketContext';
 
-import ProjectInfoCard from 'src/components/walletConnect/ProjectInfoCard';
-import RequestDataCard from 'src/components/walletConnect/RequestDataCard';
-import RequesDetailsCard from 'src/components/walletConnect/RequestDetalilsCard';
-import RequestMethodCard from 'src/components/walletConnect/RequestMethodCard';
-import RequestModalContainer from 'src/components/walletConnect/RequestModalContainer';
 import ModalStore from 'src/store/ModalStore';
-import { getSignTypedDataParamsData } from 'src/utils/walletConnect/HelperUtil';
+import { EIP155_CHAINS, TEIP155Chain } from 'src/hooks/walletConnect/wcConsts';
 import {
   approveEIP155Request,
   rejectEIP155Request,
 } from 'src/utils/walletConnect/EIP155RequestHandlerUtil';
+import { getSignTypedDataParamsData } from 'src/utils/walletConnect/HelperUtil';
 
 export default function SessionSignTypedDataModal() {
   const { smartWallet } = useWalletContext();
@@ -62,33 +68,63 @@ export default function SessionSignTypedDataModal() {
   };
 
   return (
-    <Fragment>
-      <RequestModalContainer title="Sign Typed Data">
-        <ProjectInfoCard metadata={requestSession.peer.metadata} />
+    <Dialog maxWidth="sm" open={true}>
+      <DialogTitle> Sign Typed Data </DialogTitle>
 
-        <Divider />
+      <DialogContent sx={{ overflow: 'unset' }}>
+        <Stack spacing={2.5} alignItems="center">
+          <Avatar src={requestSession.peer.metadata.icons[0]} />
 
-        <RequesDetailsCard chains={[chainId ?? '']} protocol={requestSession.relay.protocol} />
+          <Typography variant="h6">
+            {requestSession.peer.metadata.name} Wants to Sign Typed Data
+          </Typography>
 
-        <Divider />
+          <Divider />
 
-        <RequestDataCard data={data} />
+          <CodeBlock
+            showLineNumbers={false}
+            text={JSON.stringify(data, null, 2)}
+            theme={codepen}
+            language="json"
+          />
 
-        <Divider />
+          <Divider />
 
-        <RequestMethodCard methods={[request.method]} />
-      </RequestModalContainer>
+          <Stack spacing={2} direction="row">
+            <Typography variant="h6">Blockchain(s)</Typography>
+            <Stack direction="row" alignItems="center" spacing={1}>
+              {[chainId ?? ''].map((chain) => {
+                return (
+                  <Chip
+                    key={EIP155_CHAINS[chain as TEIP155Chain]?.name ?? chain}
+                    label={EIP155_CHAINS[chain as TEIP155Chain]?.name ?? chain}
+                    variant="soft"
+                    color={'info'}
+                  />
+                );
+              })}
+            </Stack>
 
-      {/* <Modal.Footer> */}
-      <div>
-        <Button color="error" onClick={onReject}>
-          Reject
+            <Typography variant="h6">Methods</Typography>
+            <Stack direction="row" alignItems="center" spacing={1}>
+              {[request.method].map((method) => (
+                <Chip key={method} label={method} variant="soft" color={'warning'} />
+              ))}
+            </Stack>
+          </Stack>
+
+          <Divider />
+        </Stack>
+      </DialogContent>
+
+      <DialogActions>
+        <Button color="inherit" variant="outlined" onClick={onReject}>
+          Cancel
         </Button>
-        <Button color="success" onClick={onApprove}>
+        <Button variant="contained" color="success" onClick={onApprove}>
           Approve
         </Button>
-      </div>
-      {/* </Modal.Footer> */}
-    </Fragment>
+      </DialogActions>
+    </Dialog>
   );
 }

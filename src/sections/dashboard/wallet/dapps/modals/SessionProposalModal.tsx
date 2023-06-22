@@ -1,22 +1,17 @@
-import React from 'react';
-import ProjectInfoCard from 'src/components/walletConnect/ProjectInfoCard';
-import ProposalSelectSection from 'src/components/walletConnect/ProposalSelectSection';
-import RequestModalContainer from 'src/components/walletConnect/RequestModalContainer';
-import SessionProposalChainCard from 'src/components/walletConnect/SessionProposalChainCard';
 import ModalStore from 'src/store/ModalStore';
-import { isEIP155Chain } from 'src/utils/walletConnect/HelperUtil';
-import { Button, Divider, Modal, Typography } from '@mui/material';
-// import { SessionTypes } from '@walletconnect/types';
-import { Fragment, useState } from 'react';
-import { useWalletContext } from 'src/contexts/WalletContext';
+import {
+  Button,
+  Stack,
+  Typography,
+  Dialog,
+  DialogTitle,
+  DialogActions,
+  DialogContent,
+  Avatar,
+  Link,
+} from '@mui/material';
 
 export default function SessionProposalModal() {
-  const { smartWalletAddress } = useWalletContext();
-
-  const [selectedAccounts, setSelectedAccounts] = useState<Record<string, string[]>>({});
-  const hasSelected = Object.keys(selectedAccounts).length;
-
-  // Get proposal data and wallet address from store
   const proposal = ModalStore.state.data?.proposal;
   const onApprove = ModalStore.state.data?.onApprove;
   const onReject = ModalStore.state.data?.onReject;
@@ -28,74 +23,35 @@ export default function SessionProposalModal() {
 
   // Get required proposal data
   const { id, params } = proposal;
-  const { proposer, requiredNamespaces, relays } = params;
-
-  // Add / remove address from EIP155 selection
-  function onSelectAccount(chain: string, account: string) {
-    if (selectedAccounts[chain]?.includes(account)) {
-      const newSelectedAccounts = selectedAccounts[chain]?.filter((a) => a !== account);
-      setSelectedAccounts((prev) => ({
-        ...prev,
-        [chain]: newSelectedAccounts,
-      }));
-    } else {
-      const prevChainAddresses = selectedAccounts[chain] ?? [];
-      setSelectedAccounts((prev) => ({
-        ...prev,
-        [chain]: [...prevChainAddresses, account],
-      }));
-    }
-  }
-
-  // Render account selection checkboxes based on chain
-  function renderAccountSelection(chain: string) {
-    if (isEIP155Chain(chain)) {
-      return (
-        <ProposalSelectSection
-          addresses={[smartWalletAddress]}
-          selectedAddresses={selectedAccounts[chain]}
-          onSelect={onSelectAccount}
-          chain={chain}
-        />
-      );
-    }
-  }
+  const { proposer } = params;
 
   return (
-    <Fragment>
-      <RequestModalContainer title="Session Proposal">
-        <ProjectInfoCard metadata={proposer.metadata} />
+    <Dialog maxWidth="sm" open={true}>
+      <DialogTitle> Session Proposal </DialogTitle>
 
-        {/* TODO(ilja) Relays selection */}
+      <DialogContent sx={{ overflow: 'unset' }}>
+        <Stack spacing={2.5} alignItems="center">
+          <Avatar src={proposer.metadata.icons[0]} />
 
-        <Divider />
+          <Typography variant="h6">{proposer.metadata.name} Wants to Connect</Typography>
 
-        {Object.keys(requiredNamespaces).map((chain) => {
-          return (
-            <Fragment key={chain}>
-              <Typography>{`Review ${chain} permissions`}</Typography>
-              <SessionProposalChainCard requiredNamespace={requiredNamespaces[chain]} />
-              {renderAccountSelection(chain)}
-              <Divider />
-            </Fragment>
-          );
-        })}
-      </RequestModalContainer>
+          <Typography variant="body1">
+            You need the Normal web app to be open to initiate transactions. You will not receive
+            transaction requests when it is not open.
+          </Typography>
 
-      <div>
-        <Button color="error" onClick={onReject}>
-          Reject
+          <Link href={proposer.metadata.url}>{proposer.metadata.url}</Link>
+        </Stack>
+      </DialogContent>
+
+      <DialogActions>
+        <Button color="inherit" variant="outlined" onClick={onReject}>
+          Cancel
         </Button>
-
-        <Button
-          color="success"
-          onClick={onApprove}
-          disabled={!hasSelected}
-          // css={{ opacity: hasSelected ? 1 : 0.4 }}
-        >
+        <Button variant="contained" color="success" onClick={onApprove}>
           Approve
         </Button>
-      </div>
-    </Fragment>
+      </DialogActions>
+    </Dialog>
   );
 }

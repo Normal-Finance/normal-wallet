@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 // @mui
-import { Divider, IconButton, Stack, Button } from '@mui/material';
+import { Divider, IconButton, Stack, Button, Box } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
 
 // components
@@ -31,15 +31,26 @@ export default function Dapps({ connections, connect, disconnect, isWcConnecting
   return (
     <>
       <Scrollbar>
-        <Stack
-          direction="row"
-          divider={<Divider orientation="vertical" flexItem sx={{ borderStyle: 'dashed' }} />}
-          sx={{ py: 2 }}
-        >
+        <Stack direction="row" sx={{ py: 2 }}>
           {/* Button */}
           {connections.length > 0 ? (
-            <IconButton color="info" aria-label="add new dapp" onClick={handleOpenConnect}>
-              <Iconify icon="eva:plus-fill" />
+            <IconButton
+              size="small"
+              color="primary"
+              onClick={handleOpenConnect}
+              sx={{
+                width: 48,
+                height: 48,
+                mt: 2.5,
+                mr: 2,
+                bgcolor: 'primary.main',
+                color: 'primary.contrastText',
+                '&:hover': {
+                  bgcolor: 'primary.dark',
+                },
+              }}
+            >
+              <Iconify icon="mingcute:add-line" />
             </IconButton>
           ) : (
             <Button
@@ -49,7 +60,12 @@ export default function Dapps({ connections, connect, disconnect, isWcConnecting
               startIcon={<Iconify icon="eva:plus-fill" />}
               onClick={handleOpenConnect}
             >
-              Connect Dapps
+              Connect Dapp
+              <Box
+                component="img"
+                src="/assets/icons/walletConnect.svg"
+                sx={{ width: 24, height: 24, cursor: 'pointer', ml: 1 }}
+              />
             </Button>
           )}
 

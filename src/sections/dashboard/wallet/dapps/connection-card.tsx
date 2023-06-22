@@ -1,34 +1,46 @@
 // @mui
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
-import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
 import ListItemText from '@mui/material/ListItemText';
 import Stack, { StackProps } from '@mui/material/Stack';
+import { useTheme } from '@mui/material/styles';
 // hooks
 import { useBoolean } from 'src/hooks/use-boolean';
 import { useResponsive } from 'src/hooks/use-responsive';
 // components
 import Iconify from 'src/components/iconify';
+import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSnackbar } from 'src/components/snackbar';
-import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import { Avatar, Button, Tooltip, Typography } from '@mui/material';
+import Label from 'src/components/label/label';
+import { RouterLink } from 'src/routes/components';
 //
 
 // ----------------------------------------------------------------------
 
 interface Props extends StackProps {
   connection: any;
-  onDisconnect: VoidFunction;
+  onDisconnect: any;
 }
 
 export default function ConnectionCard({ connection, onDisconnect, sx, ...other }: Props) {
   const { enqueueSnackbar } = useSnackbar();
 
+  const theme = useTheme();
+
   const smUp = useResponsive('up', 'sm');
 
-  const popover = usePopover();
+  const confirm = useBoolean();
 
   const details = useBoolean();
+
+  const isLight = theme.palette.mode === 'light';
+
+  const handleOnDisconnect = () => {
+    onDisconnect(connection.connectionId, connection.wcVersion);
+    confirm.onFalse();
+  };
 
   const renderAction = (
     <Box
@@ -42,9 +54,15 @@ export default function ConnectionCard({ connection, onDisconnect, sx, ...other 
         }),
       }}
     >
-      <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
-        <Iconify icon="eva:more-vertical-fill" />
+      <IconButton color={'success'} component={RouterLink} href={connection.session.peerMeta.url}>
+        <Iconify icon="eva:external-link-fill" />
       </IconButton>
+
+      <Tooltip title="Disconnect">
+        <IconButton color={confirm.value ? 'inherit' : 'default'} onClick={confirm.onTrue}>
+          <Iconify icon="eva:close-fill" />
+        </IconButton>
+      </Tooltip>
     </Box>
   );
 
@@ -53,12 +71,9 @@ export default function ConnectionCard({ connection, onDisconnect, sx, ...other 
       onClick={details.onTrue}
       primary={connection.session.peerMeta.name}
       secondary={
-        <>
-          {connection.session.peerMeta.description}
-          <Box
-            sx={{ mx: 0.75, width: 2, height: 2, borderRadius: '50%', bgcolor: 'currentColor' }}
-          />
-        </>
+        <Label variant={isLight ? 'soft' : 'filled'} color={'success'}>
+          Connected
+        </Label>
       }
       primaryTypographyProps={{
         noWrap: true,
@@ -85,6 +100,7 @@ export default function ConnectionCard({ connection, onDisconnect, sx, ...other 
         alignItems={{ xs: 'unset', sm: 'center' }}
         sx={{
           borderRadius: 2,
+          mr: 2,
           bgcolor: 'unset',
           cursor: 'pointer',
           position: 'relative',
@@ -97,27 +113,27 @@ export default function ConnectionCard({ connection, onDisconnect, sx, ...other 
         }}
         {...other}
       >
+        <Avatar
+          alt={'idk'}
+          src={connection.session.peerMeta.icons[0]}
+          sx={{ width: 36, height: 36, mr: 1 }}
+        />
+
         {renderText}
 
         {renderAction}
       </Stack>
 
-      <CustomPopover
-        open={popover.open}
-        onClose={popover.onClose}
-        arrow="right-top"
-        sx={{ width: 160 }}
-      >
-        <MenuItem
-          onClick={() => {
-            popover.onClose();
-            onDisconnect();
-          }}
-          sx={{ color: 'error.main' }}
-        >
-          Disconnect
-        </MenuItem>
-      </CustomPopover>
+      <ConfirmDialog
+        open={confirm.value}
+        onClose={confirm.onFalse}
+        title="Are you sure you want to disconnect?"
+        action={
+          <Button variant="contained" color="error" onClick={handleOnDisconnect}>
+            Disconnect
+          </Button>
+        }
+      />
     </>
   );
 }

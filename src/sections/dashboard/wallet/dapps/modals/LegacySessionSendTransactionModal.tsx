@@ -1,19 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
+import {
+  Button,
+  CircularProgress,
+  Divider,
+  Typography,
+  Stack,
+  Dialog,
+  DialogTitle,
+  DialogActions,
+  DialogContent,
+  Avatar,
+  Chip,
+} from '@mui/material';
+import { CodeBlock, codepen } from 'react-code-blocks';
+import { useWalletContext } from 'src/contexts/WalletContext';
+import { useWebsocketContext } from 'src/contexts/WebsocketContext';
 
-import ProjectInfoCard from 'src/components/walletConnect/ProjectInfoCard';
-import RequestDataCard from 'src/components/walletConnect/RequestDataCard';
-import RequesDetailsCard from 'src/components/walletConnect/RequestDetalilsCard';
-import RequestMethodCard from 'src/components/walletConnect/RequestMethodCard';
-import RequestModalContainer from 'src/components/walletConnect/RequestModalContainer';
 import ModalStore from 'src/store/ModalStore';
-import { Button, Divider, CircularProgress, Modal, Typography } from '@mui/material';
-import { Fragment, useState } from 'react';
+import { EIP155_CHAINS, TEIP155Chain } from 'src/hooks/walletConnect/wcConsts';
 import {
   approveEIP155Request,
   rejectEIP155Request,
 } from 'src/utils/walletConnect/EIP155RequestHandlerUtil';
-import { useWalletContext } from 'src/contexts/WalletContext';
-import { useWebsocketContext } from 'src/contexts/WebsocketContext';
 
 export default function LegacySessionSendTransactionModal() {
   const [loading, setLoading] = useState(false);
@@ -107,33 +115,63 @@ export default function LegacySessionSendTransactionModal() {
   };
 
   return (
-    <Fragment>
-      <RequestModalContainer title="Send / Sign Transaction">
-        <ProjectInfoCard metadata={requestSession.peerMeta!} />
+    <Dialog maxWidth="sm" open={true}>
+      <DialogTitle> Send / Sign Transaction </DialogTitle>
 
-        <Divider />
+      <DialogContent sx={{ overflow: 'unset' }}>
+        <Stack spacing={2.5} alignItems="center">
+          <Avatar src={requestSession.peerMeta!.icons[0]} />
 
-        <RequestDataCard data={transaction} />
+          <Typography variant="h6">
+            {requestSession.peerMeta!.name} Wants to Send / Sign a Transaction
+          </Typography>
 
-        <Divider />
+          <Divider />
 
-        <RequesDetailsCard chains={['eip155:' + chainId]} protocol={protocol} />
+          <CodeBlock
+            showLineNumbers={false}
+            text={JSON.stringify(transaction, null, 2)}
+            theme={codepen}
+            language="json"
+          />
 
-        <Divider />
+          <Divider />
 
-        <RequestMethodCard methods={[method]} />
-      </RequestModalContainer>
+          <Stack spacing={2} direction="row">
+            <Typography variant="h6">Blockchain(s)</Typography>
+            <Stack direction="row" alignItems="center" spacing={1}>
+              {['eip155:' + chainId].map((chain) => {
+                return (
+                  <Chip
+                    key={EIP155_CHAINS[chain as TEIP155Chain]?.name ?? chain}
+                    label={EIP155_CHAINS[chain as TEIP155Chain]?.name ?? chain}
+                    variant="soft"
+                    color={'info'}
+                  />
+                );
+              })}
+            </Stack>
 
-      {/* <Modal.Footer> */}
-      <div>
-        <Button color="error" onClick={onReject} disabled={loading}>
-          Reject
+            <Typography variant="h6">Methods</Typography>
+            <Stack direction="row" alignItems="center" spacing={1}>
+              {[method].map((method) => (
+                <Chip key={method} label={method} variant="soft" color={'warning'} />
+              ))}
+            </Stack>
+          </Stack>
+
+          <Divider />
+        </Stack>
+      </DialogContent>
+
+      <DialogActions>
+        <Button color="inherit" variant="outlined" onClick={onReject} disabled={loading}>
+          Cancel
         </Button>
-        <Button color="success" onClick={onApprove} disabled={loading}>
+        <Button variant="contained" color="success" onClick={onApprove} disabled={loading}>
           {loading ? <CircularProgress size="sm" color="success" /> : 'Approve'}
         </Button>
-        {/* </Modal.Footer> */}
-      </div>
-    </Fragment>
+      </DialogActions>
+    </Dialog>
   );
 }

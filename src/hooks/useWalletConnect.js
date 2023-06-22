@@ -19,7 +19,7 @@ export default function useWalletConnect({ account, chainId }) {
     try {
       return await navigator.clipboard.readText();
     } catch (e) {
-      clipboardError(e);
+      // clipboardError(e);
     }
 
     return false;
@@ -131,7 +131,7 @@ export default function useWalletConnect({ account, chainId }) {
           connect({ uri: clipboard });
         }
       } catch (e) {
-        clipboardError(e);
+        // clipboardError(e);
       }
     };
 
