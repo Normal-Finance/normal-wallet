@@ -12,14 +12,22 @@ import { useSnackbar } from 'src/components/snackbar';
 import Iconify from 'src/components/iconify';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
-//
-import AccountBilling from '../settings-billing';
+
 import { useWalletContext } from 'src/contexts/WalletContext';
 import { redirect } from 'next/navigation';
+
+// Tabs
+import SettingsGeneral from '../settings-general';
+import SettingsBilling from '../settings-billing';
 
 // ----------------------------------------------------------------------
 
 const TABS = [
+  {
+    value: 'general',
+    label: 'General',
+    icon: <Iconify icon="solar:user-id-bold" width={24} />,
+  },
   {
     value: 'billing',
     label: 'Billing',
@@ -70,7 +78,9 @@ export default function SettingsView() {
         ))}
       </Tabs>
 
-      {currentTab === 'billing' && <AccountBilling />}
+      {currentTab === 'general' && <SettingsGeneral />}
+
+      {currentTab === 'billing' && <SettingsBilling />}
     </Container>
   );
 }

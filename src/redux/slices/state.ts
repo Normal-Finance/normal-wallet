@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { IStateState } from 'src/types/state';
 import keyBy from 'lodash/keyBy';
-import { Priority, TransactionStatus } from 'src/types/transaction';
+import { Priority } from 'src/types/transaction';
 
 // ----------------------------------------------------------------------
 
@@ -28,6 +28,8 @@ const initialState: IStateState = {
     paymentMethods: 0,
     failedCharges: 0,
   },
+
+  autoBatchEnabled: true,
 
   userTransactions: {},
 };
@@ -82,6 +84,11 @@ const slice = createSlice({
       state.billing.email = email;
     },
 
+    /** CONFIGURATION/SETTINGS */
+    updateAutoBatchEnabled(state) {
+      state.autoBatchEnabled = !state.autoBatchEnabled;
+    },
+
     /** USER TRANSACTIONS */
     updateUserTransactions(state, action) {
       const { transactions } = action.payload;
@@ -126,6 +133,7 @@ export const {
   updateEmail,
   updateUserTransactions,
   newTransaction,
+  updateAutoBatchEnabled,
   updateTransactionPriority,
   cancelTransaction,
 } = slice.actions;

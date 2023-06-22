@@ -2,8 +2,6 @@
 import { Card, CardHeader, Box, Button, Stack } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import { APP_STUFF } from 'src/config-global';
-// components
-import UpdateBilling from './update-billing';
 
 // ----------------------------------------------------------------------
 
@@ -13,9 +11,6 @@ export default function SettingsBilling({}: Props) {
   return (
     <Grid container spacing={5} disableEqualOverflow sx={{ pb: 3 }}>
       <Grid xs={12} md={8}>
-        {/* Email */}
-        <UpdateBilling />
-
         {/* Payment methods */}
         <Card>
           <CardHeader
