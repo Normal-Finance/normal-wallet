@@ -2,7 +2,13 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
-import { Alchemy, AssetTransfersCategory, AssetTransfersResult, Network, OwnedToken } from 'alchemy-sdk';
+import {
+  Alchemy,
+  AssetTransfersCategory,
+  AssetTransfersResult,
+  Network,
+  OwnedToken,
+} from 'alchemy-sdk';
 import { useWalletContext } from './WalletContext';
 import { ALCHEMY_API_KEY } from 'src/config-global';
 
@@ -28,8 +34,8 @@ export const AlchemyContextProvider = ({ children }: Props) => {
   const [tokenBalances, setTokenBalances] = useState<OwnedToken[]>([]);
   const [assetTransfers, setAssetTransfers] = useState<Record<string, AssetTransfersResult[]>>({
     outgoing: [],
-    incoming: []
-  })
+    incoming: [],
+  });
 
   const { smartWalletAddress } = useWalletContext();
 
@@ -55,12 +61,12 @@ export const AlchemyContextProvider = ({ children }: Props) => {
     }
   }, [smartWalletAddress]);
 
-  /** 
-   * PRIVATE METHODS 
+  /**
+   * PRIVATE METHODS
    */
 
   /**
-   * 
+   *
    */
   async function getEthereumBalance() {
     const hexBalance = await alchemy?.core.getBalance(smartWalletAddress);
@@ -70,7 +76,7 @@ export const AlchemyContextProvider = ({ children }: Props) => {
   }
 
   /**
-   * 
+   *
    */
   async function getTokenBalances() {
     const tokens = await alchemy?.core.getTokensForOwner(smartWalletAddress);
@@ -80,15 +86,23 @@ export const AlchemyContextProvider = ({ children }: Props) => {
   async function getAssetTransfers() {
     const outgoing = await alchemy?.core.getAssetTransfers({
       fromAddress: smartWalletAddress,
-      category: [AssetTransfersCategory.EXTERNAL, AssetTransfersCategory.INTERNAL, AssetTransfersCategory.ERC20]
+      category: [
+        AssetTransfersCategory.EXTERNAL,
+        AssetTransfersCategory.INTERNAL,
+        AssetTransfersCategory.ERC20,
+      ],
     });
-    if (outgoing?.transfers) setAssetTransfers({ ...assetTransfers, outgoing: outgoing.transfers})
-    
+    if (outgoing?.transfers) setAssetTransfers({ ...assetTransfers, outgoing: outgoing.transfers });
+
     const incoming = await alchemy?.core.getAssetTransfers({
       toAddress: smartWalletAddress,
-      category: [AssetTransfersCategory.EXTERNAL, AssetTransfersCategory.INTERNAL, AssetTransfersCategory.ERC20]
+      category: [
+        AssetTransfersCategory.EXTERNAL,
+        AssetTransfersCategory.INTERNAL,
+        AssetTransfersCategory.ERC20,
+      ],
     });
-    if (incoming?.transfers) setAssetTransfers({ ...assetTransfers, incoming: incoming.transfers})
+    if (incoming?.transfers) setAssetTransfers({ ...assetTransfers, incoming: incoming.transfers });
   }
 
   /**
@@ -96,9 +110,9 @@ export const AlchemyContextProvider = ({ children }: Props) => {
    */
 
   /**
-   * 
-   * @param address 
-   * @returns 
+   *
+   * @param address
+   * @returns
    */
   async function getEthereumBalanceOfAddress(address: string): Promise<number> {
     const hexBalance = await alchemy?.core.getBalance(address);
@@ -108,9 +122,9 @@ export const AlchemyContextProvider = ({ children }: Props) => {
   }
 
   /**
-   * 
-   * @param address 
-   * @returns 
+   *
+   * @param address
+   * @returns
    */
   async function getTokenBalancesOfAddress(address: string): Promise<OwnedToken[]> {
     const tokens = await alchemy?.core.getTokensForOwner(address);
