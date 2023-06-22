@@ -19,6 +19,7 @@ const icon = (name: string) => (
 const ICONS = {
   banking: icon('ic_banking'),
   account: icon('ic_user'),
+  menuItem: icon('ic_menu_item'),
 };
 
 // ----------------------------------------------------------------------
@@ -34,6 +35,7 @@ export function useNavData() {
         subheader: t('wallet'),
         items: [
           { title: t('home'), path: paths.root, icon: ICONS.banking },
+          { title: t('history'), path: paths.history, icon: ICONS.menuItem },
           { title: t('settings'), path: paths.settings, icon: ICONS.account },
         ],
       },
