@@ -21,6 +21,7 @@ type Context = {
   alchemy: Alchemy | undefined;
   ethereumBalance: number;
   tokenBalances: OwnedToken[];
+  transactions: AssetTransfersResult[];
   refresh: () => void;
   getEthereumBalanceOfAddress: (address: string) => Promise<number>;
   getTokenBalancesOfAddress: (address: string) => Promise<OwnedToken[]>;
@@ -38,12 +39,9 @@ export const AlchemyContextProvider = ({ children }: Props) => {
 
   const [ethereumBalance, setEthereumBalance] = useState<number>(0);
   const [tokenBalances, setTokenBalances] = useState<OwnedToken[]>([]);
-  const [assetTransfers, setAssetTransfers] = useState<Record<string, AssetTransfersResult[]>>({
-    outgoing: [],
-    incoming: [],
-  });
+  const [transactions, setTransactions] = useState<AssetTransfersResult[]>([]);
 
-  const { smartWalletAddress } = useWalletContext();
+  const { personalWalletAddress, smartWalletAddress } = useWalletContext();
 
   useEffect(() => {
     if (!alchemy) {
@@ -97,25 +95,27 @@ export const AlchemyContextProvider = ({ children }: Props) => {
   }
 
   async function getAssetTransfers() {
-    const outgoing = await alchemy?.core.getAssetTransfers({
-      fromAddress: smartWalletAddress,
-      category: [
-        AssetTransfersCategory.EXTERNAL,
-        AssetTransfersCategory.INTERNAL,
-        AssetTransfersCategory.ERC20,
-      ],
-    });
-    if (outgoing?.transfers) setAssetTransfers({ ...assetTransfers, outgoing: outgoing.transfers });
+    if (alchemy) {
+      const { transfers: outboungTransfers } = await alchemy.core.getAssetTransfers({
+        fromAddress: personalWalletAddress,
+        category: [
+          AssetTransfersCategory.EXTERNAL,
+          AssetTransfersCategory.INTERNAL,
+          AssetTransfersCategory.ERC20,
+        ],
+      });
 
-    const incoming = await alchemy?.core.getAssetTransfers({
-      toAddress: smartWalletAddress,
-      category: [
-        AssetTransfersCategory.EXTERNAL,
-        AssetTransfersCategory.INTERNAL,
-        AssetTransfersCategory.ERC20,
-      ],
-    });
-    if (incoming?.transfers) setAssetTransfers({ ...assetTransfers, incoming: incoming.transfers });
+      const { transfers: incomingTransfers } = await alchemy.core.getAssetTransfers({
+        toAddress: personalWalletAddress,
+        category: [
+          AssetTransfersCategory.EXTERNAL,
+          AssetTransfersCategory.INTERNAL,
+          AssetTransfersCategory.ERC20,
+        ],
+      });
+
+      setTransactions([...outboungTransfers, ...incomingTransfers]);
+    }
   }
 
   /**
@@ -168,6 +168,7 @@ export const AlchemyContextProvider = ({ children }: Props) => {
         alchemy,
         ethereumBalance,
         tokenBalances,
+        transactions,
         refresh,
         getEthereumBalanceOfAddress,
         getTokenBalancesOfAddress,

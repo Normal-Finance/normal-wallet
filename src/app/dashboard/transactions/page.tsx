@@ -1,12 +1,12 @@
 // sections
-import { HistoryView } from 'src/sections/history/view';
+import { TransactionsView } from 'src/sections/transactions/view';
 
 // ----------------------------------------------------------------------
 
 export const metadata = {
-  title: 'Dashboard: History',
+  title: 'Dashboard: Transactions',
 };
 
 export default function SettingsPage() {
-  return <HistoryView />;
+  return <TransactionsView />;
 }

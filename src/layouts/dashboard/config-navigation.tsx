@@ -35,7 +35,7 @@ export function useNavData() {
         subheader: t('wallet'),
         items: [
           { title: t('home'), path: paths.root, icon: ICONS.banking },
-          { title: t('history'), path: paths.history, icon: ICONS.menuItem },
+          { title: t('transactions'), path: paths.transactions, icon: ICONS.menuItem },
           { title: t('settings'), path: paths.settings, icon: ICONS.account },
         ],
       },

@@ -4,6 +4,6 @@ export const paths = {
   page500: '/500',
   blank: '/blank',
   root: '/dashboard',
-  history: '/dashboard/history',
+  transactions: '/dashboard/transactions',
   settings: '/dashboard/settings',
 };

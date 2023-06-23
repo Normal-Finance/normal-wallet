@@ -35,7 +35,7 @@ import { useWalletContext } from 'src/contexts/WalletContext';
 import { OwnedToken, TransactionRequest } from 'alchemy-sdk';
 import { TransactionPriority } from 'src/types/transaction';
 import TransactionTypes from '../../dapps/transaction-types';
-import { fEtherscan } from 'src/utils/format-string';
+import { fEtherscanAddress } from 'src/utils/format-string';
 import { useAlchemyContext } from 'src/contexts/AlchemyContext';
 
 // ----------------------------------------------------------------------
@@ -282,7 +282,7 @@ export default function Send({ open, ethereumBalance, tokenBalances, onClose }: 
           type="submit"
           variant="contained"
           color={'info'}
-          href={fEtherscan(transactionHash)}
+          href={fEtherscanAddress(transactionHash)}
         >
           View on Etherscan
         </LoadingButton>

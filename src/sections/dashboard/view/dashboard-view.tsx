@@ -190,7 +190,11 @@ export default function DashboardView() {
                 {smartWalletFunded && (
                   <>
                     <Grid xs={12}>
-                      <Header loading={alchemyLoading} ethereumBalance={ethereumBalance} tokenBalances={tokenBalances} />
+                      <Header
+                        loading={alchemyLoading}
+                        ethereumBalance={ethereumBalance}
+                        tokenBalances={tokenBalances}
+                      />
 
                       <Dapps
                         connections={connections}

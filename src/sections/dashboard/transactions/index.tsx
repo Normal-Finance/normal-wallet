@@ -30,12 +30,10 @@ import TransactionPriorityListDialog from './modals/transaction-priority-list-di
 // ----------------------------------------------------------------------
 
 interface Props extends CardProps {
-  transactions: Record<string, Transaction>;
+  transactions: Transaction[];
 }
 
 export default function TransactionsOverview({ transactions, ...other }: Props) {
-  const dispatch = useDispatch();
-
   const { updateTransactionPriority, cancelTransaction } = useWebsocketContext();
 
   const onUpdatePriority = async (transactionId: string) => {
@@ -55,7 +53,7 @@ export default function TransactionsOverview({ transactions, ...other }: Props) 
       />
 
       <Scrollbar>
-        {Object.values(transactions).map((transaction) => {
+        {transactions.map((transaction) => {
           if (
             transaction.current_status === TransactionStatus.NEW ||
             transaction.current_status === TransactionStatus.PENDING
@@ -77,7 +75,7 @@ export default function TransactionsOverview({ transactions, ...other }: Props) 
           size="small"
           color="inherit"
           endIcon={<Iconify icon="eva:arrow-ios-forward-fill" width={18} sx={{ ml: -0.5 }} />}
-          href={paths.history}
+          href={paths.transactions}
         >
           View All
         </Button>
@@ -162,7 +160,7 @@ function TransactionItem({ transaction, onCancel, onUpdatePriority }: Transactio
         arrow="right-top"
         sx={{ width: 160 }}
       >
-        <MenuItem href={paths.history}>
+        <MenuItem href={paths.transactions}>
           <Iconify icon="solar:printer-minimalistic-bold" />
           View details
         </MenuItem>

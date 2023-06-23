@@ -8,59 +8,44 @@ import Container from '@mui/material/Container';
 // routes
 import { paths } from 'src/routes/paths';
 // components
-import { useSnackbar } from 'src/components/snackbar';
 import Iconify from 'src/components/iconify';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
-
-import { useWalletContext } from 'src/contexts/WalletContext';
-import { redirect } from 'next/navigation';
-
-// Tabs
-import SettingsGeneral from '../settings-general';
-import SettingsBilling from '../settings-billing';
+//
+import TransactionsBlockchain from '../blockchain';
+import TransactionsBatch from '../batch';
 
 // ----------------------------------------------------------------------
 
 const TABS = [
   {
-    value: 'general',
-    label: 'General',
+    value: 'blockchain',
+    label: 'Blockchain',
     icon: <Iconify icon="solar:user-id-bold" width={24} />,
   },
   {
-    value: 'billing',
-    label: 'Billing',
+    value: 'batch',
+    label: 'Batch',
     icon: <Iconify icon="solar:bill-list-bold" width={24} />,
   },
 ];
 
 // ----------------------------------------------------------------------
 
-export default function SettingsView() {
+export default function TransactionsView() {
   const settings = useSettingsContext();
-  const { enqueueSnackbar } = useSnackbar();
-  const { connectionStatus } = useWalletContext();
 
-  const [currentTab, setCurrentTab] = useState('general');
+  const [currentTab, setCurrentTab] = useState('blockchain');
 
   const handleChangeTab = useCallback((event: React.SyntheticEvent, newValue: string) => {
     setCurrentTab(newValue);
   }, []);
 
-  if (connectionStatus !== 'connected') {
-    enqueueSnackbar('Connect your wallet to view settings', { variant: 'info' });
-    return redirect(paths.root);
-  }
-
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading="Account"
-        links={[
-          { name: 'Dashboard', href: paths.root },
-          { name: 'Settings', href: paths.settings },
-        ]}
+        heading="Transactions"
+        links={[{ name: 'Dashboard', href: paths.root }, { name: 'Transactions' }]}
         sx={{
           mb: { xs: 3, md: 5 },
         }}
@@ -78,9 +63,9 @@ export default function SettingsView() {
         ))}
       </Tabs>
 
-      {currentTab === 'general' && <SettingsGeneral />}
+      {currentTab === 'blockchain' && <TransactionsBlockchain />}
 
-      {currentTab === 'billing' && <SettingsBilling />}
+      {currentTab === 'batch' && <TransactionsBatch />}
     </Container>
   );
 }

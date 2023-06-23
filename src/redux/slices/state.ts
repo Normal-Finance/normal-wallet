@@ -1,7 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { IStateState } from 'src/types/state';
-import keyBy from 'lodash/keyBy';
-import { Priority } from 'src/types/transaction';
+import { TransactionPriority } from 'src/types/transaction';
 
 // ----------------------------------------------------------------------
 
@@ -31,7 +30,7 @@ const initialState: IStateState = {
 
   autoBatchEnabled: true,
 
-  userTransactions: {},
+  userTransactions: [],
 };
 
 const slice = createSlice({
@@ -93,27 +92,28 @@ const slice = createSlice({
     updateUserTransactions(state, action) {
       const { transactions } = action.payload;
 
-      const keyedTransactions = keyBy(transactions, 'transactionId');
-      state.userTransactions = keyedTransactions;
+      state.userTransactions = transactions;
     },
     newTransaction(state, action) {
       const { transaction } = action.payload;
 
-      state.userTransactions[transaction.transactionId] = transaction;
+      state.userTransactions = [...state.userTransactions, transaction];
     },
     updateTransactionPriority(state, action) {
       const { transactionId } = action.payload;
 
-      const updatedPriority =
-        state.userTransactions[transactionId].priority === Priority.GTC
-          ? Priority.GTC
-          : Priority.INSTANT;
-      state.userTransactions[transactionId].priority = updatedPriority;
+      const foundIndex = state.userTransactions.findIndex((x) => x.transactionId === transactionId);
+      const isGTC = state.userTransactions[foundIndex].priority === TransactionPriority.GTC;
+      state.userTransactions[foundIndex].priority = isGTC
+        ? TransactionPriority.INSTANT
+        : TransactionPriority.GTC;
     },
     cancelTransaction(state, action) {
       const { transactionId } = action.payload;
 
-      delete state.userTransactions[transactionId];
+      state.userTransactions = state.userTransactions.filter(
+        (transaction) => transaction.transactionId !== transactionId
+      );
     },
   },
 });
