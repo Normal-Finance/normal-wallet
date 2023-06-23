@@ -3,10 +3,9 @@ import { createContext, ReactNode, useContext } from 'react';
 import mixpanel from 'mixpanel-browser';
 import { MIXPANEL_PROJECT_TOKEN } from 'src/config-global';
 
-// MixPanel
 mixpanel.init(MIXPANEL_PROJECT_TOKEN, {
   debug: process.env.NODE_ENV === 'production' ? false : true,
-});
+})
 
 export enum AnalyticsEvents {
   // wallet/network

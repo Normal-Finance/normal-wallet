@@ -13,7 +13,7 @@ export const ALCHEMY_API_KEY = process.env.NEXT_PUBLIC_ALCHEMY_API_KEY;
 
 export const MAGIC_API_KEY = process.env.NEXT_PUBLIC_MAGIC_API_KEY;
 
-export const MIXPANEL_PROJECT_TOKEN = process.env.NEXT_PUBLIC_MIXPANEL_PROJECT_TOKEN;
+export const MIXPANEL_PROJECT_TOKEN = process.env.NEXT_PUBLIC_MIXPANEL_PROJECT_TOKEN || '';
 
 export const WALLET_CONNECT = {
   projectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID || '',
