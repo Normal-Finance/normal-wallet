@@ -17,14 +17,14 @@ import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 import { Tooltip } from '@mui/material';
 import Link from 'next/link';
-import { RouterLink } from 'src/routes/components';
+import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsContext';
 
 // ----------------------------------------------------------------------
 
 type Props = {
   transaction: AssetTransfersResult;
   selected: boolean;
-  onCopyTransactionHash: VoidFunction;
+  onCopyTransactionHash: (hash: string) => void;
   onSelectTransaction: VoidFunction;
 };
 
@@ -37,6 +37,7 @@ export default function BlockchainTableRow({
   const { uniqueId, category, blockNum, from, to, value, tokenId, asset, hash } = transaction;
 
   const popover = usePopover();
+  const { trackEvent } = useAnalyticsContext();
 
   const renderPrimary = (
     <TableRow hover selected={selected}>
@@ -50,6 +51,12 @@ export default function BlockchainTableRow({
           href={fEtherscanBlock(parseInt(blockNum, 16))}
           rel="noopener noreferrer"
           target="_blank"
+          onClick={() =>
+            trackEvent(AnalyticsEvents.VIEWED_BLOCKCHAIN_TRANSACTION_PROPERTY_ON_ETHERSCAN, {
+              property: 'blockNumber',
+              value: parseInt(blockNum, 16),
+            })
+          }
         >
           <Box
             sx={{
@@ -82,7 +89,17 @@ export default function BlockchainTableRow({
       {/* To */}
       <TableCell>
         <Tooltip title={to}>
-          <Link href={fEtherscanAddress(to || '')} rel="noopener noreferrer" target="_blank">
+          <Link
+            href={fEtherscanAddress(to || '')}
+            rel="noopener noreferrer"
+            target="_blank"
+            onClick={() =>
+              trackEvent(AnalyticsEvents.VIEWED_BLOCKCHAIN_TRANSACTION_PROPERTY_ON_ETHERSCAN, {
+                property: 'to',
+                value: to,
+              })
+            }
+          >
             <ListItemText
               primary={to !== null ? to.slice(0, 5) + '...' + to.slice(-4) : 'Unknown'}
               primaryTypographyProps={{ typography: 'body2' }}
@@ -95,7 +112,17 @@ export default function BlockchainTableRow({
       {/* From */}
       <TableCell>
         <Tooltip title={from}>
-          <Link href={fEtherscanAddress(from)} rel="noopener noreferrer" target="_blank">
+          <Link
+            href={fEtherscanAddress(from)}
+            rel="noopener noreferrer"
+            target="_blank"
+            onClick={() =>
+              trackEvent(AnalyticsEvents.VIEWED_BLOCKCHAIN_TRANSACTION_PROPERTY_ON_ETHERSCAN, {
+                property: 'from',
+                value: from,
+              })
+            }
+          >
             <ListItemText
               primary={from.slice(0, 5) + '...' + from.slice(-4)}
               primaryTypographyProps={{ typography: 'body2' }}
@@ -131,7 +158,7 @@ export default function BlockchainTableRow({
       >
         <MenuItem
           onClick={() => {
-            onCopyTransactionHash();
+            onCopyTransactionHash(hash);
             popover.onClose();
           }}
         >
@@ -139,7 +166,12 @@ export default function BlockchainTableRow({
           Copy hash
         </MenuItem>
 
-        <MenuItem href={fEtherscanTx(hash)}>
+        <MenuItem
+          href={fEtherscanTx(hash)}
+          onClick={() =>
+            trackEvent(AnalyticsEvents.VIEWED_BLOCKCHAIN_TRANSACTION_ON_ETHERSCAN, { hash })
+          }
+        >
           <Iconify icon="solar:eye-bold" />
           Etherscan
         </MenuItem>

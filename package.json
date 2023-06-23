@@ -46,6 +46,7 @@
     "i18next": "^22.5.0",
     "i18next-browser-languagedetector": "^7.0.2",
     "lodash": "^4.17.21",
+    "mixpanel-browser": "^2.47.0",
     "mui-one-time-password-input": "^1.1.1",
     "next": "^13.4.4",
     "notistack": "^3.0.1",

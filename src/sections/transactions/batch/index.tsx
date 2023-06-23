@@ -36,6 +36,7 @@ import BatchTableToolbar from './batch-table-toolbar';
 import BatchTableFiltersResult from './batch-table-filters-result';
 import { Transaction, TransactionStatus } from 'src/types/transaction';
 import { fTimestamp } from 'src/utils/format-time';
+import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsContext';
 
 // ----------------------------------------------------------------------
 
@@ -68,6 +69,7 @@ export default function TransactionsBatch() {
   const table = useTable({ defaultOrderBy: 'blockNumber' });
 
   const settings = useSettingsContext();
+  const { trackEvent } = useAnalyticsContext();
 
   const { userTransactions } = useSelector((state) => state.state);
 
@@ -223,8 +225,14 @@ export default function TransactionsBatch() {
                         key={transaction.transactionId}
                         transaction={transaction}
                         selected={table.selected.includes(transaction.transactionId)}
-                        onSelectTransaction={() => table.onSelectRow(transaction.transactionId)}
-                        onCopyTransactionHash={() => {}}
+                        onSelectTransaction={() => {
+                          table.onSelectRow(transaction.transactionId);
+                          trackEvent(AnalyticsEvents.SELECTED_BATCH_TRANSACTION, { transaction });
+                        }}
+                        onCopyTransactionHash={(hash: string) => {
+                          // ...
+                          trackEvent(AnalyticsEvents.COPIED_BATCH_TRANSACTION_HASH, { hash });
+                        }}
                         onCancelTransaction={() => {}}
                       />
                     ))}

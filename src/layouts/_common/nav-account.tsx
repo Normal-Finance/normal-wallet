@@ -12,6 +12,7 @@ import { useSnackbar } from 'src/components/snackbar';
 // components
 import Receive from 'src/sections/dashboard/wallet/header/modals/Receive';
 import Iconify from 'src/components/iconify/iconify';
+import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsContext';
 
 // ----------------------------------------------------------------------
 
@@ -28,6 +29,7 @@ export default function NavAccount() {
   const { copy } = useCopyToClipboard();
   const { enqueueSnackbar } = useSnackbar();
   const { smartWalletAddress } = useWalletContext();
+  const { trackEvent } = useAnalyticsContext();
 
   const [openReceive, setOpenReceive] = useState(false);
 
@@ -41,8 +43,10 @@ export default function NavAccount() {
 
   const handleCopyAddress = async () => {
     const success = await copy(smartWalletAddress);
-    if (success) enqueueSnackbar('Address copied', { variant: 'success' });
-    else enqueueSnackbar('Error copying address', { variant: 'error' });
+    if (success) {
+      enqueueSnackbar('Address copied', { variant: 'success' });
+      trackEvent(AnalyticsEvents.COPIED_ADDRESS, { address: smartWalletAddress });
+    } else enqueueSnackbar('Error copying address', { variant: 'error' });
   };
 
   return (

@@ -36,6 +36,7 @@ import { AssetTransfersResult } from 'alchemy-sdk';
 import { useAlchemyContext } from 'src/contexts/AlchemyContext';
 import { useWalletContext } from 'src/contexts/WalletContext';
 import { CircularProgress } from '@mui/material';
+import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsContext';
 
 // ----------------------------------------------------------------------
 
@@ -69,6 +70,7 @@ export default function TransactionsBlockchain() {
 
   const { smartWalletAddress } = useWalletContext();
   const { loading, transactions } = useAlchemyContext();
+  const { trackEvent } = useAnalyticsContext();
 
   const [tableData, setTableData] = useState(transactions);
 
@@ -216,8 +218,18 @@ export default function TransactionsBlockchain() {
                             key={transaction.uniqueId}
                             transaction={transaction}
                             selected={table.selected.includes(transaction.uniqueId)}
-                            onSelectTransaction={() => table.onSelectRow(transaction.uniqueId)}
-                            onCopyTransactionHash={() => {}}
+                            onSelectTransaction={() => {
+                              table.onSelectRow(transaction.uniqueId);
+                              trackEvent(AnalyticsEvents.SELECTED_BLOCKCHAIN_TRANSACTION, {
+                                transaction,
+                              });
+                            }}
+                            onCopyTransactionHash={(hash: string) => {
+                              // ...
+                              trackEvent(AnalyticsEvents.COPIED_BLOCKCHAIN_TRANSACTION_HASH, {
+                                hash,
+                              });
+                            }}
                           />
                         ))}
 

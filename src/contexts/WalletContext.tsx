@@ -6,6 +6,7 @@ import { WalletInstance, useWallet, useConnectionStatus } from '@thirdweb-dev/re
 import { SmartWallet } from '@thirdweb-dev/wallets';
 import { Ethereum, Goerli } from '@thirdweb-dev/chains';
 import { THIRDWEB } from 'src/config-global';
+import { AnalyticsEvents, useAnalyticsContext } from './AnalyticsContext';
 
 type Props = {
   children: React.ReactNode;
@@ -23,12 +24,13 @@ const WalletContext = createContext<Context | null>(null);
 export const WalletContextProvider = ({ children }: Props) => {
   const wallet = useWallet();
   const connectionStatus = useConnectionStatus();
+  const { setUser, trackEvent } = useAnalyticsContext();
 
   const [personalWallet, setPersonalWallet] = useState<WalletInstance>();
   const [smartWallet, setSmartWallet] = useState<SmartWallet>();
 
-  const [personalWalletAddress, setPersonalWalletAddress] = useState<String>('');
-  const [smartWalletAddress, setSmartWalletAddress] = useState<String>('');
+  const [personalWalletAddress, setPersonalWalletAddress] = useState<string>('');
+  const [smartWalletAddress, setSmartWalletAddress] = useState<string>('');
 
   // Update wallet addresses
   useEffect(() => {
@@ -37,7 +39,13 @@ export const WalletContextProvider = ({ children }: Props) => {
   }, [personalWallet, smartWallet]);
 
   useEffect(() => {
+    if (personalWalletAddress && smartWalletAddress)
+      setUser(personalWalletAddress, smartWalletAddress);
+  }, [personalWalletAddress, smartWalletAddress]);
+
+  useEffect(() => {
     if (wallet) {
+      trackEvent(AnalyticsEvents.CONNECTED_WALLET);
       setPersonalWallet(wallet);
       connectSmartWallet();
     }

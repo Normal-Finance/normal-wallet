@@ -15,6 +15,7 @@ import { EIP155_SIGNING_METHODS } from './wcConsts';
 import { useSnackbar } from 'src/components/snackbar';
 import ModalStore from 'src/store/ModalStore';
 import { getSdkError } from '@walletconnect/utils';
+import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsContext';
 
 const SESSION_TIMEOUT = 10000;
 
@@ -41,6 +42,7 @@ export default function useWalletConnectLegacy({ account, chainId, clearWcClipbo
   //   const { networks } = useToasts()
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
+  const { trackEvent } = useAnalyticsContext();
 
   // This is needed cause of the WalletConnect event handlers
   const stateRef: any = useRef();
@@ -160,9 +162,6 @@ export default function useWalletConnectLegacy({ account, chainId, clearWcClipbo
                 chainId: chainId ?? 1,
               });
             }
-            ModalStore.close();
-
-            /** ---- */
 
             // On a session request, remove WC uri from the clipboard.
             // Otherwise, in the case the user disconnects himself from the dApp, but still having the previous WC uri in the clipboard,
@@ -179,14 +178,15 @@ export default function useWalletConnectLegacy({ account, chainId, clearWcClipbo
 
               return;
             }
+
+            trackEvent(AnalyticsEvents.APPROVED_CONNECT_DAPP, {});
+
+            ModalStore.close();
           },
           onReject: () => {
             if (payload) {
               connector.rejectSession(getSdkError('USER_REJECTED_METHODS'));
             }
-            ModalStore.close();
-
-            /** ---- */
 
             // It's safe to read .session right after approveSession because 1) approveSession itself normally stores the session itself
             // 2) connector.session is a getter that re-reads private properties of the connector; those properties are updated immediately at approveSession
@@ -200,7 +200,10 @@ export default function useWalletConnectLegacy({ account, chainId, clearWcClipbo
 
             enqueueSnackbar('Successfully connected to ' + connector.session.peerMeta.name);
 
+            trackEvent(AnalyticsEvents.REJECTED_CONNECT_DAPP, {});
+
             setIsConnecting(false);
+            ModalStore.close();
           },
         });
       });

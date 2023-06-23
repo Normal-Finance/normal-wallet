@@ -4,6 +4,7 @@ import { useContract, useTransferToken, Web3Button } from '@thirdweb-dev/react';
 // @mui
 import { Stack, Dialog, TextField, Typography, InputAdornment, Avatar } from '@mui/material';
 import { OwnedToken } from 'alchemy-sdk';
+import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsContext';
 
 // ----------------------------------------------------------------------
 
@@ -19,6 +20,7 @@ export default function DepositAsset({ open, token, toAddress, onClose }: Props)
 
   const { contract } = useContract(contractAddress);
   const { mutate: transferTokens } = useTransferToken(contract);
+  const { trackEvent } = useAnalyticsContext();
 
   const [amount, setAmount] = useState('');
 
@@ -72,12 +74,13 @@ export default function DepositAsset({ open, token, toAddress, onClose }: Props)
         <Web3Button
           contractAddress={contractAddress}
           isDisabled={amount === ''}
-          action={() =>
+          action={() => {
             transferTokens({
               to: toAddress,
               amount,
-            })
-          }
+            });
+            trackEvent(AnalyticsEvents.DEPOSITED_TOKEN, { token: name, amount });
+          }}
         >
           Deposit {symbol}
         </Web3Button>

@@ -21,10 +21,12 @@ import {
   rejectEIP155Request,
 } from 'src/utils/walletConnect/EIP155RequestHandlerUtil';
 import { getSignParamsMessage } from 'src/utils/walletConnect/HelperUtil';
+import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsContext';
 
 export default function LegacySessionSignModal() {
   const { smartWallet } = useWalletContext();
   const { newTransaction } = useWebsocketContext();
+  const { trackEvent } = useAnalyticsContext();
 
   // Get request and wallet data from store
   const requestEvent = ModalStore.state.data?.legacyCallRequestEvent;
@@ -80,6 +82,8 @@ export default function LegacySessionSignModal() {
         });
       }
 
+      trackEvent(AnalyticsEvents.APPROVED_SIGN_MESSAGE, { requestEvent });
+
       ModalStore.close();
     }
   };
@@ -105,6 +109,9 @@ export default function LegacySessionSignModal() {
         id,
         error,
       });
+
+      trackEvent(AnalyticsEvents.REJECTED_SIGN_MESSAGE, { requestEvent });
+
       ModalStore.close();
     }
   };

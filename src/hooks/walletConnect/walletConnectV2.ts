@@ -23,6 +23,7 @@ import { WALLET_CONNECT } from 'src/config-global';
 import { useSnackbar } from 'src/components/snackbar';
 
 import ModalStore from 'src/store/ModalStore';
+import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsContext';
 
 const WC2_VERBOSE = process.env.REACT_APP_WC2_VERBOSE || 0;
 
@@ -30,6 +31,7 @@ export default function useWalletConnectV2({ account, chainId, clearWcClipboard 
   /** HOOKS */
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
+  const { trackEvent } = useAnalyticsContext();
 
   // This is needed cause of the WalletConnect event handlers
   const stateRef: any = useRef();
@@ -195,7 +197,10 @@ export default function useWalletConnectV2({ account, chainId, clearWcClipboard 
                 namespaces,
               })
               .then((approveResult: any) => {
+                trackEvent(AnalyticsEvents.APPROVED_CONNECT_DAPP, {});
+
                 if (WC2_VERBOSE) enqueueSnackbar('WC2 Approve result ' + approveResult);
+
                 setIsConnecting(false);
                 dispatch(
                   connectedNewSession({
@@ -220,6 +225,7 @@ export default function useWalletConnectV2({ account, chainId, clearWcClipboard 
               id,
               reason: getSdkError('USER_REJECTED_METHODS'),
             });
+            trackEvent(AnalyticsEvents.REJECTED_CONNECT_DAPP, {});
             ModalStore.close();
           },
         });
@@ -292,6 +298,7 @@ export default function useWalletConnectV2({ account, chainId, clearWcClipboard 
               });
 
             default:
+              trackEvent(AnalyticsEvents.RECEIVED_UNSUPPORTED_WC_METHOD, { requestEvent });
               return ModalStore.open('SessionUnsuportedMethodModal', {
                 requestEvent,
                 requestSession,

@@ -9,6 +9,7 @@ import Iconify from 'src/components/iconify';
 import ConnectionCard from './connection-card';
 import Scrollbar from 'src/components/scrollbar/scrollbar';
 import ConnectDapp from './modals/ConnectDapp';
+import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsContext';
 
 // ----------------------------------------------------------------------
 
@@ -20,9 +21,19 @@ type Props = {
 };
 
 export default function Dapps({ connections, connect, disconnect, isWcConnecting }: Props) {
+  const { trackEvent } = useAnalyticsContext();
+
   const [openConnect, setOpenConnect] = useState(false);
 
-  const handleOpenConnect = () => setOpenConnect(true);
+  const handleOpenConnect = () => {
+    trackEvent(AnalyticsEvents.OPENED_CONNECT_DAPP);
+    setOpenConnect(true);
+  };
+
+  const handleOnConnect = (uri: string) => {
+    trackEvent(AnalyticsEvents.REQUESTED_CONNECT_DAPP);
+    connect({ uri: uri });
+  };
 
   const handleCloseConnect = () => setOpenConnect(false);
 
@@ -76,7 +87,7 @@ export default function Dapps({ connections, connect, disconnect, isWcConnecting
       </Scrollbar>
 
       {/* Modal */}
-      <ConnectDapp open={openConnect} onClose={handleCloseConnect} onSubmit={connect} />
+      <ConnectDapp open={openConnect} onClose={handleCloseConnect} onSubmit={handleOnConnect} />
     </>
   );
 }

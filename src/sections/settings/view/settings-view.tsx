@@ -19,6 +19,7 @@ import { redirect } from 'next/navigation';
 // Tabs
 import SettingsGeneral from '../settings-general';
 import SettingsBilling from '../settings-billing';
+import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsContext';
 
 // ----------------------------------------------------------------------
 
@@ -41,6 +42,7 @@ export default function SettingsView() {
   const settings = useSettingsContext();
   const { enqueueSnackbar } = useSnackbar();
   const { connectionStatus } = useWalletContext();
+  const { trackEvent } = useAnalyticsContext();
 
   const [currentTab, setCurrentTab] = useState('general');
 
@@ -49,6 +51,7 @@ export default function SettingsView() {
   }, []);
 
   if (connectionStatus !== 'connected') {
+    trackEvent(AnalyticsEvents.REDIRECTED, { from: 'Settings' });
     enqueueSnackbar('Connect your wallet to view settings', { variant: 'info' });
     return redirect(paths.root);
   }

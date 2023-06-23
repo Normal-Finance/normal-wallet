@@ -37,6 +37,7 @@ import { TransactionPriority } from 'src/types/transaction';
 import TransactionTypes from '../../dapps/transaction-types';
 import { fEtherscanAddress } from 'src/utils/format-string';
 import { useAlchemyContext } from 'src/contexts/AlchemyContext';
+import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsContext';
 
 // ----------------------------------------------------------------------
 
@@ -58,6 +59,7 @@ export default function Send({ open, ethereumBalance, tokenBalances, onClose }: 
   const { enqueueSnackbar } = useSnackbar();
   const { newTransaction } = useWebsocketContext();
   const { smartWallet, smartWalletAddress } = useWalletContext();
+  const { trackEvent } = useAnalyticsContext();
 
   const { transactions } = useSelector((state) => state.state);
 
@@ -104,7 +106,9 @@ export default function Send({ open, ethereumBalance, tokenBalances, onClose }: 
         case TransactionPriority.TRADITIONAL:
           let wallet = await smartWallet.getSigner();
           let { hash } = await wallet.sendTransaction(transaction);
+
           enqueueSnackbar('Transaction sent successfully!', { variant: 'success' });
+          trackEvent(AnalyticsEvents.SENT_CRYPTO, { hash });
 
           setTransactionHash(hash);
           refresh();

@@ -30,12 +30,14 @@ import FailedPaymentAlert from '../failed-payment-alert';
 import { APP_STUFF } from 'src/config-global';
 import TransactionsOverview from '../transactions';
 import { useAlchemyContext } from 'src/contexts/AlchemyContext';
+import { useAnalyticsContext } from 'src/contexts/AnalyticsContext';
 
 // ----------------------------------------------------------------------
 
 export default function DashboardView() {
   /** HOOKS */
   const settings = useSettingsContext();
+  const { trackEvent } = useAnalyticsContext();
 
   const { connectionStatus: websocketStatus, getState } = useWebsocketContext();
 
@@ -161,7 +163,12 @@ export default function DashboardView() {
               title={'🚨 You have a failed payment'}
               description="Please resolve before submitting any new transactions."
               action={
-                <Button variant="contained" color="error" href={APP_STUFF.billingLink}>
+                <Button
+                  variant="contained"
+                  color="error"
+                  href={APP_STUFF.billingLink}
+                  onClick={() => trackEvent(AnalyticsEvents.OPENED_BILLING)}
+                >
                   Update payment methods
                 </Button>
               }

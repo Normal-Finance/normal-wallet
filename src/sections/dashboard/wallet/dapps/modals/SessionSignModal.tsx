@@ -21,10 +21,12 @@ import {
   rejectEIP155Request,
 } from 'src/utils/walletConnect/EIP155RequestHandlerUtil';
 import { getSignParamsMessage } from 'src/utils/walletConnect/HelperUtil';
+import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsContext';
 
 export default function SessionSignModal() {
   const { smartWallet } = useWalletContext();
   const { newTransaction } = useWebsocketContext();
+  const { trackEvent } = useAnalyticsContext();
 
   // Get request and wallet data from store
   const requestEvent = ModalStore.state.data?.requestEvent;
@@ -56,6 +58,7 @@ export default function SessionSignModal() {
         topic,
         response,
       });
+      trackEvent(AnalyticsEvents.APPROVED_SIGN_MESSAGE, { requestEvent });
       ModalStore.close();
     }
   };
@@ -67,6 +70,7 @@ export default function SessionSignModal() {
         topic,
         response,
       });
+      trackEvent(AnalyticsEvents.REJECTED_SIGN_MESSAGE, { requestEvent });
       ModalStore.close();
     }
   };

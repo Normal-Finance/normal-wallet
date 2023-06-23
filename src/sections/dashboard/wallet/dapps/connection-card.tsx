@@ -15,6 +15,7 @@ import { useSnackbar } from 'src/components/snackbar';
 import { Avatar, Button, Tooltip, Typography } from '@mui/material';
 import Label from 'src/components/label/label';
 import { RouterLink } from 'src/routes/components';
+import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsContext';
 //
 
 // ----------------------------------------------------------------------
@@ -26,6 +27,7 @@ interface Props extends StackProps {
 
 export default function ConnectionCard({ connection, onDisconnect, sx, ...other }: Props) {
   const { enqueueSnackbar } = useSnackbar();
+  const { trackEvent } = useAnalyticsContext();
 
   const theme = useTheme();
 
@@ -39,6 +41,7 @@ export default function ConnectionCard({ connection, onDisconnect, sx, ...other 
 
   const handleOnDisconnect = () => {
     onDisconnect(connection.connectionId, connection.wcVersion);
+    trackEvent(AnalyticsEvents.DISCONNECTED_CONNECTED_DAPP, { connection });
     confirm.onFalse();
   };
 
@@ -54,7 +57,12 @@ export default function ConnectionCard({ connection, onDisconnect, sx, ...other 
         }),
       }}
     >
-      <IconButton color={'success'} component={RouterLink} href={connection.session.peerMeta.url}>
+      <IconButton
+        color={'success'}
+        component={RouterLink}
+        href={connection.session.peerMeta.url}
+        onClick={() => trackEvent(AnalyticsEvents.VIEWED_CONNECTED_DAPP, { connection })}
+      >
         <Iconify icon="eva:external-link-fill" />
       </IconButton>
 

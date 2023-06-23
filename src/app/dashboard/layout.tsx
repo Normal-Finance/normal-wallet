@@ -16,10 +16,11 @@ import { IntercomProvider } from 'src/utils/intercom/IntercomProvider';
 import { WalletContextProvider } from 'src/contexts/WalletContext';
 import { AlchemyContextProvider } from 'src/contexts/AlchemyContext';
 import { WebsocketContextProvider } from 'src/contexts/WebsocketContext';
+import { AnalyticsContextProvider } from 'src/contexts/AnalyticsContext';
 
 // components
 import DashboardLayout from 'src/layouts/dashboard';
-
+ß;
 // ----------------------------------------------------------------------
 
 type Props = {
@@ -39,13 +40,15 @@ export default function Layout({ children }: Props) {
       ]}
     >
       <IntercomProvider>
-        <WalletContextProvider>
-          <AlchemyContextProvider>
-            <WebsocketContextProvider>
-              <DashboardLayout>{children}</DashboardLayout>
-            </WebsocketContextProvider>
-          </AlchemyContextProvider>
-        </WalletContextProvider>
+        <AnalyticsContextProvider>
+          <WalletContextProvider>
+            <AlchemyContextProvider>
+              <WebsocketContextProvider>
+                <DashboardLayout>{children}</DashboardLayout>
+              </WebsocketContextProvider>
+            </AlchemyContextProvider>
+          </WalletContextProvider>
+        </AnalyticsContextProvider>
       </IntercomProvider>
     </ThirdwebProvider>
   );

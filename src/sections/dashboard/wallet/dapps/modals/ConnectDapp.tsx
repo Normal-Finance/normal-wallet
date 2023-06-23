@@ -18,7 +18,7 @@ export default function ConnectDapp({ open, onClose, onSubmit }: Props) {
   const handleUri = (event: any) => setUri(event.target.value);
 
   const handleSubmit = async () => {
-    await onSubmit({ uri: uri });
+    await onSubmit(uri);
     setUri('');
     onClose();
   };

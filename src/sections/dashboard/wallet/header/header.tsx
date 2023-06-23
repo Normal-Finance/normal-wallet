@@ -13,6 +13,7 @@ import Receive from './modals/Receive';
 import { useSnackbar } from 'src/components/snackbar';
 import { OwnedToken } from 'alchemy-sdk';
 import { CircularProgress } from '@mui/material';
+import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsContext';
 
 // ----------------------------------------------------------------------
 
@@ -24,6 +25,7 @@ type Props = {
 
 export default function Header({ loading, ethereumBalance, tokenBalances }: Props) {
   const { enqueueSnackbar } = useSnackbar();
+  const { trackEvent } = useAnalyticsContext();
 
   const canSend = ethereumBalance > 0 || tokenBalances.length > 0;
 
@@ -31,8 +33,10 @@ export default function Header({ loading, ethereumBalance, tokenBalances }: Prop
   const [openReceive, setOpenReceive] = useState(false);
 
   const handleOpenSend = () => {
-    if (canSend) setOpenSend(true);
-    else enqueueSnackbar('Wallet is empty, cannot send funds', { variant: 'error' });
+    if (canSend) {
+      trackEvent(AnalyticsEvents.OPENED_SEND);
+      setOpenSend(true);
+    } else enqueueSnackbar('Wallet is empty, cannot send funds', { variant: 'error' });
   };
 
   const handleCloseSend = () => {
@@ -40,6 +44,7 @@ export default function Header({ loading, ethereumBalance, tokenBalances }: Prop
   };
 
   const handleOpenReceive = () => {
+    trackEvent(AnalyticsEvents.OPENED_RECEIVE);
     setOpenReceive(true);
   };
 

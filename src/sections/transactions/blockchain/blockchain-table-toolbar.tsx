@@ -9,6 +9,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import { IOrderTableFilters, IOrderTableFilterValue } from 'src/types/order';
 // components
 import Iconify from 'src/components/iconify';
+import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsContext';
 
 // ----------------------------------------------------------------------
 
@@ -27,8 +28,13 @@ export default function BlockchainTableToolbar({
   canReset,
   onResetFilters,
 }: Props) {
+  const { trackEvent } = useAnalyticsContext();
+
   const handleFilterName = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
+      trackEvent(AnalyticsEvents.FILTERED_BLOCKCHAIN_TRANSACTIONS_BY_SEARCH, {
+        search: event.target.value,
+      });
       onFilters('name', event.target.value);
     },
     [onFilters]
@@ -36,6 +42,10 @@ export default function BlockchainTableToolbar({
 
   const handleFilterStartDate = useCallback(
     (newValue: Date | null) => {
+      trackEvent(AnalyticsEvents.FILTERED_BLOCKCHAIN_TRANSACTIONS_BY_DATE, {
+        type: 'startDate',
+        date: newValue,
+      });
       onFilters('startDate', newValue);
     },
     [onFilters]
@@ -43,6 +53,10 @@ export default function BlockchainTableToolbar({
 
   const handleFilterEndDate = useCallback(
     (newValue: Date | null) => {
+      trackEvent(AnalyticsEvents.FILTERED_BLOCKCHAIN_TRANSACTIONS_BY_DATE, {
+        type: 'endDate',
+        date: newValue,
+      });
       onFilters('endDate', newValue);
     },
     [onFilters]

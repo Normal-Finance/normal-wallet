@@ -19,12 +19,13 @@ import { ConfirmDialog } from 'src/components/custom-dialog';
 import { Button, IconButton, Skeleton, Tooltip } from '@mui/material';
 import Link from 'next/link';
 import { useBoolean } from 'src/hooks/use-boolean';
+import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsContext';
 // ----------------------------------------------------------------------
 
 type Props = {
   transaction: Transaction;
   selected: boolean;
-  onCopyTransactionHash: VoidFunction;
+  onCopyTransactionHash: (hash: string) => void;
   onSelectTransaction: VoidFunction;
   onCancelTransaction: VoidFunction;
 };
@@ -49,6 +50,8 @@ export default function BatchTableRow({
     updatedAt,
   } = transaction;
 
+  const { trackEvent } = useAnalyticsContext();
+
   const confirm = useBoolean();
 
   const popover = usePopover();
@@ -65,16 +68,28 @@ export default function BatchTableRow({
           <Skeleton />
         ) : (
           <Tooltip title={batchId}>
-            <Box
-              sx={{
-                cursor: 'pointer',
-                '&:hover': {
-                  textDecoration: 'underline',
-                },
-              }}
+            <Link
+              href={fEtherscanTx(batchId)}
+              rel="noopener noreferrer"
+              target="_blank"
+              onClick={() =>
+                trackEvent(AnalyticsEvents.VIEWED_BATCH_TRANSACTION_PROPERTY_ON_ETHERSCAN, {
+                  property: 'batchId',
+                  value: batchId,
+                })
+              }
             >
-              {batchId.length > 3 ? batchId.slice(0, 5) + '...' + batchId.slice(-4) : batchId}
-            </Box>
+              <Box
+                sx={{
+                  cursor: 'pointer',
+                  '&:hover': {
+                    textDecoration: 'underline',
+                  },
+                }}
+              >
+                {batchId.length > 3 ? batchId.slice(0, 5) + '...' + batchId.slice(-4) : batchId}
+              </Box>
+            </Link>
           </Tooltip>
         )}
       </TableCell>
@@ -82,7 +97,17 @@ export default function BatchTableRow({
       {/* Target */}
       <TableCell>
         <Tooltip title={target}>
-          <Link href={fEtherscanAddress(target)} rel="noopener noreferrer" target="_blank">
+          <Link
+            href={fEtherscanAddress(target)}
+            rel="noopener noreferrer"
+            target="_blank"
+            onClick={() =>
+              trackEvent(AnalyticsEvents.VIEWED_BATCH_TRANSACTION_PROPERTY_ON_ETHERSCAN, {
+                property: 'target',
+                value: target,
+              })
+            }
+          >
             <ListItemText
               primary={target.slice(0, 5) + '...' + target.slice(-4)}
               primaryTypographyProps={{ typography: 'body2' }}
@@ -161,7 +186,7 @@ export default function BatchTableRow({
           <>
             <MenuItem
               onClick={() => {
-                onCopyTransactionHash();
+                onCopyTransactionHash(batchId);
                 popover.onClose();
               }}
             >
@@ -169,7 +194,12 @@ export default function BatchTableRow({
               Copy hash
             </MenuItem>
 
-            <MenuItem href={fEtherscanTx(batchId)}>
+            <MenuItem
+              href={fEtherscanTx(batchId)}
+              onClick={() =>
+                trackEvent(AnalyticsEvents.VIEWED_BATCH_TRANSACTION_ON_ETHERSCAN, { hash: batchId })
+              }
+            >
               <Iconify icon="solar:eye-bold" />
               Etherscan
             </MenuItem>

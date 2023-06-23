@@ -7,6 +7,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import { IWalletTableFilters, IWalletTableFilterValue } from 'src/types/wallet';
 // components
 import Iconify from 'src/components/iconify';
+import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsContext';
 
 // ----------------------------------------------------------------------
 
@@ -21,8 +22,11 @@ export default function TableToolbar({
 }: //
 // serviceOptions,
 Props) {
+  const { trackEvent } = useAnalyticsContext();
+
   const handleFilterName = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
+      trackEvent(AnalyticsEvents.FILTERED_BALANCES_BY_SEARCH, { search: event.target.value });
       onFilters('name', event.target.value);
     },
     [onFilters]

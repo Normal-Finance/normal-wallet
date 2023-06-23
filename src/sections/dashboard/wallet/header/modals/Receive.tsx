@@ -8,6 +8,7 @@ import Iconify from 'src/components/iconify';
 import { useCopyToClipboard } from 'src/hooks/use-copy-to-clipboard';
 import { useWalletContext } from 'src/contexts/WalletContext';
 import { useSnackbar } from 'src/components/snackbar';
+import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsContext';
 
 // ----------------------------------------------------------------------
 
@@ -20,11 +21,14 @@ export default function Receive({ open, onClose }: Props) {
   const { enqueueSnackbar } = useSnackbar();
   const { smartWalletAddress } = useWalletContext();
   const { copy } = useCopyToClipboard();
+  const { trackEvent } = useAnalyticsContext();
 
   const handleCopyAddress = async () => {
     const success = await copy(smartWalletAddress);
-    if (success) enqueueSnackbar('Address copied', { variant: 'success' });
-    else enqueueSnackbar('Error copying address', { variant: 'error' });
+    if (success) {
+      enqueueSnackbar('Address copied', { variant: 'success' });
+      trackEvent(AnalyticsEvents.COPIED_ADDRESS, { address: smartWalletAddress });
+    } else enqueueSnackbar('Error copying address', { variant: 'error' });
   };
 
   return (

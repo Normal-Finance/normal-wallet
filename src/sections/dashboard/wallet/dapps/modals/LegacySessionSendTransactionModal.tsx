@@ -27,6 +27,7 @@ import {
 } from 'src/utils/walletConnect/EIP155RequestHandlerUtil';
 import TransactionTypes from '../transaction-types';
 import { TransactionPriority } from 'src/types/transaction';
+import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsContext';
 
 export default function LegacySessionSendTransactionModal() {
   const { transactions } = useSelector((state) => state.state);
@@ -38,6 +39,7 @@ export default function LegacySessionSendTransactionModal() {
 
   const { smartWallet } = useWalletContext();
   const { newTransaction } = useWebsocketContext();
+  const { trackEvent } = useAnalyticsContext();
 
   // Get request and wallet data from store
   const requestEvent = ModalStore.state.data?.legacyCallRequestEvent;
@@ -104,6 +106,8 @@ export default function LegacySessionSendTransactionModal() {
         });
       }
 
+      trackEvent(AnalyticsEvents.APPROVED_SIGN_SEND_TRANSACTION, { requestEvent, response });
+
       setLoading(false);
       ModalStore.close();
     }
@@ -130,6 +134,9 @@ export default function LegacySessionSendTransactionModal() {
         id,
         error,
       });
+
+      trackEvent(AnalyticsEvents.REJECTED_SIGN_SEND_TRANSACTION, { requestEvent });
+
       ModalStore.close();
     }
   };

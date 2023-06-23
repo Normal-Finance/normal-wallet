@@ -21,6 +21,7 @@ import {
 import { Events } from 'src/types/websocket';
 import { useWalletContext } from './WalletContext';
 import { TransactionPriority } from 'src/types/transaction';
+import { AnalyticsEvents, useAnalyticsContext } from './AnalyticsContext';
 
 type Props = {
   children: React.ReactNode;
@@ -55,6 +56,7 @@ export const WebsocketContextProvider = ({ children }: Props) => {
   /** HOOKS */
   const dispatch = useDispatch();
   const { smartWallet, smartWalletAddress } = useWalletContext();
+  const { trackEvent } = useAnalyticsContext();
 
   const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(socketUrl, {
     onOpen: () => {
@@ -201,7 +203,9 @@ export const WebsocketContextProvider = ({ children }: Props) => {
           signature: signature,
         },
       });
-    } else alert('hey');
+
+      trackEvent(AnalyticsEvents.UPDATED_EMAIL, { email });
+    }
   };
 
   /**
@@ -236,6 +240,8 @@ export const WebsocketContextProvider = ({ children }: Props) => {
           signature: signature,
         },
       });
+
+      trackEvent(AnalyticsEvents.CREATED_BATCH_TRANSACTION, { transaction });
     }
   };
 
@@ -257,6 +263,8 @@ export const WebsocketContextProvider = ({ children }: Props) => {
           signature: signature,
         },
       });
+
+      trackEvent(AnalyticsEvents.UPDATED_BATCH_TRANSACTION_PRIORITY, { transactionId });
     }
   };
 
@@ -278,6 +286,8 @@ export const WebsocketContextProvider = ({ children }: Props) => {
           signature: signature,
         },
       });
+
+      trackEvent(AnalyticsEvents.CANCELED_BATCH_TRANSACTION, { transactionId });
     }
   };
 
