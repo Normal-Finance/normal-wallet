@@ -17,7 +17,7 @@ import {
   EIP155_SIGNING_METHODS,
   EIP155_CHAINS,
 } from './wcConsts';
-import { WALLET_CONNECT } from 'src/config-global';
+import { NORMAL_WALLET_INFO, WALLET_CONNECT } from 'src/config-global';
 
 // components
 import { useSnackbar } from 'src/components/snackbar';
@@ -52,10 +52,10 @@ export default function useWalletConnectV2({ account, chainId, clearWcClipboard 
         projectId: WALLET_CONNECT.projectId,
         relayUrl: 'wss://relay.walletconnect.com',
         metadata: {
-          name: 'Normal Wallet',
-          description: 'Normal Wallet, An Ethereum smart wallet',
-          url: 'https://normalwallet.io/',
-          icons: ['https://wallet.ambire.com/logo192.png'],
+          name: NORMAL_WALLET_INFO.name,
+          description: NORMAL_WALLET_INFO.description,
+          url: NORMAL_WALLET_INFO.url,
+          icons: [NORMAL_WALLET_INFO.logo],
         },
       }).then((signClient: any) => {
         setClient(signClient);

@@ -30,6 +30,16 @@ export const INTERCOM = {
   privateKey: process.env.NEXT_PUBLIC_INTERCOM_PRIVATE_KEY || '',
 };
 
+export const NORMAL_WALLET_INFO = {
+  name: 'Normal Wallet',
+  url: 'https://www.normalwallet.io',
+  description: 'Normal Wallet, An Ethereum smart wallet',
+  logo:
+    process.env.NODE_ENV === 'production'
+      ? 'https://app.normalwallet.io/logo/logo_single.png'
+      : 'http://localhost:8081/logo/logo_single.png',
+};
+
 export const APP_STUFF = {
   billingLink: process.env.NEXT_PUBLIC_NORMAL_WALLET_BILLING,
   paths: {

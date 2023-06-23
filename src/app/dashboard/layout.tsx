@@ -9,7 +9,7 @@ import {
   magicLink,
 } from '@thirdweb-dev/react';
 import { Goerli, Ethereum } from '@thirdweb-dev/chains';
-import { WALLET_CONNECT } from 'src/config-global';
+import { NORMAL_WALLET_INFO, THIRDWEB, WALLET_CONNECT } from 'src/config-global';
 
 import { IntercomProvider } from 'src/utils/intercom/IntercomProvider';
 
@@ -20,7 +20,7 @@ import { AnalyticsContextProvider } from 'src/contexts/AnalyticsContext';
 
 // components
 import DashboardLayout from 'src/layouts/dashboard';
-ß;
+
 // ----------------------------------------------------------------------
 
 type Props = {
@@ -30,8 +30,17 @@ type Props = {
 export default function Layout({ children }: Props) {
   return (
     <ThirdwebProvider
+      thirdwebApiKey={THIRDWEB.apiKey}
+      dAppMeta={{
+        name: NORMAL_WALLET_INFO.name,
+        url: NORMAL_WALLET_INFO.url,
+        description: NORMAL_WALLET_INFO.description,
+        logoUrl: NORMAL_WALLET_INFO.logo,
+      }}
+      supportedChains={[Ethereum, Goerli]}
       activeChain={process.env.NODE_ENV === 'production' ? Ethereum : Goerli}
       autoConnect
+      autoSwitch
       supportedWallets={[
         metamaskWallet(),
         coinbaseWallet(),
