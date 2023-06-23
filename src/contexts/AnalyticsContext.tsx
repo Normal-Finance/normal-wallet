@@ -5,7 +5,7 @@ import { MIXPANEL_PROJECT_TOKEN } from 'src/config-global';
 
 mixpanel.init(MIXPANEL_PROJECT_TOKEN, {
   debug: process.env.NODE_ENV === 'production' ? false : true,
-})
+});
 
 export enum AnalyticsEvents {
   // wallet/network
