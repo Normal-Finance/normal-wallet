@@ -31,14 +31,14 @@ export default function MyTableRow({ token }: Props) {
               </Typography>
             }
             secondary={
-              <Link
+              <Typography
                 noWrap
                 variant="body2"
                 // onClick={onViewRow}
                 sx={{ color: 'text.disabled', cursor: 'pointer' }}
               >
                 {token.balance + ' ' + token.symbol}
-              </Link>
+              </Typography>
             }
           />
         </TableCell>

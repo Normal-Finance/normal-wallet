@@ -57,7 +57,7 @@ export default function Header({ loading, ethereumBalance, tokenBalances }: Prop
       <Stack direction="row" alignItems="center">
         <Box sx={{ flexGrow: 1 }}>
           <Typography variant="h4" gutterBottom>
-            Normal Wallet
+            Your Wallet
           </Typography>
 
           <Typography variant="body1" gutterBottom>

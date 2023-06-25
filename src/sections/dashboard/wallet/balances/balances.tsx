@@ -134,8 +134,6 @@ export default function Balances({ loading, error, ethereumBalance, tokenBalance
                   />
 
                   <TableBody>
-                    {ethereumBalance > 0 && <MyTableRow key={'ETH'} token={ethereumToken} />}
-
                     {dataFiltered
                       .slice(
                         table.page * table.rowsPerPage,
