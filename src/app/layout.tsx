@@ -26,12 +26,13 @@ import ProgressBar from 'src/components/progress-bar';
 import MotionLazy from 'src/components/animate/motion-lazy';
 import SnackbarProvider from 'src/components/snackbar/snackbar-provider';
 import { SettingsProvider, SettingsDrawer } from 'src/components/settings';
+import { NORMAL_WALLET_INFO } from 'src/config-global';
 
 // ----------------------------------------------------------------------
 
 export const metadata = {
-  title: 'Normal Wallet',
-  description: 'An ERC-4337 smart wallet with 90%+ cheaper gas and extendable functionality ',
+  title: NORMAL_WALLET_INFO.name,
+  description: NORMAL_WALLET_INFO.description,
   keywords: '',
   themeColor: '#000000',
   manifest: '/manifest.json',

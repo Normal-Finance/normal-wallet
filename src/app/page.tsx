@@ -1,10 +1,12 @@
 // sections
 // import { HomeView } from 'src/sections/home/view';
 
+import { NORMAL_WALLET_INFO } from 'src/config-global';
+
 // ----------------------------------------------------------------------
 
 export const metadata = {
-  title: 'Minimal: The starting point for your next project',
+  title: `${NORMAL_WALLET_INFO.name} | Ethereum smart wallet with 90% gas savings`,
 };
 
 export default function HomePage() {
