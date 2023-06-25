@@ -32,6 +32,7 @@ export default function DepositTokens({}: Props) {
     setEthereumBalance(ethereum);
 
     const tokens = await getTokenBalancesOfAddress(address);
+    console.log(tokenBalances);
     setTokenBalances(tokens);
   }
 

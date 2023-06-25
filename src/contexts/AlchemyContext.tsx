@@ -80,9 +80,9 @@ export const AlchemyContextProvider = ({ children }: Props) => {
 
   async function getEthereumBalance() {
     if (alchemy) {
-      const hexBalance = await alchemy.core.getBalance(smartWalletAddress);
+      const { _hex } = await alchemy.core.getBalance(smartWalletAddress);
       let ethereum = 0;
-      if (hexBalance) ethereum = parseInt(hexBalance.toString(), 16) / Math.pow(10, 18);
+      if (_hex) ethereum = parseInt(_hex.toString(), 16) / Math.pow(10, 18);
       setEthereumBalance(ethereum);
     }
   }
@@ -134,9 +134,9 @@ export const AlchemyContextProvider = ({ children }: Props) => {
    */
   async function getEthereumBalanceOfAddress(address: string): Promise<number> {
     if (alchemy) {
-      const hexBalance = await alchemy.core.getBalance(address);
+      const { _hex } = await alchemy.core.getBalance(address);
       let ethereum = 0;
-      if (hexBalance) ethereum = parseInt(hexBalance.toString(), 16) / Math.pow(10, 18);
+      if (_hex) ethereum = parseInt(_hex.toString(), 16) / Math.pow(10, 18);
       return ethereum;
     } else return 0;
   }
