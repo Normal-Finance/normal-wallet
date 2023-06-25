@@ -2,9 +2,15 @@
 
 import { createContext, useContext, useState, useEffect } from 'react';
 
-import { WalletInstance, useWallet, useConnectionStatus } from '@thirdweb-dev/react';
+import {
+  WalletInstance,
+  useWallet,
+  useConnectionStatus,
+  useChain,
+  useSwitchChain,
+} from '@thirdweb-dev/react';
 import { SmartWallet } from '@thirdweb-dev/wallets';
-import { Ethereum, Goerli } from '@thirdweb-dev/chains';
+import { Chain, ChainId, Goerli } from '@thirdweb-dev/chains';
 import { THIRDWEB } from 'src/config-global';
 import { AnalyticsEvents, useAnalyticsContext } from './AnalyticsContext';
 
@@ -12,9 +18,11 @@ type Props = {
   children: React.ReactNode;
 };
 type Context = {
-  connectionStatus: string;
+  connectionStatus: 'unknown' | 'connected' | 'disconnected' | 'connecting';
+  activeChain: Chain;
   personalWallet: WalletInstance;
   smartWallet: SmartWallet;
+  switchActiveChain: (chainId: ChainId) => Promise<void>;
   personalWalletAddress: string;
   smartWalletAddress: string;
 };
@@ -22,9 +30,16 @@ type Context = {
 const WalletContext = createContext<Context | null>(null);
 
 export const WalletContextProvider = ({ children }: Props) => {
+  // Hooks
   const wallet = useWallet();
+  const chain = useChain();
+  const switchChain = useSwitchChain();
   const connectionStatus = useConnectionStatus();
+
   const { setUser, trackEvent } = useAnalyticsContext();
+
+  // State
+  const [activeChain, setActiveChain] = useState<Chain>(Goerli);
 
   const [personalWallet, setPersonalWallet] = useState<WalletInstance>();
   const [smartWallet, setSmartWallet] = useState<SmartWallet>();
@@ -51,6 +66,14 @@ export const WalletContextProvider = ({ children }: Props) => {
     }
   }, [wallet]);
 
+  useEffect(() => {
+    if (chain) setActiveChain(chain);
+  }, [chain]);
+
+  async function switchActiveChain(chainId: ChainId) {
+    await switchChain(chainId);
+  }
+
   async function getPersonalWalletAddress() {
     const address = (await personalWallet?.getAddress()) || '';
     setPersonalWalletAddress(address);
@@ -64,7 +87,7 @@ export const WalletContextProvider = ({ children }: Props) => {
   async function connectSmartWallet() {
     // Setup the Smart Wallet configuration
     const config = {
-      chain: process.env.NODE_ENV === 'production' ? Ethereum : Goerli,
+      chain: Goerli,
       factoryAddress: THIRDWEB.factoryAddress,
       thirdwebApiKey: THIRDWEB.apiKey,
       gasless: false,
@@ -80,6 +103,8 @@ export const WalletContextProvider = ({ children }: Props) => {
     <WalletContext.Provider
       value={{
         connectionStatus,
+        activeChain: activeChain as any,
+        switchActiveChain,
         personalWallet: personalWallet as any,
         personalWalletAddress: personalWalletAddress as any,
         smartWallet: smartWallet as any,

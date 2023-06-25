@@ -30,7 +30,8 @@ import FailedPaymentAlert from '../failed-payment-alert';
 import { APP_STUFF } from 'src/config-global';
 import TransactionsOverview from '../transactions';
 import { useAlchemyContext } from 'src/contexts/AlchemyContext';
-import { useAnalyticsContext } from 'src/contexts/AnalyticsContext';
+import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsContext';
+import { Goerli } from '@thirdweb-dev/chains';
 
 // ----------------------------------------------------------------------
 
@@ -41,7 +42,8 @@ export default function DashboardView() {
 
   const { connectionStatus: websocketStatus, getState } = useWebsocketContext();
 
-  const { connectionStatus, smartWalletAddress } = useWalletContext();
+  const { connectionStatus, activeChain, switchActiveChain, smartWalletAddress } =
+    useWalletContext();
 
   /** REDUX */
   const { clients, transactions, batches, billing, userTransactions } = useSelector(
@@ -57,7 +59,7 @@ export default function DashboardView() {
 
   const { connections, connect, disconnect, isConnecting } = useWalletConnect({
     account: smartWalletAddress,
-    chainId: '5',
+    chainId: activeChain.chainId,
   });
 
   const getStateCallback = useCallback(() => {
@@ -109,126 +111,152 @@ export default function DashboardView() {
 
       <Grid container spacing={3}>
         {/* Statistics */}
-        {websocketStatus === 'Connecting' ||
-          (websocketStatus === 'Closing' && <CircularProgress />)}
-        {websocketStatus === 'Closed' ||
-          (websocketStatus === 'Uninstantiated' && <h1>Unable to connect to API.</h1>)}
-        {websocketStatus === 'Open' && (
-          <>
-            <Grid xs={12} sm={6} md={3}>
-              <AnalyticsWidget
-                title="Connected Clients"
-                total={clients}
-                color="info"
-                loading={websocketStatus !== 'Open' || clients === null}
-                icon={<img alt="icon" src="/assets/icons/glass/ic_glass_users.png" />}
-              />
-            </Grid>
+        <>
+          {websocketStatus === 'Connecting' ||
+            (websocketStatus === 'Closing' && <CircularProgress />)}
+          {websocketStatus === 'Closed' ||
+            (websocketStatus === 'Uninstantiated' && <h1>Unable to connect to API.</h1>)}
+          {websocketStatus === 'Open' && (
+            <>
+              <Grid xs={12} sm={6} md={3}>
+                <AnalyticsWidget
+                  title="Connected Clients"
+                  total={clients}
+                  color="info"
+                  loading={websocketStatus !== 'Open' || clients === null}
+                  icon={<img alt="icon" src="/assets/icons/glass/ic_glass_users.png" />}
+                />
+              </Grid>
 
-            <Grid xs={12} sm={6} md={3}>
-              <AnalyticsWidget
-                title="Pending Transactions"
-                total={transactions?.NEW + transactions?.PENDING}
-                color="warning"
-                loading={websocketStatus !== 'Open' || transactions?.PENDING === null}
-                icon={<img alt="icon" src="/assets/icons/glass/ic_glass_buy.png" />}
-              />
-            </Grid>
+              <Grid xs={12} sm={6} md={3}>
+                <AnalyticsWidget
+                  title="Pending Transactions"
+                  total={transactions?.NEW + transactions?.PENDING}
+                  color="warning"
+                  loading={websocketStatus !== 'Open' || transactions?.PENDING === null}
+                  icon={<img alt="icon" src="/assets/icons/glass/ic_glass_buy.png" />}
+                />
+              </Grid>
 
-            <Grid xs={12} sm={6} md={3}>
-              <AnalyticsWidget
-                title="Total Transactions"
-                total={totalTransactions}
-                color="error"
-                loading={websocketStatus !== 'Open' || transactions === null}
-                icon={<img alt="icon" src="/assets/icons/glass/ic_glass_message.png" />}
-              />
-            </Grid>
-
-            <Grid xs={12} sm={6} md={3}>
-              <AnalyticsWidget
-                title="Total Batches"
-                total={totalBatches}
-                loading={websocketStatus !== 'Open' || batches === null}
-                icon={<img alt="icon" src="/assets/icons/glass/ic_glass_bag.png" />}
-              />
-            </Grid>
-          </>
-        )}
-
-        {/* Failed Payment Alert */}
-        {billing.failedCharges > 0 && (
-          <Grid xs={12} md={12}>
-            <FailedPaymentAlert
-              title={'🚨 You have a failed payment'}
-              description="Please resolve before submitting any new transactions."
-              action={
-                <Button
-                  variant="contained"
+              <Grid xs={12} sm={6} md={3}>
+                <AnalyticsWidget
+                  title="Total Transactions"
+                  total={totalTransactions}
                   color="error"
-                  href={APP_STUFF.billingLink}
-                  onClick={() => trackEvent(AnalyticsEvents.OPENED_BILLING)}
-                >
-                  Update payment methods
-                </Button>
-              }
-            />
-          </Grid>
-        )}
+                  loading={websocketStatus !== 'Open' || transactions === null}
+                  icon={<img alt="icon" src="/assets/icons/glass/ic_glass_message.png" />}
+                />
+              </Grid>
 
-        {/* Get Started */}
-        {connectionStatus !== 'connected' && <GetStarted />}
+              <Grid xs={12} sm={6} md={3}>
+                <AnalyticsWidget
+                  title="Total Batches"
+                  total={totalBatches}
+                  loading={websocketStatus !== 'Open' || batches === null}
+                  icon={<img alt="icon" src="/assets/icons/glass/ic_glass_bag.png" />}
+                />
+              </Grid>
+            </>
+          )}
 
-        {connectionStatus === 'connected' && (
-          <>
-            {/* Onboarding */}
-            {onboardingActiveStep() >= 0 ? (
-              <Onboarding activeStep={onboardingActiveStep()} />
-            ) : (
-              <>
-                {/* Live User Transactions */}
-                {Object.keys(userTransactions).length > 0 && (
-                  <Grid xs={12}>
-                    <TransactionsOverview transactions={userTransactions} />
-                  </Grid>
-                )}
+          {/* Failed Payment Alert */}
+          {billing.failedCharges > 0 && (
+            <Grid xs={12} md={12}>
+              <FailedPaymentAlert
+                title={'🚨 You have a failed payment'}
+                description="Please resolve before submitting any new transactions."
+                action={
+                  <Button
+                    variant="contained"
+                    color="error"
+                    href={APP_STUFF.billingLink}
+                    onClick={() => trackEvent(AnalyticsEvents.OPENED_BILLING)}
+                  >
+                    Update payment methods
+                  </Button>
+                }
+              />
+            </Grid>
+          )}
 
-                {/* Wallet */}
-                {smartWalletFunded && (
-                  <>
-                    <Grid xs={12}>
-                      <Header
-                        loading={alchemyLoading}
-                        ethereumBalance={ethereumBalance}
-                        tokenBalances={tokenBalances}
-                      />
+          {/* Wrong Network */}
+          {![1, 5].includes(activeChain.chainId) && (
+            <Grid xs={12} md={12}>
+              <FailedPaymentAlert
+                title={'Wrong network'}
+                description="Please switch to Ethereum or Goerli to continue."
+                action={
+                  <Button
+                    variant="contained"
+                    color="error"
+                    onClick={() => switchActiveChain(Goerli.chainId)}
+                  >
+                    Switch to Ethereum {process.env.NODE_ENV === 'production' && '(Goerli)'}
+                  </Button>
+                }
+              />
+            </Grid>
+          )}
 
-                      <Dapps
-                        connections={connections}
-                        connect={connect}
-                        disconnect={disconnect}
-                        isWcConnecting={isConnecting}
-                      />
-                    </Grid>
+          {/* Correct Network */}
+          {[1, 5].includes(activeChain.chainId) && (
+            <>
+              {/* Get Started */}
+              {connectionStatus !== 'connected' && <GetStarted />}
 
-                    <Grid xs={12}>
-                      {smartWalletFunded && (
-                        <Balances
-                          loading={alchemyLoading}
-                          error={false}
-                          ethereumBalance={ethereumBalance}
-                          tokenBalances={tokenBalances}
-                        />
+              {connectionStatus === 'connected' && (
+                <>
+                  {/* Onboarding */}
+                  {onboardingActiveStep() >= 0 ? (
+                    <Onboarding activeStep={onboardingActiveStep()} />
+                  ) : (
+                    <>
+                      {/* Live User Transactions */}
+                      {Object.keys(userTransactions).length > 0 && (
+                        <Grid xs={12}>
+                          <TransactionsOverview transactions={userTransactions} />
+                        </Grid>
                       )}
 
-                      <WalletConnectModalHandler />
-                    </Grid>
-                  </>
-                )}
-              </>
-            )}
-          </>
-        )}
+                      {/* Wallet */}
+                      {smartWalletFunded && (
+                        <>
+                          <Grid xs={12}>
+                            <Header
+                              loading={alchemyLoading}
+                              ethereumBalance={ethereumBalance}
+                              tokenBalances={tokenBalances}
+                            />
+
+                            <Dapps
+                              connections={connections}
+                              connect={connect}
+                              disconnect={disconnect}
+                              isWcConnecting={isConnecting}
+                            />
+                          </Grid>
+
+                          <Grid xs={12}>
+                            {smartWalletFunded && (
+                              <Balances
+                                loading={alchemyLoading}
+                                error={false}
+                                ethereumBalance={ethereumBalance}
+                                tokenBalances={tokenBalances}
+                              />
+                            )}
+
+                            <WalletConnectModalHandler />
+                          </Grid>
+                        </>
+                      )}
+                    </>
+                  )}
+                </>
+              )}
+            </>
+          )}
+        </>
       </Grid>
     </Container>
   );

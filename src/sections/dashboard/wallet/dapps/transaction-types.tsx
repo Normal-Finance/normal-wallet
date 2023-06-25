@@ -141,7 +141,10 @@ export default function TransactionTypes({
             Description
           </Grid>
           <Grid xs={12} md={8} sx={{ typography: 'subtitle2', textTransform: 'capitalize' }}>
-            {TRANSACTION_PRIORITIES.filter((priority) => priority.name === selected)[0]?.description}
+            {
+              TRANSACTION_PRIORITIES.filter((priority) => priority.name === selected)[0]
+                ?.description
+            }
           </Grid>
         </Grid>
       </Stack>

@@ -12,6 +12,7 @@ import {
 } from 'alchemy-sdk';
 import { useWalletContext } from './WalletContext';
 import { ALCHEMY_API_KEY } from 'src/config-global';
+import { Goerli } from '@thirdweb-dev/chains';
 
 type Props = {
   children: React.ReactNode;
@@ -41,22 +42,22 @@ export const AlchemyContextProvider = ({ children }: Props) => {
   const [tokenBalances, setTokenBalances] = useState<OwnedToken[]>([]);
   const [transactions, setTransactions] = useState<AssetTransfersResult[]>([]);
 
-  const { personalWalletAddress, smartWalletAddress } = useWalletContext();
+  const { activeChain, personalWalletAddress, smartWalletAddress } = useWalletContext();
 
   useEffect(() => {
     if (!alchemy) {
       setAlchemy(
         new Alchemy({
           apiKey: ALCHEMY_API_KEY,
-          network: process.env.NODE_ENV === 'production' ? Network.ETH_MAINNET : Network.ETH_GOERLI,
+          network: Network.ETH_GOERLI,
         })
       );
     }
   }, [alchemy]);
 
   useEffect(() => {
-    getBalancesAndTransfers();
-  }, [smartWalletAddress]);
+    if (activeChain === Goerli) getBalancesAndTransfers();
+  }, [smartWalletAddress, activeChain]);
 
   useEffect(() => {
     const interval = setInterval(getBalancesAndTransfers, UPDATE_INTERVAL);

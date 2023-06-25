@@ -19,7 +19,7 @@ export default function Onboarding({ activeStep }: Props) {
       </Typography>
 
       <Grid container justifyContent={'center'}>
-        <Grid xs={12} md={8}>
+        <Grid item xs={12} md={8}>
           <OnboardingSteps activeStep={activeStep} steps={ONBOARDING_STEPS} />
         </Grid>
       </Grid>

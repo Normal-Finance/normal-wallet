@@ -1,3 +1,4 @@
+import { EIP155_CHAINS } from 'src/hooks/walletConnect/wcConsts';
 import { proxy } from 'valtio';
 
 /**
@@ -12,7 +13,10 @@ interface State {
  * State
  */
 const state = proxy<State>({
-  activeChainId: '1',
+  activeChainId:
+    process.env.NODE_ENV === 'production'
+      ? EIP155_CHAINS['eip155:1'].chainId.toString()
+      : EIP155_CHAINS['eip155:5'].chainId.toString(),
   relayerRegionURL: '',
 });
 
