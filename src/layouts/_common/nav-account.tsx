@@ -4,7 +4,7 @@ import QRCode from 'react-qr-code';
 
 // @mui
 import { styled, alpha } from '@mui/material/styles';
-import { Avatar, Box, Tooltip, Typography } from '@mui/material';
+import { Avatar, Box, Skeleton, Tooltip, Typography } from '@mui/material';
 // hooks
 import { useWalletContext } from 'src/contexts/WalletContext';
 import { useCopyToClipboard } from 'src/hooks/use-copy-to-clipboard';
@@ -28,7 +28,7 @@ const StyledRoot = styled('div')(({ theme }) => ({
 export default function NavAccount() {
   const { copy } = useCopyToClipboard();
   const { enqueueSnackbar } = useSnackbar();
-  const { smartWalletAddress } = useWalletContext();
+  const { smartWallet, smartWalletAddress } = useWalletContext();
   const { trackEvent } = useAnalyticsContext();
 
   const [openReceive, setOpenReceive] = useState(false);
@@ -51,42 +51,45 @@ export default function NavAccount() {
 
   return (
     <StyledRoot>
-      {smartWalletAddress && (
-        <>
-          <Avatar
-            variant="rounded"
-            onClick={handleOpenReceive}
-            sx={{
-              width: 64,
-              height: 64,
-              bgcolor: 'background.neutral',
-            }}
-          >
-            <Box sx={{ width: 64, height: 64 }}>
-              <QRCode value={smartWalletAddress} size={60} />
-            </Box>
-          </Avatar>
+      <Avatar
+        variant="rounded"
+        onClick={handleOpenReceive}
+        sx={{
+          width: 64,
+          height: 64,
+          bgcolor: 'background.neutral',
+        }}
+      >
+        <Box sx={{ width: 64, height: 64 }}>
+          {smartWallet ?  <QRCode value={smartWalletAddress} size={60} /> :  <QRCode value={'empty'} style={{ filter: "blur(8px)" }} size={60} />}
+         
+        </Box>
+      </Avatar>
 
-          <Box sx={{ ml: 2, minWidth: 0 }}>
-            <Typography variant="subtitle2" noWrap>
-              Normal Address
-            </Typography>
+      <Box sx={{ ml: 2, minWidth: 0 }}>
+        <Typography variant="subtitle2" noWrap>
+          {smartWallet ? 'Normal Address' : <Skeleton variant='text' sx={{ fontSize: '1rem' }} width={100} />}
+        </Typography>
 
-            <Tooltip title={smartWalletAddress}>
-              <Typography variant="body1" noWrap sx={{ color: 'text.secondary' }}>
-                {smartWalletAddress.slice(0, 5) + '...' + smartWalletAddress.slice(-4)}
-                <Iconify
-                  icon="eva:copy-outline"
-                  onClick={handleCopyAddress}
-                  sx={{ ml: 1, color: 'text.disabled' }}
-                />
-              </Typography>
-            </Tooltip>
-          </Box>
+        <Tooltip title={smartWalletAddress}>
+          <Typography variant="body1" noWrap sx={{ color: 'text.secondary' }}>
+            {smartWallet ? (
+              smartWalletAddress.slice(0, 5) + '...' + smartWalletAddress.slice(-4)
+            ) : (
+              <Skeleton />
+            )}
 
-          <Receive open={openReceive} onClose={handleCloseReceive} />
-        </>
-      )}
+            {smartWallet && <Iconify
+              icon="eva:copy-outline"
+              onClick={handleCopyAddress}
+              sx={{ ml: 1, color: 'text.disabled' }}
+            />}
+            
+          </Typography>
+        </Tooltip>
+      </Box>
+
+      {smartWallet && <Receive open={openReceive} onClose={handleCloseReceive} />}
     </StyledRoot>
   );
 }

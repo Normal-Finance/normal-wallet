@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from 'react';
 
 // @mui
-import { Button, CircularProgress, Container, Typography } from '@mui/material';
+import { Button, CircularProgress, Container, Skeleton, Typography } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 
 // redux
@@ -42,7 +42,7 @@ export default function DashboardView() {
 
   const { connectionStatus: websocketStatus, getState } = useWebsocketContext();
 
-  const { connectionStatus, activeChain, switchActiveChain, smartWalletAddress } =
+  const { connectionStatus, activeChain, switchActiveChain, smartWallet, smartWalletAddress } =
     useWalletContext();
 
   /** REDUX */
@@ -80,6 +80,7 @@ export default function DashboardView() {
   }, [transactions, batches]);
 
   useEffect(() => {
+    console.log([ethereumBalance, tokenBalances]);
     if (ethereumBalance > 0 || tokenBalances.length > 0) setSmartWalletFunded(true);
     else setSmartWalletFunded(false);
   }, [ethereumBalance, tokenBalances]);
@@ -206,48 +207,58 @@ export default function DashboardView() {
 
               {connectionStatus === 'connected' && (
                 <>
-                  {/* Onboarding */}
-                  {onboardingActiveStep() >= 0 ? (
-                    <Onboarding activeStep={onboardingActiveStep()} />
-                  ) : (
+                  {!smartWallet && (
+                    <Grid xs={12} md={12}>
+                      <Skeleton height={200} />
+                    </Grid>
+                  )}
+
+                  {smartWallet && (
                     <>
-                      {/* Live User Transactions */}
-                      {Object.keys(userTransactions).length > 0 && (
-                        <Grid xs={12}>
-                          <TransactionsOverview transactions={userTransactions} />
-                        </Grid>
-                      )}
-
-                      {/* Wallet */}
-                      {smartWalletFunded && (
+                      {/* Onboarding */}
+                      {onboardingActiveStep() >= 0 ? (
+                        <Onboarding activeStep={onboardingActiveStep()} />
+                      ) : (
                         <>
-                          <Grid xs={12}>
-                            <Header
-                              loading={alchemyLoading}
-                              ethereumBalance={ethereumBalance}
-                              tokenBalances={tokenBalances}
-                            />
+                          {/* Live User Transactions */}
+                          {Object.keys(userTransactions).length > 0 && (
+                            <Grid xs={12}>
+                              <TransactionsOverview transactions={userTransactions} />
+                            </Grid>
+                          )}
 
-                            <Dapps
-                              connections={connections}
-                              connect={connect}
-                              disconnect={disconnect}
-                              isWcConnecting={isConnecting}
-                            />
-                          </Grid>
+                          {/* Wallet */}
+                          {smartWalletFunded && (
+                            <>
+                              <Grid xs={12}>
+                                <Header
+                                  loading={alchemyLoading}
+                                  ethereumBalance={ethereumBalance}
+                                  tokenBalances={tokenBalances}
+                                />
 
-                          <Grid xs={12}>
-                            {smartWalletFunded && (
-                              <Balances
-                                loading={alchemyLoading}
-                                error={false}
-                                ethereumBalance={ethereumBalance}
-                                tokenBalances={tokenBalances}
-                              />
-                            )}
+                                <Dapps
+                                  connections={connections}
+                                  connect={connect}
+                                  disconnect={disconnect}
+                                  isWcConnecting={isConnecting}
+                                />
+                              </Grid>
 
-                            <WalletConnectModalHandler />
-                          </Grid>
+                              <Grid xs={12}>
+                                {smartWalletFunded && (
+                                  <Balances
+                                    loading={alchemyLoading}
+                                    error={false}
+                                    ethereumBalance={ethereumBalance}
+                                    tokenBalances={tokenBalances}
+                                  />
+                                )}
+
+                                <WalletConnectModalHandler />
+                              </Grid>
+                            </>
+                          )}
                         </>
                       )}
                     </>

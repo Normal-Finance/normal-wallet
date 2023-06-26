@@ -70,6 +70,10 @@ export const WalletContextProvider = ({ children }: Props) => {
     if (chain) setActiveChain(chain);
   }, [chain]);
 
+  useEffect(() => {
+    if (connectionStatus === 'disconnected') reset();
+  }, [connectionStatus])
+
   async function switchActiveChain(chainId: ChainId) {
     await switchChain(chainId);
   }
@@ -97,6 +101,13 @@ export const WalletContextProvider = ({ children }: Props) => {
     const _smartWallet = new SmartWallet(config);
     await _smartWallet.connect({ personalWallet: wallet as any });
     setSmartWallet(_smartWallet);
+  }
+
+  function reset() {
+    setPersonalWallet(undefined);
+    setSmartWallet(undefined);
+    setPersonalWalletAddress('');
+    setSmartWalletAddress('')
   }
 
   return (
