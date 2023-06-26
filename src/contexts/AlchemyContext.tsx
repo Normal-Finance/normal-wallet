@@ -90,6 +90,7 @@ export const AlchemyContextProvider = ({ children }: Props) => {
   async function getTokenBalances() {
     if (alchemy) {
       const { tokens } = await alchemy.core.getTokensForOwner(smartWalletAddress);
+      console.log(tokens)
       if (tokens.length > 0)
         setTokenBalances(tokens.filter((token) => parseFloat(token.balance!) > 0));
     }
