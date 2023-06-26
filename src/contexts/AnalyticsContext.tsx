@@ -2,6 +2,7 @@
 import { createContext, ReactNode, useContext } from 'react';
 import mixpanel from 'mixpanel-browser';
 import { MIXPANEL_PROJECT_TOKEN } from 'src/config-global';
+import { captureException } from '@sentry/nextjs';
 
 mixpanel.init(MIXPANEL_PROJECT_TOKEN, {
   debug: process.env.NODE_ENV === 'production' ? false : true,
@@ -79,7 +80,11 @@ export const AnalyticsContextProvider = ({ children }: Props) => {
    * @param user
    */
   const setUser = (personalWalletAddress: string, smartWalletAddress: string) => {
-    mixpanel.identify(`${personalWalletAddress}:${smartWalletAddress}`);
+    try {
+      mixpanel.identify(`${personalWalletAddress}:${smartWalletAddress}`);
+    } catch (error) {
+      captureException(error);
+    }
   };
 
   /**
@@ -88,7 +93,11 @@ export const AnalyticsContextProvider = ({ children }: Props) => {
    * @param data
    */
   const trackEvent = (event: AnalyticsEvents, data?: any) => {
-    mixpanel.track(event, data || {});
+    try {
+      mixpanel.track(event, data || {});
+    } catch (error) {
+      captureException(error);
+    }
   };
 
   return (

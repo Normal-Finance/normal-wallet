@@ -28,7 +28,7 @@ const StyledRoot = styled('div')(({ theme }) => ({
 export default function NavAccount() {
   const { copy } = useCopyToClipboard();
   const { enqueueSnackbar } = useSnackbar();
-  const { smartWallet, smartWalletAddress } = useWalletContext();
+  const { walletAddresses, smartWallet, smartWalletDisconnectedError } = useWalletContext();
   const { trackEvent } = useAnalyticsContext();
 
   const [openReceive, setOpenReceive] = useState(false);
@@ -42,11 +42,16 @@ export default function NavAccount() {
   };
 
   const handleCopyAddress = async () => {
-    const success = await copy(smartWalletAddress);
-    if (success) {
-      enqueueSnackbar('Address copied', { variant: 'success' });
-      trackEvent(AnalyticsEvents.COPIED_ADDRESS, { address: smartWalletAddress });
-    } else enqueueSnackbar('Error copying address', { variant: 'error' });
+    if (!smartWallet) smartWalletDisconnectedError();
+    else {
+      try {
+        await copy(walletAddresses.smart);
+        enqueueSnackbar('Address copied', { variant: 'success' });
+        trackEvent(AnalyticsEvents.COPIED_ADDRESS, { address: walletAddresses.smart });
+      } catch (error) {
+        enqueueSnackbar('Error copying address', { variant: 'error' });
+      }
+    }
   };
 
   return (
@@ -61,30 +66,38 @@ export default function NavAccount() {
         }}
       >
         <Box sx={{ width: 64, height: 64 }}>
-          {smartWallet ?  <QRCode value={smartWalletAddress} size={60} /> :  <QRCode value={'empty'} style={{ filter: "blur(8px)" }} size={60} />}
-         
+          {smartWallet ? (
+            <QRCode value={walletAddresses.smart} size={60} />
+          ) : (
+            <QRCode value={'empty'} style={{ filter: 'blur(8px)' }} size={60} />
+          )}
         </Box>
       </Avatar>
 
       <Box sx={{ ml: 2, minWidth: 0 }}>
         <Typography variant="subtitle2" noWrap>
-          {smartWallet ? 'Normal Address' : <Skeleton variant='text' sx={{ fontSize: '1rem' }} width={100} />}
+          {smartWallet ? (
+            'Normal Address'
+          ) : (
+            <Skeleton variant="text" sx={{ fontSize: '1rem' }} width={100} />
+          )}
         </Typography>
 
-        <Tooltip title={smartWalletAddress}>
+        <Tooltip title={walletAddresses.smart}>
           <Typography variant="body1" noWrap sx={{ color: 'text.secondary' }}>
             {smartWallet ? (
-              smartWalletAddress.slice(0, 5) + '...' + smartWalletAddress.slice(-4)
+              walletAddresses.smart.slice(0, 5) + '...' + walletAddresses.smart.slice(-4)
             ) : (
               <Skeleton />
             )}
 
-            {smartWallet && <Iconify
-              icon="eva:copy-outline"
-              onClick={handleCopyAddress}
-              sx={{ ml: 1, color: 'text.disabled' }}
-            />}
-            
+            {smartWallet && (
+              <Iconify
+                icon="eva:copy-outline"
+                onClick={handleCopyAddress}
+                sx={{ ml: 1, color: 'text.disabled' }}
+              />
+            )}
           </Typography>
         </Tooltip>
       </Box>

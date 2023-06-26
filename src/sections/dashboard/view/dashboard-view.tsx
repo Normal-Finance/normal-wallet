@@ -42,8 +42,7 @@ export default function DashboardView() {
 
   const { connectionStatus: websocketStatus, getState } = useWebsocketContext();
 
-  const { connectionStatus, activeChain, switchActiveChain, smartWallet, smartWalletAddress } =
-    useWalletContext();
+  const { connectionStatus, chain, switchChain, smartWallet, walletAddresses } = useWalletContext();
 
   /** REDUX */
   const { clients, transactions, batches, billing, userTransactions } = useSelector(
@@ -58,8 +57,8 @@ export default function DashboardView() {
   const { ethereumBalance, tokenBalances, loading: alchemyLoading } = useAlchemyContext();
 
   const { connections, connect, disconnect, isConnecting } = useWalletConnect({
-    account: smartWalletAddress,
-    chainId: activeChain.chainId,
+    account: walletAddresses.smart,
+    chainId: chain?.chainId!,
   });
 
   const getStateCallback = useCallback(() => {
@@ -71,8 +70,8 @@ export default function DashboardView() {
   }, [getStateCallback]);
 
   useEffect(() => {
-    if (smartWalletAddress) getStateCallback();
-  }, [smartWalletAddress]);
+    if (walletAddresses.smart) getStateCallback();
+  }, [walletAddresses.smart]);
 
   useEffect(() => {
     if (transactions) setTotalTransactions(sumValues(transactions));
@@ -80,7 +79,6 @@ export default function DashboardView() {
   }, [transactions, batches]);
 
   useEffect(() => {
-    console.log([ethereumBalance, tokenBalances]);
     if (ethereumBalance > 0 || tokenBalances.length > 0) setSmartWalletFunded(true);
     else setSmartWalletFunded(false);
   }, [ethereumBalance, tokenBalances]);
@@ -181,7 +179,7 @@ export default function DashboardView() {
           )}
 
           {/* Wrong Network */}
-          {![1, 5].includes(activeChain.chainId) && (
+          {![1, 5].includes(chain?.chainId!) && (
             <Grid xs={12} md={12}>
               <FailedPaymentAlert
                 title={'Wrong network'}
@@ -190,7 +188,7 @@ export default function DashboardView() {
                   <Button
                     variant="contained"
                     color="error"
-                    onClick={() => switchActiveChain(Goerli.chainId)}
+                    onClick={() => switchChain(Goerli.chainId)}
                   >
                     Switch to Ethereum {process.env.NODE_ENV === 'production' && '(Goerli)'}
                   </Button>
@@ -200,7 +198,7 @@ export default function DashboardView() {
           )}
 
           {/* Correct Network */}
-          {[1, 5].includes(activeChain.chainId) && (
+          {[1, 5].includes(chain?.chainId!) && (
             <>
               {/* Get Started */}
               {connectionStatus !== 'connected' && <GetStarted />}

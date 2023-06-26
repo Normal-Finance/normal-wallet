@@ -14,7 +14,7 @@ import { OwnedToken } from 'alchemy-sdk';
 type Props = {};
 
 export default function DepositTokens({}: Props) {
-  const { personalWalletAddress, smartWalletAddress } = useWalletContext();
+  const { walletAddresses } = useWalletContext();
 
   const [ethereumBalance, setEthereumBalance] = useState<number>(0);
   const [tokenBalances, setTokenBalances] = useState<OwnedToken[]>([]);
@@ -24,15 +24,14 @@ export default function DepositTokens({}: Props) {
   const { getEthereumBalanceOfAddress, getTokenBalancesOfAddress } = useAlchemyContext();
 
   useEffect(() => {
-    if (personalWalletAddress) fetchBalances(personalWalletAddress);
-  }, [personalWalletAddress]);
+    if (walletAddresses.personal) fetchBalances(walletAddresses.personal);
+  }, [walletAddresses.personal]);
 
   async function fetchBalances(address: string) {
     const ethereum = await getEthereumBalanceOfAddress(address);
     setEthereumBalance(ethereum);
 
     const tokens = await getTokenBalancesOfAddress(address);
-    console.log(tokenBalances);
     setTokenBalances(tokens);
   }
 
@@ -124,7 +123,7 @@ export default function DepositTokens({}: Props) {
           <DepositAsset
             open={openDeposit}
             token={selectedToken}
-            toAddress={smartWalletAddress}
+            toAddress={walletAddresses.smart}
             onClose={handleCloseDeposit}
           />
         )}

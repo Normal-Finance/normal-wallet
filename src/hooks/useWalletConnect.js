@@ -10,17 +10,12 @@ export default function useWalletConnect({ account, chainId }) {
   /** HOOKS */
   const { enqueueSnackbar } = useSnackbar();
 
-  const clipboardError = (e) =>
-    enqueueSnackbar('non-fatal clipboard/walletconnect err: ' + e.message, { variant: 'error' });
-
   const getClipboardText = useCallback(async () => {
     if (isFirefox()) return false;
 
     try {
       return await navigator.clipboard.readText();
-    } catch (e) {
-      // clipboardError(e);
-    }
+    } catch (e) {}
 
     return false;
   }, []);

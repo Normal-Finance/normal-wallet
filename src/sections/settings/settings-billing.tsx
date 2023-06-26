@@ -2,7 +2,7 @@
 import { Card, CardHeader, Box, Button, Stack } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import { APP_STUFF } from 'src/config-global';
-import { useAnalyticsContext } from 'src/contexts/AnalyticsContext';
+import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsContext';
 
 // ----------------------------------------------------------------------
 

@@ -13,22 +13,28 @@ import createUserHash from 'src/utils/intercom';
 // components
 import Label from 'src/components/label';
 import { APP_STUFF } from 'src/config-global';
+import { useSnackbar } from 'src/components/snackbar';
 
 // ----------------------------------------------------------------------
 
 export default function NavUpgrade() {
-  const { personalWalletAddress } = useWalletContext();
+  const { enqueueSnackbar } = useSnackbar();
+  const { walletAddresses } = useWalletContext();
 
   useEffect(() => {
-    if (personalWalletAddress) {
-      boot({
-        userId: personalWalletAddress,
-        userHash: createUserHash(personalWalletAddress),
-      });
-    } else {
-      boot();
+    try {
+      if (walletAddresses.personal) {
+        boot({
+          userId: walletAddresses.personal,
+          userHash: createUserHash(walletAddresses.personal),
+        });
+      } else {
+        boot();
+      }
+    } catch (error) {
+      enqueueSnackbar('Unable to open support chat at this time', { variant: 'error' });
     }
-  }, [personalWalletAddress]);
+  }, [walletAddresses.personal]);
 
   return (
     <Stack

@@ -22,12 +22,14 @@ import { Events } from 'src/types/websocket';
 import { useWalletContext } from './WalletContext';
 import { TransactionPriority } from 'src/types/transaction';
 import { AnalyticsEvents, useAnalyticsContext } from './AnalyticsContext';
+import { useSnackbar } from 'src/components/snackbar';
+
+import { captureException } from '@sentry/nextjs';
 
 type Props = {
   children: React.ReactNode;
 };
 type Context = {
-  socketUrl: string;
   connectionStatus: ReadyState | string;
   messageHistory: any;
   getState: () => void;
@@ -46,28 +48,27 @@ type Context = {
 const WebsocketContext = createContext<Context | null>(null);
 
 export const WebsocketContextProvider = ({ children }: Props) => {
-  /** STATE */
-  const [socketUrl] = useState(
-    process.env.NEXT_PUBLIC_WEBSOCKET_URL ||
-      'wss://phus4hn141.execute-api.us-east-2.amazonaws.com/dev'
-  );
+  // State
   const [messageHistory, setMessageHistory] = useState<any>([]);
 
-  /** HOOKS */
+  // Hooks
+  const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
-  const { smartWallet, smartWalletAddress } = useWalletContext();
+  const { smartWallet } = useWalletContext();
   const { trackEvent } = useAnalyticsContext();
 
-  const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(socketUrl, {
-    onOpen: () => {
-      sendJsonMessage({ action: 'getState', message: '' });
-    },
-    onClose: () => console.log('closed'),
-    onError: (e) => console.error(e),
-    shouldReconnect: (closeEvent) => true,
-  });
+  const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(
+    process.env.NEXT_PUBLIC_WEBSOCKET_URL || '',
+    {
+      onOpen: () => {
+        sendJsonMessage({ action: 'getState', message: '' });
+      },
+      onError: (e) => captureException(e),
+      shouldReconnect: (closeEvent) => true,
+    }
+  );
 
-  /** CONSTANTS */
+  // Constants
   const connectionStatus = {
     [ReadyState.CONNECTING]: 'Connecting',
     [ReadyState.OPEN]: 'Open',
@@ -76,16 +77,30 @@ export const WebsocketContextProvider = ({ children }: Props) => {
     [ReadyState.UNINSTANTIATED]: 'Uninstantiated',
   }[readyState];
 
-  /** FUNCTIONS */
+  /**
+   * UTILS
+   */
+  const websocketNotOpenError = () => {
+    enqueueSnackbar('Disconnected from Websocket API', { variant: 'error' });
+  };
+
+  const walletNotConnectedError = () => {
+    enqueueSnackbar('No wallet connected', { variant: 'error' });
+  };
+
+  const generalError = (message: string, error: any) => {
+    enqueueSnackbar(message, { variant: 'error' });
+  };
+
+  // When a message is received, parse and handle it
   useEffect(() => {
     if (lastJsonMessage !== null) {
       setMessageHistory((prev: any) => prev.concat(lastJsonMessage));
 
       const { event, data, error }: any = lastJsonMessage;
 
-      console.log({ event, data, error });
-
       if (error) {
+        // TODO:
       } else {
         switch (event) {
           case Events.SUBSCRIBE:
@@ -164,25 +179,31 @@ export const WebsocketContextProvider = ({ children }: Props) => {
     }
   }, [lastJsonMessage, setMessageHistory]);
 
-  /** METHODS */
-
   /**
    * Fetches latest state of Normal
    */
   const _getState = async () => {
-    const payload = 'Hello world';
-    let message = { address: smartWalletAddress || '', payload };
+    if (readyState !== ReadyState.OPEN) websocketNotOpenError();
+    else {
+      try {
+        const payload = 'Hello world';
+        const address = (await smartWallet?.getAddress()) || '';
+        let message = { address, payload };
 
-    let signature = '';
-    // if (smartWallet) signature = await smartWallet.signMessage(payload);
+        let signature = '';
+        // if (smartWallet) signature = await smartWallet.signMessage(payload);
 
-    sendJsonMessage({
-      action: Events.GET_STATE,
-      message: {
-        ...message,
-        signature: signature,
-      },
-    });
+        sendJsonMessage({
+          action: Events.GET_STATE,
+          message: {
+            ...message,
+            signature: signature,
+          },
+        });
+      } catch (error) {
+        generalError('Unable to get app state', error);
+      }
+    }
   };
 
   /**
@@ -190,21 +211,28 @@ export const WebsocketContextProvider = ({ children }: Props) => {
    * @param email
    */
   const _updateEmail = async (email: string) => {
-    if (smartWallet && smartWalletAddress) {
-      const payload = { email };
-      let message = { address: smartWalletAddress, payload };
+    if (readyState !== ReadyState.OPEN) websocketNotOpenError();
+    else if (!smartWallet) walletNotConnectedError();
+    else {
+      try {
+        const payload = { email };
+        const address = await smartWallet.getAddress();
+        let message = { address, payload };
 
-      const signature = await smartWallet.signMessage(JSON.stringify(payload));
+        const signature = await smartWallet.signMessage(JSON.stringify(payload));
 
-      sendJsonMessage({
-        action: Events.UPDATE_EMAIL,
-        message: {
-          ...message,
-          signature: signature,
-        },
-      });
+        sendJsonMessage({
+          action: Events.UPDATE_EMAIL,
+          message: {
+            ...message,
+            signature: signature,
+          },
+        });
 
-      trackEvent(AnalyticsEvents.UPDATED_EMAIL, { email });
+        trackEvent(AnalyticsEvents.UPDATED_EMAIL, { email });
+      } catch (error) {
+        generalError('Unable to update email', error);
+      }
     }
   };
 
@@ -223,25 +251,32 @@ export const WebsocketContextProvider = ({ children }: Props) => {
     calldata: string,
     priority: TransactionPriority
   ) => {
-    if (smartWallet && smartWalletAddress) {
-      const transaction = { account, target, value, calldata };
-      const payload = { transaction, priority };
-      let message = {
-        address: smartWalletAddress,
-        payload,
-      };
+    if (readyState !== ReadyState.OPEN) websocketNotOpenError();
+    else if (!smartWallet) walletNotConnectedError();
+    else {
+      try {
+        const transaction = { account, target, value, calldata };
+        const payload = { transaction, priority };
+        const address = await smartWallet.getAddress();
+        let message = {
+          address,
+          payload,
+        };
 
-      const signature = await smartWallet.signMessage(JSON.stringify(payload));
+        const signature = await smartWallet.signMessage(JSON.stringify(payload));
 
-      sendJsonMessage({
-        action: Events.NEW_TRANSACTION,
-        message: {
-          ...message,
-          signature: signature,
-        },
-      });
+        sendJsonMessage({
+          action: Events.NEW_TRANSACTION,
+          message: {
+            ...message,
+            signature: signature,
+          },
+        });
 
-      trackEvent(AnalyticsEvents.CREATED_BATCH_TRANSACTION, { transaction });
+        trackEvent(AnalyticsEvents.CREATED_BATCH_TRANSACTION, { transaction });
+      } catch (error) {
+        generalError('Unable to submit new transaction', error);
+      }
     }
   };
 
@@ -250,21 +285,28 @@ export const WebsocketContextProvider = ({ children }: Props) => {
    * @param transactionId
    */
   const _updateTransactionPriority = async (transactionId: string) => {
-    if (smartWallet && smartWalletAddress) {
-      const payload = { transactionId };
-      let message = { address: smartWalletAddress, payload };
+    if (readyState !== ReadyState.OPEN) websocketNotOpenError();
+    else if (!smartWallet) walletNotConnectedError();
+    else {
+      try {
+        const payload = { transactionId };
+        const address = await smartWallet.getAddress();
+        let message = { address, payload };
 
-      const signature = await smartWallet.signMessage(JSON.stringify(message));
+        const signature = await smartWallet.signMessage(JSON.stringify(message));
 
-      sendJsonMessage({
-        action: Events.UPDATE_TRANSACTION_PRIORITY,
-        message: {
-          ...message,
-          signature: signature,
-        },
-      });
+        sendJsonMessage({
+          action: Events.UPDATE_TRANSACTION_PRIORITY,
+          message: {
+            ...message,
+            signature: signature,
+          },
+        });
 
-      trackEvent(AnalyticsEvents.UPDATED_BATCH_TRANSACTION_PRIORITY, { transactionId });
+        trackEvent(AnalyticsEvents.UPDATED_BATCH_TRANSACTION_PRIORITY, { transactionId });
+      } catch (error) {
+        generalError('Unable to update transaction priority', error);
+      }
     }
   };
 
@@ -273,28 +315,34 @@ export const WebsocketContextProvider = ({ children }: Props) => {
    * @param transactionId
    */
   const _cancelTransaction = async (transactionId: string) => {
-    if (smartWallet && smartWalletAddress) {
-      const payload = { transactionId };
-      let message = { address: smartWalletAddress, payload };
+    if (readyState !== ReadyState.OPEN) websocketNotOpenError();
+    else if (!smartWallet) walletNotConnectedError();
+    else {
+      try {
+        const payload = { transactionId };
+        const address = await smartWallet.getAddress();
+        let message = { address, payload };
 
-      const signature = await smartWallet.signMessage(JSON.stringify(message));
+        const signature = await smartWallet.signMessage(JSON.stringify(message));
 
-      sendJsonMessage({
-        action: Events.CANCEL_TRANSACTION,
-        message: {
-          ...message,
-          signature: signature,
-        },
-      });
+        sendJsonMessage({
+          action: Events.CANCEL_TRANSACTION,
+          message: {
+            ...message,
+            signature: signature,
+          },
+        });
 
-      trackEvent(AnalyticsEvents.CANCELED_BATCH_TRANSACTION, { transactionId });
+        trackEvent(AnalyticsEvents.CANCELED_BATCH_TRANSACTION, { transactionId });
+      } catch (error) {
+        generalError('Unable to cancel transaction', error);
+      }
     }
   };
 
   return (
     <WebsocketContext.Provider
       value={{
-        socketUrl,
         connectionStatus,
         messageHistory,
         getState: _getState,

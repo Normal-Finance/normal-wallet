@@ -12,111 +12,149 @@ import {
 } from 'alchemy-sdk';
 import { useWalletContext } from './WalletContext';
 import { ALCHEMY_API_KEY } from 'src/config-global';
-import { Goerli } from '@thirdweb-dev/chains';
+import { useSnackbar } from 'src/components/snackbar';
 
 type Props = {
   children: React.ReactNode;
 };
 type Context = {
   loading: boolean;
-  alchemy: Alchemy | undefined;
   ethereumBalance: number;
   tokenBalances: OwnedToken[];
   transactions: AssetTransfersResult[];
   refresh: () => void;
-  getEthereumBalanceOfAddress: (address: string) => Promise<number>;
-  getTokenBalancesOfAddress: (address: string) => Promise<OwnedToken[]>;
+  getEthereumBalanceOfAddress: (address: string) => Promise<number> | any;
+  getTokenBalancesOfAddress: (address: string) => Promise<OwnedToken[]> | any;
   getFeeData: () => Promise<any>;
-  getGasEstimate: (transaction: TransactionRequest) => Promise<any>;
+  getGasEstimate: (transaction: TransactionRequest) => Promise<any> | any;
 };
 
 const UPDATE_INTERVAL = 1000 * 60 * 3; // 3 minutes
 
+const alchemy: Alchemy = new Alchemy({
+  apiKey: ALCHEMY_API_KEY,
+  network: Network.ETH_GOERLI,
+});
+
 const AlchemyContext = createContext<Context | null>(null);
 
 export const AlchemyContextProvider = ({ children }: Props) => {
-  const [loading, setLoading] = useState(false);
-  const [alchemy, setAlchemy] = useState<Alchemy | undefined>();
+  // Hooks
+  const { enqueueSnackbar } = useSnackbar();
+  const { chain, smartWallet, smartWalletDisconnectedError } = useWalletContext();
 
+  // State
+  const [loading, setLoading] = useState(false);
   const [ethereumBalance, setEthereumBalance] = useState<number>(0);
   const [tokenBalances, setTokenBalances] = useState<OwnedToken[]>([]);
   const [transactions, setTransactions] = useState<AssetTransfersResult[]>([]);
 
-  const { activeChain, personalWalletAddress, smartWalletAddress } = useWalletContext();
-
+  // If the smart wallet or chain is changed, update balances and transactions
   useEffect(() => {
-    if (!alchemy) {
-      setAlchemy(
-        new Alchemy({
-          apiKey: ALCHEMY_API_KEY,
-          network: Network.ETH_GOERLI,
-        })
-      );
-    }
-  }, [alchemy]);
+    if (smartWallet || chain) getBalancesAndTransactions();
+  }, [smartWallet, chain]);
 
+  // Update the balances and transactions every UPDATE_INTERVAL (3 minutes)
   useEffect(() => {
-    if (activeChain === Goerli) getBalancesAndTransfers();
-  }, [smartWalletAddress, activeChain]);
-
-  useEffect(() => {
-    const interval = setInterval(getBalancesAndTransfers, UPDATE_INTERVAL);
+    const interval = setInterval(getBalancesAndTransactions, UPDATE_INTERVAL);
     return () => clearInterval(interval);
   }, []);
+
+  /**
+   * UTILS
+   */
+  const alchemyConnectionError = () => {
+    enqueueSnackbar('Unable to connect to Alchemy client', { variant: 'error' });
+  };
+
+  const alchemyError = (message: string, error: any) => {
+    enqueueSnackbar(message, { variant: 'error' });
+  };
 
   /**
    * PRIVATE METHODS
    */
 
-  async function getBalancesAndTransfers() {
-    if (smartWalletAddress) {
-      setLoading(true);
-      await getEthereumBalance();
-      await getTokenBalances();
-      await getAssetTransfers();
-      setLoading(false);
-    }
+  function reset() {
+    setEthereumBalance(0);
+    setTokenBalances([]);
+    setTransactions([]);
+  }
+
+  async function getAddress() {
+    return (await smartWallet?.getAddress()) || '';
+  }
+
+  async function getBalancesAndTransactions() {
+    setLoading(true);
+    reset();
+    await getEthereumBalance();
+    await getTokenBalances();
+    await getTransactions();
+    setLoading(false);
   }
 
   async function getEthereumBalance() {
-    if (alchemy) {
-      const { _hex } = await alchemy.core.getBalance(smartWalletAddress);
-      let ethereum = 0;
-      if (_hex) ethereum = parseInt(_hex.toString(), 16) / Math.pow(10, 18);
-      setEthereumBalance(ethereum);
+    if (!alchemy) alchemyConnectionError();
+    else if (!smartWallet) smartWalletDisconnectedError();
+    else {
+      try {
+        const address = await getAddress();
+        const { _hex } = await alchemy.core.getBalance(address);
+        let ethereum = 0;
+        if (_hex) ethereum = parseInt(_hex.toString(), 16) / Math.pow(10, 18);
+        setEthereumBalance(ethereum);
+      } catch (error) {
+        alchemyError('Unable to fetch Ethereum balance', error);
+      }
     }
   }
 
   async function getTokenBalances() {
-    if (alchemy) {
-      const { tokens } = await alchemy.core.getTokensForOwner(smartWalletAddress);
-      console.log(tokens)
-      if (tokens.length > 0)
-        setTokenBalances(tokens.filter((token) => parseFloat(token.balance!) > 0));
+    if (!alchemy) alchemyConnectionError();
+    else if (!smartWallet) smartWalletDisconnectedError();
+    else {
+      try {
+        const address = await smartWallet.getAddress();
+        const { tokens } = await alchemy.core.getTokensForOwner(address);
+        if (tokens.length > 0)
+          setTokenBalances(tokens.filter((token) => parseFloat(token.balance!) > 0));
+      } catch (error) {
+        alchemyError('Unable to fetch Ethereum balance', error);
+      }
     }
   }
 
-  async function getAssetTransfers() {
-    if (alchemy) {
-      const { transfers: outboungTransfers } = await alchemy.core.getAssetTransfers({
-        fromAddress: personalWalletAddress,
-        category: [
-          AssetTransfersCategory.EXTERNAL,
-          AssetTransfersCategory.INTERNAL,
-          AssetTransfersCategory.ERC20,
-        ],
-      });
+  async function getTransactions() {
+    if (!alchemy) alchemyConnectionError();
+    else if (!smartWallet) smartWalletDisconnectedError();
+    else {
+      try {
+        const address = await smartWallet.getAddress();
+        if (address) {
+          const { transfers: outboungTransfers } = await alchemy.core.getAssetTransfers({
+            fromAddress: address,
+            category: [
+              AssetTransfersCategory.EXTERNAL,
+              AssetTransfersCategory.INTERNAL,
+              AssetTransfersCategory.ERC20,
+            ],
+          });
 
-      const { transfers: incomingTransfers } = await alchemy.core.getAssetTransfers({
-        toAddress: personalWalletAddress,
-        category: [
-          AssetTransfersCategory.EXTERNAL,
-          AssetTransfersCategory.INTERNAL,
-          AssetTransfersCategory.ERC20,
-        ],
-      });
+          const { transfers: incomingTransfers } = await alchemy.core.getAssetTransfers({
+            toAddress: address,
+            category: [
+              AssetTransfersCategory.EXTERNAL,
+              AssetTransfersCategory.INTERNAL,
+              AssetTransfersCategory.ERC20,
+            ],
+          });
 
-      setTransactions([...outboungTransfers, ...incomingTransfers]);
+          setTransactions([...outboungTransfers, ...incomingTransfers]);
+        }
+      } catch (error) {
+        alchemyError('Unable to transaction history', error);
+      }
     }
   }
 
@@ -125,7 +163,7 @@ export const AlchemyContextProvider = ({ children }: Props) => {
    */
 
   async function refresh() {
-    await getBalancesAndTransfers();
+    await getBalancesAndTransactions();
   }
 
   /**
@@ -133,13 +171,19 @@ export const AlchemyContextProvider = ({ children }: Props) => {
    * @param address
    * @returns
    */
-  async function getEthereumBalanceOfAddress(address: string): Promise<number> {
-    if (alchemy) {
-      const { _hex } = await alchemy.core.getBalance(address);
-      let ethereum = 0;
-      if (_hex) ethereum = parseInt(_hex.toString(), 16) / Math.pow(10, 18);
-      return ethereum;
-    } else return 0;
+  async function getEthereumBalanceOfAddress(address: string) {
+    if (!alchemy) alchemyConnectionError();
+    else if (!smartWallet) smartWalletDisconnectedError();
+    else {
+      try {
+        const { _hex } = await alchemy.core.getBalance(address);
+        let ethereum = 0;
+        if (_hex) ethereum = parseInt(_hex.toString(), 16) / Math.pow(10, 18);
+        return ethereum;
+      } catch (error) {
+        alchemyError('Unable to get Ethereum balance', error);
+      }
+    }
   }
 
   /**
@@ -147,27 +191,48 @@ export const AlchemyContextProvider = ({ children }: Props) => {
    * @param address
    * @returns
    */
-  async function getTokenBalancesOfAddress(address: string): Promise<OwnedToken[]> {
-    if (alchemy) {
-      const { tokens } = await alchemy.core.getTokensForOwner(address);
-      if (tokens.length > 0) return tokens.filter((token) => parseFloat(token.balance!) > 0);
-      else return [];
-    } else return [];
+  async function getTokenBalancesOfAddress(address: string) {
+    if (!alchemy) alchemyConnectionError();
+    else if (!smartWallet) smartWalletDisconnectedError();
+    else {
+      try {
+        const { tokens } = await alchemy.core.getTokensForOwner(address);
+        if (tokens.length > 0) return tokens.filter((token) => parseFloat(token.balance!) > 0);
+        else return [];
+      } catch (error) {
+        alchemyError('Unable to fetch token balances', error);
+      }
+    }
   }
 
   async function getFeeData() {
-    return await alchemy?.core.getFeeData();
+    if (!alchemy) alchemyConnectionError();
+    else if (!smartWallet) smartWalletDisconnectedError();
+    else {
+      try {
+        return await alchemy.core.getFeeData();
+      } catch (error) {
+        alchemyError('Unable to get fee data', error);
+      }
+    }
   }
 
   async function getGasEstimate(transaction: TransactionRequest) {
-    return await alchemy?.core.estimateGas(transaction);
+    if (!alchemy) alchemyConnectionError();
+    else if (!smartWallet) smartWalletDisconnectedError();
+    else {
+      try {
+        return await alchemy.core.estimateGas(transaction);
+      } catch (error) {
+        alchemyError('Unable to estimate gas', error);
+      }
+    }
   }
 
   return (
     <AlchemyContext.Provider
       value={{
         loading,
-        alchemy,
         ethereumBalance,
         tokenBalances,
         transactions,

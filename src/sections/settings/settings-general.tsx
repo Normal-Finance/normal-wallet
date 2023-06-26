@@ -13,7 +13,6 @@ import { useSelector } from 'src/redux/store';
 // hooks
 // utils
 // components
-import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSwitch, RHFTextField } from 'src/components/hook-form';
 import { useWebsocketContext } from 'src/contexts/WebsocketContext';
 import { Typography } from '@mui/material';
@@ -25,7 +24,6 @@ type FormValuesProps = {
 };
 
 export default function SettingsGeneral() {
-  const { enqueueSnackbar } = useSnackbar();
   const { updateEmail } = useWebsocketContext();
 
   /** REDUX */
@@ -51,18 +49,9 @@ export default function SettingsGeneral() {
     formState: { isSubmitting },
   } = methods;
 
-  const onSubmit = useCallback(
-    async (data: FormValuesProps) => {
-      try {
-        await updateEmail(data.email);
-        // enqueueSnackbar('Email updated!');
-      } catch (error) {
-        console.error(error);
-        enqueueSnackbar('Error updating email', { variant: 'error' });
-      }
-    },
-    [enqueueSnackbar]
-  );
+  const onSubmit = useCallback(async (data: FormValuesProps) => {
+    await updateEmail(data.email);
+  }, []);
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>

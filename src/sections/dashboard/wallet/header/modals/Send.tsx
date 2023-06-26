@@ -58,7 +58,7 @@ export default function Send({ open, ethereumBalance, tokenBalances, onClose }: 
   const { refresh } = useAlchemyContext();
   const { enqueueSnackbar } = useSnackbar();
   const { newTransaction } = useWebsocketContext();
-  const { smartWallet, smartWalletAddress } = useWalletContext();
+  const { smartWallet, walletAddresses } = useWalletContext();
   const { trackEvent } = useAnalyticsContext();
 
   const { transactions } = useSelector((state) => state.state);
@@ -118,7 +118,7 @@ export default function Send({ open, ethereumBalance, tokenBalances, onClose }: 
         case TransactionPriority.GTC:
         case TransactionPriority.INSTANT:
           newTransaction(
-            smartWalletAddress,
+            walletAddresses.smart,
             transaction.to!,
             transaction.value!.toString(),
             transaction.data as string,
@@ -152,7 +152,7 @@ export default function Send({ open, ethereumBalance, tokenBalances, onClose }: 
 
       let _transaction: TransactionRequest = {
         to: tokenContractAddress,
-        from: smartWalletAddress,
+        from: walletAddresses.smart,
         data: calldata,
         value,
       };

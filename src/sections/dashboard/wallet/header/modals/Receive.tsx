@@ -19,22 +19,27 @@ type Props = {
 
 export default function Receive({ open, onClose }: Props) {
   const { enqueueSnackbar } = useSnackbar();
-  const { smartWalletAddress } = useWalletContext();
+  const { smartWallet, walletAddresses, smartWalletDisconnectedError } = useWalletContext();
   const { copy } = useCopyToClipboard();
   const { trackEvent } = useAnalyticsContext();
 
   const handleCopyAddress = async () => {
-    const success = await copy(smartWalletAddress);
-    if (success) {
-      enqueueSnackbar('Address copied', { variant: 'success' });
-      trackEvent(AnalyticsEvents.COPIED_ADDRESS, { address: smartWalletAddress });
-    } else enqueueSnackbar('Error copying address', { variant: 'error' });
+    if (!smartWallet) smartWalletDisconnectedError();
+    else {
+      try {
+        await copy(walletAddresses.smart);
+        enqueueSnackbar('Address copied', { variant: 'success' });
+        trackEvent(AnalyticsEvents.COPIED_ADDRESS, { address: walletAddresses.smart });
+      } catch (error) {
+        enqueueSnackbar('Error copying address', { variant: 'error' });
+      }
+    }
   };
 
   return (
     <Dialog fullWidth maxWidth="xs" open={open} onClose={onClose}>
       <Stack sx={{ p: 2.5, alignItems: 'center' }}>
-        <QRCode value={smartWalletAddress} />
+        <QRCode value={walletAddresses.smart} />
 
         <Typography variant="subtitle1" sx={{ mt: 2 }}>
           Your Normal Address
@@ -42,7 +47,7 @@ export default function Receive({ open, onClose }: Props) {
 
         <Stack direction="row" alignItems="center" spacing={1}>
           <Typography variant="body1" sx={{ mt: 1 }}>
-            {smartWalletAddress}
+            {walletAddresses.smart}
           </Typography>
 
           <Tooltip title="Copy Address">

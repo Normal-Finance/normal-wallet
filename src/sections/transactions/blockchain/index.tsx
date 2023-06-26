@@ -68,7 +68,7 @@ export default function TransactionsBlockchain() {
 
   const settings = useSettingsContext();
 
-  const { smartWalletAddress } = useWalletContext();
+  const { walletAddresses } = useWalletContext();
   const { loading, transactions } = useAlchemyContext();
   const { trackEvent } = useAnalyticsContext();
 
@@ -79,7 +79,7 @@ export default function TransactionsBlockchain() {
   const dateError = isDateError(filters.startDate, filters.endDate);
 
   const dataFiltered = applyFilter({
-    smartWalletAddress,
+    address: walletAddresses.smart,
     inputData: tableData,
     comparator: getComparator(table.order, table.orderBy),
     filters,
@@ -156,12 +156,12 @@ export default function TransactionsBlockchain() {
                         {tab.value === 'all' && transactions.length}
                         {tab.value === 'incoming' &&
                           transactions.filter(
-                            (transaction) => transaction.to === smartWalletAddress
+                            (transaction) => transaction.to === walletAddresses.smart
                           ).length}
 
                         {tab.value === 'outgoing' &&
                           transactions.filter(
-                            (transaction) => transaction.from === smartWalletAddress
+                            (transaction) => transaction.from === walletAddresses.smart
                           ).length}
                       </Label>
                     }
@@ -265,13 +265,13 @@ export default function TransactionsBlockchain() {
 // ----------------------------------------------------------------------
 
 function applyFilter({
-  smartWalletAddress,
+  address,
   inputData,
   comparator,
   filters,
   dateError,
 }: {
-  smartWalletAddress: string;
+  address: string;
   inputData: AssetTransfersResult[];
   comparator: (a: any, b: any) => number;
   filters: IOrderTableFilters;
@@ -300,11 +300,11 @@ function applyFilter({
   }
 
   if (status === 'incoming') {
-    inputData = inputData.filter((transaction) => transaction.to === smartWalletAddress);
+    inputData = inputData.filter((transaction) => transaction.to === address);
   }
 
   if (status === 'outgoing') {
-    inputData = inputData.filter((transaction) => transaction.from === smartWalletAddress);
+    inputData = inputData.filter((transaction) => transaction.from === address);
   }
 
   // if (!dateError) {

@@ -7,7 +7,6 @@ import Grid from '@mui/material/Unstable_Grid2';
 // redux
 import { useSelector } from 'src/redux/store';
 import Iconify from 'src/components/iconify';
-import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
 import { useWebsocketContext } from 'src/contexts/WebsocketContext';
 
@@ -20,7 +19,6 @@ type FormValuesProps = {
 type Props = {};
 
 export default function UpdateEmail({}: Props) {
-  const { enqueueSnackbar } = useSnackbar();
   const { updateEmail } = useWebsocketContext();
 
   /** REDUX */
@@ -39,18 +37,9 @@ export default function UpdateEmail({}: Props) {
     formState: { isSubmitting },
   } = methods;
 
-  const onSubmit = useCallback(
-    async (data: FormValuesProps) => {
-      try {
-        await updateEmail(data.email);
-        enqueueSnackbar('Email updated!');
-      } catch (error) {
-        console.error(error);
-        enqueueSnackbar('Error updating email', { variant: 'error' });
-      }
-    },
-    [enqueueSnackbar]
-  );
+  const onSubmit = useCallback(async (data: FormValuesProps) => {
+    await updateEmail(data.email);
+  }, []);
 
   return (
     <Grid xs={12} md={12}>
