@@ -54,7 +54,7 @@ export default function HeaderSimple() {
           <SettingsButton />
 
           <Link
-            href={paths.faqs}
+            href={paths.root}
             component={RouterLink}
             color="inherit"
             sx={{ typography: 'subtitle2' }}

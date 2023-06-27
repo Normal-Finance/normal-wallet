@@ -69,9 +69,7 @@ export default function SettingsGeneral() {
               <RHFTextField
                 name="email"
                 label="Email Address"
-                helperText={
-                  'The email used to access your billing and receive payment notifications'
-                }
+                helperText="The email used to access your billing and receive payment notifications"
               />
             </Box>
 

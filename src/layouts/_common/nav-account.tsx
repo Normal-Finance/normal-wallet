@@ -69,7 +69,7 @@ export default function NavAccount() {
           {smartWallet ? (
             <QRCode value={walletAddresses.smart} size={60} />
           ) : (
-            <QRCode value={'empty'} style={{ filter: 'blur(8px)' }} size={60} />
+            <QRCode value="empty" style={{ filter: 'blur(8px)' }} size={60} />
           )}
         </Box>
       </Avatar>
@@ -86,7 +86,7 @@ export default function NavAccount() {
         <Tooltip title={walletAddresses.smart}>
           <Typography variant="body1" noWrap sx={{ color: 'text.secondary' }}>
             {smartWallet ? (
-              walletAddresses.smart.slice(0, 5) + '...' + walletAddresses.smart.slice(-4)
+              `${walletAddresses.smart.slice(0, 5)  }...${  walletAddresses.smart.slice(-4)}`
             ) : (
               <Skeleton />
             )}

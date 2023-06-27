@@ -63,8 +63,7 @@ export default function BatchTableToolbar({
   );
 
   return (
-    <>
-      <Stack
+    <Stack
         spacing={2}
         alignItems={{ xs: 'flex-end', md: 'center' }}
         direction={{
@@ -127,6 +126,5 @@ export default function BatchTableToolbar({
           </Button>
         )}
       </Stack>
-    </>
   );
 }

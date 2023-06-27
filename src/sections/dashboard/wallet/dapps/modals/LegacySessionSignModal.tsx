@@ -117,7 +117,7 @@ export default function LegacySessionSignModal() {
   };
 
   return (
-    <Dialog maxWidth="sm" open={true}>
+    <Dialog maxWidth="sm" open>
       <DialogTitle> Sign Message </DialogTitle>
 
       <DialogContent sx={{ overflow: 'unset' }}>
@@ -137,22 +137,20 @@ export default function LegacySessionSignModal() {
           <Stack spacing={2} direction="row">
             <Typography variant="h6">Blockchain(s)</Typography>
             <Stack direction="row" alignItems="center" spacing={1}>
-              {['eip155:' + chainId].map((chain) => {
-                return (
+              {[`eip155:${  chainId}`].map((chain) => (
                   <Chip
                     key={EIP155_CHAINS[chain as TEIP155Chain]?.name ?? chain}
                     label={EIP155_CHAINS[chain as TEIP155Chain]?.name ?? chain}
                     variant="soft"
-                    color={'info'}
+                    color="info"
                   />
-                );
-              })}
+                ))}
             </Stack>
 
             <Typography variant="h6">Methods</Typography>
             <Stack direction="row" alignItems="center" spacing={1}>
               {[method].map((method) => (
-                <Chip key={method} label={method} variant="soft" color={'warning'} />
+                <Chip key={method} label={method} variant="soft" color="warning" />
               ))}
             </Stack>
           </Stack>

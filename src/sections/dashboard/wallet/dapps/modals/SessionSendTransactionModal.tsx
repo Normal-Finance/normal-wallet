@@ -25,9 +25,9 @@ import {
   approveEIP155Request,
   rejectEIP155Request,
 } from 'src/utils/walletConnect/EIP155RequestHandlerUtil';
-import TransactionTypes from '../transaction-types';
 import { TransactionPriority } from 'src/types/transaction';
 import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsContext';
+import TransactionTypes from '../transaction-types';
 
 export default function SessionSendTransactionModal() {
   const { transactions } = useSelector((state) => state.state);
@@ -106,7 +106,7 @@ export default function SessionSendTransactionModal() {
   };
 
   return (
-    <Dialog maxWidth="sm" open={true}>
+    <Dialog maxWidth="sm" open>
       <DialogTitle> Send / Sign Transaction </DialogTitle>
 
       <DialogContent sx={{ overflow: 'unset' }}>
@@ -131,22 +131,20 @@ export default function SessionSendTransactionModal() {
           <Stack spacing={2} direction="row">
             <Typography variant="h6">Blockchain(s)</Typography>
             <Stack direction="row" alignItems="center" spacing={1}>
-              {[chainId ?? ''].map((chain) => {
-                return (
+              {[chainId ?? ''].map((chain) => (
                   <Chip
                     key={EIP155_CHAINS[chain as TEIP155Chain]?.name ?? chain}
                     label={EIP155_CHAINS[chain as TEIP155Chain]?.name ?? chain}
                     variant="soft"
-                    color={'info'}
+                    color="info"
                   />
-                );
-              })}
+                ))}
             </Stack>
 
             <Typography variant="h6">Methods</Typography>
             <Stack direction="row" alignItems="center" spacing={1}>
               {[request.method].map((method) => (
-                <Chip key={method} label={method} variant="soft" color={'warning'} />
+                <Chip key={method} label={method} variant="soft" color="warning" />
               ))}
             </Stack>
           </Stack>

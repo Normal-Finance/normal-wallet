@@ -42,7 +42,7 @@ export default function Send({ open, ethereumBalance, tokenBalances, onClose }: 
     setSelectedIndex(event.target.value as string);
   };
 
-  let ethToken: OwnedToken = {
+  const ethToken: OwnedToken = {
     contractAddress: '0x2170Ed0880ac9A755fd29B2688956BD959F933F8',
     rawBalance: '', // TODO: ?
     decimals: 1,
@@ -91,8 +91,7 @@ export default function Send({ open, ethereumBalance, tokenBalances, onClose }: 
           )}
 
           {/* Tokens */}
-          {tokenBalances.map((token: OwnedToken, index: any) => {
-            return (
+          {tokenBalances.map((token: OwnedToken, index: any) => (
               <MenuItem
                 key={index}
                 value={index}
@@ -106,8 +105,7 @@ export default function Send({ open, ethereumBalance, tokenBalances, onClose }: 
               >
                 {token.name}
               </MenuItem>
-            );
-          })}
+            ))}
         </Select>
 
         {selectedIndex !== -2 && (
@@ -155,7 +153,7 @@ export default function Send({ open, ethereumBalance, tokenBalances, onClose }: 
         <LoadingButton
           type="submit"
           variant="contained"
-          color={'info'}
+          color="info"
           href={fEtherscanAddress(transactionHash)}
         >
           View on Etherscan

@@ -10,9 +10,9 @@ import {
   OwnedToken,
   TransactionRequest,
 } from 'alchemy-sdk';
-import { useWalletContext } from './WalletContext';
 import { ALCHEMY_API_KEY } from 'src/config-global';
 import { useSnackbar } from 'src/components/snackbar';
+import { useWalletContext } from './WalletContext';
 
 type Props = {
   children: React.ReactNode;
@@ -103,7 +103,7 @@ export const AlchemyContextProvider = ({ children }: Props) => {
         const address = await getAddress();
         const { _hex } = await alchemy.core.getBalance(address);
         let ethereum = 0;
-        if (_hex) ethereum = parseInt(_hex.toString(), 16) / Math.pow(10, 18);
+        if (_hex) ethereum = parseInt(_hex.toString(), 16) / 10**18;
         setEthereumBalance(ethereum);
       } catch (error) {
         alchemyError('Unable to fetch Ethereum balance', error);
@@ -179,7 +179,7 @@ export const AlchemyContextProvider = ({ children }: Props) => {
       try {
         const { _hex } = await alchemy.core.getBalance(address);
         let ethereum = 0;
-        if (_hex) ethereum = parseInt(_hex.toString(), 16) / Math.pow(10, 18);
+        if (_hex) ethereum = parseInt(_hex.toString(), 16) / 10**18;
         return ethereum;
       } catch (error) {
         alchemyError('Unable to get Ethereum balance', error);
@@ -199,7 +199,7 @@ export const AlchemyContextProvider = ({ children }: Props) => {
       try {
         const { tokens } = await alchemy.core.getTokensForOwner(address);
         if (tokens.length > 0) return tokens.filter((token) => parseFloat(token.balance!) > 0);
-        else return [];
+        return [];
       } catch (error) {
         alchemyError('Unable to fetch token balances', error);
       }

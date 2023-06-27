@@ -1,10 +1,10 @@
 import { EIP155_SIGNING_METHODS } from 'src/hooks/walletConnect/wcConsts';
-import { getSignParamsMessage, getSignTypedDataParamsData } from './HelperUtil';
 import { formatJsonRpcError, formatJsonRpcResult } from '@json-rpc-tools/utils';
 import { SignClientTypes } from '@walletconnect/types';
 import { getSdkError } from '@walletconnect/utils';
 import { SmartWallet } from '@thirdweb-dev/wallets';
 import { TransactionPriority } from 'src/types/transaction';
+import { getSignParamsMessage, getSignTypedDataParamsData } from './HelperUtil';
 
 export async function approveEIP155Request(
   requestEvent: SignClientTypes.EventArguments['session_request'],

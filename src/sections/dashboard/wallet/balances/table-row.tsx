@@ -16,8 +16,7 @@ type Props = {
 
 export default function MyTableRow({ token }: Props) {
   return (
-    <>
-      <TableRow hover>
+    <TableRow hover>
         <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
           <Avatar src={token.logo} alt={token.name} sx={{ mr: 2 }}>
             {token.name}
@@ -37,7 +36,7 @@ export default function MyTableRow({ token }: Props) {
                 // onClick={onViewRow}
                 sx={{ color: 'text.disabled', cursor: 'pointer' }}
               >
-                {token.balance + ' ' + token.symbol}
+                {`${token.balance  } ${  token.symbol}`}
               </Typography>
             }
           />
@@ -45,6 +44,5 @@ export default function MyTableRow({ token }: Props) {
 
         <TableCell>{token.balance}</TableCell>
       </TableRow>
-    </>
   );
 }

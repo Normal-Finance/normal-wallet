@@ -25,9 +25,9 @@ import {
   approveEIP155Request,
   rejectEIP155Request,
 } from 'src/utils/walletConnect/EIP155RequestHandlerUtil';
-import TransactionTypes from '../transaction-types';
 import { TransactionPriority } from 'src/types/transaction';
 import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsContext';
+import TransactionTypes from '../transaction-types';
 
 export default function LegacySessionSendTransactionModal() {
   const { transactions } = useSelector((state) => state.state);
@@ -59,7 +59,7 @@ export default function LegacySessionSendTransactionModal() {
   const transaction = params[0];
 
   // // Remove unneeded key coming from v1 sample dapp that throws Ethers.
-  if (transaction['gas']) delete transaction['gas'];
+  if (transaction.gas) delete transaction.gas;
 
   const onApprove = async () => {
     if (requestEvent) {
@@ -81,7 +81,7 @@ export default function LegacySessionSendTransactionModal() {
             },
           },
         },
-        smartWallet,
+        smartWallet as any,
         selectedPriority,
         (
           account: string,
@@ -146,7 +146,7 @@ export default function LegacySessionSendTransactionModal() {
   };
 
   return (
-    <Dialog maxWidth="sm" open={true}>
+    <Dialog maxWidth="sm" open>
       <DialogTitle> Send / Sign Transaction </DialogTitle>
 
       <DialogContent sx={{ overflow: 'unset' }}>
@@ -171,22 +171,20 @@ export default function LegacySessionSendTransactionModal() {
           <Stack spacing={2} direction="row">
             <Typography variant="h6">Blockchain(s)</Typography>
             <Stack direction="row" alignItems="center" spacing={1}>
-              {['eip155:' + chainId].map((chain) => {
-                return (
+              {[`eip155:${  chainId}`].map((chain) => (
                   <Chip
                     key={EIP155_CHAINS[chain as TEIP155Chain]?.name ?? chain}
                     label={EIP155_CHAINS[chain as TEIP155Chain]?.name ?? chain}
                     variant="soft"
-                    color={'info'}
+                    color="info"
                   />
-                );
-              })}
+                ))}
             </Stack>
 
             <Typography variant="h6">Methods</Typography>
             <Stack direction="row" alignItems="center" spacing={1}>
               {[method].map((method) => (
-                <Chip key={method} label={method} variant="soft" color={'warning'} />
+                <Chip key={method} label={method} variant="soft" color="warning" />
               ))}
             </Stack>
           </Stack>

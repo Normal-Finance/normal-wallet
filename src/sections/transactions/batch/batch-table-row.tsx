@@ -87,7 +87,7 @@ export default function BatchTableRow({
                   },
                 }}
               >
-                {batchId.length > 3 ? batchId.slice(0, 5) + '...' + batchId.slice(-4) : batchId}
+                {batchId.length > 3 ? `${batchId.slice(0, 5)  }...${  batchId.slice(-4)}` : batchId}
               </Box>
             </Link>
           </Tooltip>
@@ -109,7 +109,7 @@ export default function BatchTableRow({
             }
           >
             <ListItemText
-              primary={target.slice(0, 5) + '...' + target.slice(-4)}
+              primary={`${target.slice(0, 5)  }...${  target.slice(-4)}`}
               primaryTypographyProps={{ typography: 'body2' }}
               secondaryTypographyProps={{ component: 'span', color: 'text.disabled' }}
             />
@@ -118,7 +118,7 @@ export default function BatchTableRow({
       </TableCell>
 
       {/* Value */}
-      <TableCell> {parseInt(_value.toString(), 16) / Math.pow(10, 18)} </TableCell>
+      <TableCell> {parseInt(_value.toString(), 16) / 10**18} </TableCell>
 
       {/* Priority */}
       <TableCell>

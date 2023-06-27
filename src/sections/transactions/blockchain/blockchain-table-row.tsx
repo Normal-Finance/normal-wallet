@@ -101,7 +101,7 @@ export default function BlockchainTableRow({
             }
           >
             <ListItemText
-              primary={to !== null ? to.slice(0, 5) + '...' + to.slice(-4) : 'Unknown'}
+              primary={to !== null ? `${to.slice(0, 5)  }...${  to.slice(-4)}` : 'Unknown'}
               primaryTypographyProps={{ typography: 'body2' }}
               secondaryTypographyProps={{ component: 'span', color: 'text.disabled' }}
             />
@@ -124,7 +124,7 @@ export default function BlockchainTableRow({
             }
           >
             <ListItemText
-              primary={from.slice(0, 5) + '...' + from.slice(-4)}
+              primary={`${from.slice(0, 5)  }...${  from.slice(-4)}`}
               primaryTypographyProps={{ typography: 'body2' }}
               secondaryTypographyProps={{ component: 'span', color: 'text.disabled' }}
             />

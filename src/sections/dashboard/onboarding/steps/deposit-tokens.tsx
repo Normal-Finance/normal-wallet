@@ -4,13 +4,13 @@ import { Stack, Card, Button, CardHeader, Typography, Box, Avatar, Alert } from 
 import Grid from '@mui/material/Unstable_Grid2';
 
 // utils
-import DepositAsset from '../modals/DepositAsset';
 import { useWalletContext } from 'src/contexts/WalletContext';
 import { useAlchemyContext } from 'src/contexts/AlchemyContext';
 import { OwnedToken } from 'alchemy-sdk';
-import Receive from '../../wallet/header/modals/Receive';
 import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsContext';
 import Iconify from 'src/components/iconify/iconify';
+import Receive from '../../wallet/header/modals/Receive';
+import DepositAsset from '../modals/DepositAsset';
 
 // ----------------------------------------------------------------------
 
@@ -54,7 +54,7 @@ export default function DepositTokens({}: Props) {
   };
 
   const handleSelectNativeToken = () => {
-    let ethToken: OwnedToken = {
+    const ethToken: OwnedToken = {
       contractAddress: '0x2170Ed0880ac9A755fd29B2688956BD959F933F8',
       rawBalance: '', // TODO: ?
       decimals: 1,
@@ -101,7 +101,7 @@ export default function DepositTokens({}: Props) {
         {ethereumBalance > 0 && (
           <Stack direction="row" alignItems="center">
             <Avatar
-              src={'https://assets.coingecko.com/coins/images/279/small/ethereum.png?1595348880'}
+              src="https://assets.coingecko.com/coins/images/279/small/ethereum.png?1595348880"
               sx={{ width: 48, height: 48 }}
             />
 
@@ -117,14 +117,13 @@ export default function DepositTokens({}: Props) {
           </Stack>
         )}
 
-        {tokenBalances.map((token: OwnedToken, index: number) => {
-          return (
+        {tokenBalances.map((token: OwnedToken, index: number) => (
             <Stack direction="row" alignItems="center" key={index}>
               <Avatar src={token.logo} alt={token.name} sx={{ width: 48, height: 48 }} />
 
               <Box sx={{ flexGrow: 1, ml: 2, minWidth: 100 }}>
                 <Typography variant="subtitle2" sx={{ mb: 0.5 }} noWrap>
-                  {token.balance + ' ' + token.symbol}
+                  {`${token.balance  } ${  token.symbol}`}
                 </Typography>
               </Box>
 
@@ -132,8 +131,7 @@ export default function DepositTokens({}: Props) {
                 Deposit
               </Button>
             </Stack>
-          );
-        })}
+          ))}
       </Stack>
     </Box>
   );

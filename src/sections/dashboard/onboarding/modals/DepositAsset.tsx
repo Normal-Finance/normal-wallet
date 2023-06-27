@@ -127,7 +127,7 @@ export default function DepositAsset({ open, token, toAddress, onClose }: Props)
 
       <Stack sx={{ p: 2.5 }}>
         <Typography variant="body1" sx={{ mb: 2 }}>
-          {balance + ' ' + symbol} available
+          {`${balance  } ${  symbol}`} available
         </Typography>
 
         {renderContent()}

@@ -51,11 +51,11 @@ export default function UpdateEmail({}: Props) {
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
           <Stack spacing={3} sx={{ p: 3 }}>
             <RHFTextField
-              name={'email'}
+              name="email"
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <Iconify width={24} icon={'eva:email-outline'} />
+                    <Iconify width={24} icon="eva:email-outline" />
                   </InputAdornment>
                 ),
               }}

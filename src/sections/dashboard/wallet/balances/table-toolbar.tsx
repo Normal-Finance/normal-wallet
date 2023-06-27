@@ -33,8 +33,7 @@ Props) {
   );
 
   return (
-    <>
-      <Stack
+    <Stack
         spacing={2}
         alignItems={{ xs: 'flex-end', md: 'center' }}
         direction={{
@@ -62,6 +61,5 @@ Props) {
           />
         </Stack>
       </Stack>
-    </>
   );
 }

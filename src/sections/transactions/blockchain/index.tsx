@@ -29,14 +29,14 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 //
-import BlockchainTableRow from './blockchain-table-row';
-import BlockchainTableToolbar from './blockchain-table-toolbar';
-import BlockchainTableFiltersResult from './blockchain-table-filters-result';
 import { AssetTransfersResult } from 'alchemy-sdk';
 import { useAlchemyContext } from 'src/contexts/AlchemyContext';
 import { useWalletContext } from 'src/contexts/WalletContext';
 import { CircularProgress } from '@mui/material';
 import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsContext';
+import BlockchainTableFiltersResult from './blockchain-table-filters-result';
+import BlockchainTableToolbar from './blockchain-table-toolbar';
+import BlockchainTableRow from './blockchain-table-row';
 
 // ----------------------------------------------------------------------
 
@@ -121,8 +121,7 @@ export default function TransactionsBlockchain() {
   );
 
   return (
-    <>
-      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <Card>
           {loading || (transactions.length === 0 && <CircularProgress />)}
 
@@ -271,7 +270,6 @@ export default function TransactionsBlockchain() {
           )}
         </Card>
       </Container>
-    </>
   );
 }
 

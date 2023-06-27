@@ -17,8 +17,7 @@ export default function GetStarted() {
   ];
 
   return (
-    <>
-      <Stack sx={{ maxWidth: 720, mx: 'auto' }}>
+    <Stack sx={{ maxWidth: 720, mx: 'auto' }}>
         <Stack spacing={2} sx={{ mt: 2, mb: 2 }}>
           <Typography variant="body1">
             Connect your wallet to access your new Normal smart wallet and enjoy all these amazing
@@ -67,6 +66,5 @@ export default function GetStarted() {
           theme={themeMode}
         />
       </Stack>
-    </>
   );
 }

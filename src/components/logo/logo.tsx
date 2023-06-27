@@ -35,7 +35,7 @@ const Logo = forwardRef<HTMLDivElement, LogoProps>(
 
     if (disabledLink) {
       if (full) return fullLogo;
-      else return logo;
+      return logo;
     }
 
     return (

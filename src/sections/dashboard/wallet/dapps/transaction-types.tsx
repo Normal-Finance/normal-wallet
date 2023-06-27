@@ -122,8 +122,8 @@ export default function TransactionTypes({
           {/* {priority.name === 'Traditional' &&
             (traditionalGasEstimate === null ? <Skeleton /> : <h4>{JSON.stringify(traditionalGasEstimate)}</h4>)} */}
           {priority.name === 'Batched - Good Till Cancel' &&
-            'Less than ' + fCurrency(priority.estimatedGas)}
-          {priority.name === 'Batched - Instant' && 'Approx. ' + fCurrency(priority.estimatedGas)}
+            `Less than ${  fCurrency(priority.estimatedGas)}`}
+          {priority.name === 'Batched - Instant' && `Approx. ${  fCurrency(priority.estimatedGas)}`}
         </Stack>
       </Stack>
     </Grid>

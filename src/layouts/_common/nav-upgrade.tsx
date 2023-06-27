@@ -47,8 +47,8 @@ export default function NavUpgrade() {
       <Stack alignItems="center">
         <Box sx={{ position: 'relative' }}>
           <Avatar
-            src={'/logo/logo_single.png'}
-            alt={'Normal Logo'}
+            src="/logo/logo_single.png"
+            alt="Normal Logo"
             sx={{ width: 48, height: 48 }}
           />
           <Label

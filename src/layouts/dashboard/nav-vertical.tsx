@@ -14,10 +14,10 @@ import Scrollbar from 'src/components/scrollbar';
 import { usePathname } from 'src/routes/hook';
 import { NavSectionVertical } from 'src/components/nav-section';
 //
+import { Divider } from '@mui/material';
 import { NAV } from '../config-layout';
 import { useNavData } from './config-navigation';
 import { NavAccount, NavToggleButton, NavUpgrade } from '../_common';
-import { Divider } from '@mui/material';
 
 // ----------------------------------------------------------------------
 

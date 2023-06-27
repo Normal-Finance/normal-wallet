@@ -30,8 +30,7 @@ import {
 import { LoadingButton } from '@mui/lab';
 // components
 import { useSnackbar } from 'src/components/snackbar';
-import FormProvider from 'src/components/hook-form';
-import { RHFTextField, RHFSelect } from 'src/components/hook-form';
+import FormProvider, { RHFTextField, RHFSelect } from 'src/components/hook-form';
 import { useWebsocketContext } from 'src/contexts/WebsocketContext';
 import { useWalletContext } from 'src/contexts/WalletContext';
 import { OwnedToken, TransactionRequest } from 'alchemy-sdk';
@@ -180,7 +179,7 @@ export default function SendForm({ token, onClose }: Props) {
       const iface = new ethers.utils.Interface(abi);
       const calldata = iface.encodeFunctionData('transfer', [values.toAddress, value]);
 
-      let _transaction: TransactionRequest = {
+      const _transaction: TransactionRequest = {
         to: token.contractAddress,
         from: walletAddresses.smart,
         data: calldata,

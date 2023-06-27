@@ -10,13 +10,6 @@ import { getSdkError } from '@walletconnect/utils';
 import { formatJsonRpcError } from '@json-rpc-tools/utils';
 
 // consts
-import {
-  DEFAULT_EIP155_METHODS,
-  DEFAULT_EIP155_EVENTS,
-  WC2_SUPPORTED_METHODS,
-  EIP155_SIGNING_METHODS,
-  EIP155_CHAINS,
-} from './wcConsts';
 import { NORMAL_WALLET_INFO, WALLET_CONNECT } from 'src/config-global';
 
 // components
@@ -24,6 +17,13 @@ import { useSnackbar } from 'src/components/snackbar';
 
 import ModalStore from 'src/store/ModalStore';
 import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsContext';
+import {
+  DEFAULT_EIP155_METHODS,
+  DEFAULT_EIP155_EVENTS,
+  WC2_SUPPORTED_METHODS,
+  EIP155_SIGNING_METHODS,
+  EIP155_CHAINS,
+} from './wcConsts';
 
 const WC2_VERBOSE = process.env.REACT_APP_WC2_VERBOSE || 0;
 
@@ -73,9 +73,7 @@ export default function useWalletConnectV2({ account, chainId, clearWcClipboard 
   }, []);
 
   const getConnectionFromSessionTopic = useCallback(
-    (sessionTopic: any) => {
-      return connections.find((c: any) => c.sessionTopics.includes(sessionTopic));
-    },
+    (sessionTopic: any) => connections.find((c: any) => c.sessionTopics.includes(sessionTopic)),
     [connections]
   );
 
@@ -97,7 +95,7 @@ export default function useWalletConnectV2({ account, chainId, clearWcClipboard 
 
       setIsConnecting(true);
       try {
-        let res = await client.pair({ uri: connectorOpts.uri });
+        const res = await client.pair({ uri: connectorOpts.uri });
         if (WC2_VERBOSE) enqueueSnackbar('pairing result', res);
       } catch (e) {
         enqueueSnackbar(e.message, { variant: 'error' });
@@ -132,14 +130,14 @@ export default function useWalletConnectV2({ account, chainId, clearWcClipboard 
         }
       }
 
-      dispatch(disconnected({ connectionId: connectionId }));
+      dispatch(disconnected({ connectionId }));
     },
     [client, connections]
   );
 
-  ////////////////////////
+  /// /////////////////////
   // SESSION HANDLERS START
-  ////////////////////////////////////
+  /// /////////////////////////////////
 
   const onSessionProposal = useCallback(
     async (proposal: any) => {
@@ -173,7 +171,7 @@ export default function useWalletConnectV2({ account, chainId, clearWcClipboard 
       const namespaces = {
         eip155: {
           chains: supportedChains,
-          accounts: usedChains.map((a: any) => a + ':' + account),
+          accounts: usedChains.map((a: any) => `${a  }:${  account}`),
           methods: WC2_SUPPORTED_METHODS,
           events: DEFAULT_EIP155_EVENTS,
         },
@@ -185,7 +183,7 @@ export default function useWalletConnectV2({ account, chainId, clearWcClipboard 
 
       clearWcClipboard();
       if (!existingClientSession) {
-        if (WC2_VERBOSE) enqueueSnackbar('WC2 Approving client ' + namespaces);
+        if (WC2_VERBOSE) enqueueSnackbar(`WC2 Approving client ${  namespaces}`);
 
         ModalStore.open('SessionProposalModal', {
           proposal,
@@ -199,7 +197,7 @@ export default function useWalletConnectV2({ account, chainId, clearWcClipboard 
               .then((approveResult: any) => {
                 trackEvent(AnalyticsEvents.APPROVED_CONNECT_DAPP, {});
 
-                if (WC2_VERBOSE) enqueueSnackbar('WC2 Approve result ' + approveResult);
+                if (WC2_VERBOSE) enqueueSnackbar(`WC2 Approve result ${  approveResult}`);
 
                 setIsConnecting(false);
                 dispatch(
@@ -209,7 +207,7 @@ export default function useWalletConnectV2({ account, chainId, clearWcClipboard 
                     proposerPublicKey: params.proposer.publicKey,
                     session: { peerMeta: proposer.metadata },
                     namespacedChainIds: usedChains,
-                    proposal: proposal,
+                    proposal,
                   })
                 );
 
@@ -242,7 +240,7 @@ export default function useWalletConnectV2({ account, chainId, clearWcClipboard 
       const { id, topic, params } = requestEvent;
       const { request: wcRequest } = params;
 
-      const namespacedChainId = (params.chainId || 'eip155:' + stateRef.current.chainId).split(':');
+      const namespacedChainId = (params.chainId || `eip155:${  stateRef.current.chainId}`).split(':');
 
       const namespace = namespacedChainId[0];
       const chainId = namespacedChainId[1] * 1;
@@ -262,7 +260,7 @@ export default function useWalletConnectV2({ account, chainId, clearWcClipboard 
       }
 
       if (WC2_SUPPORTED_METHODS.includes(wcRequest.method)) {
-        let method = wcRequest.method;
+        const {method} = wcRequest;
         if (WC2_VERBOSE) enqueueSnackbar('requestEvent.request.method', method);
 
         const connection = getConnectionFromSessionTopic(topic);
@@ -332,7 +330,7 @@ export default function useWalletConnectV2({ account, chainId, clearWcClipboard 
             topic: sessionToDelete.topic,
           })
           .catch((err: any) => {
-            console.error('could not disconnect topic ' + deletion.topic);
+            console.error(`could not disconnect topic ${  deletion.topic}`);
           });
       }
       dispatch(disconnected({ connectionId: connectionToDelete.connectionId }));
@@ -340,11 +338,11 @@ export default function useWalletConnectV2({ account, chainId, clearWcClipboard 
     [client, dispatch, getConnectionFromSessionTopic]
   );
 
-  ////////////////////////
+  /// /////////////////////
   // SESSION HANDLERS STOP
-  ////////////////////////////////////
+  /// /////////////////////////////////
 
-  //rerun for every state change
+  // rerun for every state change
   useEffect(() => {
     if (client) {
       // updating active connections
@@ -369,12 +367,10 @@ export default function useWalletConnectV2({ account, chainId, clearWcClipboard 
               if (WC2_VERBOSE) enqueueSnackbar('WC2 Updated ', updateResult);
             })
             .catch((err: any) => {
-              if (WC2_VERBOSE) enqueueSnackbar('WC2 Update Error: ' + err.message, session);
+              if (WC2_VERBOSE) enqueueSnackbar(`WC2 Update Error: ${  err.message}`, session);
             });
-        } else {
-          if (WC2_VERBOSE)
-            enqueueSnackbar('WC2 : session topic not found in connections ' + session.topic);
-        }
+        } else if (WC2_VERBOSE)
+            enqueueSnackbar(`WC2 : session topic not found in connections ${  session.topic}`);
       });
     }
   }, [client, connections, account, chainId]);
@@ -409,7 +405,7 @@ export default function useWalletConnectV2({ account, chainId, clearWcClipboard 
   ]);
 
   return {
-    connections: connections,
+    connections,
     isConnecting,
     connect,
     disconnect,

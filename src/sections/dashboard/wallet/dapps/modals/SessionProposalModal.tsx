@@ -26,7 +26,7 @@ export default function SessionProposalModal() {
   const { proposer } = params;
 
   return (
-    <Dialog maxWidth="sm" open={true}>
+    <Dialog maxWidth="sm" open>
       <DialogTitle> Session Proposal </DialogTitle>
 
       <DialogContent sx={{ overflow: 'unset' }}>

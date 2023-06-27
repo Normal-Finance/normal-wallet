@@ -48,7 +48,7 @@ export default function TransactionsOverview({ transactions, ...other }: Props) 
   return (
     <Card {...other}>
       <CardHeader
-        title={'Active Transactions'}
+        title="Active Transactions"
         subheader={"New and pending transactions you've submitted for batching"}
         sx={{ mb: 1 }}
       />
@@ -127,7 +127,7 @@ function TransactionItem({ transaction, onCancel, onUpdatePriority }: Transactio
     >
       <Avatar
         variant="rounded"
-        src={'/assets/icons/navbar/ic_invoice.svg'}
+        src="/assets/icons/navbar/ic_invoice.svg"
         sx={{ width: 48, height: 48, flexShrink: 0 }}
       />
 

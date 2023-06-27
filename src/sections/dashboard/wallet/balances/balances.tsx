@@ -22,11 +22,11 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 //
+import { Skeleton, CardHeader } from '@mui/material';
+import { OwnedToken } from 'alchemy-sdk';
 import MyTableRow from './table-row';
 import TableToolbar from './table-toolbar';
 import TableFiltersResult from './table-filters-result';
-import { Skeleton, CardHeader } from '@mui/material';
-import { OwnedToken } from 'alchemy-sdk';
 
 // ----------------------------------------------------------------------
 

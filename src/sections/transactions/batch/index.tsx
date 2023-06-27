@@ -31,12 +31,12 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 //
-import BatchTableRow from './batch-table-row';
-import BatchTableToolbar from './batch-table-toolbar';
-import BatchTableFiltersResult from './batch-table-filters-result';
 import { Transaction, TransactionStatus } from 'src/types/transaction';
 import { fTimestamp } from 'src/utils/format-time';
 import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsContext';
+import BatchTableRow from './batch-table-row';
+import BatchTableToolbar from './batch-table-toolbar';
+import BatchTableFiltersResult from './batch-table-filters-result';
 
 // ----------------------------------------------------------------------
 
@@ -120,8 +120,7 @@ export default function TransactionsBatch() {
   );
 
   return (
-    <>
-      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <Card>
           <Tabs
             value={filters.status}
@@ -260,7 +259,6 @@ export default function TransactionsBatch() {
           />
         </Card>
       </Container>
-    </>
   );
 }
 

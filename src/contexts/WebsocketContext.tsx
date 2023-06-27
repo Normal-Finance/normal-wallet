@@ -19,12 +19,12 @@ import {
 } from 'src/redux/slices/state';
 
 import { Events } from 'src/types/websocket';
-import { useWalletContext } from './WalletContext';
 import { TransactionPriority } from 'src/types/transaction';
-import { AnalyticsEvents, useAnalyticsContext } from './AnalyticsContext';
 import { useSnackbar } from 'src/components/snackbar';
 
 import { captureException } from '@sentry/nextjs';
+import { AnalyticsEvents, useAnalyticsContext } from './AnalyticsContext';
+import { useWalletContext } from './WalletContext';
 
 type Props = {
   children: React.ReactNode;
@@ -166,7 +166,7 @@ export const WebsocketContextProvider = ({ children }: Props) => {
             break;
 
           case Events.CANCEL_TRANSACTION:
-            let { transactionId } = data;
+            const { transactionId } = data;
 
             dispatch(cancelTransaction({ transactionId }));
 
@@ -187,16 +187,16 @@ export const WebsocketContextProvider = ({ children }: Props) => {
       try {
         const payload = 'Hello world';
         const address = (await smartWallet?.getAddress()) || '';
-        let message = { address, payload };
+        const message = { address, payload };
 
-        let signature = '123';
+        const signature = '123';
         // if (smartWallet) signature = await smartWallet.signMessage(payload);
 
         sendJsonMessage({
           action: Events.GET_STATE,
           message: {
             ...message,
-            signature: signature,
+            signature,
           },
         });
       } catch (error) {
@@ -216,7 +216,7 @@ export const WebsocketContextProvider = ({ children }: Props) => {
       try {
         const payload = { email };
         const address = await smartWallet.getAddress();
-        let message = { address, payload };
+        const message = { address, payload };
 
         const signature = await smartWallet.signMessage(JSON.stringify(payload));
 
@@ -224,7 +224,7 @@ export const WebsocketContextProvider = ({ children }: Props) => {
           action: Events.UPDATE_EMAIL,
           message: {
             ...message,
-            signature: signature,
+            signature,
           },
         });
 
@@ -253,15 +253,15 @@ export const WebsocketContextProvider = ({ children }: Props) => {
     if (readyState !== ReadyState.OPEN) {
       websocketNotOpenError();
       return false;
-    } else if (!smartWallet) {
+    } if (!smartWallet) {
       walletNotConnectedError();
       return false;
-    } else {
+    } 
       try {
         const transaction = { account, target, value, calldata };
         const payload = { transaction, priority };
         const address = await smartWallet.getAddress();
-        let message = {
+        const message = {
           address,
           payload,
         };
@@ -272,7 +272,7 @@ export const WebsocketContextProvider = ({ children }: Props) => {
           action: Events.NEW_TRANSACTION,
           message: {
             ...message,
-            signature: signature,
+            signature,
           },
         });
 
@@ -283,7 +283,7 @@ export const WebsocketContextProvider = ({ children }: Props) => {
         generalError('Unable to submit new transaction', error);
         return false;
       }
-    }
+    
   };
 
   /**
@@ -300,7 +300,7 @@ export const WebsocketContextProvider = ({ children }: Props) => {
       try {
         const payload = { transactionId, priority };
         const address = await smartWallet.getAddress();
-        let message = { address, payload };
+        const message = { address, payload };
 
         const signature = await smartWallet.signMessage(JSON.stringify(message));
 
@@ -308,7 +308,7 @@ export const WebsocketContextProvider = ({ children }: Props) => {
           action: Events.UPDATE_TRANSACTION_PRIORITY,
           message: {
             ...message,
-            signature: signature,
+            signature,
           },
         });
 
@@ -330,7 +330,7 @@ export const WebsocketContextProvider = ({ children }: Props) => {
       try {
         const payload = { transactionId };
         const address = await smartWallet.getAddress();
-        let message = { address, payload };
+        const message = { address, payload };
 
         const signature = await smartWallet.signMessage(JSON.stringify(message));
 
@@ -338,7 +338,7 @@ export const WebsocketContextProvider = ({ children }: Props) => {
           action: Events.CANCEL_TRANSACTION,
           message: {
             ...message,
-            signature: signature,
+            signature,
           },
         });
 

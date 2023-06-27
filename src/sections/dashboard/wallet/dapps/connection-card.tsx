@@ -58,7 +58,7 @@ export default function ConnectionCard({ connection, onDisconnect, sx, ...other 
       }}
     >
       <IconButton
-        color={'success'}
+        color="success"
         component={RouterLink}
         href={connection.session.peerMeta.url}
         onClick={() => trackEvent(AnalyticsEvents.VIEWED_CONNECTED_DAPP, { connection })}
@@ -79,7 +79,7 @@ export default function ConnectionCard({ connection, onDisconnect, sx, ...other 
       onClick={details.onTrue}
       primary={connection.session.peerMeta.name}
       secondary={
-        <Label variant={isLight ? 'soft' : 'filled'} color={'success'}>
+        <Label variant={isLight ? 'soft' : 'filled'} color="success">
           Connected
         </Label>
       }
@@ -122,7 +122,7 @@ export default function ConnectionCard({ connection, onDisconnect, sx, ...other 
         {...other}
       >
         <Avatar
-          alt={'idk'}
+          alt="idk"
           src={connection.session.peerMeta.icons[0]}
           sx={{ width: 36, height: 36, mr: 1 }}
         />

@@ -12,8 +12,8 @@ import {
 import { SmartWallet } from '@thirdweb-dev/wallets';
 import { Chain, Goerli } from '@thirdweb-dev/chains';
 import { THIRDWEB } from 'src/config-global';
-import { AnalyticsEvents, useAnalyticsContext } from './AnalyticsContext';
 import { useSnackbar } from 'src/components/snackbar';
+import { AnalyticsEvents, useAnalyticsContext } from './AnalyticsContext';
 
 type Props = {
   children: React.ReactNode;
@@ -110,7 +110,7 @@ export const WalletContextProvider = ({ children }: Props) => {
         chain,
         switchChain,
         personalWallet: wallet,
-        smartWallet: smartWallet,
+        smartWallet,
         walletAddresses,
         smartWalletDisconnectedError,
       }}

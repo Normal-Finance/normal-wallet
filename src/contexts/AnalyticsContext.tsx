@@ -5,7 +5,7 @@ import { MIXPANEL_PROJECT_TOKEN } from 'src/config-global';
 import { captureException } from '@sentry/nextjs';
 
 mixpanel.init(MIXPANEL_PROJECT_TOKEN, {
-  debug: process.env.NODE_ENV === 'production' ? false : true,
+  debug: process.env.NODE_ENV !== 'production',
 });
 
 export enum AnalyticsEvents {
