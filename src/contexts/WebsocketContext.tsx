@@ -175,7 +175,7 @@ export const WebsocketContextProvider = ({ children }: Props) => {
         }
       }
     }
-  }, [lastJsonMessage, setMessageHistory, dispatch]);
+  }, [lastJsonMessage, setMessageHistory]);
 
   /**
    * Fetches latest state of Normal

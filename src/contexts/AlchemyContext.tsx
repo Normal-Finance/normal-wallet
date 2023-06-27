@@ -55,7 +55,7 @@ export const AlchemyContextProvider = ({ children }: Props) => {
   // If the smart wallet or chain is changed, update balances and transactions
   useEffect(() => {
     if (smartWallet || chain) getBalancesAndTransactions();
-  }, [smartWallet, chain, getBalancesAndTransactions]);
+  }, [smartWallet, chain]);
 
   // TODO: upon trigger, the resetting of state make the dashboard show the wrong conditions
   // Update the balances and transactions every UPDATE_INTERVAL (3 minutes)

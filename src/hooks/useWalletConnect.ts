@@ -80,7 +80,8 @@ export default function useWalletConnect({ account, chainId }: Props) {
         enqueueSnackbar('Invalid WalletConnect uri', { variant: 'error' });
       }
     },
-    [connectV2, connectLegacy, enqueueSnackbar]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [connectV2, connectLegacy]
   );
 
   const disconnect = useCallback(
@@ -107,7 +108,8 @@ export default function useWalletConnect({ account, chainId }: Props) {
       enqueueSnackbar('Invalid WalletConnect uri', { variant: 'error' });
 
     if (wcUri) connect({ uri: wcUri });
-  }, [account, connect, enqueueSnackbar]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [account, connect]);
 
   useEffect(() => {
     // hax TODO: ask why? seems working without
@@ -137,7 +139,7 @@ export default function useWalletConnect({ account, chainId }: Props) {
     return () => {
       document.removeEventListener('visibilitychange', tryReadClipboard);
     };
-  }, [connect, account, enqueueSnackbar]);
+  }, [connect, account]);
 
   return {
     connections,

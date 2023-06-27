@@ -59,7 +59,8 @@ export const WalletContextProvider = ({ children }: Props) => {
       trackEvent(AnalyticsEvents.CONNECTED_WALLET, { wallet });
       connectSmartWallet();
     }
-  }, [wallet, connectSmartWallet, trackEvent]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [wallet]);
 
   // If a wallet is disconnected, reset all context state
   useEffect(() => {
@@ -69,7 +70,8 @@ export const WalletContextProvider = ({ children }: Props) => {
   // If both wallets are connected, track user for analytics
   useEffect(() => {
     if (wallet && smartWallet) setUser(walletAddresses.personal, walletAddresses.smart);
-  }, [smartWallet, setUser, wallet, walletAddresses]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [smartWallet]);
 
   function smartWalletDisconnectedError() {
     enqueueSnackbar('Smart wallet disconnected', { variant: 'error' });

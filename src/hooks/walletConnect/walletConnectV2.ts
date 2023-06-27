@@ -70,7 +70,8 @@ export default function useWalletConnectV2({ account, chainId, clearWcClipboard 
       alert(err);
       enqueueSnackbar(err);
     }
-  }, [enqueueSnackbar]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const getConnectionFromSessionTopic = useCallback(
     (sessionTopic: any) => connections.find((c: any) => c.sessionTopics.includes(sessionTopic)),
@@ -101,7 +102,8 @@ export default function useWalletConnectV2({ account, chainId, clearWcClipboard 
         enqueueSnackbar(e.message, { variant: 'error' });
       }
     },
-    [client, setIsConnecting, enqueueSnackbar]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [client, setIsConnecting]
   );
 
   const disconnect = useCallback(
@@ -132,7 +134,8 @@ export default function useWalletConnectV2({ account, chainId, clearWcClipboard 
 
       dispatch(disconnected({ connectionId }));
     },
-    [client, connections, dispatch, enqueueSnackbar]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [client, connections]
   );
 
   /// /////////////////////
@@ -232,7 +235,8 @@ export default function useWalletConnectV2({ account, chainId, clearWcClipboard 
         setIsConnecting(false);
       }
     },
-    [client, account, clearWcClipboard, dispatch, enqueueSnackbar, trackEvent]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [client, account, clearWcClipboard]
   );
 
   const onSessionRequest = useCallback(
@@ -316,7 +320,8 @@ export default function useWalletConnectV2({ account, chainId, clearWcClipboard 
         });
       }
     },
-    [client, getConnectionFromSessionTopic, enqueueSnackbar, trackEvent]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [client, getConnectionFromSessionTopic]
   );
 
   const onSessionDelete = useCallback(
@@ -377,7 +382,8 @@ export default function useWalletConnectV2({ account, chainId, clearWcClipboard 
           enqueueSnackbar(`WC2 : session topic not found in connections ${session.topic}`);
       });
     }
-  }, [client, connections, account, chainId, enqueueSnackbar]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [client, connections, account, chainId]);
 
   useEffect(() => {
     if (initialized) return;

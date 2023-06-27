@@ -82,7 +82,8 @@ export default function useWalletConnectLegacy({ account, chainId, clearWcClipbo
         })
       );
   };
-  useEffect(maybeUpdateSessions, [account, chainId, connections, dispatch]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(maybeUpdateSessions, [account, chainId]);
   // we need this so we can invoke the latest version from any event handler
   stateRef.current.maybeUpdateSessions = maybeUpdateSessions;
 
