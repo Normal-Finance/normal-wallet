@@ -8,7 +8,7 @@ import TableCell from '@mui/material/TableCell';
 import ListItemText from '@mui/material/ListItemText';
 // hooks
 // utils
-import { fEtherscanAddress, fEtherscanBlock, fEtherscanTx } from 'src/utils/format-string';
+import { fEtherscanAddress, fEtherscanTx } from 'src/utils/format-string';
 // types
 import { Transaction, TransactionPriority, TransactionStatus } from 'src/types/transaction';
 // components
@@ -37,18 +37,7 @@ export default function BatchTableRow({
   onSelectTransaction,
   onCancelTransaction,
 }: Props) {
-  const {
-    transactionId,
-    account,
-    target,
-    _value,
-    calldata,
-    priority,
-    current_status,
-    batchId,
-    createdAt,
-    updatedAt,
-  } = transaction;
+  const { target, _value, priority, current_status, batchId, createdAt } = transaction;
 
   const { trackEvent } = useAnalyticsContext();
 
@@ -87,7 +76,7 @@ export default function BatchTableRow({
                   },
                 }}
               >
-                {batchId.length > 3 ? `${batchId.slice(0, 5)  }...${  batchId.slice(-4)}` : batchId}
+                {batchId.length > 3 ? `${batchId.slice(0, 5)}...${batchId.slice(-4)}` : batchId}
               </Box>
             </Link>
           </Tooltip>
@@ -109,7 +98,7 @@ export default function BatchTableRow({
             }
           >
             <ListItemText
-              primary={`${target.slice(0, 5)  }...${  target.slice(-4)}`}
+              primary={`${target.slice(0, 5)}...${target.slice(-4)}`}
               primaryTypographyProps={{ typography: 'body2' }}
               secondaryTypographyProps={{ component: 'span', color: 'text.disabled' }}
             />
@@ -118,7 +107,7 @@ export default function BatchTableRow({
       </TableCell>
 
       {/* Value */}
-      <TableCell> {parseInt(_value.toString(), 16) / 10**18} </TableCell>
+      <TableCell> {parseInt(_value.toString(), 16) / 10 ** 18} </TableCell>
 
       {/* Priority */}
       <TableCell>

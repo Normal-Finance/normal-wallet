@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 // @mui
-import { Divider, IconButton, Stack, Button, Box } from '@mui/material';
+import { IconButton, Stack, Button, Box } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
 
 // components

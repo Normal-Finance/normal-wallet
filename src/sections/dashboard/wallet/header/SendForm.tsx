@@ -148,7 +148,7 @@ export default function SendForm({ token, onClose }: Props) {
           break;
 
         case TransactionPriority.GTC:
-        case TransactionPriority.INSTANT:
+        case TransactionPriority.INSTANT: {
           const success = await newTransaction(
             walletAddresses.smart,
             transaction.to!,
@@ -162,9 +162,9 @@ export default function SendForm({ token, onClose }: Props) {
           }
 
           break;
-
+        }
         default:
-          throw 'Unsupported Transaction Priority';
+          throw new Error('Unsupported Transaction Priority');
       }
     } else enqueueSnackbar('No wallet or transaction', { variant: 'error' });
   };
@@ -187,7 +187,7 @@ export default function SendForm({ token, onClose }: Props) {
       };
       setTransaction(_transaction);
     }
-  }, [values]);
+  }, [values, token, walletAddresses]);
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>

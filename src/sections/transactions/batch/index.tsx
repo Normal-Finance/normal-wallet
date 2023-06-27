@@ -121,144 +121,144 @@ export default function TransactionsBatch() {
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
-        <Card>
-          <Tabs
-            value={filters.status}
-            onChange={handleFilterStatus}
-            sx={{
-              px: 2.5,
-              boxShadow: (theme) => `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
-            }}
-          >
-            {STATUS_OPTIONS.map((tab) => (
-              <Tab
-                key={tab.value}
-                iconPosition="end"
-                value={tab.value}
-                label={tab.label}
-                icon={
-                  <Label
-                    variant={
-                      ((tab.value === 'all' || tab.value === filters.status) && 'filled') || 'soft'
-                    }
-                    color={
-                      (tab.value === 'new' && 'info') ||
-                      (tab.value === 'pending' && 'warning') ||
-                      (tab.value === 'completed' && 'success') ||
-                      (tab.value === 'failed' && 'error') ||
-                      'default'
-                    }
-                  >
-                    {tab.value === 'all' && userTransactions.length}
-                    {tab.value === 'new' &&
-                      userTransactions.filter(
-                        (transaction) => transaction.current_status === TransactionStatus.NEW
-                      ).length}
+      <Card>
+        <Tabs
+          value={filters.status}
+          onChange={handleFilterStatus}
+          sx={{
+            px: 2.5,
+            boxShadow: (theme) => `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
+          }}
+        >
+          {STATUS_OPTIONS.map((tab) => (
+            <Tab
+              key={tab.value}
+              iconPosition="end"
+              value={tab.value}
+              label={tab.label}
+              icon={
+                <Label
+                  variant={
+                    ((tab.value === 'all' || tab.value === filters.status) && 'filled') || 'soft'
+                  }
+                  color={
+                    (tab.value === 'new' && 'info') ||
+                    (tab.value === 'pending' && 'warning') ||
+                    (tab.value === 'completed' && 'success') ||
+                    (tab.value === 'failed' && 'error') ||
+                    'default'
+                  }
+                >
+                  {tab.value === 'all' && userTransactions.length}
+                  {tab.value === 'new' &&
+                    userTransactions.filter(
+                      (transaction) => transaction.current_status === TransactionStatus.NEW
+                    ).length}
 
-                    {tab.value === 'pending' &&
-                      userTransactions.filter(
-                        (transaction) => transaction.current_status === TransactionStatus.PENDING
-                      ).length}
+                  {tab.value === 'pending' &&
+                    userTransactions.filter(
+                      (transaction) => transaction.current_status === TransactionStatus.PENDING
+                    ).length}
 
-                    {tab.value === 'completed' &&
-                      userTransactions.filter(
-                        (transaction) => transaction.current_status === TransactionStatus.COMPLETED
-                      ).length}
+                  {tab.value === 'completed' &&
+                    userTransactions.filter(
+                      (transaction) => transaction.current_status === TransactionStatus.COMPLETED
+                    ).length}
 
-                    {tab.value === 'failed' &&
-                      userTransactions.filter(
-                        (transaction) => transaction.current_status === TransactionStatus.FAILED
-                      ).length}
-                  </Label>
-                }
-              />
-            ))}
-          </Tabs>
+                  {tab.value === 'failed' &&
+                    userTransactions.filter(
+                      (transaction) => transaction.current_status === TransactionStatus.FAILED
+                    ).length}
+                </Label>
+              }
+            />
+          ))}
+        </Tabs>
 
-          <BatchTableToolbar
+        <BatchTableToolbar
+          filters={filters}
+          onFilters={handleFilters}
+          //
+          canReset={canReset}
+          onResetFilters={handleResetFilters}
+        />
+
+        {canReset && (
+          <BatchTableFiltersResult
             filters={filters}
             onFilters={handleFilters}
             //
-            canReset={canReset}
             onResetFilters={handleResetFilters}
+            //
+            results={dataFiltered.length}
+            sx={{ p: 2.5, pt: 0 }}
           />
+        )}
 
-          {canReset && (
-            <BatchTableFiltersResult
-              filters={filters}
-              onFilters={handleFilters}
-              //
-              onResetFilters={handleResetFilters}
-              //
-              results={dataFiltered.length}
-              sx={{ p: 2.5, pt: 0 }}
-            />
-          )}
+        <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
+          <Scrollbar>
+            <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 960 }}>
+              <TableHeadCustom
+                order={table.order}
+                orderBy={table.orderBy}
+                headLabel={TABLE_HEAD}
+                rowCount={tableData.length}
+                numSelected={table.selected.length}
+                onSort={table.onSort}
+                onSelectAllRows={(checked) =>
+                  table.onSelectAllRows(
+                    checked,
+                    tableData.map((transaction) => transaction.transactionId)
+                  )
+                }
+              />
 
-          <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
-            <Scrollbar>
-              <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 960 }}>
-                <TableHeadCustom
-                  order={table.order}
-                  orderBy={table.orderBy}
-                  headLabel={TABLE_HEAD}
-                  rowCount={tableData.length}
-                  numSelected={table.selected.length}
-                  onSort={table.onSort}
-                  onSelectAllRows={(checked) =>
-                    table.onSelectAllRows(
-                      checked,
-                      tableData.map((transaction) => transaction.transactionId)
-                    )
-                  }
+              <TableBody>
+                {dataFiltered
+                  .slice(
+                    table.page * table.rowsPerPage,
+                    table.page * table.rowsPerPage + table.rowsPerPage
+                  )
+                  .map((transaction) => (
+                    <BatchTableRow
+                      key={transaction.transactionId}
+                      transaction={transaction}
+                      selected={table.selected.includes(transaction.transactionId)}
+                      onSelectTransaction={() => {
+                        table.onSelectRow(transaction.transactionId);
+                        trackEvent(AnalyticsEvents.SELECTED_BATCH_TRANSACTION, { transaction });
+                      }}
+                      onCopyTransactionHash={(hash: string) => {
+                        // ...
+                        trackEvent(AnalyticsEvents.COPIED_BATCH_TRANSACTION_HASH, { hash });
+                      }}
+                      onCancelTransaction={() => {}}
+                    />
+                  ))}
+
+                <TableEmptyRows
+                  height={denseHeight}
+                  emptyRows={emptyRows(table.page, table.rowsPerPage, tableData.length)}
                 />
 
-                <TableBody>
-                  {dataFiltered
-                    .slice(
-                      table.page * table.rowsPerPage,
-                      table.page * table.rowsPerPage + table.rowsPerPage
-                    )
-                    .map((transaction) => (
-                      <BatchTableRow
-                        key={transaction.transactionId}
-                        transaction={transaction}
-                        selected={table.selected.includes(transaction.transactionId)}
-                        onSelectTransaction={() => {
-                          table.onSelectRow(transaction.transactionId);
-                          trackEvent(AnalyticsEvents.SELECTED_BATCH_TRANSACTION, { transaction });
-                        }}
-                        onCopyTransactionHash={(hash: string) => {
-                          // ...
-                          trackEvent(AnalyticsEvents.COPIED_BATCH_TRANSACTION_HASH, { hash });
-                        }}
-                        onCancelTransaction={() => {}}
-                      />
-                    ))}
+                <TableNoData notFound={notFound} />
+              </TableBody>
+            </Table>
+          </Scrollbar>
+        </TableContainer>
 
-                  <TableEmptyRows
-                    height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, tableData.length)}
-                  />
-
-                  <TableNoData notFound={notFound} />
-                </TableBody>
-              </Table>
-            </Scrollbar>
-          </TableContainer>
-
-          <TablePaginationCustom
-            count={dataFiltered.length}
-            page={table.page}
-            rowsPerPage={table.rowsPerPage}
-            onPageChange={table.onChangePage}
-            onRowsPerPageChange={table.onChangeRowsPerPage}
-            //
-            dense={table.dense}
-            onChangeDense={table.onChangeDense}
-          />
-        </Card>
-      </Container>
+        <TablePaginationCustom
+          count={dataFiltered.length}
+          page={table.page}
+          rowsPerPage={table.rowsPerPage}
+          onPageChange={table.onChangePage}
+          onRowsPerPageChange={table.onChangeRowsPerPage}
+          //
+          dense={table.dense}
+          onChangeDense={table.onChangeDense}
+        />
+      </Card>
+    </Container>
   );
 }
 

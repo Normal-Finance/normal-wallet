@@ -22,6 +22,7 @@ import {
 } from 'src/utils/walletConnect/EIP155RequestHandlerUtil';
 import { getSignParamsMessage } from 'src/utils/walletConnect/HelperUtil';
 import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsContext';
+import { TransactionPriority } from 'src/types/transaction';
 
 export default function SessionSignModal() {
   const { smartWallet } = useWalletContext();
@@ -49,9 +50,16 @@ export default function SessionSignModal() {
     if (requestEvent) {
       const response = await approveEIP155Request(
         requestEvent,
-        smartWallet,
-        (account: string, target: string, value: string, calldata: string) => {
-          newTransaction(account, target, value, calldata);
+        smartWallet!,
+        null,
+        (
+          account: string,
+          target: string,
+          value: string,
+          calldata: string,
+          priority: TransactionPriority
+        ) => {
+          newTransaction(account, target, value, calldata, priority);
         }
       );
       await client.respond({
@@ -96,13 +104,13 @@ export default function SessionSignModal() {
             <Typography variant="h6">Blockchain(s)</Typography>
             <Stack direction="row" alignItems="center" spacing={1}>
               {[chainId ?? ''].map((chain) => (
-                  <Chip
-                    key={EIP155_CHAINS[chain as TEIP155Chain]?.name ?? chain}
-                    label={EIP155_CHAINS[chain as TEIP155Chain]?.name ?? chain}
-                    variant="soft"
-                    color="info"
-                  />
-                ))}
+                <Chip
+                  key={EIP155_CHAINS[chain as TEIP155Chain]?.name ?? chain}
+                  label={EIP155_CHAINS[chain as TEIP155Chain]?.name ?? chain}
+                  variant="soft"
+                  color="info"
+                />
+              ))}
             </Stack>
 
             <Typography variant="h6">Methods</Typography>

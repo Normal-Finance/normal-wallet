@@ -92,20 +92,20 @@ export default function Send({ open, ethereumBalance, tokenBalances, onClose }: 
 
           {/* Tokens */}
           {tokenBalances.map((token: OwnedToken, index: any) => (
-              <MenuItem
-                key={index}
-                value={index}
-                sx={{
-                  mx: 1,
-                  my: 0.5,
-                  borderRadius: 0.75,
-                  typography: 'body2',
-                  textTransform: 'capitalize',
-                }}
-              >
-                {token.name}
-              </MenuItem>
-            ))}
+            <MenuItem
+              key={index}
+              value={index}
+              sx={{
+                mx: 1,
+                my: 0.5,
+                borderRadius: 0.75,
+                typography: 'body2',
+                textTransform: 'capitalize',
+              }}
+            >
+              {token.name}
+            </MenuItem>
+          ))}
         </Select>
 
         {selectedIndex !== -2 && (

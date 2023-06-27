@@ -56,7 +56,7 @@ export const WalletContextProvider = ({ children }: Props) => {
       trackEvent(AnalyticsEvents.CONNECTED_WALLET, { wallet });
       connectSmartWallet();
     }
-  }, [wallet]);
+  }, [wallet, connectSmartWallet, trackEvent]);
 
   // If a wallet is disconnected, reset all context state
   useEffect(() => {
@@ -66,7 +66,7 @@ export const WalletContextProvider = ({ children }: Props) => {
   // If both wallets are connected, track user for analytics
   useEffect(() => {
     if (wallet && smartWallet) setUser(walletAddresses.personal, walletAddresses.smart);
-  }, [smartWallet]);
+  }, [smartWallet, setUser, wallet, walletAddresses]);
 
   function smartWalletDisconnectedError() {
     enqueueSnackbar('Smart wallet disconnected', { variant: 'error' });
@@ -91,16 +91,6 @@ export const WalletContextProvider = ({ children }: Props) => {
       personal: personalAddress,
       smart: smartAddress,
     });
-  }
-
-  async function getPersonalAddress() {
-    if (wallet) {
-      const personalAddress = await wallet.getAddress();
-      setWalletAddresses({
-        ...walletAddresses,
-        personal: personalAddress,
-      });
-    }
   }
 
   return (

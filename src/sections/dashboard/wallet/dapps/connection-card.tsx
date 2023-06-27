@@ -11,8 +11,7 @@ import { useResponsive } from 'src/hooks/use-responsive';
 // components
 import Iconify from 'src/components/iconify';
 import { ConfirmDialog } from 'src/components/custom-dialog';
-import { useSnackbar } from 'src/components/snackbar';
-import { Avatar, Button, Tooltip, Typography } from '@mui/material';
+import { Avatar, Button, Tooltip } from '@mui/material';
 import Label from 'src/components/label/label';
 import { RouterLink } from 'src/routes/components';
 import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsContext';
@@ -26,7 +25,6 @@ interface Props extends StackProps {
 }
 
 export default function ConnectionCard({ connection, onDisconnect, sx, ...other }: Props) {
-  const { enqueueSnackbar } = useSnackbar();
   const { trackEvent } = useAnalyticsContext();
 
   const theme = useTheme();

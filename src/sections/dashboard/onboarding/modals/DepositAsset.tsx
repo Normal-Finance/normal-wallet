@@ -46,12 +46,17 @@ export default function DepositAsset({ open, token, toAddress, onClose }: Props)
 
   const [amount, setAmount] = useState('');
 
+  const handleOnClose = () => {
+    onClose();
+    setAmount('');
+  };
+
   useEffect(() => {
     if (transferTokenSuccess) {
       enqueueSnackbar(`${symbol} deposit successfully sent!`, { variant: 'success' });
       handleOnClose();
     }
-  }, [transferTokenSuccess]);
+  }, [transferTokenSuccess, enqueueSnackbar, handleOnClose]);
 
   const handleAmount = (event: any) => {
     setAmount(event.target.value);
@@ -67,11 +72,6 @@ export default function DepositAsset({ open, token, toAddress, onClose }: Props)
       amount,
     });
     trackEvent(AnalyticsEvents.DEPOSITED_TOKEN, { token: name, amount });
-  };
-
-  const handleOnClose = () => {
-    onClose();
-    setAmount('');
   };
 
   const renderContent = () => {
@@ -127,7 +127,7 @@ export default function DepositAsset({ open, token, toAddress, onClose }: Props)
 
       <Stack sx={{ p: 2.5 }}>
         <Typography variant="body1" sx={{ mb: 2 }}>
-          {`${balance  } ${  symbol}`} available
+          {`${balance} ${symbol}`} available
         </Typography>
 
         {renderContent()}

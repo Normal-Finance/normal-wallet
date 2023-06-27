@@ -29,7 +29,7 @@ type Context = {
   getGasEstimate: (transaction: TransactionRequest) => Promise<any> | any;
 };
 
-const UPDATE_INTERVAL = 1000 * 60 * 3; // 3 minutes
+// const UPDATE_INTERVAL = 1000 * 60 * 3; // 3 minutes
 
 const alchemy: Alchemy = new Alchemy({
   apiKey: ALCHEMY_API_KEY,
@@ -52,7 +52,7 @@ export const AlchemyContextProvider = ({ children }: Props) => {
   // If the smart wallet or chain is changed, update balances and transactions
   useEffect(() => {
     if (smartWallet || chain) getBalancesAndTransactions();
-  }, [smartWallet, chain]);
+  }, [smartWallet, chain, getBalancesAndTransactions]);
 
   // TODO: upon trigger, the resetting of state make the dashboard show the wrong conditions
   // Update the balances and transactions every UPDATE_INTERVAL (3 minutes)
@@ -103,7 +103,7 @@ export const AlchemyContextProvider = ({ children }: Props) => {
         const address = await getAddress();
         const { _hex } = await alchemy.core.getBalance(address);
         let ethereum = 0;
-        if (_hex) ethereum = parseInt(_hex.toString(), 16) / 10**18;
+        if (_hex) ethereum = parseInt(_hex.toString(), 16) / 10 ** 18;
         setEthereumBalance(ethereum);
       } catch (error) {
         alchemyError('Unable to fetch Ethereum balance', error);
@@ -179,12 +179,13 @@ export const AlchemyContextProvider = ({ children }: Props) => {
       try {
         const { _hex } = await alchemy.core.getBalance(address);
         let ethereum = 0;
-        if (_hex) ethereum = parseInt(_hex.toString(), 16) / 10**18;
+        if (_hex) ethereum = parseInt(_hex.toString(), 16) / 10 ** 18;
         return ethereum;
       } catch (error) {
         alchemyError('Unable to get Ethereum balance', error);
       }
     }
+    return;
   }
 
   /**
@@ -204,6 +205,7 @@ export const AlchemyContextProvider = ({ children }: Props) => {
         alchemyError('Unable to fetch token balances', error);
       }
     }
+    return;
   }
 
   async function getFeeData() {
@@ -216,6 +218,7 @@ export const AlchemyContextProvider = ({ children }: Props) => {
         alchemyError('Unable to get fee data', error);
       }
     }
+    return;
   }
 
   async function getGasEstimate(transaction: TransactionRequest) {
@@ -228,6 +231,7 @@ export const AlchemyContextProvider = ({ children }: Props) => {
         alchemyError('Unable to estimate gas', error);
       }
     }
+    return;
   }
 
   return (

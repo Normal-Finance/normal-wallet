@@ -14,9 +14,7 @@ import DepositAsset from '../modals/DepositAsset';
 
 // ----------------------------------------------------------------------
 
-type Props = {};
-
-export default function DepositTokens({}: Props) {
+export default function DepositTokens() {
   const { walletAddresses } = useWalletContext();
 
   const [ethereumBalance, setEthereumBalance] = useState<number>(0);
@@ -30,7 +28,7 @@ export default function DepositTokens({}: Props) {
 
   useEffect(() => {
     if (walletAddresses.personal) fetchBalances(walletAddresses.personal);
-  }, [walletAddresses.personal]);
+  }, [walletAddresses.personal, fetchBalances]);
 
   const handleOpenReceive = () => {
     trackEvent(AnalyticsEvents.OPENED_RECEIVE);
@@ -118,20 +116,20 @@ export default function DepositTokens({}: Props) {
         )}
 
         {tokenBalances.map((token: OwnedToken, index: number) => (
-            <Stack direction="row" alignItems="center" key={index}>
-              <Avatar src={token.logo} alt={token.name} sx={{ width: 48, height: 48 }} />
+          <Stack direction="row" alignItems="center" key={index}>
+            <Avatar src={token.logo} alt={token.name} sx={{ width: 48, height: 48 }} />
 
-              <Box sx={{ flexGrow: 1, ml: 2, minWidth: 100 }}>
-                <Typography variant="subtitle2" sx={{ mb: 0.5 }} noWrap>
-                  {`${token.balance  } ${  token.symbol}`}
-                </Typography>
-              </Box>
+            <Box sx={{ flexGrow: 1, ml: 2, minWidth: 100 }}>
+              <Typography variant="subtitle2" sx={{ mb: 0.5 }} noWrap>
+                {`${token.balance} ${token.symbol}`}
+              </Typography>
+            </Box>
 
-              <Button variant="contained" color="info" onClick={() => handleSelectToken(index)}>
-                Deposit
-              </Button>
-            </Stack>
-          ))}
+            <Button variant="contained" color="info" onClick={() => handleSelectToken(index)}>
+              Deposit
+            </Button>
+          </Stack>
+        ))}
       </Stack>
     </Box>
   );

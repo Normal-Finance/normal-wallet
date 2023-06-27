@@ -113,7 +113,7 @@ export const WebsocketContextProvider = ({ children }: Props) => {
 
             break;
 
-          case Events.GET_STATE:
+          case Events.GET_STATE: {
             const {
               clients: { data: clientsData, error: clientsError },
               state: { data: stateData, error: stateError },
@@ -137,7 +137,7 @@ export const WebsocketContextProvider = ({ children }: Props) => {
               dispatch(updateUserTransactions({ transactions: transactionsData }));
 
             break;
-
+          }
           case Events.UPDATE_STATE:
             var { batch, transaction } = data;
 
@@ -165,19 +165,20 @@ export const WebsocketContextProvider = ({ children }: Props) => {
 
             break;
 
-          case Events.CANCEL_TRANSACTION:
+          case Events.CANCEL_TRANSACTION: {
             const { transactionId } = data;
 
             dispatch(cancelTransaction({ transactionId }));
 
             break;
+          }
 
           default:
             break;
         }
       }
     }
-  }, [lastJsonMessage, setMessageHistory]);
+  }, [lastJsonMessage, setMessageHistory, dispatch]);
 
   /**
    * Fetches latest state of Normal
@@ -253,37 +254,37 @@ export const WebsocketContextProvider = ({ children }: Props) => {
     if (readyState !== ReadyState.OPEN) {
       websocketNotOpenError();
       return false;
-    } if (!smartWallet) {
+    }
+    if (!smartWallet) {
       walletNotConnectedError();
       return false;
-    } 
-      try {
-        const transaction = { account, target, value, calldata };
-        const payload = { transaction, priority };
-        const address = await smartWallet.getAddress();
-        const message = {
-          address,
-          payload,
-        };
+    }
+    try {
+      const transaction = { account, target, value, calldata };
+      const payload = { transaction, priority };
+      const address = await smartWallet.getAddress();
+      const message = {
+        address,
+        payload,
+      };
 
-        const signature = await smartWallet.signMessage(JSON.stringify(payload));
+      const signature = await smartWallet.signMessage(JSON.stringify(payload));
 
-        sendJsonMessage({
-          action: Events.NEW_TRANSACTION,
-          message: {
-            ...message,
-            signature,
-          },
-        });
+      sendJsonMessage({
+        action: Events.NEW_TRANSACTION,
+        message: {
+          ...message,
+          signature,
+        },
+      });
 
-        trackEvent(AnalyticsEvents.CREATED_BATCH_TRANSACTION, { transaction });
+      trackEvent(AnalyticsEvents.CREATED_BATCH_TRANSACTION, { transaction });
 
-        return true;
-      } catch (error) {
-        generalError('Unable to submit new transaction', error);
-        return false;
-      }
-    
+      return true;
+    } catch (error) {
+      generalError('Unable to submit new transaction', error);
+      return false;
+    }
   };
 
   /**

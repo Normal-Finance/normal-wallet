@@ -64,7 +64,7 @@ export default function Balances({ loading, error, ethereumBalance, tokenBalance
     balance: ethereumBalance.toString(),
   };
 
-  const [tableData, setTableData] = useState([ethereumToken, ...tokenBalances]);
+  const [tableData] = useState([ethereumToken, ...tokenBalances]);
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -181,7 +181,10 @@ function applyFilter({
   comparator: (a: any, b: any) => number;
   filters: IWalletTableFilters;
 }) {
-  const { name, status, service } = filters;
+  const {
+    name,
+    // status, service
+  } = filters;
 
   const stabilizedThis = inputData.map((el, index) => [el, index] as const);
 

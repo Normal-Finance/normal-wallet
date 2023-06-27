@@ -45,7 +45,7 @@ export default function LegacySessionSendTransactionModal() {
   const requestEvent = ModalStore.state.data?.legacyCallRequestEvent;
   const requestSession = ModalStore.state.data?.legacyRequestSession;
   const chainId = ModalStore.state.data?.chainId;
-  const protocol = ModalStore.state.data?.protocol;
+  // const protocol = ModalStore.state.data?.protocol;
   const connector = ModalStore.state.data?.connector;
 
   // Ensure request and wallet are defined
@@ -55,7 +55,7 @@ export default function LegacySessionSendTransactionModal() {
 
   // Get required proposal data
 
-  const { method, params } = requestEvent;
+  const { id, method, params } = requestEvent;
   const transaction = params[0];
 
   // // Remove unneeded key coming from v1 sample dapp that throws Ethers.
@@ -63,8 +63,6 @@ export default function LegacySessionSendTransactionModal() {
 
   const onApprove = async () => {
     if (requestEvent) {
-      const { id, method, params } = requestEvent;
-
       setLoading(true);
 
       const response: any = await approveEIP155Request(
@@ -72,7 +70,7 @@ export default function LegacySessionSendTransactionModal() {
           id,
           topic: '',
           params: { request: { method, params }, chainId: '5' },
-          context: {
+          verifyContext: {
             // undefined
             verified: {
               origin: '',
@@ -115,13 +113,11 @@ export default function LegacySessionSendTransactionModal() {
 
   const onReject = () => {
     if (requestEvent) {
-      const { id, method, params } = requestEvent;
-
       const { error } = rejectEIP155Request({
         id,
         topic: '',
         params: { request: { method, params }, chainId: '1' },
-        context: {
+        verifyContext: {
           // undefined
           verified: {
             origin: '',
@@ -171,20 +167,20 @@ export default function LegacySessionSendTransactionModal() {
           <Stack spacing={2} direction="row">
             <Typography variant="h6">Blockchain(s)</Typography>
             <Stack direction="row" alignItems="center" spacing={1}>
-              {[`eip155:${  chainId}`].map((chain) => (
-                  <Chip
-                    key={EIP155_CHAINS[chain as TEIP155Chain]?.name ?? chain}
-                    label={EIP155_CHAINS[chain as TEIP155Chain]?.name ?? chain}
-                    variant="soft"
-                    color="info"
-                  />
-                ))}
+              {[`eip155:${chainId}`].map((chain) => (
+                <Chip
+                  key={EIP155_CHAINS[chain as TEIP155Chain]?.name ?? chain}
+                  label={EIP155_CHAINS[chain as TEIP155Chain]?.name ?? chain}
+                  variant="soft"
+                  color="info"
+                />
+              ))}
             </Stack>
 
             <Typography variant="h6">Methods</Typography>
             <Stack direction="row" alignItems="center" spacing={1}>
-              {[method].map((method) => (
-                <Chip key={method} label={method} variant="soft" color="warning" />
+              {[method].map((m) => (
+                <Chip key={m} label={m} variant="soft" color="warning" />
               ))}
             </Stack>
           </Stack>

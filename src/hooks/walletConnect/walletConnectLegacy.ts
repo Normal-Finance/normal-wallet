@@ -22,10 +22,6 @@ const SESSION_TIMEOUT = 10000;
 const connectors: any = {};
 let connectionErrors: any = [];
 
-async function wait(ms: any) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
 // Offline check: if it errored recently
 const timePastForConnectionErr = 90 * 1000;
 const checkIsOffline = (connectionId: any) => {
@@ -60,7 +56,7 @@ export default function useWalletConnectLegacy({ account, chainId, clearWcClipbo
     connections.forEach(({ connectionId, isOffline }: any) => {
       if (connectors[connectionId]) {
         const connector = connectors[connectionId];
-        const {session} = connector;
+        const { session } = connector;
         if (
           session.accounts[0] !== account ||
           session.chainId !== chainId ||
@@ -86,7 +82,7 @@ export default function useWalletConnectLegacy({ account, chainId, clearWcClipbo
         })
       );
   };
-  useEffect(maybeUpdateSessions, [account, chainId]);
+  useEffect(maybeUpdateSessions, [account, chainId, connections, dispatch]);
   // we need this so we can invoke the latest version from any event handler
   stateRef.current.maybeUpdateSessions = maybeUpdateSessions;
 
@@ -197,7 +193,7 @@ export default function useWalletConnectLegacy({ account, chainId, clearWcClipbo
               })
             );
 
-            enqueueSnackbar(`Successfully connected to ${  connector.session.peerMeta.name}`);
+            enqueueSnackbar(`Successfully connected to ${connector.session.peerMeta.name}`);
 
             trackEvent(AnalyticsEvents.REJECTED_CONNECT_DAPP, {});
 
@@ -331,7 +327,7 @@ const onCallRequest = async (
       alert(`${payload.method} is not supported for WalletConnect v1`);
       connector.rejectRequest({
         id: payload.id,
-        error: { message: `Method not found: ${  payload.method}`, code: -32601 },
+        error: { message: `Method not found: ${payload.method}`, code: -32601 },
       });
   }
 };
@@ -343,11 +339,7 @@ function getCachedLegacySession(): IWalletConnectSession | undefined {
 
   let session = null;
   if (local) {
-    try {
-      session = JSON.parse(local);
-    } catch (error) {
-      throw error;
-    }
+    session = JSON.parse(local);
   }
   return session;
 }

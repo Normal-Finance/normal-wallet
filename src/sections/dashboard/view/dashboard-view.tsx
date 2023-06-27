@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 
 // @mui
 import {
@@ -9,7 +9,6 @@ import {
   CircularProgress,
   Container,
   Skeleton,
-  Stack,
   Tooltip,
   Typography,
 } from '@mui/material';
@@ -72,7 +71,7 @@ export default function DashboardView() {
 
   useEffect(() => {
     if (walletAddresses.smart) getState();
-  }, [walletAddresses]);
+  }, [walletAddresses, getState]);
 
   useEffect(() => {
     if (transactions) setTotalTransactions(sumValues(transactions));
@@ -88,7 +87,7 @@ export default function DashboardView() {
   const onboardingActiveStep = (): number => {
     if (!smartWalletFunded) return 0;
     if (!billing.email) return 1;
-    if (billing.paymentMethods == 0) return 2;
+    if (billing.paymentMethods === 0) return 2;
     return -1;
   };
 

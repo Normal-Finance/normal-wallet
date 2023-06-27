@@ -15,7 +15,9 @@ export default function useWalletConnect({ account, chainId }) {
 
     try {
       return await navigator.clipboard.readText();
-    } catch (e) {}
+    } catch (e) {
+      return false;
+    }
 
     return false;
   }, []);
@@ -106,7 +108,7 @@ export default function useWalletConnect({ account, chainId }) {
       return enqueueSnackbar('Invalid WalletConnect uri', { variant: 'error' });
 
     if (wcUri) connect({ uri: wcUri });
-  }, [account, connect]);
+  }, [account, connect, enqueueSnackbar]);
 
   useEffect(() => {
     // hax TODO: ask why? seems working without
@@ -114,7 +116,7 @@ export default function useWalletConnect({ account, chainId }) {
 
     // @TODO on focus and on user action
     const clipboardError = (e) =>
-      enqueueSnackbar('non-fatal clipboard/walletconnect err:' + e.message, { variant: 'error' });
+      console.log('non-fatal clipboard/walletconnect err:' + e.message, { variant: 'error' });
     const tryReadClipboard = async () => {
       if (!account) return;
       if (isFirefox()) return;
@@ -126,7 +128,7 @@ export default function useWalletConnect({ account, chainId }) {
           connect({ uri: clipboard });
         }
       } catch (e) {
-        // clipboardError(e);
+        clipboardError(e);
       }
     };
 
@@ -136,7 +138,7 @@ export default function useWalletConnect({ account, chainId }) {
     return () => {
       document.removeEventListener('visibilitychange', tryReadClipboard);
     };
-  }, [connect, account]);
+  }, [connect, account, enqueueSnackbar]);
 
   return {
     connections: connections,

@@ -66,14 +66,14 @@ export default function TransactionTypes({
     },
   ];
 
-  useEffect(() => {
-    if (transaction && !traditionalGasEstimate) estimateGas(transaction);
-  }, [transaction]);
-
   const estimateGas = async (_transaction: TransactionRequest) => {
     const estimate = await getGasEstimate(_transaction);
     setTraditionalGasEstimate(estimate);
   };
+
+  useEffect(() => {
+    if (transaction && !traditionalGasEstimate) estimateGas(transaction);
+  }, [transaction, estimateGas, traditionalGasEstimate]);
 
   const renderPlans = TRANSACTION_PRIORITIES.map((priority) => (
     <Grid xs={12} md={4} key={priority.name}>
@@ -119,11 +119,15 @@ export default function TransactionTypes({
         </Box>
 
         <Stack direction="row" alignItems="center" sx={{ typography: 'subtitle2' }}>
-          {/* {priority.name === 'Traditional' &&
-            (traditionalGasEstimate === null ? <Skeleton /> : <h4>{JSON.stringify(traditionalGasEstimate)}</h4>)} */}
+          {priority.name === 'Traditional' &&
+            (traditionalGasEstimate === null ? (
+              <Skeleton />
+            ) : (
+              <h4>{JSON.stringify(traditionalGasEstimate)}</h4>
+            ))}
           {priority.name === 'Batched - Good Till Cancel' &&
-            `Less than ${  fCurrency(priority.estimatedGas)}`}
-          {priority.name === 'Batched - Instant' && `Approx. ${  fCurrency(priority.estimatedGas)}`}
+            `Less than ${fCurrency(priority.estimatedGas)}`}
+          {priority.name === 'Batched - Instant' && `Approx. ${fCurrency(priority.estimatedGas)}`}
         </Stack>
       </Stack>
     </Grid>

@@ -10,8 +10,6 @@ import Card, { CardProps } from '@mui/material/Card';
 import ListItemText from '@mui/material/ListItemText';
 // hooks
 import { useBoolean } from 'src/hooks/use-boolean';
-// redux
-import { useDispatch } from 'src/redux/store';
 // utils
 import { fToNow } from 'src/utils/format-time';
 // components
@@ -54,7 +52,7 @@ export default function TransactionsOverview({ transactions, ...other }: Props) 
       />
 
       <Scrollbar>
-        {transactions.map((transaction, index) => {
+        {transactions.map((transaction) => {
           if (
             transaction.current_status === TransactionStatus.NEW ||
             transaction.current_status === TransactionStatus.PENDING
@@ -67,7 +65,7 @@ export default function TransactionsOverview({ transactions, ...other }: Props) 
                 onUpdatePriority={onUpdatePriority}
               />
             );
-          }
+          } else return <></>;
         })}
       </Scrollbar>
 
@@ -94,7 +92,7 @@ type TransactionItemProps = {
 };
 
 function TransactionItem({ transaction, onCancel, onUpdatePriority }: TransactionItemProps) {
-  const { transactionId, target, _value, priority, current_status, createdAt } = transaction;
+  const { transactionId, target, priority, current_status, createdAt } = transaction;
 
   const router = useRouter();
   const popover = usePopover();

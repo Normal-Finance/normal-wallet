@@ -17,7 +17,7 @@ import { useWalletContext } from 'src/contexts/WalletContext';
 import { useWebsocketContext } from 'src/contexts/WebsocketContext';
 
 // redux
-import { useSelector } from 'src/redux/store';
+// import { useSelector } from 'src/redux/store';
 
 import ModalStore from 'src/store/ModalStore';
 import { EIP155_CHAINS, TEIP155Chain } from 'src/hooks/walletConnect/wcConsts';
@@ -27,15 +27,13 @@ import {
 } from 'src/utils/walletConnect/EIP155RequestHandlerUtil';
 import { TransactionPriority } from 'src/types/transaction';
 import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsContext';
-import TransactionTypes from '../transaction-types';
+// import TransactionTypes from '../transaction-types';
 
 export default function SessionSendTransactionModal() {
-  const { transactions } = useSelector((state) => state.state);
+  // const { transactions } = useSelector((state) => state.state);
 
   const [loading, setLoading] = useState(false);
-  const [selectedPriority, setSelectedPriority] = useState<TransactionPriority>(
-    TransactionPriority.TRADITIONAL
-  );
+  const [selectedPriority] = useState<TransactionPriority>(TransactionPriority.TRADITIONAL);
 
   const { smartWallet } = useWalletContext();
   const { newTransaction } = useWebsocketContext();
@@ -63,7 +61,7 @@ export default function SessionSendTransactionModal() {
 
       const response = await approveEIP155Request(
         requestEvent,
-        smartWallet,
+        smartWallet!,
         selectedPriority,
         (
           account: string,
@@ -101,9 +99,9 @@ export default function SessionSendTransactionModal() {
     }
   };
 
-  const onSelectTransactionType = (newValue: TransactionPriority) => {
-    setSelectedPriority(newValue);
-  };
+  // const onSelectTransactionType = (newValue: TransactionPriority) => {
+  //   setSelectedPriority(newValue);
+  // };
 
   return (
     <Dialog maxWidth="sm" open>
@@ -132,13 +130,13 @@ export default function SessionSendTransactionModal() {
             <Typography variant="h6">Blockchain(s)</Typography>
             <Stack direction="row" alignItems="center" spacing={1}>
               {[chainId ?? ''].map((chain) => (
-                  <Chip
-                    key={EIP155_CHAINS[chain as TEIP155Chain]?.name ?? chain}
-                    label={EIP155_CHAINS[chain as TEIP155Chain]?.name ?? chain}
-                    variant="soft"
-                    color="info"
-                  />
-                ))}
+                <Chip
+                  key={EIP155_CHAINS[chain as TEIP155Chain]?.name ?? chain}
+                  label={EIP155_CHAINS[chain as TEIP155Chain]?.name ?? chain}
+                  variant="soft"
+                  color="info"
+                />
+              ))}
             </Stack>
 
             <Typography variant="h6">Methods</Typography>

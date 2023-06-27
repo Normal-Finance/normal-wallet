@@ -22,7 +22,7 @@ export default function SessionProposalModal() {
   }
 
   // Get required proposal data
-  const { id, params } = proposal;
+  const { params } = proposal;
   const { proposer } = params;
 
   return (

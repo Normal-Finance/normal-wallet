@@ -1,5 +1,5 @@
 // @mui
-import { Divider, Typography, Stack, Box } from '@mui/material';
+import { Typography, Stack, Box } from '@mui/material';
 import { ConnectWallet } from '@thirdweb-dev/react';
 import Iconify from 'src/components/iconify/iconify';
 import { useSettingsContext } from 'src/components/settings';
@@ -18,53 +18,53 @@ export default function GetStarted() {
 
   return (
     <Stack sx={{ maxWidth: 720, mx: 'auto' }}>
-        <Stack spacing={2} sx={{ mt: 2, mb: 2 }}>
-          <Typography variant="body1">
-            Connect your wallet to access your new Normal smart wallet and enjoy all these amazing
-            features.
-          </Typography>
+      <Stack spacing={2} sx={{ mt: 2, mb: 2 }}>
+        <Typography variant="body1">
+          Connect your wallet to access your new Normal smart wallet and enjoy all these amazing
+          features.
+        </Typography>
 
-          <Typography variant="h6">Features</Typography>
+        <Typography variant="h6">Features</Typography>
 
-          <Box
-            rowGap={2}
-            display="grid"
-            gridTemplateColumns={{
-              xs: 'repeat(1, 1fr)',
-              md: 'repeat(2, 1fr)',
-            }}
-          >
-            {FEATURES.map((feature) => (
-              <Stack
-                key={feature.label}
-                spacing={1}
-                direction="row"
-                alignItems="center"
-                sx={{
-                  color: 'text.disabled',
-                }}
-              >
-                <Iconify
-                  icon="eva:checkmark-circle-2-outline"
-                  sx={{
-                    color: 'primary.main',
-                    // color: 'text.disabled',
-                  }}
-                />
-                {feature.label}
-              </Stack>
-            ))}
-          </Box>
-        </Stack>
-
-        <ConnectWallet
-          dropdownPosition={{
-            align: 'center',
-            side: 'bottom',
+        <Box
+          rowGap={2}
+          display="grid"
+          gridTemplateColumns={{
+            xs: 'repeat(1, 1fr)',
+            md: 'repeat(2, 1fr)',
           }}
-          btnTitle="Connect wallet"
-          theme={themeMode}
-        />
+        >
+          {FEATURES.map((feature) => (
+            <Stack
+              key={feature.label}
+              spacing={1}
+              direction="row"
+              alignItems="center"
+              sx={{
+                color: 'text.disabled',
+              }}
+            >
+              <Iconify
+                icon="eva:checkmark-circle-2-outline"
+                sx={{
+                  color: 'primary.main',
+                  // color: 'text.disabled',
+                }}
+              />
+              {feature.label}
+            </Stack>
+          ))}
+        </Box>
       </Stack>
+
+      <ConnectWallet
+        dropdownPosition={{
+          align: 'center',
+          side: 'bottom',
+        }}
+        btnTitle="Connect wallet"
+        theme={themeMode}
+      />
+    </Stack>
   );
 }

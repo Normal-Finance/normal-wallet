@@ -3,7 +3,7 @@ import { useState } from 'react';
 import QRCode from 'react-qr-code';
 
 // @mui
-import { styled, alpha } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import { Avatar, Box, Skeleton, Tooltip, Typography } from '@mui/material';
 // hooks
 import { useWalletContext } from 'src/contexts/WalletContext';
@@ -86,7 +86,7 @@ export default function NavAccount() {
         <Tooltip title={walletAddresses.smart}>
           <Typography variant="body1" noWrap sx={{ color: 'text.secondary' }}>
             {smartWallet ? (
-              `${walletAddresses.smart.slice(0, 5)  }...${  walletAddresses.smart.slice(-4)}`
+              `${walletAddresses.smart.slice(0, 5)}...${walletAddresses.smart.slice(-4)}`
             ) : (
               <Skeleton />
             )}

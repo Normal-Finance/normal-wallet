@@ -25,7 +25,7 @@ export default function SessionUnsuportedMethodModal() {
   }
 
   // Get required request data
-  const { topic, params } = requestEvent;
+  const { params } = requestEvent;
   const { chainId, request } = params;
 
   return (
@@ -46,13 +46,13 @@ export default function SessionUnsuportedMethodModal() {
             <Typography variant="h6">Blockchain(s)</Typography>
             <Stack direction="row" alignItems="center" spacing={1}>
               {[chainId ?? ''].map((chain) => (
-                  <Chip
-                    key={EIP155_CHAINS[chain as TEIP155Chain]?.name ?? chain}
-                    label={EIP155_CHAINS[chain as TEIP155Chain]?.name ?? chain}
-                    variant="soft"
-                    color="info"
-                  />
-                ))}
+                <Chip
+                  key={EIP155_CHAINS[chain as TEIP155Chain]?.name ?? chain}
+                  label={EIP155_CHAINS[chain as TEIP155Chain]?.name ?? chain}
+                  variant="soft"
+                  color="info"
+                />
+              ))}
             </Stack>
 
             <Typography variant="h6">Methods</Typography>

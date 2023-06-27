@@ -22,7 +22,7 @@ export default function LegacySessionProposalModal() {
   }
 
   // Get required proposal data
-  const { id, params } = proposal;
+  const { params } = proposal;
   const [{ peerMeta }] = params;
 
   return (
