@@ -35,29 +35,29 @@ export const REGIONALIZED_RELAYER_ENDPOINTS: RelayerType[] = [
 /**
  * Chains
  */
-// export const EIP155_MAINNET_CHAINS = {
-//   'eip155:1': {
-//     chainId: 1,
-//     name: 'Ethereum',
-//     logo: '/chain-logos/eip155-1.png',
-//     rgb: '99, 125, 234',
-//     rpc: 'https://cloudflare-eth.com/',
-//   },
-// };
-
-export const EIP155_TEST_CHAINS = {
-  'eip155:5': {
-    chainId: 5,
-    name: 'Ethereum Goerli',
+export const EIP155_MAINNET_CHAINS = {
+  'eip155:1': {
+    chainId: 1,
+    name: 'Ethereum',
     logo: '/chain-logos/eip155-1.png',
     rgb: '99, 125, 234',
-    rpc: 'https://goerli.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161',
+    rpc: 'https://cloudflare-eth.com/',
   },
 };
 
+// export const EIP155_TEST_CHAINS = {
+//   'eip155:5': {
+//     chainId: 5,
+//     name: 'Ethereum Goerli',
+//     logo: '/chain-logos/eip155-1.png',
+//     rgb: '99, 125, 234',
+//     rpc: 'https://goerli.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161',
+//   },
+// };
+
 export const EIP155_CHAINS = {
-  // ...EIP155_MAINNET_CHAINS,
-  ...EIP155_TEST_CHAINS,
+  ...EIP155_MAINNET_CHAINS,
+  // ...EIP155_TEST_CHAINS,
 };
 
 /**

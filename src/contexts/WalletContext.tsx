@@ -13,7 +13,7 @@ import {
   useSwitchChain,
 } from '@thirdweb-dev/react';
 import { SmartWallet } from '@thirdweb-dev/wallets';
-import { Chain, Goerli } from '@thirdweb-dev/chains';
+import { Chain, Ethereum } from '@thirdweb-dev/chains';
 import { THIRDWEB } from 'src/config-global';
 import { useSnackbar } from 'src/components/snackbar';
 import { AnalyticsEvents, useAnalyticsContext } from './AnalyticsContext';
@@ -80,7 +80,7 @@ export const WalletContextProvider = ({ children }: Props) => {
   async function connectSmartWallet() {
     // connect the smart wallet
     const _smartWallet = new SmartWallet({
-      chain: Goerli,
+      chain: Ethereum,
       factoryAddress: THIRDWEB.factoryAddress,
       thirdwebApiKey: THIRDWEB.apiKey,
       gasless: false,

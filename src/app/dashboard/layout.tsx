@@ -8,7 +8,7 @@ import {
   walletConnect,
   magicLink,
 } from '@thirdweb-dev/react';
-import { Goerli } from '@thirdweb-dev/chains';
+import { Etherum } from '@thirdweb-dev/chains';
 import { NORMAL_WALLET_INFO, THIRDWEB, WALLET_CONNECT } from 'src/config-global';
 
 import { IntercomProvider } from 'src/utils/intercom/IntercomProvider';
@@ -37,8 +37,8 @@ export default function Layout({ children }: Props) {
         description: NORMAL_WALLET_INFO.description,
         logoUrl: NORMAL_WALLET_INFO.logo,
       }}
-      supportedChains={[Goerli]}
-      activeChain={Goerli}
+      supportedChains={[Etherum]}
+      activeChain={Etherum}
       autoConnect
       autoSwitch
       supportedWallets={[

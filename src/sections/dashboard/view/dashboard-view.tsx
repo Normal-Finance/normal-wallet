@@ -32,7 +32,7 @@ import { useWalletContext } from 'src/contexts/WalletContext';
 import { APP_STUFF } from 'src/config-global';
 import { useAlchemyContext } from 'src/contexts/AlchemyContext';
 import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsContext';
-import { Goerli } from '@thirdweb-dev/chains';
+import { Ethereum } from '@thirdweb-dev/chains';
 import AnalyticsWidget from '../statistics/analytics-widget';
 import GetStarted from '../get-started';
 import Header from '../wallet/header/header';
@@ -204,14 +204,14 @@ export default function DashboardView() {
                 <Grid xs={12} md={12}>
                   <FailedPaymentAlert
                     title="Wrong network"
-                    description="Please switch to Ethereum or Goerli to continue."
+                    description="Please switch to Ethereum to continue."
                     action={
                       <Button
                         variant="contained"
                         color="error"
-                        onClick={() => switchChain(Goerli.chainId)}
+                        onClick={() => switchChain(Ethereum.chainId)}
                       >
-                        Switch to Ethereum {process.env.NODE_ENV === 'production' && '(Goerli)'}
+                        Switch to Ethereum
                       </Button>
                     }
                   />

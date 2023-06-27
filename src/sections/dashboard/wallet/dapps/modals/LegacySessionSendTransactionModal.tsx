@@ -67,7 +67,7 @@ export default function LegacySessionSendTransactionModal() {
         {
           id,
           topic: '',
-          params: { request: { method, params }, chainId: '5' },
+          params: { request: { method, params }, chainId: '1' },
           verifyContext: {
             // undefined
             verified: {

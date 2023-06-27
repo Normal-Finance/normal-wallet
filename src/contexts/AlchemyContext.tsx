@@ -36,7 +36,7 @@ type Context = {
 
 const alchemy: Alchemy = new Alchemy({
   apiKey: ALCHEMY_API_KEY,
-  network: Network.ETH_GOERLI,
+  network: Network.ETH_MAINNET,
 });
 
 const AlchemyContext = createContext<Context | null>(null);
