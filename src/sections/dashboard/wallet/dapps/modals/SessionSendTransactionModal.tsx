@@ -34,7 +34,7 @@ export default function SessionSendTransactionModal() {
 
   const [loading, setLoading] = useState(false);
   const [selectedPriority, setSelectedPriority] = useState<TransactionPriority>(
-    TransactionPriority.GTC
+    TransactionPriority.TRADITIONAL
   );
 
   const { smartWallet } = useWalletContext();
@@ -154,12 +154,12 @@ export default function SessionSendTransactionModal() {
           <Divider />
 
           {/* <transaction> will most likely not satisfy required input type */}
-          <TransactionTypes
+          {/* <TransactionTypes
             newTransactions={transactions.NEW}
             transaction={transaction}
             selected={selectedPriority}
             onSelect={onSelectTransactionType}
-          />
+          /> */}
 
           <Divider />
         </Stack>

@@ -40,6 +40,8 @@ export default function TransactionTypes({
 }: Props) {
   const { getGasEstimate } = useAlchemyContext();
 
+  const [traditionalGasEstimate, setTraditionalGasEstimate] = useState(null);
+
   const TRANSACTION_PRIORITIES: TransactionPriorityData[] = [
     {
       value: TransactionPriority.TRADITIONAL,
@@ -65,13 +67,13 @@ export default function TransactionTypes({
   ];
 
   useEffect(() => {
-    if (transaction) estimateGas(transaction);
+    if (transaction && !traditionalGasEstimate) estimateGas(transaction);
   }, [transaction]);
 
-  const estimateGas = async (_transaction: TransactionRequest) =>
-    setTraditionalGasEstimate(await getGasEstimate(_transaction));
-
-  const [traditionalGasEstimate, setTraditionalGasEstimate] = useState(null);
+  const estimateGas = async (_transaction: TransactionRequest) => {
+    const estimate = await getGasEstimate(_transaction);
+    setTraditionalGasEstimate(estimate);
+  };
 
   const renderPlans = TRANSACTION_PRIORITIES.map((priority) => (
     <Grid xs={12} md={4} key={priority.name}>
@@ -116,9 +118,9 @@ export default function TransactionTypes({
           {priority.speed}
         </Box>
 
-        <Stack direction="row" alignItems="center" sx={{ typography: 'h4' }}>
-          {priority.name === 'Traditional' &&
-            (traditionalGasEstimate === null ? <Skeleton /> : traditionalGasEstimate)}
+        <Stack direction="row" alignItems="center" sx={{ typography: 'subtitle2' }}>
+          {/* {priority.name === 'Traditional' &&
+            (traditionalGasEstimate === null ? <Skeleton /> : <h4>{JSON.stringify(traditionalGasEstimate)}</h4>)} */}
           {priority.name === 'Batched - Good Till Cancel' &&
             'Less than ' + fCurrency(priority.estimatedGas)}
           {priority.name === 'Batched - Instant' && 'Approx. ' + fCurrency(priority.estimatedGas)}
