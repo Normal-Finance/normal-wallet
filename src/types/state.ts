@@ -30,6 +30,5 @@ export type IStateState = {
   transactions: ITransactions;
   batches: IBatches;
   billing: IBilling;
-  autoBatchEnabled: boolean;
   userTransactions: Transaction[];
 };

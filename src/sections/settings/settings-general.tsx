@@ -27,7 +27,7 @@ export default function SettingsGeneral() {
   const { updateEmail } = useWebsocketContext();
 
   /** REDUX */
-  const { billing, autoBatchEnabled } = useSelector((state) => state.state);
+  const { billing } = useSelector((state) => state.state);
 
   const UpdateUserSchema = Yup.object().shape({
     email: Yup.string().required('Email is required').email('Email must be a valid email address'),
@@ -35,7 +35,6 @@ export default function SettingsGeneral() {
 
   const defaultValues = {
     email: billing.email || '',
-    autoBatchEnabled: autoBatchEnabled || true,
   };
 
   const methods = useForm<FormValuesProps>({
@@ -56,19 +55,7 @@ export default function SettingsGeneral() {
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={3}>
-        <Grid xs={12} md={4}>
-          <Card sx={{ pt: 10, pb: 5, px: 3, textAlign: 'center' }}>
-            <RHFSwitch
-              name="autoBatchEnabled"
-              labelPlacement="start"
-              label="Auto Batch"
-              sx={{ mt: 5 }}
-              helperText={'New transactions are automatically sent to be batched'}
-            />
-          </Card>
-        </Grid>
-
-        <Grid xs={12} md={8}>
+        <Grid xs={12} md={12}>
           <Card sx={{ p: 3 }}>
             <Box
               rowGap={3}
