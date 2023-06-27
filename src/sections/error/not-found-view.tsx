@@ -12,6 +12,7 @@ import { RouterLink } from 'src/routes/components';
 import { MotionContainer, varBounce } from 'src/components/animate';
 // assets
 import { PageNotFoundIllustration } from 'src/assets/illustrations';
+import { paths } from 'src/routes/paths';
 
 // ----------------------------------------------------------------------
 
@@ -41,7 +42,7 @@ export default function NotFoundView() {
           />
         </m.div>
 
-        <Button component={RouterLink} href="/" size="large" variant="contained">
+        <Button component={RouterLink} href={paths.root} size="large" variant="contained">
           Go to Home
         </Button>
       </MotionContainer>
