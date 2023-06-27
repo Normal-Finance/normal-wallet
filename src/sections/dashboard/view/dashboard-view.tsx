@@ -129,7 +129,14 @@ export default function DashboardView() {
                     total={clients}
                     color="info"
                     loading={websocketStatus !== 'Open' || clients === null}
-                    icon={<Image alt="icon" src="/assets/icons/glass/ic_glass_users.png" />}
+                    icon={
+                      <Image
+                        alt="icon"
+                        src="/assets/icons/glass/ic_glass_users.png"
+                        height={64}
+                        width={64}
+                      />
+                    }
                   />
                 </Grid>
               </Tooltip>
@@ -142,7 +149,14 @@ export default function DashboardView() {
                     total={transactions?.NEW + transactions?.PENDING}
                     color="warning"
                     loading={websocketStatus !== 'Open' || transactions?.PENDING === null}
-                    icon={<Image alt="icon" src="/assets/icons/glass/ic_glass_buy.png" />}
+                    icon={
+                      <Image
+                        alt="icon"
+                        src="/assets/icons/glass/ic_glass_buy.png"
+                        height={64}
+                        width={64}
+                      />
+                    }
                   />
                 </Grid>
               </Tooltip>
@@ -154,7 +168,14 @@ export default function DashboardView() {
                     total={totalTransactions}
                     color="error"
                     loading={websocketStatus !== 'Open' || transactions === null}
-                    icon={<Image alt="icon" src="/assets/icons/glass/ic_glass_message.png" />}
+                    icon={
+                      <Image
+                        alt="icon"
+                        src="/assets/icons/glass/ic_glass_message.png"
+                        height={64}
+                        width={64}
+                      />
+                    }
                   />
                 </Grid>
               </Tooltip>
@@ -165,7 +186,14 @@ export default function DashboardView() {
                     title="Total Batches"
                     total={totalBatches}
                     loading={websocketStatus !== 'Open' || batches === null}
-                    icon={<Image alt="icon" src="/assets/icons/glass/ic_glass_bag.png" />}
+                    icon={
+                      <Image
+                        alt="icon"
+                        src="/assets/icons/glass/ic_glass_bag.png"
+                        height={64}
+                        width={64}
+                      />
+                    }
                   />
                 </Grid>
               </Tooltip>
