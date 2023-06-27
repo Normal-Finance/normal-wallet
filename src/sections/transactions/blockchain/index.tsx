@@ -42,8 +42,9 @@ import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsCont
 
 const STATUS_OPTIONS = [
   { value: 'all', label: 'All' },
-  { value: 'incoming', label: 'Incoming' },
-  { value: 'outgoing', label: 'Outgoing' },
+  { value: 'deposit', label: 'Deposit' },
+  { value: 'withdrawal', label: 'Withdrawal' },
+  { value: 'contract_interaction', label: 'Contract Interaction' },
 ];
 
 const TABLE_HEAD = [
@@ -148,21 +149,33 @@ export default function TransactionsBlockchain() {
                           'soft'
                         }
                         color={
-                          (tab.value === 'incoming' && 'success') ||
-                          (tab.value === 'outgoing' && 'info') ||
+                          (tab.value === 'deposit' && 'success') ||
+                          (tab.value === 'withdrawal' && 'error') ||
+                          (tab.value === 'contract' && 'info') ||
                           'default'
                         }
                       >
-                        {tab.value === 'all' && transactions.length}
-                        {tab.value === 'incoming' &&
-                          transactions.filter(
-                            (transaction) => transaction.to === walletAddresses.smart
-                          ).length}
+                        {transactions.length > 0 && (
+                          <>
+                            {tab.value === 'all' && transactions.length}
+                            {tab.value === 'deposit' &&
+                              transactions.filter(
+                                (transaction) =>
+                                  transaction.to === walletAddresses.smart.toLowerCase()
+                              ).length}
 
-                        {tab.value === 'outgoing' &&
+                            {tab.value === 'withdrawal' &&
+                              transactions.filter(
+                                (transaction) =>
+                                  transaction.from === walletAddresses.smart.toLowerCase()
+                              ).length}
+                          </>
+                        )}
+
+                        {/* {tab.value === 'contract_interaction' &&
                           transactions.filter(
                             (transaction) => transaction.from === walletAddresses.smart
-                          ).length}
+                          ).length} */}
                       </Label>
                     }
                   />
@@ -299,12 +312,16 @@ function applyFilter({
     );
   }
 
-  if (status === 'incoming') {
-    inputData = inputData.filter((transaction) => transaction.to === address);
+  if (status === 'deposit') {
+    inputData = inputData.filter((transaction) => transaction.to === address.toLowerCase());
   }
 
-  if (status === 'outgoing') {
-    inputData = inputData.filter((transaction) => transaction.from === address);
+  if (status === 'withdrawal') {
+    inputData = inputData.filter((transaction) => transaction.from === address.toLowerCase());
+  }
+
+  if (status === 'contract_interaction') {
+    // inputData = inputData.filter((transaction) => transaction.from === address.toLowerCase());
   }
 
   // if (!dateError) {

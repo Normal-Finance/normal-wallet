@@ -118,7 +118,7 @@ export default function BatchTableRow({
       </TableCell>
 
       {/* Value */}
-      <TableCell> {_value} </TableCell>
+      <TableCell> {parseInt(_value.toString(), 16) / Math.pow(10, 18)} </TableCell>
 
       {/* Priority */}
       <TableCell>
@@ -232,17 +232,19 @@ export default function BatchTableRow({
         )}
       </CustomPopover>
 
-      <ConfirmDialog
-        open={confirm.value}
-        onClose={confirm.onFalse}
-        title="Cancel transaction"
-        content="Are you sure want to cancel this transaction? Only new and pending transactions can be cancelled. You will not be charged for any gas if cancelled."
-        action={
-          <Button variant="contained" color="error" onClick={onCancelTransaction}>
-            Cancel
-          </Button>
-        }
-      />
+      {current_status === TransactionStatus.NEW && (
+        <ConfirmDialog
+          open={confirm.value}
+          onClose={confirm.onFalse}
+          title="Cancel transaction"
+          content="Are you sure want to cancel this transaction? Only new and pending transactions can be cancelled. You will not be charged for any gas if cancelled."
+          action={
+            <Button variant="contained" color="error" onClick={onCancelTransaction}>
+              Cancel
+            </Button>
+          }
+        />
+      )}
     </>
   );
 }
