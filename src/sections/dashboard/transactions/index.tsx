@@ -65,7 +65,8 @@ export default function TransactionsOverview({ transactions, ...other }: Props) 
                 onUpdatePriority={onUpdatePriority}
               />
             );
-          } else return <></>;
+          }
+          return null;
         })}
       </Scrollbar>
 

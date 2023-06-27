@@ -13,12 +13,14 @@ const slice = createSlice({
     updateConnections(state, action) {
       state.connections = action.payload.connections;
     },
+    // eslint-disable-next-line consistent-return
     connectedNewSession(state, action) {
       const existingConnection = state.connections.find(
         (c: any) => c.pairingTopic === action.payload.pairingTopic
       );
 
       if (existingConnection) {
+        // eslint-disable-next-line array-callback-return, consistent-return
         const updatedConnections = state.connections.map((c: any) => {
           if (c.pairingTopic === action.payload.pairingTopic) {
             state.sessionTopics = [...c.sessionTopics, action.payload.sessionTopic];

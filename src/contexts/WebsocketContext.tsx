@@ -1,3 +1,6 @@
+/* eslint-disable react/jsx-no-constructed-context-values */
+/* eslint-disable react-hooks/exhaustive-deps */
+
 'use client';
 
 import { createContext, useContext, useState, useEffect } from 'react';
@@ -139,23 +142,17 @@ export const WebsocketContextProvider = ({ children }: Props) => {
             break;
           }
           case Events.UPDATE_STATE:
-            var { batch, transaction } = data;
-
-            dispatch(updateState({ transaction, batch }));
+            dispatch(updateState({ transaction: data.transaction, batch: data.batch }));
 
             break;
 
           case Events.UPDATE_EMAIL:
-            const { customer } = data;
-
-            dispatch(updateEmail({ email: customer.email }));
+            dispatch(updateEmail({ email: data.customer.email }));
 
             break;
 
           case Events.NEW_TRANSACTION:
-            var { transaction } = data;
-
-            dispatch(newTransaction({ transaction }));
+            dispatch(newTransaction({ transaction: data.transaction }));
 
             break;
 

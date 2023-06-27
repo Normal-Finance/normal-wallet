@@ -1,3 +1,6 @@
+/* eslint-disable react/jsx-no-constructed-context-values */
+/* eslint-disable react-hooks/exhaustive-deps */
+
 'use client';
 
 import { createContext, useContext, useState, useEffect } from 'react';
@@ -173,19 +176,20 @@ export const AlchemyContextProvider = ({ children }: Props) => {
    * @returns
    */
   async function getEthereumBalanceOfAddress(address: string) {
+    let ethereum = 0;
+
     if (!alchemy) alchemyConnectionError();
     else if (!smartWallet) smartWalletDisconnectedError();
     else {
       try {
         const { _hex } = await alchemy.core.getBalance(address);
-        let ethereum = 0;
         if (_hex) ethereum = parseInt(_hex.toString(), 16) / 10 ** 18;
-        return ethereum;
       } catch (error) {
         alchemyError('Unable to get Ethereum balance', error);
       }
     }
-    return;
+
+    return ethereum;
   }
 
   /**
@@ -194,44 +198,53 @@ export const AlchemyContextProvider = ({ children }: Props) => {
    * @returns
    */
   async function getTokenBalancesOfAddress(address: string) {
+    let _tokens: OwnedToken[] = [];
+
     if (!alchemy) alchemyConnectionError();
     else if (!smartWallet) smartWalletDisconnectedError();
     else {
       try {
         const { tokens } = await alchemy.core.getTokensForOwner(address);
-        if (tokens.length > 0) return tokens.filter((token) => parseFloat(token.balance!) > 0);
+        if (tokens.length > 0) _tokens = tokens.filter((token) => parseFloat(token.balance!) > 0);
         return [];
       } catch (error) {
         alchemyError('Unable to fetch token balances', error);
       }
     }
-    return;
+
+    return _tokens;
   }
 
   async function getFeeData() {
+    let feeData = null;
+
     if (!alchemy) alchemyConnectionError();
     else if (!smartWallet) smartWalletDisconnectedError();
     else {
       try {
-        return await alchemy.core.getFeeData();
+        feeData = await alchemy.core.getFeeData();
       } catch (error) {
         alchemyError('Unable to get fee data', error);
       }
     }
-    return;
+
+    return feeData;
   }
 
   async function getGasEstimate(transaction: TransactionRequest) {
+    let estimate = null;
+
     if (!alchemy) alchemyConnectionError();
     else if (!smartWallet) smartWalletDisconnectedError();
     else {
       try {
-        return await alchemy.core.estimateGas(transaction);
+        estimate = await alchemy.core.estimateGas(transaction);
       } catch (error) {
         alchemyError('Unable to estimate gas', error);
       }
     }
-    return;
+
+    return estimate;
   }
 
   return (

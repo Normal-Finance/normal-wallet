@@ -140,6 +140,7 @@ export default function useWalletConnectV2({ account, chainId, clearWcClipboard 
   /// /////////////////////////////////
 
   const onSessionProposal = useCallback(
+    // eslint-disable-next-line consistent-return
     async (proposal: any) => {
       // Get required proposal data
       const { id, params } = proposal;
@@ -153,11 +154,11 @@ export default function useWalletConnectV2({ account, chainId, clearWcClipboard 
         }
       });
       const unsupportedChains: any = [];
-      requiredNamespaces.eip155?.chains.forEach((chainId: any) => {
-        if (supportedChains.includes(chainId)) {
-          usedChains.push(chainId);
+      requiredNamespaces.eip155?.chains.forEach((_chainId: any) => {
+        if (supportedChains.includes(_chainId)) {
+          usedChains.push(_chainId);
         } else {
-          unsupportedChains.push(chainId);
+          unsupportedChains.push(_chainId);
         }
       });
       if (unsupportedChains.length) {
@@ -253,8 +254,8 @@ export default function useWalletConnectV2({ account, chainId, clearWcClipboard 
             topic: requestEvent.topic,
             response: formatJsonRpcError(requestEvent.id, err),
           })
-          .catch((err: any) => {
-            enqueueSnackbar(err.message, { variant: 'error' });
+          .catch((error: any) => {
+            enqueueSnackbar(error.message, { variant: 'error' });
           });
         return;
       }
@@ -265,42 +266,45 @@ export default function useWalletConnectV2({ account, chainId, clearWcClipboard 
 
         const connection = getConnectionFromSessionTopic(topic);
         if (connection) {
-          const { topic, params } = requestEvent;
           const { request } = params;
           const requestSession = client.session.get(topic);
 
           switch (request.method) {
             case EIP155_SIGNING_METHODS.ETH_SIGN:
             case EIP155_SIGNING_METHODS.PERSONAL_SIGN:
-              return ModalStore.open('SessionSignModal', {
+              ModalStore.open('SessionSignModal', {
                 requestEvent,
                 requestSession,
                 client,
               });
+              break;
 
             case EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA:
             case EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA_V3:
             case EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA_V4:
-              return ModalStore.open('SessionSignTypedDataModal', {
+              ModalStore.open('SessionSignTypedDataModal', {
                 requestEvent,
                 requestSession,
                 client,
               });
-
+              break;
             case EIP155_SIGNING_METHODS.ETH_SEND_TRANSACTION:
             case EIP155_SIGNING_METHODS.ETH_SIGN_TRANSACTION:
-              return ModalStore.open('SessionSendTransactionModal', {
+              ModalStore.open('SessionSendTransactionModal', {
                 requestEvent,
                 requestSession,
                 client,
               });
+              break;
 
             default:
               trackEvent(AnalyticsEvents.RECEIVED_UNSUPPORTED_WC_METHOD, { requestEvent });
-              return ModalStore.open('SessionUnsuportedMethodModal', {
+
+              ModalStore.open('SessionUnsuportedMethodModal', {
                 requestEvent,
                 requestSession,
               });
+              break;
           }
         }
       } else {
@@ -381,6 +385,7 @@ export default function useWalletConnectV2({ account, chainId, clearWcClipboard 
     onInitialize();
   }, [onInitialize, initialized]);
 
+  // eslint-disable-next-line consistent-return
   useEffect(() => {
     if (initialized) {
       client.on('session_proposal', onSessionProposal);

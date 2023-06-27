@@ -31,6 +31,7 @@ import { APP_STUFF } from 'src/config-global';
 import { useAlchemyContext } from 'src/contexts/AlchemyContext';
 import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsContext';
 import { Goerli } from '@thirdweb-dev/chains';
+import Image from 'next/image';
 import AnalyticsWidget from '../statistics/analytics-widget';
 import GetStarted from '../get-started';
 import Header from '../wallet/header/header';
@@ -128,7 +129,7 @@ export default function DashboardView() {
                     total={clients}
                     color="info"
                     loading={websocketStatus !== 'Open' || clients === null}
-                    icon={<img alt="icon" src="/assets/icons/glass/ic_glass_users.png" />}
+                    icon={<Image alt="icon" src="/assets/icons/glass/ic_glass_users.png" />}
                   />
                 </Grid>
               </Tooltip>
@@ -137,10 +138,11 @@ export default function DashboardView() {
                 <Grid xs={12} sm={6} md={3}>
                   <AnalyticsWidget
                     title="Pending Transactions"
+                    // eslint-disable-next-line no-unsafe-optional-chaining
                     total={transactions?.NEW + transactions?.PENDING}
                     color="warning"
                     loading={websocketStatus !== 'Open' || transactions?.PENDING === null}
-                    icon={<img alt="icon" src="/assets/icons/glass/ic_glass_buy.png" />}
+                    icon={<Image alt="icon" src="/assets/icons/glass/ic_glass_buy.png" />}
                   />
                 </Grid>
               </Tooltip>
@@ -152,7 +154,7 @@ export default function DashboardView() {
                     total={totalTransactions}
                     color="error"
                     loading={websocketStatus !== 'Open' || transactions === null}
-                    icon={<img alt="icon" src="/assets/icons/glass/ic_glass_message.png" />}
+                    icon={<Image alt="icon" src="/assets/icons/glass/ic_glass_message.png" />}
                   />
                 </Grid>
               </Tooltip>
@@ -163,7 +165,7 @@ export default function DashboardView() {
                     title="Total Batches"
                     total={totalBatches}
                     loading={websocketStatus !== 'Open' || batches === null}
-                    icon={<img alt="icon" src="/assets/icons/glass/ic_glass_bag.png" />}
+                    icon={<Image alt="icon" src="/assets/icons/glass/ic_glass_bag.png" />}
                   />
                 </Grid>
               </Tooltip>

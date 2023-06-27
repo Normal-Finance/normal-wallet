@@ -66,14 +66,14 @@ export default function TransactionTypes({
     },
   ];
 
-  const estimateGas = async (_transaction: TransactionRequest) => {
-    const estimate = await getGasEstimate(_transaction);
-    setTraditionalGasEstimate(estimate);
-  };
-
   useEffect(() => {
+    const estimateGas = async (_transaction: TransactionRequest) => {
+      const estimate = await getGasEstimate(_transaction);
+      setTraditionalGasEstimate(estimate);
+    };
+
     if (transaction && !traditionalGasEstimate) estimateGas(transaction);
-  }, [transaction, estimateGas, traditionalGasEstimate]);
+  }, [transaction, traditionalGasEstimate, getGasEstimate]);
 
   const renderPlans = TRANSACTION_PRIORITIES.map((priority) => (
     <Grid xs={12} md={4} key={priority.name}>

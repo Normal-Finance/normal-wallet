@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect, useState } from 'react';
 
 import * as Yup from 'yup';
@@ -190,7 +191,7 @@ export default function SendForm({ token, onClose }: Props) {
   }, [values, token, walletAddresses]);
 
   return (
-    <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+    <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit as any)}>
       <Stack sx={{ p: 2.5 }}>
         {/* Amount */}
         <RHFTextField

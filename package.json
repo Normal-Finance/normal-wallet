@@ -86,6 +86,7 @@
     "@next/eslint-plugin-next": "^13.4.7",
     "@svgr/webpack": "^8.0.1",
     "@types/autosuggest-highlight": "^3.2.0",
+    "@types/crypto-js": "^4.1.1",
     "@types/lodash": "^4.14.195",
     "@types/mixpanel-browser": "^2.47.0",
     "@types/node": "^20.2.5",

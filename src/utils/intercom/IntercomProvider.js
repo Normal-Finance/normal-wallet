@@ -2,7 +2,11 @@
 
 // import { useEffect } from 'react';
 // import { useRouter } from 'next/router';
-import { load as loadIntercom, boot as bootIntercom, update as updateIntercom } from './intercom';
+import {
+  load as loadIntercom,
+  boot as bootIntercom,
+  // update as updateIntercom
+} from './intercom';
 
 export const IntercomProvider = ({ children }) => {
   // const router = useRouter();

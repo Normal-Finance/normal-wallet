@@ -51,7 +51,7 @@ export default function TransactionPriorityListDialog({
         onClose();
       }
     },
-    [onClose, onSelect, selected]
+    [enqueueSnackbar, onClose, onSelect, selected]
   );
 
   return (

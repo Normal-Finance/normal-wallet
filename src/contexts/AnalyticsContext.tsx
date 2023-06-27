@@ -1,3 +1,6 @@
+/* eslint-disable react/jsx-no-constructed-context-values */
+/* eslint-disable react-hooks/exhaustive-deps */
+
 // Modules
 import { createContext, ReactNode, useContext } from 'react';
 import mixpanel from 'mixpanel-browser';

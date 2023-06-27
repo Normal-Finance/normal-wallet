@@ -259,18 +259,21 @@ export default function useWalletConnectLegacy({ account, chainId, clearWcClipbo
 
       return connector;
     },
-    [clearWcClipboard]
+    [chainId, clearWcClipboard, dispatch, enqueueSnackbar, trackEvent]
   );
 
-  const disconnect = useCallback((connectionId: any) => {
-    // connector might not be there, either cause we disconnected before,
-    // or cause we failed to connect in the first place
-    if (connectors[connectionId]) {
-      connectors[connectionId].killSession();
-      connectors[connectionId] = null;
-    }
-    dispatch(disconnected({ connectionId }));
-  }, []);
+  const disconnect = useCallback(
+    (connectionId: any) => {
+      // connector might not be there, either cause we disconnected before,
+      // or cause we failed to connect in the first place
+      if (connectors[connectionId]) {
+        connectors[connectionId].killSession();
+        connectors[connectionId] = null;
+      }
+      dispatch(disconnected({ connectionId }));
+    },
+    [dispatch]
+  );
 
   // Side effects on init
   useEffect(() => {
@@ -292,6 +295,7 @@ export default function useWalletConnectLegacy({ account, chainId, clearWcClipbo
 const onCallRequest = async (
   connector: any,
   payload: { id: number; method: string; params: any[] }
+  // eslint-disable-next-line consistent-return
 ) => {
   switch (payload.method) {
     case EIP155_SIGNING_METHODS.ETH_SIGN:
@@ -341,6 +345,7 @@ function getCachedLegacySession(): IWalletConnectSession | undefined {
   if (local) {
     session = JSON.parse(local);
   }
+  // eslint-disable-next-line consistent-return
   return session;
 }
 

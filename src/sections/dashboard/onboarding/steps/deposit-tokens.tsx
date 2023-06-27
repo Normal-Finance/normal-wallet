@@ -27,8 +27,16 @@ export default function DepositTokens() {
   const { trackEvent } = useAnalyticsContext();
 
   useEffect(() => {
+    async function fetchBalances(address: string) {
+      const ethereum = await getEthereumBalanceOfAddress(address);
+      setEthereumBalance(ethereum);
+
+      const tokens = await getTokenBalancesOfAddress(address);
+      setTokenBalances(tokens);
+    }
+
     if (walletAddresses.personal) fetchBalances(walletAddresses.personal);
-  }, [walletAddresses.personal, fetchBalances]);
+  }, [getEthereumBalanceOfAddress, getTokenBalancesOfAddress, walletAddresses.personal]);
 
   const handleOpenReceive = () => {
     trackEvent(AnalyticsEvents.OPENED_RECEIVE);
@@ -38,14 +46,6 @@ export default function DepositTokens() {
   const handleCloseReceive = () => {
     setOpenReceive(false);
   };
-
-  async function fetchBalances(address: string) {
-    const ethereum = await getEthereumBalanceOfAddress(address);
-    setEthereumBalance(ethereum);
-
-    const tokens = await getTokenBalancesOfAddress(address);
-    setTokenBalances(tokens);
-  }
 
   const handleCloseDeposit = () => {
     setOpenDeposit(false);

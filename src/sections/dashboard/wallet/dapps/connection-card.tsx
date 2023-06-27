@@ -113,6 +113,7 @@ export default function ConnectionCard({ connection, onDisconnect, sx, ...other 
           p: { xs: 2.5, sm: 2 },
           '&:hover': {
             bgcolor: 'background.paper',
+            // eslint-disable-next-line @typescript-eslint/no-shadow
             boxShadow: (theme) => theme.customShadows.z20,
           },
           ...sx,

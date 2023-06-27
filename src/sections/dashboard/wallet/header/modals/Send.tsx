@@ -39,7 +39,7 @@ export default function Send({ open, ethereumBalance, tokenBalances, onClose }: 
   };
 
   const handleChange = (event: SelectChangeEvent) => {
-    setSelectedIndex(event.target.value as string);
+    setSelectedIndex(event.target.value as any);
   };
 
   const ethToken: OwnedToken = {
@@ -69,7 +69,7 @@ export default function Send({ open, ethereumBalance, tokenBalances, onClose }: 
           name="token"
           label="Token"
           size="small"
-          value={selectedIndex}
+          value={selectedIndex as any}
           onChange={handleChange}
           // InputLabelProps={{ shrink: true }}
           // SelectProps={{ native: false, sx: { textTransform: 'capitalize', mb: 2 } }}

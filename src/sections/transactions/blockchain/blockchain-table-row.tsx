@@ -34,7 +34,7 @@ export default function BlockchainTableRow({
   onCopyTransactionHash,
   onSelectTransaction,
 }: Props) {
-  const { uniqueId, category, blockNum, from, to, value, tokenId, asset, hash } = transaction;
+  const { category, blockNum, from, to, value, asset, hash } = transaction;
 
   const popover = usePopover();
   const { trackEvent } = useAnalyticsContext();

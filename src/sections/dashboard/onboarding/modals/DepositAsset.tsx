@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useContract, useTransferToken, Web3Button } from '@thirdweb-dev/react';
 
 // @mui
@@ -46,17 +46,17 @@ export default function DepositAsset({ open, token, toAddress, onClose }: Props)
 
   const [amount, setAmount] = useState('');
 
-  const handleOnClose = () => {
+  const handleOnClose = useCallback(() => {
     onClose();
     setAmount('');
-  };
+  }, [onClose]);
 
   useEffect(() => {
     if (transferTokenSuccess) {
       enqueueSnackbar(`${symbol} deposit successfully sent!`, { variant: 'success' });
       handleOnClose();
     }
-  }, [transferTokenSuccess, enqueueSnackbar, handleOnClose]);
+  }, [transferTokenSuccess, enqueueSnackbar, handleOnClose, symbol]);
 
   const handleAmount = (event: any) => {
     setAmount(event.target.value);

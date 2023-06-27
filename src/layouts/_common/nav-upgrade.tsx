@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import { useEffect } from 'react';
 // @mui
 import Box from '@mui/material/Box';
@@ -69,7 +70,7 @@ export default function NavUpgrade() {
           </Typography>
 
           <Typography variant="body2" noWrap sx={{ color: 'text.disabled' }}>
-            We&lsquo;'ve got you covered
+            We've got you covered
           </Typography>
         </Stack>
 
