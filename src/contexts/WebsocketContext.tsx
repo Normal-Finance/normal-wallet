@@ -103,7 +103,7 @@ export const WebsocketContextProvider = ({ children }: Props) => {
       const { event, data, error }: any = lastJsonMessage;
 
       if (error) {
-        // TODO:
+        enqueueSnackbar(`Request failed - ${error.message}`, { variant: 'error' });
       } else {
         switch (event) {
           case Events.SUBSCRIBE:
