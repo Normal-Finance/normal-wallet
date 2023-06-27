@@ -369,7 +369,7 @@ export default function useWalletConnectV2({ account, chainId, clearWcClipboard 
               if (WC2_VERBOSE) enqueueSnackbar('WC2 Updated ', updateResult);
             })
             .catch((err: any) => {
-              enqueueSnackbar('WC2 Update Error: ' + err.message, session);
+              if (WC2_VERBOSE) enqueueSnackbar('WC2 Update Error: ' + err.message, session);
             });
         } else {
           if (WC2_VERBOSE)
@@ -390,10 +390,6 @@ export default function useWalletConnectV2({ account, chainId, clearWcClipboard 
       client.on('session_proposal', onSessionProposal);
       client.on('session_request', onSessionRequest);
       client.on('session_delete', onSessionDelete);
-
-      client.on('session_ping', (data: any) => console.log('ping', data));
-      client.on('session_event', (data: any) => console.log('event', data));
-      client.on('session_update', (data: any) => console.log('update', data));
 
       return () => {
         client.removeListener('session_proposal', onSessionProposal);

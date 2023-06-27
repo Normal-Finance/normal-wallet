@@ -50,14 +50,11 @@ export const WalletContextProvider = ({ children }: Props) => {
     smart: '',
   });
 
-  // When a wallet is connected, the smart wallet
+  // When a wallet is connected, connect to its smart wallet
   useEffect(() => {
     if (wallet) {
       trackEvent(AnalyticsEvents.CONNECTED_WALLET, { wallet });
-
-      getPersonalAddress();
       connectSmartWallet();
-      getSmartAddress();
     }
   }, [wallet]);
 
@@ -71,25 +68,29 @@ export const WalletContextProvider = ({ children }: Props) => {
     if (wallet && smartWallet) setUser(walletAddresses.personal, walletAddresses.smart);
   }, [smartWallet]);
 
-  //
-  function personalWalletDisconnectedError() {
-    enqueueSnackbar('Personal wallet disconnected', { variant: 'error' });
-  }
   function smartWalletDisconnectedError() {
     enqueueSnackbar('Smart wallet disconnected', { variant: 'error' });
   }
 
   async function connectSmartWallet() {
-    const config = {
+    // connect the smart wallet
+    const _smartWallet = new SmartWallet({
       chain: Goerli,
       factoryAddress: THIRDWEB.factoryAddress,
       thirdwebApiKey: THIRDWEB.apiKey,
       gasless: false,
-    };
-
-    const _smartWallet = new SmartWallet(config);
+    });
     await _smartWallet.connect({ personalWallet: wallet as any });
     setSmartWallet(_smartWallet);
+
+    // save the addresses
+    const personalAddress = await wallet!.getAddress();
+    const smartAddress = await _smartWallet.getAddress();
+
+    setWalletAddresses({
+      personal: personalAddress,
+      smart: smartAddress,
+    });
   }
 
   async function getPersonalAddress() {
@@ -98,16 +99,6 @@ export const WalletContextProvider = ({ children }: Props) => {
       setWalletAddresses({
         ...walletAddresses,
         personal: personalAddress,
-      });
-    }
-  }
-
-  async function getSmartAddress() {
-    if (smartWallet) {
-      const smartAddress = await smartWallet.getAddress();
-      setWalletAddresses({
-        ...walletAddresses,
-        smart: smartAddress,
       });
     }
   }

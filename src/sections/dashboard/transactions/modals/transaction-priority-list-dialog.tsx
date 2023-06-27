@@ -9,7 +9,7 @@ import Typography from '@mui/material/Typography';
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
 //
-import { Priority } from 'src/types/transaction';
+import { TransactionPriority } from 'src/types/transaction';
 import Label from 'src/components/label/label';
 
 // ----------------------------------------------------------------------
@@ -17,8 +17,8 @@ import Label from 'src/components/label/label';
 type Props = {
   open: boolean;
   onClose: VoidFunction;
-  selected: Priority;
-  onSelect: (priority: Priority) => void;
+  selected: TransactionPriority;
+  onSelect: (priority: TransactionPriority) => void;
 };
 
 export default function TransactionPriorityListDialog({
@@ -29,12 +29,12 @@ export default function TransactionPriorityListDialog({
 }: Props) {
   const TRANSACTION_PRIORITIES = [
     {
-      id: Priority.GTC,
+      id: TransactionPriority.GTC,
       name: 'Good Till Cancel (GTC)',
       description: 'Optimized for gas savings. Waits for other transactions before being executed.',
     },
     {
-      id: Priority.INSTANT,
+      id: TransactionPriority.INSTANT,
       name: 'Instant',
       description: 'Optimzed for speed. Execution is immediate regardless of batch size.',
     },
@@ -43,7 +43,7 @@ export default function TransactionPriorityListDialog({
   const { enqueueSnackbar } = useSnackbar();
 
   const handleSelectPriority = useCallback(
-    (priority: Priority) => {
+    (priority: TransactionPriority) => {
       if (priority === selected)
         enqueueSnackbar(`Transaction priority already set to ${selected}`, { variant: 'error' });
       else {
@@ -86,7 +86,7 @@ export default function TransactionPriorityListDialog({
             <Stack direction="row" alignItems="center" spacing={1}>
               <Iconify
                 icon={
-                  (priority.id === Priority.GTC && 'solar:clock-circle-bold-duotone') ||
+                  (priority.id === TransactionPriority.GTC && 'solar:clock-circle-bold-duotone') ||
                   'solar:battery-charge-minimalistic-bold-duotone'
                 }
                 width={36}

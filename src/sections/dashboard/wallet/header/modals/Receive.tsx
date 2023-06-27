@@ -19,12 +19,12 @@ type Props = {
 
 export default function Receive({ open, onClose }: Props) {
   const { enqueueSnackbar } = useSnackbar();
-  const { smartWallet, walletAddresses, smartWalletDisconnectedError } = useWalletContext();
+  const { smartWallet, walletAddresses } = useWalletContext();
   const { copy } = useCopyToClipboard();
   const { trackEvent } = useAnalyticsContext();
 
   const handleCopyAddress = async () => {
-    if (!smartWallet) smartWalletDisconnectedError();
+    if (!walletAddresses.smart) enqueueSnackbar('Unable to copy address', { variant: 'error' });
     else {
       try {
         await copy(walletAddresses.smart);

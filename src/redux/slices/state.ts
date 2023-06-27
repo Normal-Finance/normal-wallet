@@ -28,8 +28,6 @@ const initialState: IStateState = {
     failedCharges: 0,
   },
 
-  autoBatchEnabled: true,
-
   userTransactions: [],
 };
 
@@ -83,11 +81,6 @@ const slice = createSlice({
       state.billing.email = email;
     },
 
-    /** CONFIGURATION/SETTINGS */
-    updateAutoBatchEnabled(state) {
-      state.autoBatchEnabled = !state.autoBatchEnabled;
-    },
-
     /** USER TRANSACTIONS */
     updateUserTransactions(state, action) {
       const { transactions } = action.payload;
@@ -133,7 +126,6 @@ export const {
   updateEmail,
   updateUserTransactions,
   newTransaction,
-  updateAutoBatchEnabled,
   updateTransactionPriority,
   cancelTransaction,
 } = slice.actions;

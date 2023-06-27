@@ -3,7 +3,16 @@
 import { useEffect, useState, useCallback } from 'react';
 
 // @mui
-import { Button, CircularProgress, Container, Skeleton, Typography } from '@mui/material';
+import {
+  Alert,
+  Button,
+  CircularProgress,
+  Container,
+  Skeleton,
+  Stack,
+  Tooltip,
+  Typography,
+} from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 
 // redux
@@ -61,17 +70,9 @@ export default function DashboardView() {
     chainId: chain?.chainId!,
   });
 
-  const getStateCallback = useCallback(() => {
-    getState();
-  }, []);
-
   useEffect(() => {
-    getStateCallback();
-  }, [getStateCallback]);
-
-  useEffect(() => {
-    if (walletAddresses.smart) getStateCallback();
-  }, [walletAddresses.smart]);
+    if (walletAddresses.smart) getState();
+  }, [walletAddresses]);
 
   useEffect(() => {
     if (transactions) setTotalTransactions(sumValues(transactions));
@@ -111,50 +112,62 @@ export default function DashboardView() {
       <Grid container spacing={3}>
         {/* Statistics */}
         <>
-          {websocketStatus === 'Connecting' ||
-            (websocketStatus === 'Closing' && <CircularProgress />)}
-          {websocketStatus === 'Closed' ||
-            (websocketStatus === 'Uninstantiated' && <h1>Unable to connect to API.</h1>)}
+          {(websocketStatus === 'Connecting' || websocketStatus === 'Closing') && (
+            <CircularProgress sx={{ mb: 2 }} />
+          )}
+          {(websocketStatus === 'Closed' || websocketStatus === 'Uninstantiated') && (
+            <Alert severity="error" sx={{ mb: 2 }}>
+              Unable to load realtime statistics. There was an error connecting to the API.
+            </Alert>
+          )}
           {websocketStatus === 'Open' && (
             <>
-              <Grid xs={12} sm={6} md={3}>
-                <AnalyticsWidget
-                  title="Connected Clients"
-                  total={clients}
-                  color="info"
-                  loading={websocketStatus !== 'Open' || clients === null}
-                  icon={<img alt="icon" src="/assets/icons/glass/ic_glass_users.png" />}
-                />
-              </Grid>
+              <Tooltip title="Total number of people using Normal right now" placement="top">
+                <Grid xs={12} sm={6} md={3}>
+                  <AnalyticsWidget
+                    title="Connected Clients"
+                    total={clients}
+                    color="info"
+                    loading={websocketStatus !== 'Open' || clients === null}
+                    icon={<img alt="icon" src="/assets/icons/glass/ic_glass_users.png" />}
+                  />
+                </Grid>
+              </Tooltip>
 
-              <Grid xs={12} sm={6} md={3}>
-                <AnalyticsWidget
-                  title="Pending Transactions"
-                  total={transactions?.NEW + transactions?.PENDING}
-                  color="warning"
-                  loading={websocketStatus !== 'Open' || transactions?.PENDING === null}
-                  icon={<img alt="icon" src="/assets/icons/glass/ic_glass_buy.png" />}
-                />
-              </Grid>
+              <Tooltip title="Total number of new transactions ready to be batched" placement="top">
+                <Grid xs={12} sm={6} md={3}>
+                  <AnalyticsWidget
+                    title="Pending Transactions"
+                    total={transactions?.NEW + transactions?.PENDING}
+                    color="warning"
+                    loading={websocketStatus !== 'Open' || transactions?.PENDING === null}
+                    icon={<img alt="icon" src="/assets/icons/glass/ic_glass_buy.png" />}
+                  />
+                </Grid>
+              </Tooltip>
 
-              <Grid xs={12} sm={6} md={3}>
-                <AnalyticsWidget
-                  title="Total Transactions"
-                  total={totalTransactions}
-                  color="error"
-                  loading={websocketStatus !== 'Open' || transactions === null}
-                  icon={<img alt="icon" src="/assets/icons/glass/ic_glass_message.png" />}
-                />
-              </Grid>
+              <Tooltip title="Total number of transactions batched" placement="top">
+                <Grid xs={12} sm={6} md={3}>
+                  <AnalyticsWidget
+                    title="Total Transactions"
+                    total={totalTransactions}
+                    color="error"
+                    loading={websocketStatus !== 'Open' || transactions === null}
+                    icon={<img alt="icon" src="/assets/icons/glass/ic_glass_message.png" />}
+                  />
+                </Grid>
+              </Tooltip>
 
-              <Grid xs={12} sm={6} md={3}>
-                <AnalyticsWidget
-                  title="Total Batches"
-                  total={totalBatches}
-                  loading={websocketStatus !== 'Open' || batches === null}
-                  icon={<img alt="icon" src="/assets/icons/glass/ic_glass_bag.png" />}
-                />
-              </Grid>
+              <Tooltip title="Total number of batched executed" placement="top">
+                <Grid xs={12} sm={6} md={3}>
+                  <AnalyticsWidget
+                    title="Total Batches"
+                    total={totalBatches}
+                    loading={websocketStatus !== 'Open' || batches === null}
+                    icon={<img alt="icon" src="/assets/icons/glass/ic_glass_bag.png" />}
+                  />
+                </Grid>
+              </Tooltip>
             </>
           )}
 
@@ -178,32 +191,31 @@ export default function DashboardView() {
             </Grid>
           )}
 
-          {/* Wrong Network */}
-          {![1, 5].includes(chain?.chainId!) && (
-            <Grid xs={12} md={12}>
-              <FailedPaymentAlert
-                title={'Wrong network'}
-                description="Please switch to Ethereum or Goerli to continue."
-                action={
-                  <Button
-                    variant="contained"
-                    color="error"
-                    onClick={() => switchChain(Goerli.chainId)}
-                  >
-                    Switch to Ethereum {process.env.NODE_ENV === 'production' && '(Goerli)'}
-                  </Button>
-                }
-              />
-            </Grid>
-          )}
+          {/* Get Started */}
+          {connectionStatus !== 'connected' && <GetStarted />}
 
-          {/* Correct Network */}
-          {[1, 5].includes(chain?.chainId!) && (
+          {connectionStatus === 'connected' && (
             <>
-              {/* Get Started */}
-              {connectionStatus !== 'connected' && <GetStarted />}
+              {/* Wrong Network */}
+              {![1, 5].includes(chain?.chainId!) && (
+                <Grid xs={12} md={12}>
+                  <FailedPaymentAlert
+                    title={'Wrong network'}
+                    description="Please switch to Ethereum or Goerli to continue."
+                    action={
+                      <Button
+                        variant="contained"
+                        color="error"
+                        onClick={() => switchChain(Goerli.chainId)}
+                      >
+                        Switch to Ethereum {process.env.NODE_ENV === 'production' && '(Goerli)'}
+                      </Button>
+                    }
+                  />
+                </Grid>
+              )}
 
-              {connectionStatus === 'connected' && (
+              {[1, 5].includes(chain?.chainId!) && (
                 <>
                   {!smartWallet && (
                     <Grid xs={12} md={12}>
@@ -219,7 +231,7 @@ export default function DashboardView() {
                       ) : (
                         <>
                           {/* Live User Transactions */}
-                          {Object.keys(userTransactions).length > 0 && (
+                          {userTransactions.length > 0 && (
                             <Grid xs={12}>
                               <TransactionsOverview transactions={userTransactions} />
                             </Grid>

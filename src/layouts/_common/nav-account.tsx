@@ -28,7 +28,7 @@ const StyledRoot = styled('div')(({ theme }) => ({
 export default function NavAccount() {
   const { copy } = useCopyToClipboard();
   const { enqueueSnackbar } = useSnackbar();
-  const { walletAddresses, smartWallet, smartWalletDisconnectedError } = useWalletContext();
+  const { walletAddresses, smartWallet } = useWalletContext();
   const { trackEvent } = useAnalyticsContext();
 
   const [openReceive, setOpenReceive] = useState(false);
@@ -42,7 +42,7 @@ export default function NavAccount() {
   };
 
   const handleCopyAddress = async () => {
-    if (!smartWallet) smartWalletDisconnectedError();
+    if (!walletAddresses.smart) enqueueSnackbar('Unable to copy address', { variant: 'error' });
     else {
       try {
         await copy(walletAddresses.smart);

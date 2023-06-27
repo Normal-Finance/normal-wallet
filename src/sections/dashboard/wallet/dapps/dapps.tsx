@@ -42,7 +42,7 @@ export default function Dapps({ connections, connect, disconnect, isWcConnecting
   return (
     <>
       <Scrollbar>
-        <Stack direction="row" sx={{ py: 2 }}>
+        <Stack direction="row" sx={{ py: 1 }}>
           {/* Button */}
           {connections.length > 0 ? (
             <IconButton

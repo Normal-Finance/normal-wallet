@@ -54,11 +54,12 @@ export const AlchemyContextProvider = ({ children }: Props) => {
     if (smartWallet || chain) getBalancesAndTransactions();
   }, [smartWallet, chain]);
 
+  // TODO: upon trigger, the resetting of state make the dashboard show the wrong conditions
   // Update the balances and transactions every UPDATE_INTERVAL (3 minutes)
-  useEffect(() => {
-    const interval = setInterval(getBalancesAndTransactions, UPDATE_INTERVAL);
-    return () => clearInterval(interval);
-  }, []);
+  // useEffect(() => {
+  //   const interval = setInterval(getBalancesAndTransactions, UPDATE_INTERVAL);
+  //   return () => clearInterval(interval);
+  // }, []);
 
   /**
    * UTILS

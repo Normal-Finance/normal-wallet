@@ -53,7 +53,7 @@ export default function Header({ loading, ethereumBalance, tokenBalances }: Prop
   };
 
   return (
-    <Box sx={{ mb: { xs: 3, md: 5 } }}>
+    <Box sx={{ mb: { xs: 3, md: 3 } }}>
       <Stack direction="row" alignItems="center">
         <Box sx={{ flexGrow: 1 }}>
           <Typography variant="h4" gutterBottom>
