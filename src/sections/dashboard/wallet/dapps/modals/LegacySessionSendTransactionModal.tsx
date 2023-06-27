@@ -17,7 +17,7 @@ import { useWalletContext } from 'src/contexts/WalletContext';
 import { useWebsocketContext } from 'src/contexts/WebsocketContext';
 
 // redux
-import { useSelector } from 'src/redux/store';
+// import { useSelector } from 'src/redux/store';
 
 import ModalStore from 'src/store/ModalStore';
 import { EIP155_CHAINS, TEIP155Chain } from 'src/hooks/walletConnect/wcConsts';
@@ -27,15 +27,13 @@ import {
 } from 'src/utils/walletConnect/EIP155RequestHandlerUtil';
 import { TransactionPriority } from 'src/types/transaction';
 import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsContext';
-import TransactionTypes from '../transaction-types';
+// import TransactionTypes from '../transaction-types';
 
 export default function LegacySessionSendTransactionModal() {
-  const { transactions } = useSelector((state) => state.state);
+  // const { transactions } = useSelector((state) => state.state);
 
   const [loading, setLoading] = useState(false);
-  const [selectedPriority, setSelectedPriority] = useState<TransactionPriority>(
-    TransactionPriority.GTC
-  );
+  const [selectedPriority] = useState<TransactionPriority>(TransactionPriority.TRADITIONAL);
 
   const { smartWallet } = useWalletContext();
   const { newTransaction } = useWebsocketContext();
@@ -137,9 +135,9 @@ export default function LegacySessionSendTransactionModal() {
     }
   };
 
-  const onSelectTransactionType = (newValue: TransactionPriority) => {
-    setSelectedPriority(newValue);
-  };
+  // const onSelectTransactionType = (newValue: TransactionPriority) => {
+  //   setSelectedPriority(newValue);
+  // };
 
   return (
     <Dialog maxWidth="sm" open>
@@ -188,12 +186,12 @@ export default function LegacySessionSendTransactionModal() {
           <Divider />
 
           {/* <transaction> will most likely not satisfy required input type */}
-          <TransactionTypes
+          {/* <TransactionTypes
             newTransactions={transactions.NEW}
             transaction={transaction}
             selected={selectedPriority}
             onSelect={onSelectTransactionType}
-          />
+          /> */}
 
           <Divider />
         </Stack>

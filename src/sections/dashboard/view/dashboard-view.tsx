@@ -1,3 +1,5 @@
+/* eslint-disable @next/next/no-img-element */
+
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -31,7 +33,6 @@ import { APP_STUFF } from 'src/config-global';
 import { useAlchemyContext } from 'src/contexts/AlchemyContext';
 import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsContext';
 import { Goerli } from '@thirdweb-dev/chains';
-import Image from 'next/image';
 import AnalyticsWidget from '../statistics/analytics-widget';
 import GetStarted from '../get-started';
 import Header from '../wallet/header/header';
@@ -72,7 +73,8 @@ export default function DashboardView() {
 
   useEffect(() => {
     if (walletAddresses.smart) getState();
-  }, [walletAddresses, getState]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [walletAddresses]);
 
   useEffect(() => {
     if (transactions) setTotalTransactions(sumValues(transactions));
@@ -129,14 +131,7 @@ export default function DashboardView() {
                     total={clients}
                     color="info"
                     loading={websocketStatus !== 'Open' || clients === null}
-                    icon={
-                      <Image
-                        alt="icon"
-                        src="/assets/icons/glass/ic_glass_users.png"
-                        height={64}
-                        width={64}
-                      />
-                    }
+                    icon={<img alt="icon" src="/assets/icons/glass/ic_glass_users.png" />}
                   />
                 </Grid>
               </Tooltip>
@@ -149,14 +144,7 @@ export default function DashboardView() {
                     total={transactions?.NEW + transactions?.PENDING}
                     color="warning"
                     loading={websocketStatus !== 'Open' || transactions?.PENDING === null}
-                    icon={
-                      <Image
-                        alt="icon"
-                        src="/assets/icons/glass/ic_glass_buy.png"
-                        height={64}
-                        width={64}
-                      />
-                    }
+                    icon={<img alt="icon" src="/assets/icons/glass/ic_glass_buy.png" />}
                   />
                 </Grid>
               </Tooltip>
@@ -168,14 +156,7 @@ export default function DashboardView() {
                     total={totalTransactions}
                     color="error"
                     loading={websocketStatus !== 'Open' || transactions === null}
-                    icon={
-                      <Image
-                        alt="icon"
-                        src="/assets/icons/glass/ic_glass_message.png"
-                        height={64}
-                        width={64}
-                      />
-                    }
+                    icon={<img alt="icon" src="/assets/icons/glass/ic_glass_message.png" />}
                   />
                 </Grid>
               </Tooltip>
@@ -186,14 +167,7 @@ export default function DashboardView() {
                     title="Total Batches"
                     total={totalBatches}
                     loading={websocketStatus !== 'Open' || batches === null}
-                    icon={
-                      <Image
-                        alt="icon"
-                        src="/assets/icons/glass/ic_glass_bag.png"
-                        height={64}
-                        width={64}
-                      />
-                    }
+                    icon={<img alt="icon" src="/assets/icons/glass/ic_glass_bag.png" />}
                   />
                 </Grid>
               </Tooltip>

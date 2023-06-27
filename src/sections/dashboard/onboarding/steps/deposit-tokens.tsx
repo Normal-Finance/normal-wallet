@@ -26,17 +26,18 @@ export default function DepositTokens() {
   const { getEthereumBalanceOfAddress, getTokenBalancesOfAddress } = useAlchemyContext();
   const { trackEvent } = useAnalyticsContext();
 
+  async function fetchBalances(address: string) {
+    const ethereum = await getEthereumBalanceOfAddress(address);
+    setEthereumBalance(ethereum);
+
+    const tokens = await getTokenBalancesOfAddress(address);
+    setTokenBalances(tokens);
+  }
+
   useEffect(() => {
-    async function fetchBalances(address: string) {
-      const ethereum = await getEthereumBalanceOfAddress(address);
-      setEthereumBalance(ethereum);
-
-      const tokens = await getTokenBalancesOfAddress(address);
-      setTokenBalances(tokens);
-    }
-
     if (walletAddresses.personal) fetchBalances(walletAddresses.personal);
-  }, [getEthereumBalanceOfAddress, getTokenBalancesOfAddress, walletAddresses.personal]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [walletAddresses.personal]);
 
   const handleOpenReceive = () => {
     trackEvent(AnalyticsEvents.OPENED_RECEIVE);
