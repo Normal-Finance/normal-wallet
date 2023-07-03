@@ -17,7 +17,7 @@ import { useWalletContext } from 'src/contexts/WalletContext';
 import { useWebsocketContext } from 'src/contexts/WebsocketContext';
 
 // redux
-import { useSelector } from 'src/redux/store';
+// import { useSelector } from 'src/redux/store';
 
 import ModalStore from 'src/store/ModalStore';
 import { EIP155_CHAINS, TEIP155Chain } from 'src/hooks/walletConnect/wcConsts';
@@ -25,17 +25,15 @@ import {
   approveEIP155Request,
   rejectEIP155Request,
 } from 'src/utils/walletConnect/EIP155RequestHandlerUtil';
-import TransactionTypes from '../transaction-types';
 import { TransactionPriority } from 'src/types/transaction';
 import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsContext';
+// import TransactionTypes from '../transaction-types';
 
 export default function SessionSendTransactionModal() {
-  const { transactions } = useSelector((state) => state.state);
+  // const { transactions } = useSelector((state) => state.state);
 
   const [loading, setLoading] = useState(false);
-  const [selectedPriority, setSelectedPriority] = useState<TransactionPriority>(
-    TransactionPriority.TRADITIONAL
-  );
+  const [selectedPriority] = useState<TransactionPriority>(TransactionPriority.TRADITIONAL);
 
   const { smartWallet } = useWalletContext();
   const { newTransaction } = useWebsocketContext();
@@ -63,7 +61,7 @@ export default function SessionSendTransactionModal() {
 
       const response = await approveEIP155Request(
         requestEvent,
-        smartWallet,
+        smartWallet!,
         selectedPriority,
         (
           account: string,
@@ -101,12 +99,12 @@ export default function SessionSendTransactionModal() {
     }
   };
 
-  const onSelectTransactionType = (newValue: TransactionPriority) => {
-    setSelectedPriority(newValue);
-  };
+  // const onSelectTransactionType = (newValue: TransactionPriority) => {
+  //   setSelectedPriority(newValue);
+  // };
 
   return (
-    <Dialog maxWidth="sm" open={true}>
+    <Dialog maxWidth="sm" open>
       <DialogTitle> Send / Sign Transaction </DialogTitle>
 
       <DialogContent sx={{ overflow: 'unset' }}>
@@ -131,22 +129,20 @@ export default function SessionSendTransactionModal() {
           <Stack spacing={2} direction="row">
             <Typography variant="h6">Blockchain(s)</Typography>
             <Stack direction="row" alignItems="center" spacing={1}>
-              {[chainId ?? ''].map((chain) => {
-                return (
-                  <Chip
-                    key={EIP155_CHAINS[chain as TEIP155Chain]?.name ?? chain}
-                    label={EIP155_CHAINS[chain as TEIP155Chain]?.name ?? chain}
-                    variant="soft"
-                    color={'info'}
-                  />
-                );
-              })}
+              {[chainId ?? ''].map((chain) => (
+                <Chip
+                  key={EIP155_CHAINS[chain as TEIP155Chain]?.name ?? chain}
+                  label={EIP155_CHAINS[chain as TEIP155Chain]?.name ?? chain}
+                  variant="soft"
+                  color="info"
+                />
+              ))}
             </Stack>
 
             <Typography variant="h6">Methods</Typography>
             <Stack direction="row" alignItems="center" spacing={1}>
               {[request.method].map((method) => (
-                <Chip key={method} label={method} variant="soft" color={'warning'} />
+                <Chip key={method} label={method} variant="soft" color="warning" />
               ))}
             </Stack>
           </Stack>

@@ -9,7 +9,7 @@ import {
   magicLink,
 } from '@thirdweb-dev/react';
 import { Goerli } from '@thirdweb-dev/chains';
-import { NORMAL_WALLET_INFO, THIRDWEB, WALLET_CONNECT } from 'src/config-global';
+import { MAGIC_API_KEY, NORMAL_WALLET_INFO, THIRDWEB, WALLET_CONNECT } from 'src/config-global';
 
 import { IntercomProvider } from 'src/utils/intercom/IntercomProvider';
 
@@ -45,7 +45,7 @@ export default function Layout({ children }: Props) {
         metamaskWallet(),
         coinbaseWallet(),
         walletConnect({ projectId: WALLET_CONNECT.projectId }),
-        magicLink({ apiKey: WALLET_CONNECT.relayUrl, emailLogin: true, smsLogin: true }),
+        magicLink({ apiKey: MAGIC_API_KEY, emailLogin: true, smsLogin: true }),
       ]}
     >
       <IntercomProvider>

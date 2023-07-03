@@ -3,22 +3,11 @@ import { useState } from 'react';
 import { CodeBlock, codepen } from 'react-code-blocks';
 
 // @mui
-import {
-  Box,
-  Stack,
-  Button,
-  MenuItem,
-  DialogActions,
-  Dialog,
-  Typography,
-  Select,
-  SelectChangeEvent,
-} from '@mui/material';
+import { Box, Stack, Button, DialogActions, Dialog, Typography, Alert } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // components
 import { OwnedToken } from 'alchemy-sdk';
 import { fEtherscanAddress } from 'src/utils/format-string';
-import SendForm from '../SendForm';
 
 // ----------------------------------------------------------------------
 
@@ -30,26 +19,11 @@ type Props = {
 };
 
 export default function Send({ open, ethereumBalance, tokenBalances, onClose }: Props) {
-  const [selectedIndex, setSelectedIndex] = useState(-2);
   const [transactionHash, setTransactionHash] = useState('');
 
   const handleOnClose = () => {
     setTransactionHash('');
     onClose();
-  };
-
-  const handleChange = (event: SelectChangeEvent) => {
-    setSelectedIndex(event.target.value as string);
-  };
-
-  let ethToken: OwnedToken = {
-    contractAddress: '0x2170Ed0880ac9A755fd29B2688956BD959F933F8',
-    rawBalance: '', // TODO: ?
-    decimals: 1,
-    logo: 'https://assets.coingecko.com/coins/images/279/small/ethereum.png?1595348880',
-    name: 'Ethereum',
-    symbol: 'ETH',
-    balance: ethereumBalance.toString(),
   };
 
   const renderForm = (
@@ -64,58 +38,9 @@ export default function Send({ open, ethereumBalance, tokenBalances, onClose }: 
       </Stack>
 
       <Stack sx={{ p: 2.5 }}>
-        {/* Token */}
-        <Select
-          name="token"
-          label="Token"
-          size="small"
-          value={selectedIndex}
-          onChange={handleChange}
-          // InputLabelProps={{ shrink: true }}
-          // SelectProps={{ native: false, sx: { textTransform: 'capitalize', mb: 2 } }}
-        >
-          {/* Ethereum */}
-          {ethereumBalance > 0 && (
-            <MenuItem
-              value={-1}
-              sx={{
-                mx: 1,
-                my: 0.5,
-                borderRadius: 0.75,
-                typography: 'body2',
-                textTransform: 'capitalize',
-              }}
-            >
-              ETH - Ethereum
-            </MenuItem>
-          )}
-
-          {/* Tokens */}
-          {tokenBalances.map((token: OwnedToken, index: any) => {
-            return (
-              <MenuItem
-                key={index}
-                value={index}
-                sx={{
-                  mx: 1,
-                  my: 0.5,
-                  borderRadius: 0.75,
-                  typography: 'body2',
-                  textTransform: 'capitalize',
-                }}
-              >
-                {token.name}
-              </MenuItem>
-            );
-          })}
-        </Select>
-
-        {selectedIndex !== -2 && (
-          <SendForm
-            token={selectedIndex === -1 ? ethToken : tokenBalances[selectedIndex]}
-            onClose={handleOnClose}
-          />
-        )}
+        <Alert severity="warning">
+          Sending crypto is not a supported feature yet. Come back later for new updates.
+        </Alert>
       </Stack>
     </>
   );
@@ -155,7 +80,7 @@ export default function Send({ open, ethereumBalance, tokenBalances, onClose }: 
         <LoadingButton
           type="submit"
           variant="contained"
-          color={'info'}
+          color="info"
           href={fEtherscanAddress(transactionHash)}
         >
           View on Etherscan

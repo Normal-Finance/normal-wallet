@@ -1,6 +1,3 @@
-// sections
-// import { HomeView } from 'src/sections/home/view';
-
 import { NORMAL_WALLET_INFO } from 'src/config-global';
 
 // ----------------------------------------------------------------------

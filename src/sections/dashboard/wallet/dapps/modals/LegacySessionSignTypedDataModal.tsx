@@ -22,6 +22,7 @@ import {
 } from 'src/utils/walletConnect/EIP155RequestHandlerUtil';
 import { getSignTypedDataParamsData } from 'src/utils/walletConnect/HelperUtil';
 import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsContext';
+import { TransactionPriority } from 'src/types/transaction';
 
 export default function LegacySessionSignTypedDataModal() {
   const { smartWallet } = useWalletContext();
@@ -32,7 +33,7 @@ export default function LegacySessionSignTypedDataModal() {
   const requestEvent = ModalStore.state.data?.legacyCallRequestEvent;
   const requestSession = ModalStore.state.data?.legacyRequestSession;
   const chainId = ModalStore.state.data?.chainId;
-  const protocol = ModalStore.state.data?.protocol;
+  // const protocol = ModalStore.state.data?.protocol;
   const connector = ModalStore.state.data?.connector;
 
   // Ensure request and wallet are defined
@@ -41,21 +42,19 @@ export default function LegacySessionSignTypedDataModal() {
   }
 
   // Get required request data
-  const { method, params } = requestEvent;
+  const { id, method, params } = requestEvent;
 
   // Get data
   const data = getSignTypedDataParamsData(params);
 
   const onApprove = async () => {
     if (requestEvent) {
-      const { id, method, params } = requestEvent;
-
       const response: any = await approveEIP155Request(
         {
           id,
           topic: '',
           params: { request: { method, params }, chainId: '5' },
-          context: {
+          verifyContext: {
             // undefined
             verified: {
               origin: '',
@@ -64,9 +63,16 @@ export default function LegacySessionSignTypedDataModal() {
             },
           },
         },
-        smartWallet,
-        (account: string, target: string, value: string, calldata: string) => {
-          newTransaction(account, target, value, calldata);
+        smartWallet!,
+        null,
+        (
+          account: string,
+          target: string,
+          value: string,
+          calldata: string,
+          priority: TransactionPriority
+        ) => {
+          newTransaction(account, target, value, calldata, priority);
         }
       );
 
@@ -90,13 +96,11 @@ export default function LegacySessionSignTypedDataModal() {
 
   const onReject = () => {
     if (requestEvent) {
-      const { id, method, params } = requestEvent;
-
       const { error } = rejectEIP155Request({
         id,
         topic: '',
         params: { request: { method, params }, chainId: '1' },
-        context: {
+        verifyContext: {
           // undefined
           verified: {
             origin: '',
@@ -117,7 +121,7 @@ export default function LegacySessionSignTypedDataModal() {
   };
 
   return (
-    <Dialog maxWidth="sm" open={true}>
+    <Dialog maxWidth="sm" open>
       <DialogTitle> Sign Typed Data </DialogTitle>
 
       <DialogContent sx={{ overflow: 'unset' }}>
@@ -142,22 +146,20 @@ export default function LegacySessionSignTypedDataModal() {
           <Stack spacing={2} direction="row">
             <Typography variant="h6">Blockchain(s)</Typography>
             <Stack direction="row" alignItems="center" spacing={1}>
-              {[chainId ?? ''].map((chain) => {
-                return (
-                  <Chip
-                    key={EIP155_CHAINS[chain as TEIP155Chain]?.name ?? chain}
-                    label={EIP155_CHAINS[chain as TEIP155Chain]?.name ?? chain}
-                    variant="soft"
-                    color={'info'}
-                  />
-                );
-              })}
+              {[chainId ?? ''].map((chain) => (
+                <Chip
+                  key={EIP155_CHAINS[chain as TEIP155Chain]?.name ?? chain}
+                  label={EIP155_CHAINS[chain as TEIP155Chain]?.name ?? chain}
+                  variant="soft"
+                  color="info"
+                />
+              ))}
             </Stack>
 
             <Typography variant="h6">Methods</Typography>
             <Stack direction="row" alignItems="center" spacing={1}>
-              {[method].map((method) => (
-                <Chip key={method} label={method} variant="soft" color={'warning'} />
+              {[method].map((m) => (
+                <Chip key={m} label={m} variant="soft" color="warning" />
               ))}
             </Stack>
           </Stack>

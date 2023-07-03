@@ -1,15 +1,15 @@
 import { EIP155_SIGNING_METHODS } from 'src/hooks/walletConnect/wcConsts';
-import { getSignParamsMessage, getSignTypedDataParamsData } from './HelperUtil';
 import { formatJsonRpcError, formatJsonRpcResult } from '@json-rpc-tools/utils';
 import { SignClientTypes } from '@walletconnect/types';
 import { getSdkError } from '@walletconnect/utils';
 import { SmartWallet } from '@thirdweb-dev/wallets';
 import { TransactionPriority } from 'src/types/transaction';
+import { getSignParamsMessage, getSignTypedDataParamsData } from './HelperUtil';
 
 export async function approveEIP155Request(
   requestEvent: SignClientTypes.EventArguments['session_request'],
   smartWallet: SmartWallet,
-  selectedPriority: TransactionPriority,
+  selectedPriority: TransactionPriority | null,
   submitTransactionHandler: (
     account: string,
     target: string,
@@ -19,7 +19,7 @@ export async function approveEIP155Request(
   ) => void
 ) {
   const { params, id } = requestEvent;
-  const { chainId, request } = params;
+  const { request } = params;
 
   if (!window.ethereum)
     throw new Error(
@@ -63,6 +63,7 @@ export async function approveEIP155Request(
 
         switch (selectedPriority) {
           case TransactionPriority.TRADITIONAL:
+            // eslint-disable-next-line no-case-declarations
             const sentTransaction = await wallet.sendTransaction(transaction);
             return formatJsonRpcResult(id, sentTransaction);
 
@@ -79,7 +80,7 @@ export async function approveEIP155Request(
             return formatJsonRpcResult(id, true);
 
           default:
-            throw 'Unsupported Transaction Priority';
+            throw new Error('Unsupported Transaction Priority');
         }
       } catch (error: any) {
         console.error(error);

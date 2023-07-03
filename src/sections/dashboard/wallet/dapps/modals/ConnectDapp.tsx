@@ -43,7 +43,7 @@ export default function ConnectDapp({ open, onClose, onSubmit }: Props) {
       <Stack sx={{ p: 2.5 }}>
         <Typography variant="body1">
           Do not close this window while connecting. Have a question? Follow this{' '}
-          <Link href={'https://www.google.com'}>guide</Link>.
+          <Link href="https://www.google.com">guide</Link>.
         </Typography>
 
         <TextField value={uri} onChange={handleUri} placeholder="Paste link here" sx={{ mt: 2 }} />

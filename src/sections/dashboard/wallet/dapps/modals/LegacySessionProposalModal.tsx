@@ -22,11 +22,11 @@ export default function LegacySessionProposalModal() {
   }
 
   // Get required proposal data
-  const { id, params } = proposal;
+  const { params } = proposal;
   const [{ peerMeta }] = params;
 
   return (
-    <Dialog maxWidth="sm" open={true}>
+    <Dialog maxWidth="sm" open>
       <DialogTitle> Session Proposal </DialogTitle>
 
       <DialogContent sx={{ overflow: 'unset' }}>

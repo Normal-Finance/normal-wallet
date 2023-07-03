@@ -6,7 +6,12 @@ import { isFirefox } from 'src/utils/isFirefox';
 // components
 import { useSnackbar } from 'src/components/snackbar';
 
-export default function useWalletConnect({ account, chainId }) {
+type Props = {
+  account: string;
+  chainId: number;
+};
+
+export default function useWalletConnect({ account, chainId }: Props) {
   /** HOOKS */
   const { enqueueSnackbar } = useSnackbar();
 
@@ -15,9 +20,9 @@ export default function useWalletConnect({ account, chainId }) {
 
     try {
       return await navigator.clipboard.readText();
-    } catch (e) {}
-
-    return false;
+    } catch (e) {
+      return false;
+    }
   }, []);
 
   const clearWcClipboard = useCallback(async () => {
@@ -53,24 +58,20 @@ export default function useWalletConnect({ account, chainId }) {
 
   const connections = useMemo(
     () => [
-      ...connectionsLegacy.map((c) => {
-        return {
-          ...c,
-          wcVersion: 1,
-        };
-      }),
-      ...connectionsV2.map((c) => {
-        return {
-          ...c,
-          wcVersion: 2,
-        };
-      }),
+      ...connectionsLegacy.map((c: any) => ({
+        ...c,
+        wcVersion: 1,
+      })),
+      ...connectionsV2.map((c: any) => ({
+        ...c,
+        wcVersion: 2,
+      })),
     ],
     [connectionsLegacy, connectionsV2]
   );
 
   const connect = useCallback(
-    (connectorOpts) => {
+    (connectorOpts: any) => {
       if (connectorOpts.uri.match(/^wc:([a-f0-9]+)@2/)) {
         connectV2(connectorOpts);
       } else if (connectorOpts.uri.match(/^wc:([a-f0-9-]+)@1/)) {
@@ -79,11 +80,12 @@ export default function useWalletConnect({ account, chainId }) {
         enqueueSnackbar('Invalid WalletConnect uri', { variant: 'error' });
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [connectV2, connectLegacy]
   );
 
   const disconnect = useCallback(
-    (connectionId, wcVersion) => {
+    (connectionId: any, wcVersion: number) => {
       if (wcVersion === 2) {
         disconnectV2(connectionId);
       } else if (wcVersion === 1) {
@@ -103,9 +105,10 @@ export default function useWalletConnect({ account, chainId }) {
 
     if (!wcUri) return;
     if (!wcUri.includes('key=') && !wcUri.includes('symKey='))
-      return enqueueSnackbar('Invalid WalletConnect uri', { variant: 'error' });
+      enqueueSnackbar('Invalid WalletConnect uri', { variant: 'error' });
 
     if (wcUri) connect({ uri: wcUri });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [account, connect]);
 
   useEffect(() => {
@@ -113,8 +116,8 @@ export default function useWalletConnect({ account, chainId }) {
     // window.wcConnect = uri => connect({ uri })
 
     // @TODO on focus and on user action
-    const clipboardError = (e) =>
-      enqueueSnackbar('non-fatal clipboard/walletconnect err:' + e.message, { variant: 'error' });
+    const clipboardError = (e: any) =>
+      console.log(`non-fatal clipboard/walletconnect err:${e.message}`, { variant: 'error' });
     const tryReadClipboard = async () => {
       if (!account) return;
       if (isFirefox()) return;
@@ -126,7 +129,7 @@ export default function useWalletConnect({ account, chainId }) {
           connect({ uri: clipboard });
         }
       } catch (e) {
-        // clipboardError(e);
+        clipboardError(e);
       }
     };
 
@@ -139,7 +142,7 @@ export default function useWalletConnect({ account, chainId }) {
   }, [connect, account]);
 
   return {
-    connections: connections,
+    connections,
     isConnecting: isConnectingLegacy || isConnectingV2,
     connect,
     disconnect,

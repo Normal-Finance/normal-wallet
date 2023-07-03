@@ -17,7 +17,7 @@ import { useWalletContext } from 'src/contexts/WalletContext';
 import { useWebsocketContext } from 'src/contexts/WebsocketContext';
 
 // redux
-import { useSelector } from 'src/redux/store';
+// import { useSelector } from 'src/redux/store';
 
 import ModalStore from 'src/store/ModalStore';
 import { EIP155_CHAINS, TEIP155Chain } from 'src/hooks/walletConnect/wcConsts';
@@ -25,17 +25,15 @@ import {
   approveEIP155Request,
   rejectEIP155Request,
 } from 'src/utils/walletConnect/EIP155RequestHandlerUtil';
-import TransactionTypes from '../transaction-types';
 import { TransactionPriority } from 'src/types/transaction';
 import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsContext';
+// import TransactionTypes from '../transaction-types';
 
 export default function LegacySessionSendTransactionModal() {
-  const { transactions } = useSelector((state) => state.state);
+  // const { transactions } = useSelector((state) => state.state);
 
   const [loading, setLoading] = useState(false);
-  const [selectedPriority, setSelectedPriority] = useState<TransactionPriority>(
-    TransactionPriority.GTC
-  );
+  const [selectedPriority] = useState<TransactionPriority>(TransactionPriority.TRADITIONAL);
 
   const { smartWallet } = useWalletContext();
   const { newTransaction } = useWebsocketContext();
@@ -45,7 +43,7 @@ export default function LegacySessionSendTransactionModal() {
   const requestEvent = ModalStore.state.data?.legacyCallRequestEvent;
   const requestSession = ModalStore.state.data?.legacyRequestSession;
   const chainId = ModalStore.state.data?.chainId;
-  const protocol = ModalStore.state.data?.protocol;
+  // const protocol = ModalStore.state.data?.protocol;
   const connector = ModalStore.state.data?.connector;
 
   // Ensure request and wallet are defined
@@ -55,16 +53,14 @@ export default function LegacySessionSendTransactionModal() {
 
   // Get required proposal data
 
-  const { method, params } = requestEvent;
+  const { id, method, params } = requestEvent;
   const transaction = params[0];
 
   // // Remove unneeded key coming from v1 sample dapp that throws Ethers.
-  if (transaction['gas']) delete transaction['gas'];
+  if (transaction.gas) delete transaction.gas;
 
   const onApprove = async () => {
     if (requestEvent) {
-      const { id, method, params } = requestEvent;
-
       setLoading(true);
 
       const response: any = await approveEIP155Request(
@@ -72,7 +68,7 @@ export default function LegacySessionSendTransactionModal() {
           id,
           topic: '',
           params: { request: { method, params }, chainId: '5' },
-          context: {
+          verifyContext: {
             // undefined
             verified: {
               origin: '',
@@ -81,7 +77,7 @@ export default function LegacySessionSendTransactionModal() {
             },
           },
         },
-        smartWallet,
+        smartWallet as any,
         selectedPriority,
         (
           account: string,
@@ -115,13 +111,11 @@ export default function LegacySessionSendTransactionModal() {
 
   const onReject = () => {
     if (requestEvent) {
-      const { id, method, params } = requestEvent;
-
       const { error } = rejectEIP155Request({
         id,
         topic: '',
         params: { request: { method, params }, chainId: '1' },
-        context: {
+        verifyContext: {
           // undefined
           verified: {
             origin: '',
@@ -141,12 +135,12 @@ export default function LegacySessionSendTransactionModal() {
     }
   };
 
-  const onSelectTransactionType = (newValue: TransactionPriority) => {
-    setSelectedPriority(newValue);
-  };
+  // const onSelectTransactionType = (newValue: TransactionPriority) => {
+  //   setSelectedPriority(newValue);
+  // };
 
   return (
-    <Dialog maxWidth="sm" open={true}>
+    <Dialog maxWidth="sm" open>
       <DialogTitle> Send / Sign Transaction </DialogTitle>
 
       <DialogContent sx={{ overflow: 'unset' }}>
@@ -171,22 +165,20 @@ export default function LegacySessionSendTransactionModal() {
           <Stack spacing={2} direction="row">
             <Typography variant="h6">Blockchain(s)</Typography>
             <Stack direction="row" alignItems="center" spacing={1}>
-              {['eip155:' + chainId].map((chain) => {
-                return (
-                  <Chip
-                    key={EIP155_CHAINS[chain as TEIP155Chain]?.name ?? chain}
-                    label={EIP155_CHAINS[chain as TEIP155Chain]?.name ?? chain}
-                    variant="soft"
-                    color={'info'}
-                  />
-                );
-              })}
+              {[`eip155:${chainId}`].map((chain) => (
+                <Chip
+                  key={EIP155_CHAINS[chain as TEIP155Chain]?.name ?? chain}
+                  label={EIP155_CHAINS[chain as TEIP155Chain]?.name ?? chain}
+                  variant="soft"
+                  color="info"
+                />
+              ))}
             </Stack>
 
             <Typography variant="h6">Methods</Typography>
             <Stack direction="row" alignItems="center" spacing={1}>
-              {[method].map((method) => (
-                <Chip key={method} label={method} variant="soft" color={'warning'} />
+              {[method].map((m) => (
+                <Chip key={m} label={m} variant="soft" color="warning" />
               ))}
             </Stack>
           </Stack>
@@ -194,12 +186,12 @@ export default function LegacySessionSendTransactionModal() {
           <Divider />
 
           {/* <transaction> will most likely not satisfy required input type */}
-          <TransactionTypes
+          {/* <TransactionTypes
             newTransactions={transactions.NEW}
             transaction={transaction}
             selected={selectedPriority}
             onSelect={onSelectTransactionType}
-          />
+          /> */}
 
           <Divider />
         </Stack>

@@ -1,3 +1,10 @@
+/* eslint-disable import/no-unresolved */
+/* eslint-disable prefer-template */
+/* eslint-disable func-names */
+/* eslint-disable prefer-rest-params */
+/* eslint-disable vars-on-top */
+/* eslint-disable @typescript-eslint/no-unused-expressions */
+/* eslint-disable no-var */
 import { INTERCOM } from 'src/config-global';
 
 // Loads Intercom with the snippet

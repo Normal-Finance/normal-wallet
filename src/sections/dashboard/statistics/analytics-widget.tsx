@@ -7,7 +7,7 @@ import { CardProps } from '@mui/material/Card';
 // theme
 import { bgGradient } from 'src/theme/css';
 // utils
-import { fNumber, fShortenNumber } from 'src/utils/format-number';
+import { fNumber } from 'src/utils/format-number';
 // theme
 import { ColorSchema } from 'src/theme/palette';
 import { Skeleton } from '@mui/material';

@@ -8,12 +8,12 @@ import Button from '@mui/material/Button';
 
 // components
 import Iconify from 'src/components/iconify';
-import Send from './modals/Send';
-import Receive from './modals/Receive';
 import { useSnackbar } from 'src/components/snackbar';
 import { OwnedToken } from 'alchemy-sdk';
 import { CircularProgress } from '@mui/material';
 import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsContext';
+import Receive from './modals/Receive';
+import Send from './modals/Send';
 
 // ----------------------------------------------------------------------
 

@@ -1,15 +1,15 @@
 import { useState } from 'react';
 
 // @mui
-import { Divider, IconButton, Stack, Button, Box } from '@mui/material';
+import { IconButton, Stack, Button, Box } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
 
 // components
 import Iconify from 'src/components/iconify';
-import ConnectionCard from './connection-card';
 import Scrollbar from 'src/components/scrollbar/scrollbar';
-import ConnectDapp from './modals/ConnectDapp';
 import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsContext';
+import ConnectionCard from './connection-card';
+import ConnectDapp from './modals/ConnectDapp';
 
 // ----------------------------------------------------------------------
 
@@ -32,7 +32,7 @@ export default function Dapps({ connections, connect, disconnect, isWcConnecting
 
   const handleOnConnect = (uri: string) => {
     trackEvent(AnalyticsEvents.REQUESTED_CONNECT_DAPP);
-    connect({ uri: uri });
+    connect({ uri });
   };
 
   const handleCloseConnect = () => setOpenConnect(false);

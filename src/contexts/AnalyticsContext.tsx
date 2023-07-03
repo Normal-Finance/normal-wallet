@@ -1,3 +1,6 @@
+/* eslint-disable react/jsx-no-constructed-context-values */
+/* eslint-disable react-hooks/exhaustive-deps */
+
 // Modules
 import { createContext, ReactNode, useContext } from 'react';
 import mixpanel from 'mixpanel-browser';
@@ -5,7 +8,7 @@ import { MIXPANEL_PROJECT_TOKEN } from 'src/config-global';
 import { captureException } from '@sentry/nextjs';
 
 mixpanel.init(MIXPANEL_PROJECT_TOKEN, {
-  debug: process.env.NODE_ENV === 'production' ? false : true,
+  debug: process.env.NODE_ENV !== 'production',
 });
 
 export enum AnalyticsEvents {

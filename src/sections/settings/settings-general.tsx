@@ -13,9 +13,8 @@ import { useSelector } from 'src/redux/store';
 // hooks
 // utils
 // components
-import FormProvider, { RHFSwitch, RHFTextField } from 'src/components/hook-form';
+import FormProvider, { RHFTextField } from 'src/components/hook-form';
 import { useWebsocketContext } from 'src/contexts/WebsocketContext';
-import { Typography } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
@@ -43,14 +42,16 @@ export default function SettingsGeneral() {
   });
 
   const {
-    setValue,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
 
-  const onSubmit = useCallback(async (data: FormValuesProps) => {
-    await updateEmail(data.email);
-  }, []);
+  const onSubmit = useCallback(
+    async (data: FormValuesProps) => {
+      await updateEmail(data.email);
+    },
+    [updateEmail]
+  );
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
@@ -69,9 +70,7 @@ export default function SettingsGeneral() {
               <RHFTextField
                 name="email"
                 label="Email Address"
-                helperText={
-                  'The email used to access your billing and receive payment notifications'
-                }
+                helperText="The email used to access your billing and receive payment notifications"
               />
             </Box>
 

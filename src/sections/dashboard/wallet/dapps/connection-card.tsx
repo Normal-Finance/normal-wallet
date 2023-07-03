@@ -11,8 +11,7 @@ import { useResponsive } from 'src/hooks/use-responsive';
 // components
 import Iconify from 'src/components/iconify';
 import { ConfirmDialog } from 'src/components/custom-dialog';
-import { useSnackbar } from 'src/components/snackbar';
-import { Avatar, Button, Tooltip, Typography } from '@mui/material';
+import { Avatar, Button, Tooltip } from '@mui/material';
 import Label from 'src/components/label/label';
 import { RouterLink } from 'src/routes/components';
 import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsContext';
@@ -26,7 +25,6 @@ interface Props extends StackProps {
 }
 
 export default function ConnectionCard({ connection, onDisconnect, sx, ...other }: Props) {
-  const { enqueueSnackbar } = useSnackbar();
   const { trackEvent } = useAnalyticsContext();
 
   const theme = useTheme();
@@ -58,7 +56,7 @@ export default function ConnectionCard({ connection, onDisconnect, sx, ...other 
       }}
     >
       <IconButton
-        color={'success'}
+        color="success"
         component={RouterLink}
         href={connection.session.peerMeta.url}
         onClick={() => trackEvent(AnalyticsEvents.VIEWED_CONNECTED_DAPP, { connection })}
@@ -79,7 +77,7 @@ export default function ConnectionCard({ connection, onDisconnect, sx, ...other 
       onClick={details.onTrue}
       primary={connection.session.peerMeta.name}
       secondary={
-        <Label variant={isLight ? 'soft' : 'filled'} color={'success'}>
+        <Label variant={isLight ? 'soft' : 'filled'} color="success">
           Connected
         </Label>
       }
@@ -115,6 +113,7 @@ export default function ConnectionCard({ connection, onDisconnect, sx, ...other 
           p: { xs: 2.5, sm: 2 },
           '&:hover': {
             bgcolor: 'background.paper',
+            // eslint-disable-next-line @typescript-eslint/no-shadow
             boxShadow: (theme) => theme.customShadows.z20,
           },
           ...sx,
@@ -122,7 +121,7 @@ export default function ConnectionCard({ connection, onDisconnect, sx, ...other 
         {...other}
       >
         <Avatar
-          alt={'idk'}
+          alt="idk"
           src={connection.session.peerMeta.icons[0]}
           sx={{ width: 36, height: 36, mr: 1 }}
         />

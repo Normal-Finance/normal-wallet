@@ -9,9 +9,7 @@ import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsCont
 
 // ----------------------------------------------------------------------
 
-type Props = {};
-
-export default function AddPaymentMethod({}: Props) {
+export default function AddPaymentMethod() {
   const { trackEvent } = useAnalyticsContext();
 
   return (

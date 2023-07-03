@@ -1,3 +1,6 @@
+/* eslint-disable react/jsx-no-constructed-context-values */
+/* eslint-disable react-hooks/exhaustive-deps */
+
 'use client';
 
 import { createContext, useContext, useState, useEffect } from 'react';
@@ -12,8 +15,8 @@ import {
 import { SmartWallet } from '@thirdweb-dev/wallets';
 import { Chain, Goerli } from '@thirdweb-dev/chains';
 import { THIRDWEB } from 'src/config-global';
-import { AnalyticsEvents, useAnalyticsContext } from './AnalyticsContext';
 import { useSnackbar } from 'src/components/snackbar';
+import { AnalyticsEvents, useAnalyticsContext } from './AnalyticsContext';
 
 type Props = {
   children: React.ReactNode;
@@ -56,6 +59,7 @@ export const WalletContextProvider = ({ children }: Props) => {
       trackEvent(AnalyticsEvents.CONNECTED_WALLET, { wallet });
       connectSmartWallet();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [wallet]);
 
   // If a wallet is disconnected, reset all context state
@@ -66,6 +70,7 @@ export const WalletContextProvider = ({ children }: Props) => {
   // If both wallets are connected, track user for analytics
   useEffect(() => {
     if (wallet && smartWallet) setUser(walletAddresses.personal, walletAddresses.smart);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [smartWallet]);
 
   function smartWalletDisconnectedError() {
@@ -93,16 +98,6 @@ export const WalletContextProvider = ({ children }: Props) => {
     });
   }
 
-  async function getPersonalAddress() {
-    if (wallet) {
-      const personalAddress = await wallet.getAddress();
-      setWalletAddresses({
-        ...walletAddresses,
-        personal: personalAddress,
-      });
-    }
-  }
-
   return (
     <WalletContext.Provider
       value={{
@@ -110,7 +105,7 @@ export const WalletContextProvider = ({ children }: Props) => {
         chain,
         switchChain,
         personalWallet: wallet,
-        smartWallet: smartWallet,
+        smartWallet,
         walletAddresses,
         smartWalletDisconnectedError,
       }}

@@ -22,6 +22,7 @@ import {
 } from 'src/utils/walletConnect/EIP155RequestHandlerUtil';
 import { getSignTypedDataParamsData } from 'src/utils/walletConnect/HelperUtil';
 import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsContext';
+import { TransactionPriority } from 'src/types/transaction';
 
 export default function SessionSignTypedDataModal() {
   const { smartWallet } = useWalletContext();
@@ -48,9 +49,16 @@ export default function SessionSignTypedDataModal() {
   const onApprove = async () => {
     const response = await approveEIP155Request(
       requestEvent,
-      smartWallet,
-      (account: string, target: string, value: string, calldata: string) => {
-        newTransaction(account, target, value, calldata);
+      smartWallet!,
+      null,
+      (
+        account: string,
+        target: string,
+        value: string,
+        calldata: string,
+        priority: TransactionPriority
+      ) => {
+        newTransaction(account, target, value, calldata, priority);
       }
     );
     await client.respond({
@@ -72,7 +80,7 @@ export default function SessionSignTypedDataModal() {
   };
 
   return (
-    <Dialog maxWidth="sm" open={true}>
+    <Dialog maxWidth="sm" open>
       <DialogTitle> Sign Typed Data </DialogTitle>
 
       <DialogContent sx={{ overflow: 'unset' }}>
@@ -97,22 +105,20 @@ export default function SessionSignTypedDataModal() {
           <Stack spacing={2} direction="row">
             <Typography variant="h6">Blockchain(s)</Typography>
             <Stack direction="row" alignItems="center" spacing={1}>
-              {[chainId ?? ''].map((chain) => {
-                return (
-                  <Chip
-                    key={EIP155_CHAINS[chain as TEIP155Chain]?.name ?? chain}
-                    label={EIP155_CHAINS[chain as TEIP155Chain]?.name ?? chain}
-                    variant="soft"
-                    color={'info'}
-                  />
-                );
-              })}
+              {[chainId ?? ''].map((chain) => (
+                <Chip
+                  key={EIP155_CHAINS[chain as TEIP155Chain]?.name ?? chain}
+                  label={EIP155_CHAINS[chain as TEIP155Chain]?.name ?? chain}
+                  variant="soft"
+                  color="info"
+                />
+              ))}
             </Stack>
 
             <Typography variant="h6">Methods</Typography>
             <Stack direction="row" alignItems="center" spacing={1}>
               {[request.method].map((method) => (
-                <Chip key={method} label={method} variant="soft" color={'warning'} />
+                <Chip key={method} label={method} variant="soft" color="warning" />
               ))}
             </Stack>
           </Stack>

@@ -10,8 +10,6 @@ import Card, { CardProps } from '@mui/material/Card';
 import ListItemText from '@mui/material/ListItemText';
 // hooks
 import { useBoolean } from 'src/hooks/use-boolean';
-// redux
-import { useDispatch } from 'src/redux/store';
 // utils
 import { fToNow } from 'src/utils/format-time';
 // components
@@ -48,13 +46,13 @@ export default function TransactionsOverview({ transactions, ...other }: Props) 
   return (
     <Card {...other}>
       <CardHeader
-        title={'Active Transactions'}
+        title="Active Transactions"
         subheader={"New and pending transactions you've submitted for batching"}
         sx={{ mb: 1 }}
       />
 
       <Scrollbar>
-        {transactions.map((transaction, index) => {
+        {transactions.map((transaction) => {
           if (
             transaction.current_status === TransactionStatus.NEW ||
             transaction.current_status === TransactionStatus.PENDING
@@ -68,6 +66,7 @@ export default function TransactionsOverview({ transactions, ...other }: Props) 
               />
             );
           }
+          return null;
         })}
       </Scrollbar>
 
@@ -94,7 +93,7 @@ type TransactionItemProps = {
 };
 
 function TransactionItem({ transaction, onCancel, onUpdatePriority }: TransactionItemProps) {
-  const { transactionId, target, _value, priority, current_status, createdAt } = transaction;
+  const { transactionId, target, priority, current_status, createdAt } = transaction;
 
   const router = useRouter();
   const popover = usePopover();
@@ -127,7 +126,7 @@ function TransactionItem({ transaction, onCancel, onUpdatePriority }: Transactio
     >
       <Avatar
         variant="rounded"
-        src={'/assets/icons/navbar/ic_invoice.svg'}
+        src="/assets/icons/navbar/ic_invoice.svg"
         sx={{ width: 48, height: 48, flexShrink: 0 }}
       />
 

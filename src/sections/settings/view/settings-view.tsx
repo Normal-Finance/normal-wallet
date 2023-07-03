@@ -17,9 +17,9 @@ import { useWalletContext } from 'src/contexts/WalletContext';
 import { redirect } from 'next/navigation';
 
 // Tabs
+import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsContext';
 import SettingsGeneral from '../settings-general';
 import SettingsBilling from '../settings-billing';
-import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsContext';
 
 // ----------------------------------------------------------------------
 

@@ -1,6 +1,8 @@
+/* eslint-disable @next/next/no-img-element */
+
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 
 // @mui
 import {
@@ -9,7 +11,6 @@ import {
   CircularProgress,
   Container,
   Skeleton,
-  Stack,
   Tooltip,
   Typography,
 } from '@mui/material';
@@ -24,23 +25,23 @@ import { useSettingsContext } from 'src/components/settings';
 // utils
 
 // components
+import WalletConnectModalHandler from 'src/components/walletConnect/WalletConnectModalHandler';
+import useWalletConnect from 'src/hooks/useWalletConnect';
+import { useWebsocketContext } from 'src/contexts/WebsocketContext';
+import { useWalletContext } from 'src/contexts/WalletContext';
+import { APP_STUFF } from 'src/config-global';
+import { useAlchemyContext } from 'src/contexts/AlchemyContext';
+import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsContext';
+import { Goerli } from '@thirdweb-dev/chains';
 import AnalyticsWidget from '../statistics/analytics-widget';
 import GetStarted from '../get-started';
 import Header from '../wallet/header/header';
 import Dapps from '../wallet/dapps/dapps';
 import Balances from '../wallet/balances/balances';
-import WalletConnectModalHandler from 'src/components/walletConnect/WalletConnectModalHandler';
 
-import useWalletConnect from 'src/hooks/useWalletConnect';
-import { useWebsocketContext } from 'src/contexts/WebsocketContext';
-import { useWalletContext } from 'src/contexts/WalletContext';
 import Onboarding from '../onboarding';
 import FailedPaymentAlert from '../failed-payment-alert';
-import { APP_STUFF } from 'src/config-global';
 import TransactionsOverview from '../transactions';
-import { useAlchemyContext } from 'src/contexts/AlchemyContext';
-import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsContext';
-import { Goerli } from '@thirdweb-dev/chains';
 
 // ----------------------------------------------------------------------
 
@@ -72,6 +73,7 @@ export default function DashboardView() {
 
   useEffect(() => {
     if (walletAddresses.smart) getState();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [walletAddresses]);
 
   useEffect(() => {
@@ -87,14 +89,14 @@ export default function DashboardView() {
   /** CONSTANTS */
   const onboardingActiveStep = (): number => {
     if (!smartWalletFunded) return 0;
-    else if (!billing.email) return 1;
-    else if (billing.paymentMethods == 0) return 2;
-    else return -1;
+    if (!billing.email) return 1;
+    if (billing.paymentMethods === 0) return 2;
+    return -1;
   };
 
   const sumValues = (obj: object) => {
     if (obj) return Object.values(obj).reduce((a, b) => a + b, 0) || 0;
-    else return 0;
+    return 0;
   };
 
   return (
@@ -138,6 +140,7 @@ export default function DashboardView() {
                 <Grid xs={12} sm={6} md={3}>
                   <AnalyticsWidget
                     title="Pending Transactions"
+                    // eslint-disable-next-line no-unsafe-optional-chaining
                     total={transactions?.NEW + transactions?.PENDING}
                     color="warning"
                     loading={websocketStatus !== 'Open' || transactions?.PENDING === null}
@@ -175,7 +178,7 @@ export default function DashboardView() {
           {billing.failedCharges > 0 && (
             <Grid xs={12} md={12}>
               <FailedPaymentAlert
-                title={'🚨 You have a failed payment'}
+                title="🚨 You have a failed payment"
                 description="Please resolve before submitting any new transactions."
                 action={
                   <Button
@@ -200,7 +203,7 @@ export default function DashboardView() {
               {![1, 5].includes(chain?.chainId!) && (
                 <Grid xs={12} md={12}>
                   <FailedPaymentAlert
-                    title={'Wrong network'}
+                    title="Wrong network"
                     description="Please switch to Ethereum or Goerli to continue."
                     action={
                       <Button

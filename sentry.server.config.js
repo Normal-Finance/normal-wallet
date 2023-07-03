@@ -12,16 +12,6 @@ Sentry.init({
     'https://7a397ed20619494f9a7e50c2dbcd4757@o4504056500715520.ingest.sentry.io/4505410317385728',
   environment: process.env.NODE_ENV,
   debug: process.env.NODE_ENV === 'production' ? false : true,
-  integrations: [
-    new Sentry.BrowserTracing({
-      // Set `tracePropagationTargets` to control for which URLs distributed tracing should be enabled
-      tracePropagationTargets: ['localhost', /^https:\/\/yourserver\.io\/api/],
-    }),
-    new Sentry.Replay(),
-  ],
   // Performance Monitoring
   tracesSampleRate: process.env.NODE_ENV === 'production' ? 0.33 : 1.0,
-  // Session Replay
-  replaysSessionSampleRate: process.env.NODE_ENV === 'production' ? 0.1 : 1.0,
-  replaysOnErrorSampleRate: 1.0,
 });

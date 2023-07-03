@@ -29,14 +29,14 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 //
-import BlockchainTableRow from './blockchain-table-row';
-import BlockchainTableToolbar from './blockchain-table-toolbar';
-import BlockchainTableFiltersResult from './blockchain-table-filters-result';
 import { AssetTransfersResult } from 'alchemy-sdk';
 import { useAlchemyContext } from 'src/contexts/AlchemyContext';
 import { useWalletContext } from 'src/contexts/WalletContext';
 import { CircularProgress } from '@mui/material';
 import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsContext';
+import BlockchainTableFiltersResult from './blockchain-table-filters-result';
+import BlockchainTableToolbar from './blockchain-table-toolbar';
+import BlockchainTableRow from './blockchain-table-row';
 
 // ----------------------------------------------------------------------
 
@@ -121,157 +121,155 @@ export default function TransactionsBlockchain() {
   );
 
   return (
-    <>
-      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
-        <Card>
-          {loading || (transactions.length === 0 && <CircularProgress />)}
+    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      <Card>
+        {loading || (transactions.length === 0 && <CircularProgress />)}
 
-          {!loading && transactions.length > 0 && (
-            <>
-              <Tabs
-                value={filters.status}
-                onChange={handleFilterStatus}
-                sx={{
-                  px: 2.5,
-                  boxShadow: (theme) => `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
-                }}
-              >
-                {STATUS_OPTIONS.map((tab) => (
-                  <Tab
-                    key={tab.value}
-                    iconPosition="end"
-                    value={tab.value}
-                    label={tab.label}
-                    icon={
-                      <Label
-                        variant={
-                          ((tab.value === 'all' || tab.value === filters.status) && 'filled') ||
-                          'soft'
-                        }
-                        color={
-                          (tab.value === 'deposit' && 'success') ||
-                          (tab.value === 'withdrawal' && 'error') ||
-                          (tab.value === 'contract' && 'info') ||
-                          'default'
-                        }
-                      >
-                        {transactions.length > 0 && (
-                          <>
-                            {tab.value === 'all' && transactions.length}
-                            {tab.value === 'deposit' &&
-                              transactions.filter(
-                                (transaction) =>
-                                  transaction.to === walletAddresses.smart.toLowerCase()
-                              ).length}
+        {!loading && transactions.length > 0 && (
+          <>
+            <Tabs
+              value={filters.status}
+              onChange={handleFilterStatus}
+              sx={{
+                px: 2.5,
+                boxShadow: (theme) => `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
+              }}
+            >
+              {STATUS_OPTIONS.map((tab) => (
+                <Tab
+                  key={tab.value}
+                  iconPosition="end"
+                  value={tab.value}
+                  label={tab.label}
+                  icon={
+                    <Label
+                      variant={
+                        ((tab.value === 'all' || tab.value === filters.status) && 'filled') ||
+                        'soft'
+                      }
+                      color={
+                        (tab.value === 'deposit' && 'success') ||
+                        (tab.value === 'withdrawal' && 'error') ||
+                        (tab.value === 'contract' && 'info') ||
+                        'default'
+                      }
+                    >
+                      {transactions.length > 0 && (
+                        <>
+                          {tab.value === 'all' && transactions.length}
+                          {tab.value === 'deposit' &&
+                            transactions.filter(
+                              (transaction) =>
+                                transaction.to === walletAddresses.smart.toLowerCase()
+                            ).length}
 
-                            {tab.value === 'withdrawal' &&
-                              transactions.filter(
-                                (transaction) =>
-                                  transaction.from === walletAddresses.smart.toLowerCase()
-                              ).length}
-                          </>
-                        )}
+                          {tab.value === 'withdrawal' &&
+                            transactions.filter(
+                              (transaction) =>
+                                transaction.from === walletAddresses.smart.toLowerCase()
+                            ).length}
+                        </>
+                      )}
 
-                        {/* {tab.value === 'contract_interaction' &&
+                      {/* {tab.value === 'contract_interaction' &&
                           transactions.filter(
                             (transaction) => transaction.from === walletAddresses.smart
                           ).length} */}
-                      </Label>
-                    }
-                  />
-                ))}
-              </Tabs>
+                    </Label>
+                  }
+                />
+              ))}
+            </Tabs>
 
-              <BlockchainTableToolbar
+            <BlockchainTableToolbar
+              filters={filters}
+              onFilters={handleFilters}
+              //
+              canReset={canReset}
+              onResetFilters={handleResetFilters}
+            />
+
+            {canReset && (
+              <BlockchainTableFiltersResult
                 filters={filters}
                 onFilters={handleFilters}
                 //
-                canReset={canReset}
                 onResetFilters={handleResetFilters}
+                //
+                results={dataFiltered.length}
+                sx={{ p: 2.5, pt: 0 }}
               />
+            )}
 
-              {canReset && (
-                <BlockchainTableFiltersResult
-                  filters={filters}
-                  onFilters={handleFilters}
-                  //
-                  onResetFilters={handleResetFilters}
-                  //
-                  results={dataFiltered.length}
-                  sx={{ p: 2.5, pt: 0 }}
-                />
-              )}
+            <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
+              <Scrollbar>
+                <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 960 }}>
+                  <TableHeadCustom
+                    order={table.order}
+                    orderBy={table.orderBy}
+                    headLabel={TABLE_HEAD}
+                    rowCount={tableData.length}
+                    numSelected={table.selected.length}
+                    onSort={table.onSort}
+                    onSelectAllRows={(checked) =>
+                      table.onSelectAllRows(
+                        checked,
+                        tableData.map((transaction) => transaction.uniqueId)
+                      )
+                    }
+                  />
 
-              <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
-                <Scrollbar>
-                  <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 960 }}>
-                    <TableHeadCustom
-                      order={table.order}
-                      orderBy={table.orderBy}
-                      headLabel={TABLE_HEAD}
-                      rowCount={tableData.length}
-                      numSelected={table.selected.length}
-                      onSort={table.onSort}
-                      onSelectAllRows={(checked) =>
-                        table.onSelectAllRows(
-                          checked,
-                          tableData.map((transaction) => transaction.uniqueId)
-                        )
-                      }
+                  <TableBody>
+                    {dataFiltered
+                      .slice(
+                        table.page * table.rowsPerPage,
+                        table.page * table.rowsPerPage + table.rowsPerPage
+                      )
+                      .map((transaction) => (
+                        <BlockchainTableRow
+                          key={transaction.uniqueId}
+                          transaction={transaction}
+                          selected={table.selected.includes(transaction.uniqueId)}
+                          onSelectTransaction={() => {
+                            table.onSelectRow(transaction.uniqueId);
+                            trackEvent(AnalyticsEvents.SELECTED_BLOCKCHAIN_TRANSACTION, {
+                              transaction,
+                            });
+                          }}
+                          onCopyTransactionHash={(hash: string) => {
+                            // ...
+                            trackEvent(AnalyticsEvents.COPIED_BLOCKCHAIN_TRANSACTION_HASH, {
+                              hash,
+                            });
+                          }}
+                        />
+                      ))}
+
+                    <TableEmptyRows
+                      height={denseHeight}
+                      emptyRows={emptyRows(table.page, table.rowsPerPage, tableData.length)}
                     />
 
-                    <TableBody>
-                      {dataFiltered
-                        .slice(
-                          table.page * table.rowsPerPage,
-                          table.page * table.rowsPerPage + table.rowsPerPage
-                        )
-                        .map((transaction) => (
-                          <BlockchainTableRow
-                            key={transaction.uniqueId}
-                            transaction={transaction}
-                            selected={table.selected.includes(transaction.uniqueId)}
-                            onSelectTransaction={() => {
-                              table.onSelectRow(transaction.uniqueId);
-                              trackEvent(AnalyticsEvents.SELECTED_BLOCKCHAIN_TRANSACTION, {
-                                transaction,
-                              });
-                            }}
-                            onCopyTransactionHash={(hash: string) => {
-                              // ...
-                              trackEvent(AnalyticsEvents.COPIED_BLOCKCHAIN_TRANSACTION_HASH, {
-                                hash,
-                              });
-                            }}
-                          />
-                        ))}
+                    <TableNoData notFound={notFound} />
+                  </TableBody>
+                </Table>
+              </Scrollbar>
+            </TableContainer>
 
-                      <TableEmptyRows
-                        height={denseHeight}
-                        emptyRows={emptyRows(table.page, table.rowsPerPage, tableData.length)}
-                      />
-
-                      <TableNoData notFound={notFound} />
-                    </TableBody>
-                  </Table>
-                </Scrollbar>
-              </TableContainer>
-
-              <TablePaginationCustom
-                count={dataFiltered.length}
-                page={table.page}
-                rowsPerPage={table.rowsPerPage}
-                onPageChange={table.onChangePage}
-                onRowsPerPageChange={table.onChangeRowsPerPage}
-                //
-                dense={table.dense}
-                onChangeDense={table.onChangeDense}
-              />
-            </>
-          )}
-        </Card>
-      </Container>
-    </>
+            <TablePaginationCustom
+              count={dataFiltered.length}
+              page={table.page}
+              rowsPerPage={table.rowsPerPage}
+              onPageChange={table.onChangePage}
+              onRowsPerPageChange={table.onChangeRowsPerPage}
+              //
+              dense={table.dense}
+              onChangeDense={table.onChangeDense}
+            />
+          </>
+        )}
+      </Card>
+    </Container>
   );
 }
 
@@ -290,7 +288,11 @@ function applyFilter({
   filters: IOrderTableFilters;
   dateError: boolean;
 }) {
-  const { status, name, startDate, endDate } = filters;
+  const {
+    status,
+    name,
+    // startDate, endDate
+  } = filters;
 
   const stabilizedThis = inputData.map((el, index) => [el, index] as const);
 

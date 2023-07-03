@@ -4,19 +4,17 @@ import { Stack, Card, Button, CardHeader, Typography, Box, Avatar, Alert } from 
 import Grid from '@mui/material/Unstable_Grid2';
 
 // utils
-import DepositAsset from '../modals/DepositAsset';
 import { useWalletContext } from 'src/contexts/WalletContext';
 import { useAlchemyContext } from 'src/contexts/AlchemyContext';
 import { OwnedToken } from 'alchemy-sdk';
-import Receive from '../../wallet/header/modals/Receive';
 import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsContext';
 import Iconify from 'src/components/iconify/iconify';
+import Receive from '../../wallet/header/modals/Receive';
+import DepositAsset from '../modals/DepositAsset';
 
 // ----------------------------------------------------------------------
 
-type Props = {};
-
-export default function DepositTokens({}: Props) {
+export default function DepositTokens() {
   const { walletAddresses } = useWalletContext();
 
   const [ethereumBalance, setEthereumBalance] = useState<number>(0);
@@ -28,8 +26,17 @@ export default function DepositTokens({}: Props) {
   const { getEthereumBalanceOfAddress, getTokenBalancesOfAddress } = useAlchemyContext();
   const { trackEvent } = useAnalyticsContext();
 
+  async function fetchBalances(address: string) {
+    const ethereum = await getEthereumBalanceOfAddress(address);
+    setEthereumBalance(ethereum);
+
+    const tokens = await getTokenBalancesOfAddress(address);
+    setTokenBalances(tokens);
+  }
+
   useEffect(() => {
     if (walletAddresses.personal) fetchBalances(walletAddresses.personal);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [walletAddresses.personal]);
 
   const handleOpenReceive = () => {
@@ -41,20 +48,12 @@ export default function DepositTokens({}: Props) {
     setOpenReceive(false);
   };
 
-  async function fetchBalances(address: string) {
-    const ethereum = await getEthereumBalanceOfAddress(address);
-    setEthereumBalance(ethereum);
-
-    const tokens = await getTokenBalancesOfAddress(address);
-    setTokenBalances(tokens);
-  }
-
   const handleCloseDeposit = () => {
     setOpenDeposit(false);
   };
 
   const handleSelectNativeToken = () => {
-    let ethToken: OwnedToken = {
+    const ethToken: OwnedToken = {
       contractAddress: '0x2170Ed0880ac9A755fd29B2688956BD959F933F8',
       rawBalance: '', // TODO: ?
       decimals: 1,
@@ -101,7 +100,7 @@ export default function DepositTokens({}: Props) {
         {ethereumBalance > 0 && (
           <Stack direction="row" alignItems="center">
             <Avatar
-              src={'https://assets.coingecko.com/coins/images/279/small/ethereum.png?1595348880'}
+              src="https://assets.coingecko.com/coins/images/279/small/ethereum.png?1595348880"
               sx={{ width: 48, height: 48 }}
             />
 
@@ -117,23 +116,21 @@ export default function DepositTokens({}: Props) {
           </Stack>
         )}
 
-        {tokenBalances.map((token: OwnedToken, index: number) => {
-          return (
-            <Stack direction="row" alignItems="center" key={index}>
-              <Avatar src={token.logo} alt={token.name} sx={{ width: 48, height: 48 }} />
+        {tokenBalances.map((token: OwnedToken, index: number) => (
+          <Stack direction="row" alignItems="center" key={index}>
+            <Avatar src={token.logo} alt={token.name} sx={{ width: 48, height: 48 }} />
 
-              <Box sx={{ flexGrow: 1, ml: 2, minWidth: 100 }}>
-                <Typography variant="subtitle2" sx={{ mb: 0.5 }} noWrap>
-                  {token.balance + ' ' + token.symbol}
-                </Typography>
-              </Box>
+            <Box sx={{ flexGrow: 1, ml: 2, minWidth: 100 }}>
+              <Typography variant="subtitle2" sx={{ mb: 0.5 }} noWrap>
+                {`${token.balance} ${token.symbol}`}
+              </Typography>
+            </Box>
 
-              <Button variant="contained" color="info" onClick={() => handleSelectToken(index)}>
-                Deposit
-              </Button>
-            </Stack>
-          );
-        })}
+            <Button variant="contained" color="info" onClick={() => handleSelectToken(index)}>
+              Deposit
+            </Button>
+          </Stack>
+        ))}
       </Stack>
     </Box>
   );

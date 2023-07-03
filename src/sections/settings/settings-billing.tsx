@@ -6,9 +6,7 @@ import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsCont
 
 // ----------------------------------------------------------------------
 
-type Props = {};
-
-export default function SettingsBilling({}: Props) {
+export default function SettingsBilling() {
   const { trackEvent } = useAnalyticsContext();
 
   return (

@@ -9,22 +9,18 @@ import LegacySignClient from '@walletconnect/client';
 import { IWalletConnectSession } from '@walletconnect/legacy-types';
 
 // consts
-import { EIP155_SIGNING_METHODS } from './wcConsts';
 
 // components
 import { useSnackbar } from 'src/components/snackbar';
 import ModalStore from 'src/store/ModalStore';
 import { getSdkError } from '@walletconnect/utils';
 import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsContext';
+import { EIP155_SIGNING_METHODS } from './wcConsts';
 
 const SESSION_TIMEOUT = 10000;
 
-let connectors: any = {};
+const connectors: any = {};
 let connectionErrors: any = [];
-
-async function wait(ms: any) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
 
 // Offline check: if it errored recently
 const timePastForConnectionErr = 90 * 1000;
@@ -60,7 +56,7 @@ export default function useWalletConnectLegacy({ account, chainId, clearWcClipbo
     connections.forEach(({ connectionId, isOffline }: any) => {
       if (connectors[connectionId]) {
         const connector = connectors[connectionId];
-        const session = connector.session;
+        const { session } = connector;
         if (
           session.accounts[0] !== account ||
           session.chainId !== chainId ||
@@ -86,6 +82,7 @@ export default function useWalletConnectLegacy({ account, chainId, clearWcClipbo
         })
       );
   };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(maybeUpdateSessions, [account, chainId]);
   // we need this so we can invoke the latest version from any event handler
   stateRef.current.maybeUpdateSessions = maybeUpdateSessions;
@@ -157,7 +154,7 @@ export default function useWalletConnectLegacy({ account, chainId, clearWcClipbo
           onApprove: (selectedAccounts: any) => {
             if (payload) {
               connector.approveSession({
-                accounts: selectedAccounts['eip155'],
+                accounts: selectedAccounts.eip155,
                 chainId: chainId ?? 1,
               });
             }
@@ -192,12 +189,12 @@ export default function useWalletConnectLegacy({ account, chainId, clearWcClipbo
             dispatch(
               connectedNewSession({
                 connectionId: connectorOpts.uri,
-                //uri: connectionIdentifier,// TODO check if we still need that
+                // uri: connectionIdentifier,// TODO check if we still need that
                 session: connector.session,
               })
             );
 
-            enqueueSnackbar('Successfully connected to ' + connector.session.peerMeta.name);
+            enqueueSnackbar(`Successfully connected to ${connector.session.peerMeta.name}`);
 
             trackEvent(AnalyticsEvents.REJECTED_CONNECT_DAPP, {});
 
@@ -263,18 +260,21 @@ export default function useWalletConnectLegacy({ account, chainId, clearWcClipbo
 
       return connector;
     },
-    [clearWcClipboard]
+    [chainId, clearWcClipboard, dispatch, enqueueSnackbar, trackEvent]
   );
 
-  const disconnect = useCallback((connectionId: any) => {
-    // connector might not be there, either cause we disconnected before,
-    // or cause we failed to connect in the first place
-    if (connectors[connectionId]) {
-      connectors[connectionId].killSession();
-      connectors[connectionId] = null;
-    }
-    dispatch(disconnected({ connectionId: connectionId }));
-  }, []);
+  const disconnect = useCallback(
+    (connectionId: any) => {
+      // connector might not be there, either cause we disconnected before,
+      // or cause we failed to connect in the first place
+      if (connectors[connectionId]) {
+        connectors[connectionId].killSession();
+        connectors[connectionId] = null;
+      }
+      dispatch(disconnected({ connectionId }));
+    },
+    [dispatch]
+  );
 
   // Side effects on init
   useEffect(() => {
@@ -286,7 +286,7 @@ export default function useWalletConnectLegacy({ account, chainId, clearWcClipbo
   }, [connect]);
 
   return {
-    connections: connections,
+    connections,
     connect,
     disconnect,
     isConnecting,
@@ -296,6 +296,7 @@ export default function useWalletConnectLegacy({ account, chainId, clearWcClipbo
 const onCallRequest = async (
   connector: any,
   payload: { id: number; method: string; params: any[] }
+  // eslint-disable-next-line consistent-return
 ) => {
   switch (payload.method) {
     case EIP155_SIGNING_METHODS.ETH_SIGN:
@@ -305,7 +306,7 @@ const onCallRequest = async (
         legacyRequestSession: connector.session,
         chainId: connector.chainId,
         protocol: connector.protocol,
-        connector: connector,
+        connector,
       });
 
     case EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA:
@@ -314,7 +315,7 @@ const onCallRequest = async (
       return ModalStore.open('LegacySessionSignTypedDataModal', {
         legacyCallRequestEvent: payload,
         legacyRequestSession: connector.session,
-        connector: connector,
+        connector,
       });
 
     case EIP155_SIGNING_METHODS.ETH_SEND_TRANSACTION:
@@ -324,14 +325,14 @@ const onCallRequest = async (
         legacyRequestSession: connector.session,
         chainId: connector.chainId,
         protocol: connector.protocol,
-        connector: connector,
+        connector,
       });
 
     default:
       alert(`${payload.method} is not supported for WalletConnect v1`);
       connector.rejectRequest({
         id: payload.id,
-        error: { message: 'Method not found: ' + payload.method, code: -32601 },
+        error: { message: `Method not found: ${payload.method}`, code: -32601 },
       });
   }
 };
@@ -343,12 +344,9 @@ function getCachedLegacySession(): IWalletConnectSession | undefined {
 
   let session = null;
   if (local) {
-    try {
-      session = JSON.parse(local);
-    } catch (error) {
-      throw error;
-    }
+    session = JSON.parse(local);
   }
+  // eslint-disable-next-line consistent-return
   return session;
 }
 

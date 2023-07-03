@@ -51,7 +51,8 @@ export default function TransactionPriorityListDialog({
         onClose();
       }
     },
-    [onClose, onSelect]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [onClose, onSelect, selected]
   );
 
   return (

@@ -11,6 +11,7 @@ import { ForbiddenIllustration } from 'src/assets/illustrations';
 // components
 import { RouterLink } from 'src/routes/components';
 import { MotionContainer, varBounce } from 'src/components/animate';
+import { paths } from 'src/routes/paths';
 
 // ----------------------------------------------------------------------
 
@@ -36,7 +37,7 @@ export default function View403() {
           <ForbiddenIllustration sx={{ height: 260, my: { xs: 5, sm: 10 } }} />
         </m.div>
 
-        <Button component={RouterLink} href="/" size="large" variant="contained">
+        <Button component={RouterLink} href={paths.root} size="large" variant="contained">
           Go to Home
         </Button>
       </MotionContainer>

@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import { useEffect } from 'react';
 // @mui
 import Box from '@mui/material/Box';
@@ -34,7 +35,7 @@ export default function NavUpgrade() {
     } catch (error) {
       enqueueSnackbar('Unable to open support chat at this time', { variant: 'error' });
     }
-  }, [walletAddresses.personal]);
+  }, [walletAddresses.personal, enqueueSnackbar]);
 
   return (
     <Stack
@@ -46,11 +47,7 @@ export default function NavUpgrade() {
     >
       <Stack alignItems="center">
         <Box sx={{ position: 'relative' }}>
-          <Avatar
-            src={'/logo/logo_single.png'}
-            alt={'Normal Logo'}
-            sx={{ width: 48, height: 48 }}
-          />
+          <Avatar src="/logo/logo_single.png" alt="Normal Logo" sx={{ width: 48, height: 48 }} />
           <Label
             color="success"
             variant="filled"

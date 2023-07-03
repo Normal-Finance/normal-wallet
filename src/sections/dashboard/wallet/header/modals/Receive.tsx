@@ -19,7 +19,7 @@ type Props = {
 
 export default function Receive({ open, onClose }: Props) {
   const { enqueueSnackbar } = useSnackbar();
-  const { smartWallet, walletAddresses } = useWalletContext();
+  const { walletAddresses } = useWalletContext();
   const { copy } = useCopyToClipboard();
   const { trackEvent } = useAnalyticsContext();
 
