@@ -1,0 +1,259 @@
+{
+  "common": {
+    "words": {
+      "home": "Thuis",
+      "max": ".MAX",
+      "available": "beschikbaar",
+      "to": "Aan",
+      "receive": "Ontvangen",
+      "send": "Verzenden",
+      "dashboard": "Dashboard",
+      "settings": "Instellingen",
+      "account": "Rekening",
+      "transactions": "Transacties",
+      "general": "Algemeen",
+      "billing": "Facturering",
+      "english": "Engels",
+      "mode": "Wijze",
+      "wallet": "Portemonnee",
+      "blockchain": "Blockchain",
+      "batch": "Batch",
+      "methods": "Methoden",
+      "token": "Teken",
+      "balance": "Evenwicht",
+      "balances": "Saldi",
+      "deposit": "Deponeren",
+      "withdrawal": "Terugtrekking",
+      "all": "Alle",
+      "new": "Nieuw",
+      "pending": "Aanhangig",
+      "completed": "Volbracht",
+      "failed": "Mislukt",
+      "of": "van",
+      "dense": "Dicht",
+      "block": "Blokkeren",
+      "category": "Categorie",
+      "from": "Van",
+      "value": "Waarde",
+      "asset": "Bezit",
+      "priority": "Voorrang",
+      "status": "Status",
+      "created": "Geschapen"
+    },
+    "actions": {
+      "clear": "Duidelijk",
+      "cancel": "Annuleren",
+      "approve": "Goedkeuren",
+      "connect": "Verbinden",
+      "connectWallet": "Portemonnee koppelen",
+      "disconnect": "Scheiden",
+      "saveChanges": "Wijzigingen opslaan",
+      "managePaymentMethods": "Betaalmethoden beheren",
+      "viewRecentInvoices": "Bekijk recente facturen",
+      "deposit": "Deponeren",
+      "updateEmail": "E-mail bijwerken",
+      "viewAll": "Alles weergeven",
+      "viewDetails": "Bekijk details",
+      "copyHash": "Hash kopiëren",
+      "etherscan": "Etherscan",
+      "viewOnEtherscan": "Bekijk op Etherscan",
+      "makeInstant": "Direct maken",
+      "switchToEthereum": "Overstappen naar Ethereum",
+      "copyAddress": "Adres kopiëren"
+    },
+    "table": {
+      "noData": "Geen gegevens",
+      "resultsFound": "gevonden resultaten",
+      "footer": { "rowsPerPage": "Rijen per pagina" }
+    }
+  },
+  "header": { "search": {} },
+  "navbar": {
+    "account": { "title": "Normaal adres" },
+    "footer": {
+      "title": "Hulp nodig?",
+      "subtitle": "Bij ons zit je goed",
+      "badge": "Steunen",
+      "buttons": { "docs": "Documenten lezen", "chat": "Live chatten" }
+    }
+  },
+  "home": {
+    "statistics": {
+      "title": "Realtime wereldwijd 🌎",
+      "error": "Kan realtime statistieken niet laden. Er is een fout opgetreden bij het verbinden met de API.",
+      "cards": {
+        "connectedClients": {
+          "title": "Verbonden clients",
+          "tooltip": "Totaal aantal mensen dat normaal op dit moment gebruikt"
+        },
+        "pendingTransactions": {
+          "title": "Transacties in behandeling",
+          "tooltip": "Totaal aantal nieuwe transacties klaar om te worden batchgewijs"
+        },
+        "totalTransactions": {
+          "title": "Totaal aantal transacties",
+          "tooltip": "Totaal aantal transacties in batches"
+        },
+        "totalBatches": { "title": "Totaal baden", "tooltip": "Totaal aantal uitgevoerde batches" }
+      }
+    },
+    "failedCharges": {
+      "title": "🚨 U hebt een mislukte betaling",
+      "subtitle": "Los dit op voordat u nieuwe transacties indient.",
+      "buttonText": "Betaalmethoden bijwerken"
+    },
+    "wrongNetwork": {
+      "title": "Verkeerd netwerk",
+      "subtitle": "Schakel over naar Ethereum of Goerli om door te gaan."
+    },
+    "onboarding": {
+      "title": "Slag",
+      "steps": {
+        "depositToken": {
+          "step": "Stortingstokens",
+          "title": "Stap 1 | Stortingstokens",
+          "subtitle": "Verplaats crypto naar uw normale portemonnee om enorm te besparen op gas",
+          "noTokens": "Er zitten geen tokens in je verbonden wallet.",
+          "ctaTitle": "Gebruik uw normale portemonnee-adres om tokens te storten om door te gaan.",
+          "cta": "Toon mijn adres",
+          "modal": {
+            "errors": {
+              "contract": { "prefix": "Kan de", "suffix": "contract op dit moment." },
+              "transfer": {
+                "prefix": "Er is een fout opgetreden bij het indienen van uw",
+                "suffix": "deponeren."
+              }
+            },
+            "form": { "placeholder": "Voer het bedrag in" }
+          }
+        },
+        "updateEmail": {
+          "step": "E-mail bijwerken",
+          "title": "Stap 2 | E-mail bijwerken",
+          "subtitle": "Het e-mailadres dat wordt gebruikt om toegang te krijgen tot uw facturering en betalingsmeldingen te ontvangen"
+        },
+        "addPaymentMethod": {
+          "step": "Betaalmethode toevoegen",
+          "title": "Stap 3 | Betaalmethode toevoegen",
+          "subtitle": "Dit is vereist om uw transacties in batches te verzenden. Er worden alleen kosten in rekening gebracht voor uw deel van het gas dat wordt gebruikt om een batch in te dienen."
+        }
+      }
+    },
+    "getStarted": {
+      "subtitle": "Verbind uw portemonnee om toegang te krijgen tot uw nieuwe normale slimme portemonnee en geniet van al deze geweldige functies.",
+      "features": {
+        "title": "Functies",
+        "values": {
+          "reducedGas": "90%+ minder gas",
+          "seamlessTrading": "Naadloos handelen",
+          "emailAndSocialRecovery": "E-mail & sociaal herstel",
+          "payGasWithCreditDebitCard": "Gas betalen met creditcard/betaalpas",
+          "openSource": "Open source",
+          "instantDeFiAndBeyond": "Instant DeFi en meer"
+        }
+      }
+    },
+    "activeTransactions": {
+      "title": "Actieve transacties",
+      "subtitle": "Nieuwe en lopende transacties die u hebt ingediend voor batching",
+      "daysAgo": "dagen geleden",
+      "modals": {
+        "cancelTransaction": {
+          "title": "Transactie annuleren",
+          "subtitle": "Weet u zeker dat u deze transactie wilt annuleren? Alleen nieuwe en lopende transacties kunnen worden geannuleerd. Er worden geen kosten in rekening gebracht voor gas bij annulering."
+        }
+      }
+    },
+    "wallet": {
+      "header": {
+        "title": "Uw portemonnee",
+        "subtitle": "Totaal saldo: binnenkort beschikbaar",
+        "modals": {
+          "send": {
+            "error": "Het verzenden van crypto is nog geen ondersteunde functie. Kom later terug voor nieuwe updates.",
+            "hashConfirmation": {
+              "title": "Hash-bevestiging",
+              "subtitle": "Uw transactie is verzonden! U kunt de status ervan bekijken in uw geschiedenis, maar we raden Etherscan aan voor de meest actuele informatie."
+            },
+            "batchConfirmation": {
+              "title": "Batchbevestiging",
+              "subtitle": "Uw transactie is in de rij gezet voor batching! U kunt de status bekijken, de prioriteit bijwerken en deze volledig annuleren vanuit uw dashboard of geschiedenis."
+            }
+          },
+          "receive": { "title": "Uw normale adres" }
+        }
+      },
+      "dapps": {
+        "connectDapp": "Dapp verbinden",
+        "modals": {
+          "connect": {
+            "title": "Verbinding maken met WalletConnect",
+            "body": "Sluit dit venster niet tijdens het verbinden. Heb je een vraag? Volg deze gids.",
+            "placeholder": "Plak link hier"
+          },
+          "sessionProposal": {
+            "header": { "title": "Sessie voorstel" },
+            "body": {
+              "title": "Wil verbinding maken",
+              "body": "U moet de normale web-app openen om transacties te starten. U ontvangt geen transactieverzoeken wanneer deze niet is geopend."
+            }
+          },
+          "sendTransaction": {
+            "header": { "title": "Een transactie verzenden / ondertekenen" },
+            "body": { "title": "Wil een transactie verzenden / ondertekenen" }
+          }
+        },
+        "disconnect": { "title": "Weet je zeker dat je de verbinding wilt verbreken?" }
+      },
+      "balances": {
+        "table": {
+          "error": {
+            "subtitle": "Er is een fout opgetreden bij het laden van uw portemonneesaldi"
+          },
+          "toolbar": { "searchPlaceholder": "Zoek op naam of symbool..." }
+        }
+      }
+    }
+  },
+  "transactions": {
+    "tabs": {
+      "blockchain": {
+        "table": {
+          "toolbar": {
+            "status": { "contractInteraction": "Contractinteractie" },
+            "date": { "startDate": "Startdatum", "endDate": "Einddatum" },
+            "search": { "placeholder": "Zoeken naar, van, token of waarde..." }
+          }
+        }
+      },
+      "batch": {
+        "table": {
+          "toolbar": {
+            "date": { "startDate": "Startdatum", "endDate": "Einddatum" },
+            "search": { "placeholder": "Zoeken naar, van, token of waarde..." }
+          }
+        }
+      }
+    }
+  },
+  "settings": {
+    "tabs": {
+      "general": {
+        "email": {
+          "label": "E-mailadres",
+          "helperText": "Het e-mailadres dat wordt gebruikt om toegang te krijgen tot uw facturering en betalingsmeldingen te ontvangen"
+        }
+      },
+      "billing": {
+        "paymentMethods": {
+          "title": "Betalingsmethoden",
+          "subtitle": "Debet-/creditcards die worden gebruikt om gaskosten te betalen"
+        },
+        "invoiceHistory": {
+          "title": "Factuurgeschiedenis",
+          "subtitle": "Recente kosten van uw account"
+        }
+      }
+    }
+  }
+}

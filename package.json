@@ -4,13 +4,14 @@
   "version": "0.1.0",
   "description": "An ERC-4337 smart wallet with 90%+ cheaper gas and extendable functionality",
   "scripts": {
+    "translate": "jsontt src/locales/langs/en.json",
     "dev": "next dev -p 8081",
     "start": "next start",
     "build": "next build",
     "export": "yarn build && next export -o _static",
     "lint": "eslint --ext .ts,.tsx .",
     "lint:fix": "eslint --fix --ext .ts,.tsx .",
-    "prettier": "prettier --write 'src/**/*.{js,jsx,ts,tsx}'",
+    "prettier": "prettier --write 'src/**/*.{js,jsx,ts,tsx,json}'",
     "clear-all": "rm -rf .next .swc _static out node_modules",
     "re-start": "rm -rf .next .swc _static out node_modules && yarn install && yarn dev",
     "re-build": "rm -rf .next .swc _static out node_modules && yarn install && yarn build"
