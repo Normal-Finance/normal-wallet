@@ -1,54 +1,300 @@
 {
-  "app": "应用",
-  "job": "工作",
-  "user": "用户",
-  "list": "列表",
-  "edit": "编辑",
-  "shop": "商店",
-  "blog": "博客",
-  "post": "文章",
-  "mail": "邮件",
-  "chat": "聊天",
-  "file": "文件",
-  "tour": "导览",
-  "cards": "卡片",
-  "blank": "空白",
-  "order": "订单",
-  "lists": "列表",
-  "create": "创建",
-  "kanban": "看板",
-  "general": "常规",
-  "banking": "银行",
-  "booking": "预订",
-  "profile": "个人资料",
-  "account": "账户",
-  "product": "产品",
-  "invoice": "发票",
-  "details": "详情",
-  "checkout": "结账",
-  "calendar": "日历",
-  "overview": "概览",
-  "analytics": "分析",
-  "ecommerce": "电子商务",
-  "management": "管理",
-  "menu_level": "菜单级别",
-  "item_label": "项目标签",
-  "description": "描述",
-  "other_cases": "其他情况",
-  "item_caption": "项目标题",
-  "file_manager": "文件管理器",
-  "menu_level_1a": "菜单级别 1a",
-  "menu_level_1b": "菜单级别 1b",
-  "menu_level_2a": "菜单级别 2a",
-  "menu_level_2b": "菜单级别 2b",
-  "menu_level_3a": "菜单级别 3a",
-  "menu_level_3b": "菜单级别 4b",
-  "item_disabled": "项目已禁用",
-  "item_by_roles": "按角色显示的项目",
-  "item_external_link": "项目外部链接",
-  "only_admin_can_see_this_item": "只有管理员可以看到此项目",
-  "upgrade_to_pro": "升级到专业版",
-  "demo": {
-    "title": "Chinese"
+  "common": {
+    "words": {
+      "home": "",
+      "max": "",
+      "available": "",
+      "to": "",
+      "receive": "",
+      "send": "",
+      "dashboard": "",
+      "settings": "",
+      "account": "",
+      "transactions": "",
+      "general": "",
+      "billing": "",
+      "english": "",
+      "mode": "",
+      "wallet": "",
+      "blockchain": "",
+      "batch": "",
+      "methods": "",
+      "token": "",
+      "balance": "",
+      "balances": "",
+      "deposit": "",
+      "withdrawal": "",
+      "all": "",
+      "new": "",
+      "pending": "",
+      "completed": "",
+      "failed": "",
+      "of": "",
+      "dense": "",
+      "block": "",
+      "category": "",
+      "from": "",
+      "value": "",
+      "asset": "",
+      "priority": "",
+      "status": "",
+      "created": ""
+    },
+    "actions": {
+      "clear": "",
+      "cancel": "",
+      "approve": "",
+      "connect": "",
+      "connectWallet": "",
+      "disconnect": "",
+      "saveChanges": "",
+      "managePaymentMethods": "",
+      "viewRecentInvoices": "",
+      "deposit": "",
+      "updateEmail": "",
+      "viewAll": "",
+      "viewDetails": "",
+      "copyHash": "",
+      "etherscan": "",
+      "viewOnEtherscan": "",
+      "makeInstant": "",
+      "switchToEthereum": "",
+      "copyAddress": ""
+    },
+    "table": {
+      "noData": "",
+      "resultsFound": "",
+      "footer": {
+        "rowsPerPage": ""
+      }
+    }
+  },
+  "header": {
+    "search": {}
+  },
+  "navbar": {
+    "account": {
+      "title": ""
+    },
+    "footer": {
+      "title": "",
+      "subtitle": "",
+      "badge": "",
+      "buttons": {
+        "docs": "",
+        "chat": ""
+      }
+    }
+  },
+  "home": {
+    "statistics": {
+      "title": "",
+      "error": "",
+      "cards": {
+        "connectedClients": {
+          "title": "",
+          "tooltip": ""
+        },
+        "pendingTransactions": {
+          "title": "",
+          "tooltip": ""
+        },
+        "totalTransactions": {
+          "title": "",
+          "tooltip": ""
+        },
+        "totalBatches": {
+          "title": "",
+          "tooltip": ""
+        }
+      }
+    },
+    "failedCharges": {
+      "title": "",
+      "subtitle": "",
+      "buttonText": ""
+    },
+    "wrongNetwork": {
+      "title": "",
+      "subtitle": ""
+    },
+    "onboarding": {
+      "title": "",
+      "steps": {
+        "depositToken": {
+          "step": "",
+          "title": "",
+          "subtitle": "",
+          "noTokens": "",
+          "ctaTitle": "",
+          "cta": "",
+          "modal": {
+            "errors": {
+              "contract": {
+                "prefix": "",
+                "suffix": ""
+              },
+              "transfer": {
+                "prefix": "",
+                "suffix": ""
+              }
+            },
+            "form": {
+              "placeholder": ""
+            }
+          }
+        },
+        "updateEmail": {
+          "step": "",
+          "title": "",
+          "subtitle": ""
+        },
+        "addPaymentMethod": {
+          "step": "",
+          "title": "",
+          "subtitle": ""
+        }
+      }
+    },
+    "getStarted": {
+      "subtitle": "",
+      "features": {
+        "title": "",
+        "values": {
+          "reducedGas": "",
+          "seamlessTrading": "",
+          "emailAndSocialRecovery": "",
+          "payGasWithCreditDebitCard": "",
+          "openSource": "",
+          "instantDeFiAndBeyond": ""
+        }
+      }
+    },
+    "activeTransactions": {
+      "title": "",
+      "subtitle": "",
+      "daysAgo": "",
+      "modals": {
+        "cancelTransaction": {
+          "title": "",
+          "subtitle": ""
+        }
+      }
+    },
+    "wallet": {
+      "header": {
+        "title": "",
+        "subtitle": "",
+        "modals": {
+          "send": {
+            "error": "",
+            "hashConfirmation": {
+              "title": "",
+              "subtitle": ""
+            },
+            "batchConfirmation": {
+              "title": "",
+              "subtitle": ""
+            }
+          },
+          "receive": {
+            "title": ""
+          }
+        }
+      },
+      "dapps": {
+        "connectDapp": "",
+        "modals": {
+          "connect": {
+            "title": "",
+            "body": "",
+            "placeholder": ""
+          },
+          "sessionProposal": {
+            "header": {
+              "title": ""
+            },
+            "body": {
+              "title": "",
+              "body": ""
+            }
+          },
+          "sendTransaction": {
+            "header": {
+              "title": ""
+            },
+            "body": {
+              "title": ""
+            }
+          }
+        },
+        "disconnect": {
+          "title": ""
+        }
+      },
+      "balances": {
+        "table": {
+          "error": {
+            "subtitle": ""
+          },
+          "toolbar": {
+            "searchPlaceholder": ""
+          }
+        }
+      }
+    }
+  },
+  "transactions": {
+    "tabs": {
+      "blockchain": {
+        "table": {
+          "toolbar": {
+            "status": {
+              "contractInteraction": ""
+            },
+            "date": {
+              "startDate": "",
+              "endDate": ""
+            },
+            "search": {
+              "placeholder": ""
+            }
+          }
+        }
+      },
+      "batch": {
+        "table": {
+          "toolbar": {
+            "date": {
+              "startDate": "",
+              "endDate": ""
+            },
+            "search": {
+              "placeholder": ""
+            }
+          }
+        }
+      }
+    }
+  },
+  "settings": {
+    "tabs": {
+      "general": {
+        "email": {
+          "label": "",
+          "helperText": ""
+        }
+      },
+      "billing": {
+        "paymentMethods": {
+          "title": "",
+          "subtitle": ""
+        },
+        "invoiceHistory": {
+          "title": "",
+          "subtitle": ""
+        }
+      }
+    }
   }
 }

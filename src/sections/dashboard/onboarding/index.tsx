@@ -1,4 +1,5 @@
 import { Grid, Typography } from '@mui/material';
+import { useLocales } from 'src/locales';
 
 import DepositTokens from './steps/deposit-tokens';
 import UpdateEmail from './steps/update-email';
@@ -10,12 +11,17 @@ type Props = {
 };
 
 export default function Onboarding({ activeStep }: Props) {
-  const ONBOARDING_STEPS = ['Deposit tokens', 'Update email', 'Add payment method'];
+  const { t } = useLocales();
+  const ONBOARDING_STEPS = [
+    t('home.onboarding.steps.depositToken.step'),
+    t('home.onboarding.steps.updateEmail.step'),
+    t('home.onboarding.steps.addPaymentMethod.step'),
+  ];
 
   return (
     <>
       <Typography variant="h4" sx={{ my: { xs: 3, md: 5 } }}>
-        Getting started
+        {t('home.onboarding.title')}
       </Typography>
 
       <Grid container justifyContent="center">

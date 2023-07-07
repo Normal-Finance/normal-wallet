@@ -13,6 +13,7 @@ import { useSnackbar } from 'src/components/snackbar';
 import Receive from 'src/sections/dashboard/wallet/header/modals/Receive';
 import Iconify from 'src/components/iconify/iconify';
 import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsContext';
+import { useLocales } from 'src/locales';
 
 // ----------------------------------------------------------------------
 
@@ -26,6 +27,7 @@ const StyledRoot = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function NavAccount() {
+  const { t } = useLocales();
   const { copy } = useCopyToClipboard();
   const { enqueueSnackbar } = useSnackbar();
   const { walletAddresses, smartWallet } = useWalletContext();
@@ -77,7 +79,7 @@ export default function NavAccount() {
       <Box sx={{ ml: 2, minWidth: 0 }}>
         <Typography variant="subtitle2" noWrap>
           {smartWallet ? (
-            'Normal Address'
+            t('navbar.account.title')
           ) : (
             <Skeleton variant="text" sx={{ fontSize: '1rem' }} width={100} />
           )}

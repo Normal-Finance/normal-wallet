@@ -3,6 +3,7 @@ import { useState } from 'react';
 // @mui
 import { Stack, Dialog, Button, TextField, Typography, Box } from '@mui/material';
 import Link from 'next/link';
+import { useLocales } from 'src/locales';
 
 // ----------------------------------------------------------------------
 
@@ -13,6 +14,7 @@ type Props = {
 };
 
 export default function ConnectDapp({ open, onClose, onSubmit }: Props) {
+  const { t } = useLocales();
   const [uri, setUri] = useState('');
 
   const handleUri = (event: any) => setUri(event.target.value);
@@ -31,7 +33,7 @@ export default function ConnectDapp({ open, onClose, onSubmit }: Props) {
         justifyContent="space-between"
         sx={{ pt: 2.5, px: 2.5 }}
       >
-        <Typography variant="h6"> Connect with WalletConnect </Typography>
+        <Typography variant="h6"> {t('home.wallet.dapps.modals.connect.title')} </Typography>
 
         <Box
           component="img"
@@ -42,8 +44,8 @@ export default function ConnectDapp({ open, onClose, onSubmit }: Props) {
 
       <Stack sx={{ p: 2.5 }}>
         <Typography variant="body1">
-          Do not close this window while connecting. Have a question? Follow this{' '}
-          <Link href="https://www.google.com">guide</Link>.
+          {t('home.wallet.dapps.modals.connect.body')}
+          {/* <Link href="https://www.google.com">guide</Link> */}
         </Typography>
 
         <TextField value={uri} onChange={handleUri} placeholder="Paste link here" sx={{ mt: 2 }} />
@@ -55,7 +57,7 @@ export default function ConnectDapp({ open, onClose, onSubmit }: Props) {
           onClick={handleSubmit}
           sx={{ mt: 2 }}
         >
-          Connect
+          {t('common.actions.connect')}
         </Button>
       </Stack>
     </Dialog>

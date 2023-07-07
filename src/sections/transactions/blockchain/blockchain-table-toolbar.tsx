@@ -10,6 +10,7 @@ import { IOrderTableFilters, IOrderTableFilterValue } from 'src/types/order';
 // components
 import Iconify from 'src/components/iconify';
 import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsContext';
+import { useLocales } from 'src/locales';
 
 // ----------------------------------------------------------------------
 
@@ -28,6 +29,7 @@ export default function BlockchainTableToolbar({
   canReset,
   onResetFilters,
 }: Props) {
+  const { t } = useLocales();
   const { trackEvent } = useAnalyticsContext();
 
   const handleFilterName = useCallback(
@@ -76,7 +78,7 @@ export default function BlockchainTableToolbar({
       }}
     >
       <DatePicker
-        label="Start date"
+        label={t('transactions.tabs.blockchain.table.toolbar.date.startDate')}
         value={filters.startDate}
         onChange={handleFilterStartDate}
         slotProps={{
@@ -90,7 +92,7 @@ export default function BlockchainTableToolbar({
       />
 
       <DatePicker
-        label="End date"
+        label={t('transactions.tabs.blockchain.table.toolbar.date.endDate')}
         value={filters.endDate}
         onChange={handleFilterEndDate}
         slotProps={{ textField: { fullWidth: true } }}
@@ -104,7 +106,7 @@ export default function BlockchainTableToolbar({
           fullWidth
           value={filters.name}
           onChange={handleFilterName}
-          placeholder="Search to, from, token, or value..."
+          placeholder={t('transactions.tabs.blockchain.table.toolbar.search.placeholder') || ''}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
@@ -122,7 +124,7 @@ export default function BlockchainTableToolbar({
           onClick={onResetFilters}
           startIcon={<Iconify icon="solar:trash-bin-trash-bold" />}
         >
-          Clear
+          {t('common.table.clear')}
         </Button>
       )}
     </Stack>

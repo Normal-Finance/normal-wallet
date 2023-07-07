@@ -8,6 +8,7 @@ import { LoadingButton } from '@mui/lab';
 // components
 import { OwnedToken } from 'alchemy-sdk';
 import { fEtherscanAddress } from 'src/utils/format-string';
+import { useLocales } from 'src/locales';
 
 // ----------------------------------------------------------------------
 
@@ -19,6 +20,7 @@ type Props = {
 };
 
 export default function Send({ open, ethereumBalance, tokenBalances, onClose }: Props) {
+  const { t } = useLocales();
   const [transactionHash, setTransactionHash] = useState('');
 
   const handleOnClose = () => {
@@ -34,13 +36,11 @@ export default function Send({ open, ethereumBalance, tokenBalances, onClose }: 
         justifyContent="space-between"
         sx={{ pt: 2.5, px: 2.5 }}
       >
-        <Typography variant="h6"> Send </Typography>
+        <Typography variant="h6"> {t('common.words.send')} </Typography>
       </Stack>
 
       <Stack sx={{ p: 2.5 }}>
-        <Alert severity="warning">
-          Sending crypto is not a supported feature yet. Come back later for new updates.
-        </Alert>
+        <Alert severity="warning">{t('home.wallet.header.modals.send.error')}</Alert>
       </Stack>
     </>
   );
@@ -53,7 +53,10 @@ export default function Send({ open, ethereumBalance, tokenBalances, onClose }: 
         justifyContent="space-between"
         sx={{ pt: 2.5, px: 2.5 }}
       >
-        <Typography variant="h6"> Hash Confirmation </Typography>
+        <Typography variant="h6">
+          {' '}
+          {t('home.wallet.header.modals.send.hashConfirmation.title')}{' '}
+        </Typography>
       </Stack>
 
       <Stack alignItems="center" sx={{ p: 2.5 }}>
@@ -65,8 +68,7 @@ export default function Send({ open, ethereumBalance, tokenBalances, onClose }: 
         />
 
         <Typography variant="body2">
-          Your transaction has been submitted! You can view its status in your History, but we
-          recommend Etherscan for the most up to date information.
+          {t('home.wallet.header.modals.send.hashConfirmation.subtitle')}
         </Typography>
       </Stack>
 
@@ -74,7 +76,7 @@ export default function Send({ open, ethereumBalance, tokenBalances, onClose }: 
         <Box sx={{ flexGrow: 1 }} />
 
         <Button variant="outlined" color="inherit" onClick={handleOnClose}>
-          Close
+          {t('common.actions.close')}
         </Button>
 
         <LoadingButton
@@ -83,7 +85,7 @@ export default function Send({ open, ethereumBalance, tokenBalances, onClose }: 
           color="info"
           href={fEtherscanAddress(transactionHash)}
         >
-          View on Etherscan
+          {t('common.actions.viewOnEtherscan')}
         </LoadingButton>
       </DialogActions>
     </>
@@ -97,13 +99,14 @@ export default function Send({ open, ethereumBalance, tokenBalances, onClose }: 
         justifyContent="space-between"
         sx={{ pt: 2.5, px: 2.5 }}
       >
-        <Typography variant="h6"> Batch Confirmation </Typography>
+        <Typography variant="h6">
+          {t('home.wallet.header.modals.send.batchConfirmation.title')}{' '}
+        </Typography>
       </Stack>
 
       <Stack alignItems="center" sx={{ p: 2.5 }}>
         <Typography variant="body2">
-          Your transaction has been queud for batching! You can view its status, update the
-          priority, and cancel it entirely from your Dashboard or History.
+          {t('home.wallet.header.modals.send.batchConfirmation.subtitle')}
         </Typography>
       </Stack>
 
@@ -111,7 +114,7 @@ export default function Send({ open, ethereumBalance, tokenBalances, onClose }: 
         <Box sx={{ flexGrow: 1 }} />
 
         <Button variant="outlined" color="inherit" onClick={handleOnClose}>
-          Close
+          {t('common.actions.close')}
         </Button>
       </DialogActions>
     </>

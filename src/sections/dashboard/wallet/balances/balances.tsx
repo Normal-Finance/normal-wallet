@@ -24,17 +24,12 @@ import {
 //
 import { Skeleton, CardHeader } from '@mui/material';
 import { OwnedToken } from 'alchemy-sdk';
+import { useLocales } from 'src/locales';
 import MyTableRow from './table-row';
 import TableToolbar from './table-toolbar';
 import TableFiltersResult from './table-filters-result';
 
 // ----------------------------------------------------------------------
-
-const TABLE_HEAD = [
-  { id: 'token', label: 'Token' },
-  { id: 'balance', label: 'Balance' },
-  { id: '' },
-];
 
 const defaultFilters = {
   name: '',
@@ -52,6 +47,14 @@ type Props = {
 };
 
 export default function Balances({ loading, error, ethereumBalance, tokenBalances }: Props) {
+  const { t } = useLocales();
+
+  const TABLE_HEAD = [
+    { id: 'token', label: t('common.words.token') },
+    { id: 'balance', label: t('common.words.balance') },
+    { id: '' },
+  ];
+
   const table = useTable({ defaultOrderBy: 'createDate' });
 
   const ethereumToken: OwnedToken = {
@@ -98,7 +101,10 @@ export default function Balances({ loading, error, ethereumBalance, tokenBalance
   if (error)
     return (
       <Card>
-        <CardHeader title="Balances" subheader="There was an error loading your wallet balances" />
+        <CardHeader
+          title={t('home.wallet.balances.table.error.title')}
+          subheader={t('home.wallet.balances.table.error.title')}
+        />
       </Card>
     );
 

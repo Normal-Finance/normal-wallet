@@ -9,8 +9,8 @@ import { localStorageGetItem } from 'src/utils/storage-available';
 import { defaultLang } from './config-lang';
 //
 import translationEn from './langs/en.json';
+import translationEs from './langs/es.json';
 import translationFr from './langs/fr.json';
-import translationVi from './langs/vi.json';
 import translationCn from './langs/cn.json';
 import translationAr from './langs/ar.json';
 
@@ -24,8 +24,8 @@ i18n
   .init({
     resources: {
       en: { translations: translationEn },
+      es: { translations: translationEs },
       fr: { translations: translationFr },
-      vi: { translations: translationVi },
       cn: { translations: translationCn },
       ar: { translations: translationAr },
     },

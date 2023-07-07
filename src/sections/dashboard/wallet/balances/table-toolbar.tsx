@@ -8,6 +8,7 @@ import { IWalletTableFilters, IWalletTableFilterValue } from 'src/types/wallet';
 // components
 import Iconify from 'src/components/iconify';
 import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsContext';
+import { useLocales } from 'src/locales';
 
 // ----------------------------------------------------------------------
 
@@ -22,6 +23,7 @@ export default function TableToolbar({
 }: //
 // serviceOptions,
 Props) {
+  const { t } = useLocales();
   const { trackEvent } = useAnalyticsContext();
 
   const handleFilterName = useCallback(
@@ -50,7 +52,7 @@ Props) {
           fullWidth
           value={filters.name}
           onChange={handleFilterName}
-          placeholder="Search by name or symbol..."
+          placeholder={t('home.wallet.balances.table.toolbar.searchPlaceholder')}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">

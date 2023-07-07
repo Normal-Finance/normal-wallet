@@ -1,54 +1,300 @@
 {
-  "app": "application",
-  "job": "emploi",
-  "user": "utilisateur",
-  "list": "liste",
-  "edit": "modifier",
-  "shop": "boutique",
-  "blog": "blog",
-  "post": "article",
-  "mail": "courrier",
-  "chat": "discussion",
-  "file": "fichier",
-  "tour": "visite",
-  "cards": "cartes",
-  "blank": "vide",
-  "order": "commande",
-  "lists": "listes",
-  "create": "créer",
-  "kanban": "tableau",
-  "general": "général",
-  "banking": "bancaire",
-  "booking": "réservation",
-  "profile": "profil",
-  "account": "compte",
-  "product": "produit",
-  "invoice": "facture",
-  "details": "détails",
-  "checkout": "paiement",
-  "calendar": "calendrier",
-  "overview": "aperçu",
-  "analytics": "analytics",
-  "ecommerce": "e-commerce",
-  "management": "gestion",
-  "menu_level": "niveau de menu",
-  "item_label": "étiquette de l'élément",
-  "description": "description",
-  "other_cases": "autres cas",
-  "item_caption": "légende de l'élément",
-  "file_manager": "Gestionnaire de fichiers",
-  "menu_level_1a": "niveau de menu 1a",
-  "menu_level_1b": "niveau de menu 1b",
-  "menu_level_2a": "niveau de menu 2a",
-  "menu_level_2b": "niveau de menu 2b",
-  "menu_level_3a": "niveau de menu 3a",
-  "menu_level_3b": "niveau de menu 4b",
-  "item_disabled": "élément désactivé",
-  "item_by_roles": "élément par rôles",
-  "item_external_link": "lien externe de l'élément",
-  "only_admin_can_see_this_item": "Seul l'administrateur peut voir cet élément",
-  "upgrade_to_pro": "Passer à la version Pro",
-  "demo": {
-    "title": "France"
+  "common": {
+    "words": {
+      "home": "",
+      "max": "",
+      "available": "",
+      "to": "",
+      "receive": "",
+      "send": "",
+      "dashboard": "",
+      "settings": "",
+      "account": "",
+      "transactions": "",
+      "general": "",
+      "billing": "",
+      "english": "",
+      "mode": "",
+      "wallet": "",
+      "blockchain": "",
+      "batch": "",
+      "methods": "",
+      "token": "",
+      "balance": "",
+      "balances": "",
+      "deposit": "",
+      "withdrawal": "",
+      "all": "",
+      "new": "",
+      "pending": "",
+      "completed": "",
+      "failed": "",
+      "of": "",
+      "dense": "",
+      "block": "",
+      "category": "",
+      "from": "",
+      "value": "",
+      "asset": "",
+      "priority": "",
+      "status": "",
+      "created": ""
+    },
+    "actions": {
+      "clear": "",
+      "cancel": "",
+      "approve": "",
+      "connect": "",
+      "connectWallet": "",
+      "disconnect": "",
+      "saveChanges": "",
+      "managePaymentMethods": "",
+      "viewRecentInvoices": "",
+      "deposit": "",
+      "updateEmail": "",
+      "viewAll": "",
+      "viewDetails": "",
+      "copyHash": "",
+      "etherscan": "",
+      "viewOnEtherscan": "",
+      "makeInstant": "",
+      "switchToEthereum": "",
+      "copyAddress": ""
+    },
+    "table": {
+      "noData": "",
+      "resultsFound": "",
+      "footer": {
+        "rowsPerPage": ""
+      }
+    }
+  },
+  "header": {
+    "search": {}
+  },
+  "navbar": {
+    "account": {
+      "title": ""
+    },
+    "footer": {
+      "title": "",
+      "subtitle": "",
+      "badge": "",
+      "buttons": {
+        "docs": "",
+        "chat": ""
+      }
+    }
+  },
+  "home": {
+    "statistics": {
+      "title": "",
+      "error": "",
+      "cards": {
+        "connectedClients": {
+          "title": "",
+          "tooltip": ""
+        },
+        "pendingTransactions": {
+          "title": "",
+          "tooltip": ""
+        },
+        "totalTransactions": {
+          "title": "",
+          "tooltip": ""
+        },
+        "totalBatches": {
+          "title": "",
+          "tooltip": ""
+        }
+      }
+    },
+    "failedCharges": {
+      "title": "",
+      "subtitle": "",
+      "buttonText": ""
+    },
+    "wrongNetwork": {
+      "title": "",
+      "subtitle": ""
+    },
+    "onboarding": {
+      "title": "",
+      "steps": {
+        "depositToken": {
+          "step": "",
+          "title": "",
+          "subtitle": "",
+          "noTokens": "",
+          "ctaTitle": "",
+          "cta": "",
+          "modal": {
+            "errors": {
+              "contract": {
+                "prefix": "",
+                "suffix": ""
+              },
+              "transfer": {
+                "prefix": "",
+                "suffix": ""
+              }
+            },
+            "form": {
+              "placeholder": ""
+            }
+          }
+        },
+        "updateEmail": {
+          "step": "",
+          "title": "",
+          "subtitle": ""
+        },
+        "addPaymentMethod": {
+          "step": "",
+          "title": "",
+          "subtitle": ""
+        }
+      }
+    },
+    "getStarted": {
+      "subtitle": "",
+      "features": {
+        "title": "",
+        "values": {
+          "reducedGas": "",
+          "seamlessTrading": "",
+          "emailAndSocialRecovery": "",
+          "payGasWithCreditDebitCard": "",
+          "openSource": "",
+          "instantDeFiAndBeyond": ""
+        }
+      }
+    },
+    "activeTransactions": {
+      "title": "",
+      "subtitle": "",
+      "daysAgo": "",
+      "modals": {
+        "cancelTransaction": {
+          "title": "",
+          "subtitle": ""
+        }
+      }
+    },
+    "wallet": {
+      "header": {
+        "title": "",
+        "subtitle": "",
+        "modals": {
+          "send": {
+            "error": "",
+            "hashConfirmation": {
+              "title": "",
+              "subtitle": ""
+            },
+            "batchConfirmation": {
+              "title": "",
+              "subtitle": ""
+            }
+          },
+          "receive": {
+            "title": ""
+          }
+        }
+      },
+      "dapps": {
+        "connectDapp": "",
+        "modals": {
+          "connect": {
+            "title": "",
+            "body": "",
+            "placeholder": ""
+          },
+          "sessionProposal": {
+            "header": {
+              "title": ""
+            },
+            "body": {
+              "title": "",
+              "body": ""
+            }
+          },
+          "sendTransaction": {
+            "header": {
+              "title": ""
+            },
+            "body": {
+              "title": ""
+            }
+          }
+        },
+        "disconnect": {
+          "title": ""
+        }
+      },
+      "balances": {
+        "table": {
+          "error": {
+            "subtitle": ""
+          },
+          "toolbar": {
+            "searchPlaceholder": ""
+          }
+        }
+      }
+    }
+  },
+  "transactions": {
+    "tabs": {
+      "blockchain": {
+        "table": {
+          "toolbar": {
+            "status": {
+              "contractInteraction": ""
+            },
+            "date": {
+              "startDate": "",
+              "endDate": ""
+            },
+            "search": {
+              "placeholder": ""
+            }
+          }
+        }
+      },
+      "batch": {
+        "table": {
+          "toolbar": {
+            "date": {
+              "startDate": "",
+              "endDate": ""
+            },
+            "search": {
+              "placeholder": ""
+            }
+          }
+        }
+      }
+    }
+  },
+  "settings": {
+    "tabs": {
+      "general": {
+        "email": {
+          "label": "",
+          "helperText": ""
+        }
+      },
+      "billing": {
+        "paymentMethods": {
+          "title": "",
+          "subtitle": ""
+        },
+        "invoiceHistory": {
+          "title": "",
+          "subtitle": ""
+        }
+      }
+    }
   }
 }

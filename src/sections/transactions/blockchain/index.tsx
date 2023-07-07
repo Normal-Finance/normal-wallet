@@ -34,28 +34,12 @@ import { useAlchemyContext } from 'src/contexts/AlchemyContext';
 import { useWalletContext } from 'src/contexts/WalletContext';
 import { CircularProgress } from '@mui/material';
 import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsContext';
+import { useLocales } from 'src/locales';
 import BlockchainTableFiltersResult from './blockchain-table-filters-result';
 import BlockchainTableToolbar from './blockchain-table-toolbar';
 import BlockchainTableRow from './blockchain-table-row';
 
 // ----------------------------------------------------------------------
-
-const STATUS_OPTIONS = [
-  { value: 'all', label: 'All' },
-  { value: 'deposit', label: 'Deposit' },
-  { value: 'withdrawal', label: 'Withdrawal' },
-  { value: 'contract_interaction', label: 'Contract Interaction' },
-];
-
-const TABLE_HEAD = [
-  { id: 'blockNumber', label: 'Block', width: 116 },
-  { id: 'category', label: 'Category' },
-  { id: 'to', label: 'To', width: 140 },
-  { id: 'from', label: 'From', width: 140 },
-  { id: 'value', label: 'Value', width: 120 },
-  { id: 'asset', label: 'Asset', width: 140 },
-  { id: '', width: 32 },
-];
 
 const defaultFilters = {
   name: '',
@@ -65,6 +49,28 @@ const defaultFilters = {
 };
 
 export default function TransactionsBlockchain() {
+  const { t } = useLocales();
+
+  const STATUS_OPTIONS = [
+    { value: 'all', label: t('common.words.all') },
+    { value: 'deposit', label: t('common.words.deposit') },
+    { value: 'withdrawal', label: t('common.words.withdrawal') },
+    {
+      value: 'contract_interaction',
+      label: t('transactions.tabs.blockchain.table.toolbar.status.contractInteraction'),
+    },
+  ];
+
+  const TABLE_HEAD = [
+    { id: 'blockNumber', label: t('common.words.block'), width: 116 },
+    { id: 'category', label: t('common.words.category') },
+    { id: 'to', label: t('common.words.to'), width: 140 },
+    { id: 'from', label: t('common.words.from'), width: 140 },
+    { id: 'value', label: t('common.words.value'), width: 120 },
+    { id: 'asset', label: t('common.words.asset'), width: 140 },
+    { id: '', width: 32 },
+  ];
+
   const table = useTable({ defaultOrderBy: 'blockNumber' });
 
   const settings = useSettingsContext();

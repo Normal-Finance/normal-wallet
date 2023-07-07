@@ -9,6 +9,7 @@ import { useSelector } from 'src/redux/store';
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
 import { useWebsocketContext } from 'src/contexts/WebsocketContext';
+import { useLocales } from 'src/locales';
 
 // ----------------------------------------------------------------------
 
@@ -17,6 +18,7 @@ type FormValuesProps = {
 };
 
 export default function UpdateEmail() {
+  const { t } = useLocales();
   const { updateEmail } = useWebsocketContext();
 
   /** REDUX */
@@ -46,8 +48,8 @@ export default function UpdateEmail() {
     <Grid xs={12} md={12}>
       <Card sx={{ mb: 2 }}>
         <CardHeader
-          title="Step 2 | Add your email"
-          subheader="The email used to access your billing and receive payment notifications"
+          title={t('home.onboarding.steps.updateEmail.title')}
+          subheader={t('home.onboarding.steps.updateEmail.subtitle')}
         />
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
           <Stack spacing={3} sx={{ p: 3 }}>
@@ -69,7 +71,7 @@ export default function UpdateEmail() {
               loading={isSubmitting}
               sx={{ ml: 'auto' }}
             >
-              Update email
+              {t('common.actions.updateEmail')}
             </LoadingButton>
           </Stack>
         </FormProvider>

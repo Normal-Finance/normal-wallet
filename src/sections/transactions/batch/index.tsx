@@ -34,29 +34,12 @@ import {
 import { Transaction, TransactionStatus } from 'src/types/transaction';
 import { fTimestamp } from 'src/utils/format-time';
 import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsContext';
+import { useLocales } from 'src/locales';
 import BatchTableRow from './batch-table-row';
 import BatchTableToolbar from './batch-table-toolbar';
 import BatchTableFiltersResult from './batch-table-filters-result';
 
 // ----------------------------------------------------------------------
-
-const STATUS_OPTIONS = [
-  { value: 'all', label: 'All' },
-  { value: 'new', label: 'New' },
-  { value: 'pending', label: 'Pending' },
-  { value: 'completed', label: 'Completed' },
-  { value: 'failed', label: 'Failed' },
-];
-
-const TABLE_HEAD = [
-  { id: 'batchId', label: 'Batch', width: 116 },
-  { id: 'target', label: 'To', width: 140 },
-  { id: '_value', label: 'Value', width: 140 },
-  { id: 'priority', label: 'Priority', width: 140 },
-  { id: 'current_status', label: 'Status', width: 120 },
-  { id: 'createdAt', label: 'Created', width: 140 },
-  { id: '', width: 32 },
-];
 
 const defaultFilters = {
   name: '',
@@ -66,6 +49,26 @@ const defaultFilters = {
 };
 
 export default function TransactionsBatch() {
+  const { t } = useLocales();
+
+  const STATUS_OPTIONS = [
+    { value: 'all', label: t('common.words.all') },
+    { value: 'new', label: t('common.words.new') },
+    { value: 'pending', label: t('common.words.pending') },
+    { value: 'completed', label: t('common.words.completed') },
+    { value: 'failed', label: t('common.words.failed') },
+  ];
+
+  const TABLE_HEAD = [
+    { id: 'batchId', label: t('common.words.batch'), width: 116 },
+    { id: 'target', label: t('common.words.to'), width: 140 },
+    { id: '_value', label: t('common.words.value'), width: 140 },
+    { id: 'priority', label: t('common.words.priority'), width: 140 },
+    { id: 'current_status', label: t('common.words.status'), width: 120 },
+    { id: 'createdAt', label: t('common.words.created'), width: 140 },
+    { id: '', width: 32 },
+  ];
+
   const table = useTable({ defaultOrderBy: 'blockNumber' });
 
   const settings = useSettingsContext();

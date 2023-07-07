@@ -1,5 +1,5 @@
 // @mui
-import { enUS, frFR, zhCN, viVN, arSA } from '@mui/material/locale';
+import { enUS, frFR, zhCN, esES, arSA } from '@mui/material/locale';
 
 // PLEASE REMOVE `LOCAL STORAGE` WHEN YOU CHANGE SETTINGS.
 // ----------------------------------------------------------------------
@@ -18,10 +18,10 @@ export const allLangs = [
     icon: 'flagpack:fr',
   },
   {
-    label: 'Vietnamese',
-    value: 'vi',
-    systemValue: viVN,
-    icon: 'flagpack:vn',
+    label: 'Spanish',
+    value: 'es',
+    systemValue: esES,
+    icon: 'flagpack:es',
   },
   {
     label: 'Chinese',

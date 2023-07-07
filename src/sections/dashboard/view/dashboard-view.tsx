@@ -42,11 +42,13 @@ import Balances from '../wallet/balances/balances';
 import Onboarding from '../onboarding';
 import FailedPaymentAlert from '../failed-payment-alert';
 import TransactionsOverview from '../transactions';
+import { useLocales } from '../../../locales';
 
 // ----------------------------------------------------------------------
 
 export default function DashboardView() {
   /** HOOKS */
+  const { t } = useLocales();
   const settings = useSettingsContext();
   const { trackEvent } = useAnalyticsContext();
 
@@ -119,15 +121,15 @@ export default function DashboardView() {
           )}
           {(websocketStatus === 'Closed' || websocketStatus === 'Uninstantiated') && (
             <Alert severity="error" sx={{ mb: 2 }}>
-              Unable to load realtime statistics. There was an error connecting to the API.
+              {t('home.statistics.error')}
             </Alert>
           )}
           {websocketStatus === 'Open' && (
             <>
-              <Tooltip title="Total number of people using Normal right now" placement="top">
+              <Tooltip title={t('home.statistics.cards.connectedClients.tooltip')} placement="top">
                 <Grid xs={12} sm={6} md={3}>
                   <AnalyticsWidget
-                    title="Connected Clients"
+                    title={t('home.statistics.cards.connectedClients.title')}
                     total={clients}
                     color="info"
                     loading={websocketStatus !== 'Open' || clients === null}
@@ -136,10 +138,13 @@ export default function DashboardView() {
                 </Grid>
               </Tooltip>
 
-              <Tooltip title="Total number of new transactions ready to be batched" placement="top">
+              <Tooltip
+                title={t('home.statistics.cards.pendingTransactions.tooltip')}
+                placement="top"
+              >
                 <Grid xs={12} sm={6} md={3}>
                   <AnalyticsWidget
-                    title="Pending Transactions"
+                    title={t('home.statistics.cards.pendingTransactions.title')}
                     // eslint-disable-next-line no-unsafe-optional-chaining
                     total={transactions?.NEW + transactions?.PENDING}
                     color="warning"
@@ -149,10 +154,10 @@ export default function DashboardView() {
                 </Grid>
               </Tooltip>
 
-              <Tooltip title="Total number of transactions batched" placement="top">
+              <Tooltip title={t('home.statistics.cards.totalTransactions.tooltip')} placement="top">
                 <Grid xs={12} sm={6} md={3}>
                   <AnalyticsWidget
-                    title="Total Transactions"
+                    title={t('home.statistics.cards.totalTransactions.title')}
                     total={totalTransactions}
                     color="error"
                     loading={websocketStatus !== 'Open' || transactions === null}
@@ -161,10 +166,10 @@ export default function DashboardView() {
                 </Grid>
               </Tooltip>
 
-              <Tooltip title="Total number of batched executed" placement="top">
+              <Tooltip title={t('home.statistics.cards.totalBatches.tooltip')} placement="top">
                 <Grid xs={12} sm={6} md={3}>
                   <AnalyticsWidget
-                    title="Total Batches"
+                    title={t('home.statistics.cards.totalBatches.title')}
                     total={totalBatches}
                     loading={websocketStatus !== 'Open' || batches === null}
                     icon={<img alt="icon" src="/assets/icons/glass/ic_glass_bag.png" />}
@@ -178,8 +183,8 @@ export default function DashboardView() {
           {billing.failedCharges > 0 && (
             <Grid xs={12} md={12}>
               <FailedPaymentAlert
-                title="🚨 You have a failed payment"
-                description="Please resolve before submitting any new transactions."
+                title={t('home.failedCharges.title') || ''}
+                description={t('home.failedCharges.subtitle') || ''}
                 action={
                   <Button
                     variant="contained"
@@ -187,7 +192,7 @@ export default function DashboardView() {
                     href={APP_STUFF.billingLink}
                     onClick={() => trackEvent(AnalyticsEvents.OPENED_BILLING)}
                   >
-                    Update payment methods
+                    {t('home.failedCharges.buttonText')}
                   </Button>
                 }
               />
@@ -203,15 +208,15 @@ export default function DashboardView() {
               {![1, 5].includes(chain?.chainId!) && (
                 <Grid xs={12} md={12}>
                   <FailedPaymentAlert
-                    title="Wrong network"
-                    description="Please switch to Ethereum or Goerli to continue."
+                    title={t('home.wrongNetwork.title') || ''}
+                    description={t('home.wrongNetwork.subtitle') || ''}
                     action={
                       <Button
                         variant="contained"
                         color="error"
                         onClick={() => switchChain(Goerli.chainId)}
                       >
-                        Switch to Ethereum {process.env.NODE_ENV === 'production' && '(Goerli)'}
+                        {t('common.actions.switchToEthereum')}
                       </Button>
                     }
                   />

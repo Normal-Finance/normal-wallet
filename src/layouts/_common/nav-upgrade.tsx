@@ -15,10 +15,12 @@ import createUserHash from 'src/utils/intercom';
 import Label from 'src/components/label';
 import { APP_STUFF } from 'src/config-global';
 import { useSnackbar } from 'src/components/snackbar';
+import { useLocales } from 'src/locales';
 
 // ----------------------------------------------------------------------
 
 export default function NavUpgrade() {
+  const { t } = useLocales();
   const { enqueueSnackbar } = useSnackbar();
   const { walletAddresses } = useWalletContext();
 
@@ -60,17 +62,17 @@ export default function NavUpgrade() {
               borderBottomLeftRadius: 2,
             }}
           >
-            Support
+            {t('navbar.footer.badge')}
           </Label>
         </Box>
 
         <Stack spacing={0.5} sx={{ mt: 1.5, mb: 2 }}>
           <Typography variant="subtitle2" noWrap>
-            Need help?
+            {t('navbar.footer.title')}
           </Typography>
 
           <Typography variant="body2" noWrap sx={{ color: 'text.disabled' }}>
-            We've got you covered
+            {t('navbar.footer.subtitle')}
           </Typography>
         </Stack>
 
@@ -81,11 +83,11 @@ export default function NavUpgrade() {
             target="_blank"
             rel="noopener"
           >
-            Read docs
+            {t('navbar.footer.buttons.docs')}
           </Button>
 
           <Button variant="contained" onClick={show}>
-            Live chat
+            {t('navbar.footer.buttons.chat')}
           </Button>
         </Stack>
       </Stack>

@@ -27,10 +27,13 @@ import {
 } from 'src/utils/walletConnect/EIP155RequestHandlerUtil';
 import { TransactionPriority } from 'src/types/transaction';
 import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsContext';
+import { useLocales } from 'src/locales';
 // import TransactionTypes from '../transaction-types';
 
 export default function SessionSendTransactionModal() {
   // const { transactions } = useSelector((state) => state.state);
+
+  const { t } = useLocales();
 
   const [loading, setLoading] = useState(false);
   const [selectedPriority] = useState<TransactionPriority>(TransactionPriority.TRADITIONAL);
@@ -105,14 +108,15 @@ export default function SessionSendTransactionModal() {
 
   return (
     <Dialog maxWidth="sm" open>
-      <DialogTitle> Send / Sign Transaction </DialogTitle>
+      <DialogTitle> {t('home.wallet.dapps.modals.sendTransaction.header.title')} </DialogTitle>
 
       <DialogContent sx={{ overflow: 'unset' }}>
         <Stack spacing={2.5} alignItems="center">
           <Avatar src={requestSession.peer.metadata.icons[0]} />
 
           <Typography variant="h6">
-            {requestSession.peer.metadata.name} Wants to Send / Sign a Transaction
+            {requestSession.peer.metadata.name}{' '}
+            {t('home.wallet.dapps.modals.sendTransaction.body.title')}
           </Typography>
 
           <Divider />
@@ -127,7 +131,7 @@ export default function SessionSendTransactionModal() {
           <Divider />
 
           <Stack spacing={2} direction="row">
-            <Typography variant="h6">Blockchain(s)</Typography>
+            <Typography variant="h6">{t('common.words.blockchain')}</Typography>
             <Stack direction="row" alignItems="center" spacing={1}>
               {[chainId ?? ''].map((chain) => (
                 <Chip
@@ -139,7 +143,7 @@ export default function SessionSendTransactionModal() {
               ))}
             </Stack>
 
-            <Typography variant="h6">Methods</Typography>
+            <Typography variant="h6">{t('common.words.methods')}</Typography>
             <Stack direction="row" alignItems="center" spacing={1}>
               {[request.method].map((method) => (
                 <Chip key={method} label={method} variant="soft" color="warning" />
@@ -163,10 +167,10 @@ export default function SessionSendTransactionModal() {
 
       <DialogActions>
         <Button color="inherit" variant="outlined" onClick={onReject} disabled={loading}>
-          Cancel
+          {t('common.actions.cancel')}
         </Button>
         <Button variant="contained" color="success" onClick={onApprove} disabled={loading}>
-          {loading ? <CircularProgress size="sm" color="success" /> : 'Approve'}
+          {loading ? <CircularProgress size="sm" color="success" /> : t('common.actions.approve')}
         </Button>
       </DialogActions>
     </Dialog>
