@@ -24,6 +24,9 @@
       "balances": "Soldes",
       "deposit": "Dépôt",
       "withdrawal": "Retrait",
+      "internal": "Interne",
+      "external": "Externe",
+      "connected": "Connecté",
       "all": "Tous",
       "new": "Nouveau",
       "pending": "En attente",
@@ -41,6 +44,7 @@
       "created": "Créé"
     },
     "actions": {
+      "close": "Fermer",
       "clear": "Clair",
       "cancel": "Annuler",
       "approve": "Approuver",
@@ -67,7 +71,15 @@
       "footer": { "rowsPerPage": "Lignes par page" }
     }
   },
-  "header": { "search": {} },
+  "header": {
+    "search": {
+      "placeholder": "Recherche...",
+      "notFound": "Pas trouvé",
+      "noResultsFoundFor": "Aucun résultat trouvé pour",
+      "tryCheckingForTyposOrUsingCompleteWords": "Essayez de vérifier les fautes de frappe ou d'utiliser des mots complets.",
+      "pleaseEnterKeywords": "Veuillez entrer les mots clés"
+    }
+  },
   "navbar": {
     "account": { "title": "Adresse normale" },
     "footer": {
@@ -189,6 +201,7 @@
       "dapps": {
         "connectDapp": "Connecter Dapp",
         "modals": {
+          "missingRequestData": "Données de demande manquantes",
           "connect": {
             "title": "Connectez-vous avec Wallet Connect",
             "body": "Ne fermez pas cette fenêtre pendant la connexion. Avoir une question? Suivez ce guide.",
@@ -201,9 +214,21 @@
               "body": "Vous avez besoin que l'application Web normale soit ouverte pour initier des transactions. Vous ne recevrez pas de demandes de transaction lorsqu'il n'est pas ouvert."
             }
           },
+          "signMessage": {
+            "header": { "title": "Signer le message" },
+            "body": { "title": "Veut signer un message" }
+          },
+          "signTypedData": {
+            "header": { "title": "Signer les données typées" },
+            "body": { "title": "Veut signer des données saisies" }
+          },
           "sendTransaction": {
             "header": { "title": "Envoyer/Signer une Transaction" },
             "body": { "title": "Veut envoyer/signer une transaction" }
+          },
+          "unsupportedMethod": {
+            "header": { "title": "Méthode non prise en charge" },
+            "body": { "title": "Veut utiliser une méthode non prise en charge" }
           }
         },
         "disconnect": { "title": "Voulez-vous vraiment vous déconnecter ?" }

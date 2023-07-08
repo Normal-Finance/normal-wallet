@@ -1,0 +1,276 @@
+{
+  "common": {
+    "words": {
+      "home": "Ev",
+      "max": ".MAX",
+      "available": "mevcut",
+      "to": "Hedef",
+      "receive": "Alıcı",
+      "send": "Gönder",
+      "dashboard": "Tablo",
+      "settings": "Ayarlar",
+      "account": "Hesap",
+      "transactions": "Hareket",
+      "general": "Genel",
+      "billing": "Fatura",
+      "english": "İngilizce",
+      "mode": "Mod",
+      "wallet": "Cüzdan",
+      "blockchain": "Blockchain",
+      "batch": "Toplu iş",
+      "methods": "Yöntemler",
+      "token": "Jeton",
+      "balance": "Denge",
+      "balances": "Bakiye",
+      "deposit": "Pey",
+      "withdrawal": "Çekilme",
+      "internal": "Dahili",
+      "external": "Dış",
+      "connected": "Bağlandı",
+      "all": "Tüm",
+      "new": "Yeni",
+      "pending": "Beklemede",
+      "completed": "Tamamlandı",
+      "failed": "Başarısız",
+      "of": "in",
+      "dense": "Yoğun",
+      "block": "Blok",
+      "category": "Kategori",
+      "from": "Kaynak",
+      "value": "Değer",
+      "asset": "Kıymet",
+      "priority": "Öncelik",
+      "status": "Durum",
+      "created": "Oluşturulan"
+    },
+    "actions": {
+      "close": "Kapatmak",
+      "clear": "Berrak",
+      "cancel": "İptal",
+      "approve": "Onaylamak",
+      "connect": "Bağlamak",
+      "connectWallet": "Cüzdanı bağlayın",
+      "disconnect": "Ayırmak",
+      "saveChanges": "Değişiklikleri kaydetme",
+      "managePaymentMethods": "Ödeme yöntemlerini yönetme",
+      "viewRecentInvoices": "Son faturaları görüntüleme",
+      "deposit": "Pey",
+      "updateEmail": "E-postayı güncelleme",
+      "viewAll": "Tümünü görüntüle",
+      "viewDetails": "Ayrıntıları görüntüleyin",
+      "copyHash": "Karmayı kopyala",
+      "etherscan": "Eter taraması",
+      "viewOnEtherscan": "Etherscan'da görüntüle",
+      "makeInstant": "Anında yapın",
+      "switchToEthereum": "Ethereum'a geçin",
+      "copyAddress": "Adresi kopyala"
+    },
+    "table": {
+      "noData": "Veri yok",
+      "resultsFound": "Bulunan sonuçlar",
+      "footer": { "rowsPerPage": "Sayfa başına satır sayısı" }
+    }
+  },
+  "header": {
+    "search": {
+      "placeholder": "Aramak...",
+      "notFound": "Bulunamadı",
+      "noResultsFoundFor": "Şunun için sonuç bulunamadı:",
+      "tryCheckingForTyposOrUsingCompleteWords": "Yazım hatalarını kontrol etmeyi veya tam sözcükleri kullanmayı deneyin.",
+      "pleaseEnterKeywords": "Lütfen anahtar kelimeler girin"
+    }
+  },
+  "navbar": {
+    "account": { "title": "Normal Adres" },
+    "footer": {
+      "title": "Yardıma mı ihtiyacınız var?",
+      "subtitle": "Yanınızdayız",
+      "badge": "Destek",
+      "buttons": { "docs": "Belgeleri okuyun", "chat": "Canlı sohbet" }
+    }
+  },
+  "home": {
+    "statistics": {
+      "title": "Dünya Çapında Gerçek Zamanlı 🌎",
+      "error": "Gerçek zamanlı istatistikler yüklenemiyor. API'ye bağlanırken bir hata oluştu.",
+      "cards": {
+        "connectedClients": {
+          "title": "Bağlı İstemciler",
+          "tooltip": "Şu anda Normal kullanan toplam kişi sayısı"
+        },
+        "pendingTransactions": {
+          "title": "Bekleyen İşlemler",
+          "tooltip": "Toplu hale getirilmeye hazır yeni hareketlerin toplam sayısı"
+        },
+        "totalTransactions": { "title": "Toplam İşlem Sayısı", "tooltip": "Toplu işlem sayısı" },
+        "totalBatches": { "title": "Toplam Banyo", "tooltip": "Yürütülen toplam toplu iş sayısı" }
+      }
+    },
+    "failedCharges": {
+      "title": "🚨 Ödemeniz başarısız oldu",
+      "subtitle": "Lütfen yeni işlemler göndermeden önce sorunu çözün.",
+      "buttonText": "Ödeme yöntemlerini güncelleme"
+    },
+    "wrongNetwork": {
+      "title": "Yanlış ağ",
+      "subtitle": "Devam etmek için lütfen Ethereum veya Goerli'ye geçin."
+    },
+    "onboarding": {
+      "title": "Başlarken",
+      "steps": {
+        "depositToken": {
+          "step": "Para yatırma jetonları",
+          "title": "1. Adım | Para yatırma jetonları",
+          "subtitle": "Gazdan büyük tasarruf etmeye başlamak için kriptoyu Normal Cüzdanınıza taşıyın",
+          "noTokens": "Bağlı cüzdanınızda jeton yok.",
+          "ctaTitle": "Devam etmek üzere jeton yatırmak için Normal Cüzdan adresinizi kullanın.",
+          "cta": "Adresimi göster",
+          "modal": {
+            "errors": {
+              "contract": { "prefix": "Yüklenemiyor", "suffix": "şu anda sözleşme." },
+              "transfer": { "prefix": "Gönderdiğiniz bir hata oluştu", "suffix": "pey." }
+            },
+            "form": { "placeholder": "Tutarı girin" }
+          }
+        },
+        "updateEmail": {
+          "step": "E-postayı güncelleme",
+          "title": "2. Adım | E-postayı güncelleme",
+          "subtitle": "Faturalandırmanıza erişmek ve ödeme bildirimlerini almak için kullanılan e-posta"
+        },
+        "addPaymentMethod": {
+          "step": "Ödeme yöntemi ekleme",
+          "title": "3. Adım | Ödeme yöntemi ekleme",
+          "subtitle": "Bu, işlemlerinizi toplu hale getirmek için gereklidir. Yalnızca parti göndermek için kullanılan gazdan aldığınız pay için ücretlendirilirsiniz."
+        }
+      }
+    },
+    "getStarted": {
+      "subtitle": "Yeni Normal akıllı cüzdanınıza erişmek ve tüm bu şaşırtıcı özelliklerin keyfini çıkarmak için cüzdanınızı bağlayın.",
+      "features": {
+        "title": "Özellik",
+        "values": {
+          "reducedGas": "%90+ azaltılmış gaz",
+          "seamlessTrading": "Sorunsuz ticaret",
+          "emailAndSocialRecovery": "E-posta ve sosyal kurtarma",
+          "payGasWithCreditDebitCard": "Gaza kredi/banka kartı ile ödeme yapın",
+          "openSource": "Açık kaynak",
+          "instantDeFiAndBeyond": "Anında DeFi ve ötesi"
+        }
+      }
+    },
+    "activeTransactions": {
+      "title": "Aktif İşlemler",
+      "subtitle": "Toplu işlem için gönderdiğiniz yeni ve bekleyen işlemler",
+      "daysAgo": "günler önce",
+      "modals": {
+        "cancelTransaction": {
+          "title": "İşlemi iptal et",
+          "subtitle": "Bu işlemi iptal etmek istediğinizden emin misiniz? Yalnızca yeni ve bekleyen işlemler iptal edilebilir. İptal durumunda herhangi bir gaz için ücretlendirilmezsiniz."
+        }
+      }
+    },
+    "wallet": {
+      "header": {
+        "title": "Cüzdanınız",
+        "subtitle": "Toplam bakiye: yakında geliyor",
+        "modals": {
+          "send": {
+            "error": "Kripto göndermek henüz desteklenen bir özellik değildir. Yeni güncellemeler için daha sonra tekrar gelin.",
+            "hashConfirmation": {
+              "title": "Karma Onayı",
+              "subtitle": "İşleminiz gönderildi! Durumunu Geçmişinizde görüntüleyebilirsiniz, ancak en güncel bilgiler için Etherscan'ı öneririz."
+            },
+            "batchConfirmation": {
+              "title": "Toplu İş Onayı",
+              "subtitle": "İşleminiz toplu işlem için sıraya alındı! Durumunu görüntüleyebilir, önceliğini güncelleyebilir ve Kontrol Panelinizden veya Geçmişinizden tamamen iptal edebilirsiniz."
+            }
+          },
+          "receive": { "title": "Normal Adresiniz" }
+        }
+      },
+      "dapps": {
+        "connectDapp": "Dapp'ı bağlayın",
+        "modals": {
+          "missingRequestData": "Eksik istek verileri",
+          "connect": {
+            "title": "WalletConnect ile bağlan",
+            "body": "Bağlanırken bu pencereyi kapatmayın. Bir sorunuz mu var? Bu kılavuzu izleyin.",
+            "placeholder": "Bağlantıyı buraya yapıştır"
+          },
+          "sessionProposal": {
+            "header": { "title": "Oturum Önerisi" },
+            "body": {
+              "title": "Bağlanmak İstiyor",
+              "body": "İşlemleri başlatmak için Normal web uygulamasının açık olması gerekir. Açık olmadığında işlem istekleri almazsınız."
+            }
+          },
+          "signMessage": {
+            "header": { "title": "İmza Mesajı" },
+            "body": { "title": "Bir İletiyi İmzalamak İstiyor" }
+          },
+          "signTypedData": {
+            "header": { "title": "Yazılan Verileri İşaretle" },
+            "body": { "title": "Yazılan verileri imzalamak istiyor" }
+          },
+          "sendTransaction": {
+            "header": { "title": "İşlem Gönderme / İmzalama" },
+            "body": { "title": "Bir İşlem Göndermek / İmzalamak İstiyor" }
+          },
+          "unsupportedMethod": {
+            "header": { "title": "Desteklenmeyen Yöntem" },
+            "body": { "title": "Desteklenmeyen Yöntem İstiyor" }
+          }
+        },
+        "disconnect": { "title": "Bağlantıyı kesmek istediğinizden emin misiniz?" }
+      },
+      "balances": {
+        "table": {
+          "error": { "subtitle": "Cüzdan bakiyeleriniz yüklenirken bir hata oluştu" },
+          "toolbar": { "searchPlaceholder": "İsme veya sembole göre arama yapın..." }
+        }
+      }
+    }
+  },
+  "transactions": {
+    "tabs": {
+      "blockchain": {
+        "table": {
+          "toolbar": {
+            "status": { "contractInteraction": "Sözleşme Etkileşimi" },
+            "date": { "startDate": "Başlangıç tarihi", "endDate": "Bitiş tarihi" },
+            "search": { "placeholder": "Arama, kimden, belirteç veya değer..." }
+          }
+        }
+      },
+      "batch": {
+        "table": {
+          "toolbar": {
+            "date": { "startDate": "Başlangıç tarihi", "endDate": "Bitiş tarihi" },
+            "search": { "placeholder": "Arama, kimden, belirteç veya değer..." }
+          }
+        }
+      }
+    }
+  },
+  "settings": {
+    "tabs": {
+      "general": {
+        "email": {
+          "label": "E-posta Adresiniz",
+          "helperText": "Faturalandırmanıza erişmek ve ödeme bildirimlerini almak için kullanılan e-posta"
+        }
+      },
+      "billing": {
+        "paymentMethods": {
+          "title": "Ödeme Yöntemleri",
+          "subtitle": "Gaz masraflarını ödemek için kullanılan banka/kredi kartları"
+        },
+        "invoiceHistory": {
+          "title": "Fatura Geçmişi",
+          "subtitle": "Hesabınız tarafından yapılan son ödemeler"
+        }
+      }
+    }
+  }
+}

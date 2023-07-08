@@ -20,6 +20,7 @@ import { Button, IconButton, Skeleton, Tooltip } from '@mui/material';
 import Link from 'next/link';
 import { useBoolean } from 'src/hooks/use-boolean';
 import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsContext';
+import { useLocales } from 'src/locales';
 // ----------------------------------------------------------------------
 
 type Props = {
@@ -37,6 +38,7 @@ export default function BatchTableRow({
   onSelectTransaction,
   onCancelTransaction,
 }: Props) {
+  const { t } = useLocales();
   const { target, _value, priority, current_status, batchId, createdAt } = transaction;
 
   const { trackEvent } = useAnalyticsContext();
@@ -135,7 +137,7 @@ export default function BatchTableRow({
             'default'
           }
         >
-          {current_status}
+          {t(`common.words.${current_status.toLowerCase()}`)}
         </Label>
       </TableCell>
 
@@ -180,7 +182,7 @@ export default function BatchTableRow({
               }}
             >
               <Iconify icon="solar:copy-bold" />
-              Copy hash
+              {t('common.actions.copyHash')}
             </MenuItem>
 
             <MenuItem
@@ -190,7 +192,7 @@ export default function BatchTableRow({
               }
             >
               <Iconify icon="solar:eye-bold" />
-              Etherscan
+              {t('common.actions.etherscan')}
             </MenuItem>
           </>
         )}

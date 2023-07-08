@@ -68,9 +68,7 @@
     "table": {
       "noData": "No data",
       "resultsFound": "results found",
-      "footer": {
-        "rowsPerPage": "Rows per page"
-      }
+      "footer": { "rowsPerPage": "Rows per page" }
     }
   },
   "header": {
@@ -83,17 +81,12 @@
     }
   },
   "navbar": {
-    "account": {
-      "title": "Normal Address"
-    },
+    "account": { "title": "Normal Address" },
     "footer": {
       "title": "Need help?",
       "subtitle": "We've got you covered",
       "badge": "Support",
-      "buttons": {
-        "docs": "Read docs",
-        "chat": "Live chat"
-      }
+      "buttons": { "docs": "Read docs", "chat": "Live chat" }
     }
   },
   "home": {
@@ -113,10 +106,7 @@
           "title": "Total Transactions",
           "tooltip": "Total number of transactions batched"
         },
-        "totalBatches": {
-          "title": "Total Bathces",
-          "tooltip": "Total number of batched executed"
-        }
+        "totalBatches": { "title": "Total Bathces", "tooltip": "Total number of batched executed" }
       }
     },
     "failedCharges": {
@@ -140,18 +130,10 @@
           "cta": "Show my address",
           "modal": {
             "errors": {
-              "contract": {
-                "prefix": "Unable to load the",
-                "suffix": "contract at this time."
-              },
-              "transfer": {
-                "prefix": "There was an error submitting your",
-                "suffix": "deposit."
-              }
+              "contract": { "prefix": "Unable to load the", "suffix": "contract at this time." },
+              "transfer": { "prefix": "There was an error submitting your", "suffix": "deposit." }
             },
-            "form": {
-              "placeholder": "Enter amount"
-            }
+            "form": { "placeholder": "Enter amount" }
           }
         },
         "updateEmail": {
@@ -207,9 +189,7 @@
               "subtitle": "Your transaction has been queud for batching! You can view its status, update the priority, and cancel it entirely from your Dashboard or History."
             }
           },
-          "receive": {
-            "title": "Your Normal Address"
-          }
+          "receive": { "title": "Your Normal Address" }
         }
       },
       "dapps": {
@@ -222,59 +202,35 @@
             "placeholder": "Paste link here"
           },
           "sessionProposal": {
-            "header": {
-              "title": "Session Proposal"
-            },
+            "header": { "title": "Session Proposal" },
             "body": {
               "title": "Wants to Connect",
               "body": "You need the Normal web app to be open to initiate transactions. You will not receive transaction requests when it is not open."
             }
           },
           "signMessage": {
-            "header": {
-              "title": "Sign Message"
-            },
-            "body": {
-              "title": "Wants to Sign a Message"
-            }
+            "header": { "title": "Sign Message" },
+            "body": { "title": "Wants to Sign a Message" }
           },
           "signTypedData": {
-            "header": {
-              "title": "Sign Typed Data"
-            },
-            "body": {
-              "title": "Wants to Sign Typed Data"
-            }
+            "header": { "title": "Sign Typed Data" },
+            "body": { "title": "Wants to Sign Typed Data" }
           },
           "sendTransaction": {
-            "header": {
-              "title": "Send / Sign a Transaction"
-            },
-            "body": {
-              "title": "Wants to Send / Sign a Transaction"
-            }
+            "header": { "title": "Send / Sign a Transaction" },
+            "body": { "title": "Wants to Send / Sign a Transaction" }
           },
           "unsupportedMethod": {
-            "header": {
-              "title": "Unsupported Method"
-            },
-            "body": {
-              "title": "Wants to Unsupported Method"
-            }
+            "header": { "title": "Unsupported Method" },
+            "body": { "title": "Wants to Unsupported Method" }
           }
         },
-        "disconnect": {
-          "title": "Are you sure you want to disconnect?"
-        }
+        "disconnect": { "title": "Are you sure you want to disconnect?" }
       },
       "balances": {
         "table": {
-          "error": {
-            "subtitle": "There was an error loading your wallet balances"
-          },
-          "toolbar": {
-            "searchPlaceholder": "Search by name or symbol..."
-          }
+          "error": { "subtitle": "There was an error loading your wallet balances" },
+          "toolbar": { "searchPlaceholder": "Search by name or symbol..." }
         }
       }
     }
@@ -284,29 +240,17 @@
       "blockchain": {
         "table": {
           "toolbar": {
-            "status": {
-              "contractInteraction": "Contract Interaction"
-            },
-            "date": {
-              "startDate": "Start date",
-              "endDate": "End date"
-            },
-            "search": {
-              "placeholder": "Search to, from, token, or value..."
-            }
+            "status": { "contractInteraction": "Contract Interaction" },
+            "date": { "startDate": "Start date", "endDate": "End date" },
+            "search": { "placeholder": "Search to, from, token, or value..." }
           }
         }
       },
       "batch": {
         "table": {
           "toolbar": {
-            "date": {
-              "startDate": "Start date",
-              "endDate": "End date"
-            },
-            "search": {
-              "placeholder": "Search to, from, token, or value..."
-            }
+            "date": { "startDate": "Start date", "endDate": "End date" },
+            "search": { "placeholder": "Search to, from, token, or value..." }
           }
         }
       }

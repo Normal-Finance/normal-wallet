@@ -13,6 +13,7 @@ import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import Dialog, { dialogClasses } from '@mui/material/Dialog';
 // hooks
+import { useLocales } from 'src/locales';
 import { useBoolean } from 'src/hooks/use-boolean';
 import { useResponsive } from 'src/hooks/use-responsive';
 import { useEventListener } from 'src/hooks/use-event-listener';
@@ -30,6 +31,7 @@ import { applyFilter, groupedData, getAllItems } from './utils';
 // ----------------------------------------------------------------------
 
 function Searchbar() {
+  const { t } = useLocales();
   const theme = useTheme();
 
   const router = useRouter();
@@ -146,7 +148,7 @@ function Searchbar() {
           <InputBase
             fullWidth
             autoFocus
-            placeholder="Search..."
+            placeholder={t('header.search.placeholder') || ''}
             value={searchQuery}
             onChange={handleSearch}
             startAdornment={

@@ -110,7 +110,7 @@ export default function DashboardView() {
           mb: { xs: 3, md: 5 },
         }}
       >
-        Realtime Worldwide 🌎
+        {t('home.statistics.title')}
       </Typography>
 
       <Grid container spacing={3}>

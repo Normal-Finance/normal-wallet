@@ -18,6 +18,7 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 import { Tooltip } from '@mui/material';
 import Link from 'next/link';
 import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsContext';
+import { useLocales } from 'src/locales';
 
 // ----------------------------------------------------------------------
 
@@ -34,6 +35,7 @@ export default function BlockchainTableRow({
   onCopyTransactionHash,
   onSelectTransaction,
 }: Props) {
+  const { t } = useLocales();
   const { category, blockNum, from, to, value, asset, hash } = transaction;
 
   const popover = usePopover();
@@ -163,7 +165,7 @@ export default function BlockchainTableRow({
           }}
         >
           <Iconify icon="solar:copy-bold" />
-          Copy hash
+          {t('common.actions.copyHash')}
         </MenuItem>
 
         <MenuItem
@@ -173,7 +175,7 @@ export default function BlockchainTableRow({
           }
         >
           <Iconify icon="solar:eye-bold" />
-          Etherscan
+          {t('common.actions.etherscan')}
         </MenuItem>
       </CustomPopover>
     </>

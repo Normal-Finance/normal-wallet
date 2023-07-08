@@ -142,7 +142,7 @@ function TransactionItem({ transaction, onCancel, onUpdatePriority }: Transactio
             </Typography>
 
             <Label color={current_status === TransactionStatus.NEW ? 'success' : 'info'}>
-              {current_status}
+              {t(`common.words.${current_status.toLowerCase()}`)}
             </Label>
 
             {current_status === TransactionStatus.PENDING && (

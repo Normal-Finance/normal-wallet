@@ -1,0 +1,265 @@
+{
+  "common": {
+    "words": {
+      "home": "Lar",
+      "max": "MAX",
+      "available": "disponível",
+      "to": "para",
+      "receive": "receber",
+      "send": "Enviar",
+      "dashboard": "Painel",
+      "settings": "Configurações",
+      "account": "Conta",
+      "transactions": "Transações",
+      "general": "Em geral",
+      "billing": "Cobrança",
+      "english": "inglês",
+      "mode": "Modo",
+      "wallet": "Carteira",
+      "blockchain": "Blockchain",
+      "batch": "Lote",
+      "methods": "Métodos",
+      "token": "Símbolo",
+      "balance": "Equilíbrio",
+      "balances": "Saldos",
+      "deposit": "Depósito",
+      "withdrawal": "Cancelamento",
+      "all": "Todos",
+      "new": "Novo",
+      "pending": "Pendente",
+      "completed": "Concluído",
+      "failed": "Fracassado",
+      "of": "de",
+      "dense": "Denso",
+      "block": "Bloquear",
+      "category": "Categoria",
+      "from": "De",
+      "value": "Valor",
+      "asset": "Ativo",
+      "priority": "Prioridade",
+      "status": "Status",
+      "created": "Criada"
+    },
+    "actions": {
+      "clear": "Claro",
+      "cancel": "Cancelar",
+      "approve": "Aprovar",
+      "connect": "Conectar",
+      "connectWallet": "Conectar carteira",
+      "disconnect": "desconectar",
+      "saveChanges": "Salvar alterações",
+      "managePaymentMethods": "Gerenciar métodos de pagamento",
+      "viewRecentInvoices": "Ver faturas recentes",
+      "deposit": "Depósito",
+      "updateEmail": "Atualizar e-mail",
+      "viewAll": "Ver tudo",
+      "viewDetails": "Ver detalhes",
+      "copyHash": "Copiar hash",
+      "etherscan": "Etherscan",
+      "viewOnEtherscan": "Ver em Etherscan",
+      "makeInstant": "Tornar instantâneo",
+      "switchToEthereum": "Mudar para Ethereum",
+      "copyAddress": "Copiar endereço"
+    },
+    "table": {
+      "noData": "sem dados",
+      "resultsFound": "resultados encontrados",
+      "footer": { "rowsPerPage": "Linhas por página" }
+    }
+  },
+  "header": {
+    "search": {
+      "placeholder": "Procurar...",
+      "notFound": "Não encontrado",
+      "noResultsFoundFor": "Nenhum resultado encontrado para",
+      "tryCheckingForTyposOrUsingCompleteWords": "Tente verificar se há erros de digitação ou usar palavras completas.",
+      "pleaseEnterKeywords": "Insira palavras-chave"
+    }
+  },
+  "navbar": {
+    "account": { "title": "Endereço normal" },
+    "footer": {
+      "title": "Preciso de ajuda?",
+      "subtitle": "Estamos protegendo você",
+      "badge": "Apoiar",
+      "buttons": { "docs": "ler documentos", "chat": "Bate-papo ao vivo" }
+    }
+  },
+  "home": {
+    "statistics": {
+      "title": "Em tempo real em todo o mundo 🌎",
+      "error": "Não foi possível carregar as estatísticas em tempo real. Ocorreu um erro ao conectar-se à API.",
+      "cards": {
+        "connectedClients": {
+          "title": "Clientes Conectados",
+          "tooltip": "Número total de pessoas usando o Normal agora"
+        },
+        "pendingTransactions": {
+          "title": "Transações Pendentes",
+          "tooltip": "Número total de novas transações prontas para serem agrupadas"
+        },
+        "totalTransactions": {
+          "title": "Total de Transações",
+          "tooltip": "Número total de transações agrupadas"
+        },
+        "totalBatches": { "title": "Banhos Totais", "tooltip": "Número total de lotes executados" }
+      }
+    },
+    "failedCharges": {
+      "title": "🚨 Você tem um pagamento falhado",
+      "subtitle": "Resolva antes de enviar qualquer nova transação.",
+      "buttonText": "Atualizar formas de pagamento"
+    },
+    "wrongNetwork": {
+      "title": "rede errada",
+      "subtitle": "Mude para Ethereum ou Goerli para continuar."
+    },
+    "onboarding": {
+      "title": "Começando",
+      "steps": {
+        "depositToken": {
+          "step": "Tokens de depósito",
+          "title": "Passo 1 | Tokens de depósito",
+          "subtitle": "Mova criptomoedas para sua Carteira Normal para começar a economizar muito em gasolina",
+          "noTokens": "Não há tokens em sua carteira conectada.",
+          "ctaTitle": "Use seu endereço de carteira normal para depositar tokens para continuar.",
+          "cta": "Mostrar meu endereço",
+          "modal": {
+            "errors": {
+              "contract": {
+                "prefix": "Não foi possível carregar o",
+                "suffix": "contrato neste momento."
+              },
+              "transfer": { "prefix": "Ocorreu um erro ao enviar seu", "suffix": "depósito." }
+            },
+            "form": { "placeholder": "Insira o valor" }
+          }
+        },
+        "updateEmail": {
+          "step": "Atualizar e-mail",
+          "title": "Passo 2 | Atualizar e-mail",
+          "subtitle": "O e-mail usado para acessar sua cobrança e receber notificações de pagamento"
+        },
+        "addPaymentMethod": {
+          "step": "Adicionar forma de pagamento",
+          "title": "Passo 3 | Adicionar forma de pagamento",
+          "subtitle": "Isso é necessário para agrupar suas transações. Você só será cobrado pela sua parte do gás usado para enviar um lote."
+        }
+      }
+    },
+    "getStarted": {
+      "subtitle": "Conecte sua carteira para acessar sua nova carteira inteligente Normal e aproveite todos esses recursos incríveis.",
+      "features": {
+        "title": "Características",
+        "values": {
+          "reducedGas": "90%+ gás reduzido",
+          "seamlessTrading": "Negociação contínua",
+          "emailAndSocialRecovery": "E-mail e recuperação social",
+          "payGasWithCreditDebitCard": "Pague gasolina com cartão de crédito/débito",
+          "openSource": "Código aberto",
+          "instantDeFiAndBeyond": "DeFi instantâneo e além"
+        }
+      }
+    },
+    "activeTransactions": {
+      "title": "Transações Ativas",
+      "subtitle": "Transações novas e pendentes que você enviou para lote",
+      "daysAgo": "dias atrás",
+      "modals": {
+        "cancelTransaction": {
+          "title": "cancelar transações",
+          "subtitle": "Tem certeza que deseja cancelar esta transação? Somente transações novas e pendentes podem ser canceladas. Você não será cobrado por qualquer gás se cancelado."
+        }
+      }
+    },
+    "wallet": {
+      "header": {
+        "title": "Sua carteira",
+        "subtitle": "Saldo total: em breve",
+        "modals": {
+          "send": {
+            "error": "O envio de criptografia ainda não é um recurso compatível. Volte mais tarde para novas atualizações.",
+            "hashConfirmation": {
+              "title": "Confirmação de hash",
+              "subtitle": "Sua transação foi enviada! Você pode visualizar seu status em seu histórico, mas recomendamos o Etherscan para obter as informações mais atualizadas."
+            },
+            "batchConfirmation": {
+              "title": "Confirmação de Lote",
+              "subtitle": "Sua transação foi enfileirada para processamento em lote! Você pode visualizar seu status, atualizar a prioridade e cancelá-lo totalmente em seu Painel ou Histórico."
+            }
+          },
+          "receive": { "title": "Seu endereço normal" }
+        }
+      },
+      "dapps": {
+        "connectDapp": "Conectar Dapp",
+        "modals": {
+          "connect": {
+            "title": "Conecte-se com a WalletConnect",
+            "body": "Não feche esta janela durante a conexão. Ter uma questão? Siga este guia.",
+            "placeholder": "Cole o link aqui"
+          },
+          "sessionProposal": {
+            "header": { "title": "Proposta de Sessão" },
+            "body": {
+              "title": "Quer se conectar",
+              "body": "Você precisa que o aplicativo da Web Normal esteja aberto para iniciar as transações. Você não receberá solicitações de transação quando não estiver aberto."
+            }
+          },
+          "sendTransaction": {
+            "header": { "title": "Enviar / assinar uma transação" },
+            "body": { "title": "Quer enviar/assinar uma transação" }
+          }
+        },
+        "disconnect": { "title": "Tem certeza de que deseja desconectar?" }
+      },
+      "balances": {
+        "table": {
+          "error": { "subtitle": "Ocorreu um erro ao carregar os saldos da sua carteira" },
+          "toolbar": { "searchPlaceholder": "Pesquise por nome ou símbolo..." }
+        }
+      }
+    }
+  },
+  "transactions": {
+    "tabs": {
+      "blockchain": {
+        "table": {
+          "toolbar": {
+            "status": { "contractInteraction": "Interação Contratual" },
+            "date": { "startDate": "Data de início", "endDate": "Data final" },
+            "search": { "placeholder": "Pesquise para, de, token ou valor..." }
+          }
+        }
+      },
+      "batch": {
+        "table": {
+          "toolbar": {
+            "date": { "startDate": "Data de início", "endDate": "Data final" },
+            "search": { "placeholder": "Pesquise para, de, token ou valor..." }
+          }
+        }
+      }
+    }
+  },
+  "settings": {
+    "tabs": {
+      "general": {
+        "email": {
+          "label": "Endereço de email",
+          "helperText": "O e-mail usado para acessar sua cobrança e receber notificações de pagamento"
+        }
+      },
+      "billing": {
+        "paymentMethods": {
+          "title": "Métodos de Pagamento",
+          "subtitle": "Cartões de débito/crédito usados ​​para pagar despesas de gás"
+        },
+        "invoiceHistory": {
+          "title": "Histórico de faturas",
+          "subtitle": "Cobranças recentes incorridas em sua conta"
+        }
+      }
+    }
+  }
+}

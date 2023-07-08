@@ -48,7 +48,12 @@ export default function ConnectDapp({ open, onClose, onSubmit }: Props) {
           {/* <Link href="https://www.google.com">guide</Link> */}
         </Typography>
 
-        <TextField value={uri} onChange={handleUri} placeholder="Paste link here" sx={{ mt: 2 }} />
+        <TextField
+          value={uri}
+          onChange={handleUri}
+          placeholder={t('home.wallet.dapps.modals.connect.placeholder') || ''}
+          sx={{ mt: 2 }}
+        />
 
         <Button
           variant="contained"

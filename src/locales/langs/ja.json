@@ -1,0 +1,276 @@
+{
+  "common": {
+    "words": {
+      "home": "家",
+      "max": ".MAX",
+      "available": "利用できる",
+      "to": "宛先",
+      "receive": "受信",
+      "send": "送信",
+      "dashboard": "ダッシュボード",
+      "settings": "設定",
+      "account": "アカウント",
+      "transactions": "トランザクション",
+      "general": "全般",
+      "billing": "請求",
+      "english": "英語",
+      "mode": "モード",
+      "wallet": "財布",
+      "blockchain": "ブロックチェーン",
+      "batch": "バッチ",
+      "methods": "メソッド",
+      "token": "トークン",
+      "balance": "秤",
+      "balances": "残高",
+      "deposit": "預金",
+      "withdrawal": "撤退",
+      "internal": "国内",
+      "external": "外",
+      "connected": "接続",
+      "all": "すべての",
+      "new": "新機能",
+      "pending": "ペンディング",
+      "completed": "完了",
+      "failed": "失敗 しました",
+      "of": "の",
+      "dense": "濃い",
+      "block": "ブロック",
+      "category": "カテゴリ",
+      "from": "差出人",
+      "value": "価値",
+      "asset": "資産",
+      "priority": "優先権",
+      "status": "地位",
+      "created": "作成"
+    },
+    "actions": {
+      "close": "閉める",
+      "clear": "クリア",
+      "cancel": "キャンセル",
+      "approve": "承認する",
+      "connect": "繋ぐ",
+      "connectWallet": "ウォレットを接続する",
+      "disconnect": "切る",
+      "saveChanges": "変更を保存",
+      "managePaymentMethods": "お支払い方法を管理する",
+      "viewRecentInvoices": "最近の請求書を表示する",
+      "deposit": "預金",
+      "updateEmail": "メールを更新する",
+      "viewAll": "すべて表示",
+      "viewDetails": "詳細を見る",
+      "copyHash": "ハッシュのコピー",
+      "etherscan": "イーサスキャン",
+      "viewOnEtherscan": "イーサスキャンで見る",
+      "makeInstant": "インスタントにする",
+      "switchToEthereum": "イーサリアムに切り替える",
+      "copyAddress": "アドレスをコピー"
+    },
+    "table": {
+      "noData": "データなし",
+      "resultsFound": "見つかった結果",
+      "footer": { "rowsPerPage": "ページあたりの行数" }
+    }
+  },
+  "header": {
+    "search": {
+      "placeholder": "捜索。。。",
+      "notFound": "見つかりません",
+      "noResultsFoundFor": "結果が見つかりません",
+      "tryCheckingForTyposOrUsingCompleteWords": "タイプミスをチェックするか、完全な単語を使用してみてください。",
+      "pleaseEnterKeywords": "キーワードを入力してください"
+    }
+  },
+  "navbar": {
+    "account": { "title": "通常のアドレス" },
+    "footer": {
+      "title": "ヘルプが必要ですか?",
+      "subtitle": "私たちはあなたをカバーしています",
+      "badge": "支える",
+      "buttons": { "docs": "ドキュメントを読む", "chat": "ライブチャット" }
+    }
+  },
+  "home": {
+    "statistics": {
+      "title": "リアルタイムワールドワイド 🌎",
+      "error": "リアルタイム統計を読み込めません。API への接続中にエラーが発生しました。",
+      "cards": {
+        "connectedClients": {
+          "title": "接続されたクライアント",
+          "tooltip": "現在ノーマルを使用している人の総数"
+        },
+        "pendingTransactions": {
+          "title": "保留中のトランザクション",
+          "tooltip": "バッチ処理の準備ができている新しいトランザクションの合計数"
+        },
+        "totalTransactions": {
+          "title": "合計トランザクション数",
+          "tooltip": "バッチ処理されたトランザクションの合計数"
+        },
+        "totalBatches": { "title": "総浴場数", "tooltip": "バッチ実行の総数" }
+      }
+    },
+    "failedCharges": {
+      "title": "🚨 支払いに失敗した場合",
+      "subtitle": "新しい取引を送信する前に解決してください。",
+      "buttonText": "お支払い方法を更新する"
+    },
+    "wrongNetwork": {
+      "title": "間違ったネットワーク",
+      "subtitle": "続行するには、イーサリアムまたはゴエリに切り替えてください。"
+    },
+    "onboarding": {
+      "title": "はじめ",
+      "steps": {
+        "depositToken": {
+          "step": "入金トークン",
+          "title": "ステップ1 |入金トークン",
+          "subtitle": "暗号を通常のウォレットに移動して、ガスを大幅に節約し始めます",
+          "noTokens": "接続されたウォレットにトークンがありません。",
+          "ctaTitle": "続行するには、通常のウォレットアドレスを使用してトークンを入金します。",
+          "cta": "住所を表示",
+          "modal": {
+            "errors": {
+              "contract": { "prefix": "を読み込めません", "suffix": "この時点で契約します。" },
+              "transfer": { "prefix": "送信中にエラーが発生しました", "suffix": "預金。" }
+            },
+            "form": { "placeholder": "金額を入力" }
+          }
+        },
+        "updateEmail": {
+          "step": "メールを更新する",
+          "title": "ステップ 2 |メールを更新する",
+          "subtitle": "請求へのアクセスと支払い通知の受信に使用されるメール"
+        },
+        "addPaymentMethod": {
+          "step": "お支払い方法を追加する",
+          "title": "ステップ 3 |お支払い方法を追加する",
+          "subtitle": "これは、トランザクションをバッチ処理するために必要です。バッチの提出に使用されたガスのシェアに対してのみ請求されます。"
+        }
+      }
+    },
+    "getStarted": {
+      "subtitle": "ウォレットを接続して新しいNormalスマートウォレットにアクセスし、これらすべてのすばらしい機能をお楽しみください。",
+      "features": {
+        "title": "顔立ち",
+        "values": {
+          "reducedGas": "90%+ガス削減",
+          "seamlessTrading": "シームレスな取引",
+          "emailAndSocialRecovery": "メールとソーシャルリカバリ",
+          "payGasWithCreditDebitCard": "クレジットカード/デビットカードでガスを支払う",
+          "openSource": "オープンソース",
+          "instantDeFiAndBeyond": "インスタントDeFiとその先"
+        }
+      }
+    },
+    "activeTransactions": {
+      "title": "アクティブなトランザクション",
+      "subtitle": "バッチ処理のために送信した新規および保留中のトランザクション",
+      "daysAgo": "か月前",
+      "modals": {
+        "cancelTransaction": {
+          "title": "トランザクションのキャンセル",
+          "subtitle": "この取引をキャンセルしてもよろしいですか?新規および保留中のトランザクションのみをキャンセルできます。キャンセルした場合、ガス料金は請求されません。"
+        }
+      }
+    },
+    "wallet": {
+      "header": {
+        "title": "あなたの財布",
+        "subtitle": "合計残高:近日公開予定",
+        "modals": {
+          "send": {
+            "error": "暗号の送信はまだサポートされていない機能です。後で新しいアップデートのために戻ってきてください。",
+            "hashConfirmation": {
+              "title": "ハッシュ確認",
+              "subtitle": "トランザクションが送信されました!そのステータスは履歴で確認できますが、最新の情報についてはEtherscanをお勧めします。"
+            },
+            "batchConfirmation": {
+              "title": "バッチ確認",
+              "subtitle": "トランザクションはバッチ処理のためにキューに入れられました!ダッシュボードまたは履歴から、ステータスを表示したり、優先度を更新したり、完全にキャンセルしたりできます。"
+            }
+          },
+          "receive": { "title": "あなたの通常の住所" }
+        }
+      },
+      "dapps": {
+        "connectDapp": "接続ダップ",
+        "modals": {
+          "missingRequestData": "要求データの欠落",
+          "connect": {
+            "title": "ウォレットコネクトで接続する",
+            "body": "接続中はこのウィンドウを閉じないでください。質問がありますか?このガイドに従ってください。",
+            "placeholder": "ここにリンクを貼り付け"
+          },
+          "sessionProposal": {
+            "header": { "title": "セッション提案" },
+            "body": {
+              "title": "接続したい",
+              "body": "トランザクションを開始するには、通常の Web アプリが開いている必要があります。開いていないときは、トランザクション要求を受信しません。"
+            }
+          },
+          "signMessage": {
+            "header": { "title": "メッセージに署名" },
+            "body": { "title": "メッセージに署名したい" }
+          },
+          "signTypedData": {
+            "header": { "title": "型付きデータに署名する" },
+            "body": { "title": "型指定されたデータに署名したい" }
+          },
+          "sendTransaction": {
+            "header": { "title": "トランザクションの送信/署名" },
+            "body": { "title": "トランザクションを送信/署名したい" }
+          },
+          "unsupportedMethod": {
+            "header": { "title": "サポートされていないメソッド" },
+            "body": { "title": "サポートされていないメソッドをしたい" }
+          }
+        },
+        "disconnect": { "title": "切断してもよろしいですか?" }
+      },
+      "balances": {
+        "table": {
+          "error": { "subtitle": "ウォレット残高の読み込み中にエラーが発生しました" },
+          "toolbar": { "searchPlaceholder": "名前またはシンボルで検索..." }
+        }
+      }
+    }
+  },
+  "transactions": {
+    "tabs": {
+      "blockchain": {
+        "table": {
+          "toolbar": {
+            "status": { "contractInteraction": "契約の相互作用" },
+            "date": { "startDate": "開始日", "endDate": "終了日" },
+            "search": { "placeholder": "検索先、差出人、トークン、または値..." }
+          }
+        }
+      },
+      "batch": {
+        "table": {
+          "toolbar": {
+            "date": { "startDate": "開始日", "endDate": "終了日" },
+            "search": { "placeholder": "検索先、差出人、トークン、または値..." }
+          }
+        }
+      }
+    }
+  },
+  "settings": {
+    "tabs": {
+      "general": {
+        "email": {
+          "label": "アドレス",
+          "helperText": "請求へのアクセスと支払い通知の受信に使用されるメール"
+        }
+      },
+      "billing": {
+        "paymentMethods": {
+          "title": "お支払い方法",
+          "subtitle": "ガソリン代の支払いに使用されるデビット/クレジットカード"
+        },
+        "invoiceHistory": { "title": "請求書履歴", "subtitle": "アカウントで最近発生した請求" }
+      }
+    }
+  }
+}

@@ -124,7 +124,7 @@ export default function BlockchainTableToolbar({
           onClick={onResetFilters}
           startIcon={<Iconify icon="solar:trash-bin-trash-bold" />}
         >
-          {t('common.table.clear')}
+          {t('common.actions.clear')}
         </Button>
       )}
     </Stack>

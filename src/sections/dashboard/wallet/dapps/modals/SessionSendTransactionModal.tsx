@@ -49,7 +49,7 @@ export default function SessionSendTransactionModal() {
 
   // Ensure request and wallet are defined
   if (!requestEvent || !requestSession) {
-    return <Typography>Missing request data</Typography>;
+    return <Typography> {t('home.wallet.dapps.modals.signTypedData.body.title')}</Typography>;
   }
 
   // Get required proposal data

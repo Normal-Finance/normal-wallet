@@ -1,0 +1,279 @@
+{
+  "common": {
+    "words": {
+      "home": "Nhà",
+      "max": ".MAX",
+      "available": "Có sẵ",
+      "to": "đến",
+      "receive": "Nhận",
+      "send": "Gửi",
+      "dashboard": "Bảng điều khiển",
+      "settings": "Cài đặt",
+      "account": "Tài khoản",
+      "transactions": "Giao dịch",
+      "general": "Tổng quát",
+      "billing": "Thanh toán",
+      "english": "Tiếng Anh",
+      "mode": "Chế độ",
+      "wallet": "Ví",
+      "blockchain": "Chuỗi khối",
+      "batch": "Mẻ",
+      "methods": "Phương pháp",
+      "token": "Token",
+      "balance": "Cân",
+      "balances": "Cân bằng",
+      "deposit": "Lắng",
+      "withdrawal": "Rút",
+      "internal": "Nội",
+      "external": "Ngoài",
+      "connected": "Kết nối",
+      "all": "Tất cả",
+      "new": "Mới",
+      "pending": "Chờ",
+      "completed": "Hoàn thành",
+      "failed": "Thất bại",
+      "of": "của",
+      "dense": "Rậm",
+      "block": "Khối",
+      "category": "Loại",
+      "from": "Từ",
+      "value": "Giá trị",
+      "asset": "Tài sản",
+      "priority": "Ưu tiên",
+      "status": "Tình trạng",
+      "created": "Tạo"
+    },
+    "actions": {
+      "close": "Đóng",
+      "clear": "Trong",
+      "cancel": "Hủy",
+      "approve": "Chấp nhận",
+      "connect": "Kết nối",
+      "connectWallet": "Kết nối ví",
+      "disconnect": "Ngắt kết nối",
+      "saveChanges": "Lưu thay đổi",
+      "managePaymentMethods": "Quản lý phương thức thanh toán",
+      "viewRecentInvoices": "Xem hóa đơn gần đây",
+      "deposit": "Lắng",
+      "updateEmail": "Cập nhật email",
+      "viewAll": "Xem tất cả",
+      "viewDetails": "Xem chi tiết",
+      "copyHash": "Sao chép hàm băm",
+      "etherscan": "Quét Ether",
+      "viewOnEtherscan": "Xem trên Etherscan",
+      "makeInstant": "Làm ngay lập tức",
+      "switchToEthereum": "Chuyển sang Ethereum",
+      "copyAddress": "Sao chép địa chỉ"
+    },
+    "table": {
+      "noData": "Không có dữ liệu",
+      "resultsFound": "Kết quả tìm thấy",
+      "footer": { "rowsPerPage": "Hàng trên mỗi trang" }
+    }
+  },
+  "header": {
+    "search": {
+      "placeholder": "Tìm kiếm...",
+      "notFound": "Không tìm thấy",
+      "noResultsFoundFor": "Không tìm thấy kết quả cho",
+      "tryCheckingForTyposOrUsingCompleteWords": "Hãy thử kiểm tra lỗi chính tả hoặc sử dụng các từ hoàn chỉnh.",
+      "pleaseEnterKeywords": "Vui lòng nhập từ khóa"
+    }
+  },
+  "navbar": {
+    "account": { "title": "Địa chỉ bình thường" },
+    "footer": {
+      "title": "Cần giúp đỡ?",
+      "subtitle": "Chúng tôi luôn sẵn sàng hỗ trợ bạn",
+      "badge": "Hỗ trợ",
+      "buttons": { "docs": "Đọc tài liệu", "chat": "Trò chuyện trực tiếp" }
+    }
+  },
+  "home": {
+    "statistics": {
+      "title": "Thời gian thực trên toàn thế giới 🌎",
+      "error": "Không thể tải số liệu thống kê thời gian thực. Đã xảy ra lỗi khi kết nối với API.",
+      "cards": {
+        "connectedClients": {
+          "title": "Máy khách được kết nối",
+          "tooltip": "Tổng số người sử dụng Bình thường ngay bây giờ"
+        },
+        "pendingTransactions": {
+          "title": "Giao dịch đang chờ xử lý",
+          "tooltip": "Tổng số giao dịch mới sẵn sàng thực hiện theo lô"
+        },
+        "totalTransactions": {
+          "title": "Tổng số giao dịch",
+          "tooltip": "Tổng số giao dịch theo lô"
+        },
+        "totalBatches": { "title": "Tổng số bồn tắm", "tooltip": "Tổng số đợt thực hiện" }
+      }
+    },
+    "failedCharges": {
+      "title": "🚨 Bạn có một khoản thanh toán không thành công",
+      "subtitle": "Vui lòng giải quyết trước khi gửi bất kỳ giao dịch mới nào.",
+      "buttonText": "Cập nhật phương thức thanh toán"
+    },
+    "wrongNetwork": {
+      "title": "Mạng sai",
+      "subtitle": "Vui lòng chuyển sang Ethereum hoặc Goerli để tiếp tục."
+    },
+    "onboarding": {
+      "title": "Bắt đầu",
+      "steps": {
+        "depositToken": {
+          "step": "Nạp token",
+          "title": "Bước 1 | Nạp token",
+          "subtitle": "Chuyển tiền điện tử vào Ví thông thường của bạn để bắt đầu tiết kiệm rất nhiều tiền gas",
+          "noTokens": "Không có mã thông báo nào trong ví được kết nối của bạn.",
+          "ctaTitle": "Sử dụng địa chỉ Ví thông thường của bạn để nạp token để tiếp tục.",
+          "cta": "Hiển thị địa chỉ của tôi",
+          "modal": {
+            "errors": {
+              "contract": { "prefix": "Không thể tải", "suffix": "hợp đồng tại thời điểm này." },
+              "transfer": { "prefix": "Đã xảy ra lỗi khi gửi", "suffix": "lắng." }
+            },
+            "form": { "placeholder": "Nhập số tiền" }
+          }
+        },
+        "updateEmail": {
+          "step": "Cập nhật email",
+          "title": "Bước 2 | Cập nhật email",
+          "subtitle": "Email được sử dụng để truy cập thông tin thanh toán của bạn và nhận thông báo thanh toán"
+        },
+        "addPaymentMethod": {
+          "step": "Thêm phương thức thanh toán",
+          "title": "Bước 3 | Thêm phương thức thanh toán",
+          "subtitle": "Điều này là bắt buộc để thực hiện hàng loạt giao dịch của bạn. Bạn sẽ chỉ bị tính phí cho phần khí đốt được sử dụng để gửi một lô."
+        }
+      }
+    },
+    "getStarted": {
+      "subtitle": "Kết nối ví của bạn để truy cập ví thông minh Thông thường mới của bạn và tận hưởng tất cả các tính năng tuyệt vời này.",
+      "features": {
+        "title": "Tính năng",
+        "values": {
+          "reducedGas": "Giảm 90% + khí",
+          "seamlessTrading": "Giao dịch liền mạch",
+          "emailAndSocialRecovery": "Email &; phục hồi xã hội",
+          "payGasWithCreditDebitCard": "Thanh toán gas bằng thẻ tín dụng / thẻ ghi nợ",
+          "openSource": "Mã nguồn mở",
+          "instantDeFiAndBeyond": "DeFi tức thì và hơn thế nữa"
+        }
+      }
+    },
+    "activeTransactions": {
+      "title": "Giao dịch đang hoạt động",
+      "subtitle": "Các giao dịch mới và đang chờ xử lý mà bạn đã gửi để phân lô",
+      "daysAgo": "ngày trước",
+      "modals": {
+        "cancelTransaction": {
+          "title": "Hủy giao dịch",
+          "subtitle": "Bạn có chắc chắn muốn hủy giao dịch này không? Chỉ các giao dịch mới và đang chờ xử lý mới có thể bị hủy. Bạn sẽ không bị tính phí cho bất kỳ loại gas nào nếu bị hủy."
+        }
+      }
+    },
+    "wallet": {
+      "header": {
+        "title": "Ví của bạn",
+        "subtitle": "Tổng số dư: sắp ra mắt",
+        "modals": {
+          "send": {
+            "error": "Gửi tiền mã hóa chưa phải là một tính năng được hỗ trợ. Quay lại sau để cập nhật mới.",
+            "hashConfirmation": {
+              "title": "Xác nhận băm",
+              "subtitle": "Giao dịch của bạn đã được gửi! Bạn có thể xem trạng thái của nó trong Lịch sử của mình, nhưng chúng tôi khuyên bạn nên sử dụng Etherscan để biết thông tin cập nhật nhất."
+            },
+            "batchConfirmation": {
+              "title": "Xác nhận hàng loạt",
+              "subtitle": "Giao dịch của bạn đã được xếp hàng để phân lô! Bạn có thể xem trạng thái của nó, cập nhật mức độ ưu tiên và hủy hoàn toàn khỏi Trang tổng quan hoặc Lịch sử của mình."
+            }
+          },
+          "receive": { "title": "Địa chỉ bình thường của bạn" }
+        }
+      },
+      "dapps": {
+        "connectDapp": "Kết nối Dapp",
+        "modals": {
+          "missingRequestData": "Thiếu dữ liệu yêu cầu",
+          "connect": {
+            "title": "Kết nối với WalletConnect",
+            "body": "Không đóng cửa sổ này trong khi kết nối. Bạn có câu hỏi? Làm theo hướng dẫn này.",
+            "placeholder": "Dán liên kết vào đây"
+          },
+          "sessionProposal": {
+            "header": { "title": "Đề xuất phiên họp" },
+            "body": {
+              "title": "Muốn kết nối",
+              "body": "Bạn cần ứng dụng web Bình thường được mở để bắt đầu giao dịch. Bạn sẽ không nhận được yêu cầu giao dịch khi nó không mở."
+            }
+          },
+          "signMessage": {
+            "header": { "title": "Ký tin nhắn" },
+            "body": { "title": "Muốn ký một tin nhắn" }
+          },
+          "signTypedData": {
+            "header": { "title": "Ký dữ liệu đã nhập" },
+            "body": { "title": "Muốn ký dữ liệu đã nhập" }
+          },
+          "sendTransaction": {
+            "header": { "title": "Gửi / Ký giao dịch" },
+            "body": { "title": "Muốn gửi / ký giao dịch" }
+          },
+          "unsupportedMethod": {
+            "header": { "title": "Phương pháp không được hỗ trợ" },
+            "body": { "title": "Muốn phương pháp không được hỗ trợ" }
+          }
+        },
+        "disconnect": { "title": "Bạn có chắc chắn muốn ngắt kết nối?" }
+      },
+      "balances": {
+        "table": {
+          "error": { "subtitle": "Đã xảy ra lỗi khi tải số dư ví của bạn" },
+          "toolbar": { "searchPlaceholder": "Tìm kiếm theo tên hoặc ký hiệu..." }
+        }
+      }
+    }
+  },
+  "transactions": {
+    "tabs": {
+      "blockchain": {
+        "table": {
+          "toolbar": {
+            "status": { "contractInteraction": "Tương tác hợp đồng" },
+            "date": { "startDate": "Ngày bắt đầu", "endDate": "Ngày kết thúc" },
+            "search": { "placeholder": "Tìm kiếm, từ, mã thông báo hoặc giá trị..." }
+          }
+        }
+      },
+      "batch": {
+        "table": {
+          "toolbar": {
+            "date": { "startDate": "Ngày bắt đầu", "endDate": "Ngày kết thúc" },
+            "search": { "placeholder": "Tìm kiếm, từ, mã thông báo hoặc giá trị..." }
+          }
+        }
+      }
+    }
+  },
+  "settings": {
+    "tabs": {
+      "general": {
+        "email": {
+          "label": "Địa chỉ email",
+          "helperText": "Email được sử dụng để truy cập thông tin thanh toán của bạn và nhận thông báo thanh toán"
+        }
+      },
+      "billing": {
+        "paymentMethods": {
+          "title": "Phương thức thanh toán",
+          "subtitle": "Thẻ ghi nợ / thẻ tín dụng được sử dụng để thanh toán chi phí gas"
+        },
+        "invoiceHistory": {
+          "title": "Lịch sử hóa đơn",
+          "subtitle": "Các khoản phí gần đây mà tài khoản của bạn phải chịu"
+        }
+      }
+    }
+  }
+}

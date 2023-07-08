@@ -24,6 +24,9 @@
       "balances": "शेष",
       "deposit": "जमा",
       "withdrawal": "प्रत्याहरण",
+      "internal": "आंतरिक",
+      "external": "बाह्य",
+      "connected": "जुड़ा",
       "all": "सब",
       "new": "नया",
       "pending": "विचाराधीन",
@@ -41,6 +44,7 @@
       "created": "बनाया"
     },
     "actions": {
+      "close": "बंद करना",
       "clear": "स्पष्ट",
       "cancel": "रद्द करना",
       "approve": "समर्थन कर",
@@ -67,7 +71,15 @@
       "footer": { "rowsPerPage": "पंक्तियाँ प्रति पृष्ठ" }
     }
   },
-  "header": { "search": {} },
+  "header": {
+    "search": {
+      "placeholder": "ढूँढ।।।",
+      "notFound": "नहीं मिला",
+      "noResultsFoundFor": "",
+      "tryCheckingForTyposOrUsingCompleteWords": "टाइपोस की जांच करने या पूर्ण शब्दों का उपयोग करने का प्रयास करें।",
+      "pleaseEnterKeywords": "कृपया कीवर्ड दर्ज करें"
+    }
+  },
   "navbar": {
     "account": { "title": "सामान्य पता" },
     "footer": {
@@ -183,6 +195,7 @@
       "dapps": {
         "connectDapp": "कनेक्ट करें Dapp",
         "modals": {
+          "missingRequestData": "अनुरोध डेटा अनुपलब्ध है",
           "connect": {
             "title": "WalletConnect के साथ कनेक्ट करें",
             "body": "कनेक्ट करते समय इस विंडो को बंद न करें. कोई सवाल है? इस गाइड का पालन करें।",
@@ -195,9 +208,21 @@
               "body": "आपको लेनदेन शुरू करने के लिए सामान्य वेब ऐप को खुला रखने की आवश्यकता है। जब यह खुला नहीं होगा तो आपको लेन-देन अनुरोध प्राप्त नहीं होंगे।"
             }
           },
+          "signMessage": {
+            "header": { "title": "हस्ताक्षर संदेश" },
+            "body": { "title": "किसी संदेश पर हस्ताक्षर करना चाहता है" }
+          },
+          "signTypedData": {
+            "header": { "title": "टाइप किए गए डेटा पर हस्ताक्षर करें" },
+            "body": { "title": "टाइप किए गए डेटा पर हस्ताक्षर करना चाहता है" }
+          },
           "sendTransaction": {
             "header": { "title": "लेन-देन भेजें/हस्ताक्षर करें" },
             "body": { "title": "लेन-देन भेजना/हस्ताक्षर करना चाहता है" }
+          },
+          "unsupportedMethod": {
+            "header": { "title": "असमर्थित विधि" },
+            "body": { "title": "असमर्थित विधि चाहता है" }
           }
         },
         "disconnect": { "title": "क्या आप वाकई डिस्कनेक्ट करना चाहते हैं?" }

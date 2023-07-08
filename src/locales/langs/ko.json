@@ -1,0 +1,273 @@
+{
+  "common": {
+    "words": {
+      "home": "집",
+      "max": ".MAX",
+      "available": "이용할 수 있는",
+      "to": "받는 사람",
+      "receive": "리시브",
+      "send": "보내기",
+      "dashboard": "대시보드",
+      "settings": "설정",
+      "account": "계좌",
+      "transactions": "트랜잭션을",
+      "general": "일반",
+      "billing": "과금",
+      "english": "영어",
+      "mode": "모드",
+      "wallet": "지갑",
+      "blockchain": "블록체인",
+      "batch": "일괄",
+      "methods": "방법",
+      "token": "토큰",
+      "balance": "저울",
+      "balances": "균형",
+      "deposit": "보증금",
+      "withdrawal": "출금",
+      "internal": "내부",
+      "external": "외부",
+      "connected": "연결",
+      "all": "모두",
+      "new": "새로운",
+      "pending": "보류 중인",
+      "completed": "완료",
+      "failed": "실패",
+      "of": "의",
+      "dense": "빽빽한",
+      "block": "차단",
+      "category": "범주",
+      "from": "보낸 사람",
+      "value": "값",
+      "asset": "자산",
+      "priority": "우선권",
+      "status": "상태",
+      "created": "만든"
+    },
+    "actions": {
+      "close": "닫다",
+      "clear": "맑다",
+      "cancel": "취소",
+      "approve": "승인",
+      "connect": "연결하다",
+      "connectWallet": "지갑 연결",
+      "disconnect": "분리하다",
+      "saveChanges": "변경 내용 저장",
+      "managePaymentMethods": "결제 수단 관리",
+      "viewRecentInvoices": "최근 인보이스 보기",
+      "deposit": "보증금",
+      "updateEmail": "이메일 업데이트",
+      "viewAll": "모두보기",
+      "viewDetails": "세부정보 보기",
+      "copyHash": "해시 복사",
+      "etherscan": "이더스캔",
+      "viewOnEtherscan": "Etherscan에서 보기",
+      "makeInstant": "인스턴트 만들기",
+      "switchToEthereum": "이더리움으로 전환",
+      "copyAddress": "주소 복사"
+    },
+    "table": {
+      "noData": "데이터 없음",
+      "resultsFound": "검색된 결과",
+      "footer": { "rowsPerPage": "페이지당 행 수" }
+    }
+  },
+  "header": {
+    "search": {
+      "placeholder": "검색...",
+      "notFound": "찾을 수 없음",
+      "noResultsFoundFor": "에 대한 검색 결과가 없습니다.",
+      "tryCheckingForTyposOrUsingCompleteWords": "오타가 있는지 확인하거나 완전한 단어를 사용해 보세요.",
+      "pleaseEnterKeywords": "키워드를 입력해 주세요"
+    }
+  },
+  "navbar": {
+    "account": { "title": "일반 주소" },
+    "footer": {
+      "title": "도움이 필요하신가요?",
+      "subtitle": "우리는 당신을 덮었습니다",
+      "badge": "지원",
+      "buttons": { "docs": "문서 읽기", "chat": "라이브 채팅" }
+    }
+  },
+  "home": {
+    "statistics": {
+      "title": "전 세계 🌎 실시간",
+      "error": "실시간 통계를 로드할 수 없습니다. API에 연결하는 동안 오류가 발생했습니다.",
+      "cards": {
+        "connectedClients": {
+          "title": "연결된 클라이언트",
+          "tooltip": "현재 Normal을 사용하는 총 사용자 수"
+        },
+        "pendingTransactions": {
+          "title": "보류 중인 트랜잭션",
+          "tooltip": "일괄 처리할 준비가 된 총 새 트랜잭션 수"
+        },
+        "totalTransactions": { "title": "총 거래 수", "tooltip": "일괄 처리된 총 트랜잭션 수" },
+        "totalBatches": { "title": "총 목욕탕", "tooltip": "일괄 처리된 총 실행 수" }
+      }
+    },
+    "failedCharges": {
+      "title": "🚨 결제에 실패했습니다.",
+      "subtitle": "새로운 거래를 제출하기 전에 해결하십시오.",
+      "buttonText": "결제 수단 업데이트"
+    },
+    "wrongNetwork": {
+      "title": "잘못된 네트워크",
+      "subtitle": "계속하려면 Ethereum 또는 Goerli로 전환하십시오."
+    },
+    "onboarding": {
+      "title": "시작",
+      "steps": {
+        "depositToken": {
+          "step": "예금 토큰",
+          "title": "1단계 | 예금 토큰",
+          "subtitle": "암호화폐를 일반 지갑으로 이동하여 가스를 크게 절약하세요.",
+          "noTokens": "연결된 지갑에 토큰이 없습니다.",
+          "ctaTitle": "계속하려면 일반 지갑 주소를 사용하여 토큰을 입금하십시오.",
+          "cta": "내 주소 표시",
+          "modal": {
+            "errors": {
+              "contract": { "prefix": "로드할 수 없습니다.", "suffix": "현재 계약." },
+              "transfer": { "prefix": "제출하는 동안 오류가 발생했습니다.", "suffix": "보증금." }
+            },
+            "form": { "placeholder": "금액 입력" }
+          }
+        },
+        "updateEmail": {
+          "step": "이메일 업데이트",
+          "title": "2단계 | 이메일 업데이트",
+          "subtitle": "결제에 액세스하고 결제 알림을 받는 데 사용되는 이메일"
+        },
+        "addPaymentMethod": {
+          "step": "결제 수단 추가",
+          "title": "3단계 | 결제 수단 추가",
+          "subtitle": "이는 트랜잭션을 일괄 처리하는 데 필요합니다. 배치를 제출하는 데 사용된 가스의 몫에 대해서만 비용이 청구됩니다."
+        }
+      }
+    },
+    "getStarted": {
+      "subtitle": "지갑을 연결하여 새로운 일반 스마트 지갑에 액세스하고 이 모든 놀라운 기능을 즐기십시오.",
+      "features": {
+        "title": "기능",
+        "values": {
+          "reducedGas": "90%+ 환원 가스",
+          "seamlessTrading": "원활한 거래",
+          "emailAndSocialRecovery": "이메일 및 소셜 복구",
+          "payGasWithCreditDebitCard": "신용/직불 카드로 가스 지불",
+          "openSource": "오픈 소스",
+          "instantDeFiAndBeyond": "인스턴트 디파이와 그 이상"
+        }
+      }
+    },
+    "activeTransactions": {
+      "title": "활성 트랜잭션",
+      "subtitle": "일괄 처리를 위해 제출한 신규 및 보류 중인 트랜잭션",
+      "daysAgo": "며칠 전",
+      "modals": {
+        "cancelTransaction": {
+          "title": "거래 취소",
+          "subtitle": "이 거래를 취소하시겠습니까? 신규 및 보류 중인 거래만 취소할 수 있습니다. 취소 시 가스 요금이 부과되지 않습니다."
+        }
+      }
+    },
+    "wallet": {
+      "header": {
+        "title": "지갑",
+        "subtitle": "총 잔액: 출시 예정",
+        "modals": {
+          "send": {
+            "error": "암호화폐 전송은 아직 지원되는 기능이 아닙니다. 나중에 다시 방문하여 새로운 업데이트를 확인하세요.",
+            "hashConfirmation": {
+              "title": "해시 확인",
+              "subtitle": "거래가 제출되었습니다! 당신은 당신의 역사에서 그 상태를 볼 수 있지만, 우리는 가장 최신 정보를 위해 Etherscan 을 권장합니다."
+            },
+            "batchConfirmation": {
+              "title": "배치 확인",
+              "subtitle": "트랜잭션이 일괄 처리를 위해 대기열에 추가되었습니다! 상태를 보고, 우선 순위를 업데이트하고, 대시보드 또는 기록에서 완전히 취소할 수 있습니다."
+            }
+          },
+          "receive": { "title": "일반 주소" }
+        }
+      },
+      "dapps": {
+        "connectDapp": "디앱 연결",
+        "modals": {
+          "missingRequestData": "요청 데이터 누락",
+          "connect": {
+            "title": "월렛커넥트와 연결",
+            "body": "연결하는 동안 이 창을 닫지 마십시오. 질문이 있으세요? 이 가이드를 따르십시오.",
+            "placeholder": "여기에 링크 붙여넣기"
+          },
+          "sessionProposal": {
+            "header": { "title": "세션 제안" },
+            "body": {
+              "title": "연결하려고 합니다",
+              "body": "트랜잭션을 시작하려면 일반 웹앱이 열려 있어야 합니다. 열려 있지 않으면 트랜잭션 요청을 받지 않습니다."
+            }
+          },
+          "signMessage": {
+            "header": { "title": "메시지 서명" },
+            "body": { "title": "메시지에 서명하고 싶습니다." }
+          },
+          "signTypedData": {
+            "header": { "title": "입력된 데이터에 서명" },
+            "body": { "title": "형식화된 데이터에 서명하려고 합니다." }
+          },
+          "sendTransaction": {
+            "header": { "title": "거래 보내기/서명" },
+            "body": { "title": "트랜잭션을 보내거나 서명하려고 합니다." }
+          },
+          "unsupportedMethod": {
+            "header": { "title": "지원되지 않는 메서드" },
+            "body": { "title": "지원되지 않는 메서드를 원합니다." }
+          }
+        },
+        "disconnect": { "title": "연결을 끊으시겠습니까?" }
+      },
+      "balances": {
+        "table": {
+          "error": { "subtitle": "지갑 잔액을 로드하는 동안 오류가 발생했습니다." },
+          "toolbar": { "searchPlaceholder": "이름 또는 기호로 검색..." }
+        }
+      }
+    }
+  },
+  "transactions": {
+    "tabs": {
+      "blockchain": {
+        "table": {
+          "toolbar": {
+            "status": { "contractInteraction": "계약 상호 작용" },
+            "date": { "startDate": "시작 날짜", "endDate": "종료일" },
+            "search": { "placeholder": "검색 대상, 보낸 사람, 토큰 또는 값..." }
+          }
+        }
+      },
+      "batch": {
+        "table": {
+          "toolbar": {
+            "date": { "startDate": "시작 날짜", "endDate": "종료일" },
+            "search": { "placeholder": "검색 대상, 보낸 사람, 토큰 또는 값..." }
+          }
+        }
+      }
+    }
+  },
+  "settings": {
+    "tabs": {
+      "general": {
+        "email": {
+          "label": "이메일 주소",
+          "helperText": "결제에 액세스하고 결제 알림을 받는 데 사용되는 이메일"
+        }
+      },
+      "billing": {
+        "paymentMethods": {
+          "title": "지불 방법",
+          "subtitle": "가스 비용 지불에 사용되는 직불/신용 카드"
+        },
+        "invoiceHistory": { "title": "송장 내역", "subtitle": "계정에서 발생한 최근 청구 내역" }
+      }
+    }
+  }
+}

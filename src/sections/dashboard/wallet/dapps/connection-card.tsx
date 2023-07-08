@@ -80,7 +80,7 @@ export default function ConnectionCard({ connection, onDisconnect, sx, ...other 
       primary={connection.session.peerMeta.name}
       secondary={
         <Label variant={isLight ? 'soft' : 'filled'} color="success">
-          Connected
+          {t('common.words.connected')}
         </Label>
       }
       primaryTypographyProps={{

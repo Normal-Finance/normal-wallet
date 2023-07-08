@@ -55,7 +55,15 @@ export default function BlockchainTableFiltersResult({
       <Stack flexGrow={1} spacing={1} direction="row" flexWrap="wrap" alignItems="center">
         {filters.status !== 'all' && (
           <Block label="Status:">
-            <Chip size="small" label={filters.status} onDelete={handleRemoveStatus} />
+            <Chip
+              size="small"
+              label={
+                filters.status === 'contract_interaction'
+                  ? t('transactions.tabs.blockchain.table.toolbar.status.contractInteraction')
+                  : t(`common.words.${filters.status}`)
+              }
+              onDelete={handleRemoveStatus}
+            />
           </Block>
         )}
 
@@ -70,7 +78,7 @@ export default function BlockchainTableFiltersResult({
           onClick={onResetFilters}
           startIcon={<Iconify icon="solar:trash-bin-trash-bold" />}
         >
-          {t('common.table.clear')}
+          {t('common.actions.clear')}
         </Button>
       </Stack>
     </Stack>

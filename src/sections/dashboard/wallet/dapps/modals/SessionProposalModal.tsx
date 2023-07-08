@@ -21,7 +21,7 @@ export default function SessionProposalModal() {
 
   // Ensure proposal is defined
   if (!proposal) {
-    return <Typography>Missing proposal data</Typography>;
+    return <Typography> {t('home.wallet.dapps.modals.signTypedData.body.title')}</Typography>;
   }
 
   // Get required proposal data
