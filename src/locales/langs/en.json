@@ -1,54 +1,335 @@
 {
-  "app": "app",
-  "job": "job",
-  "user": "user",
-  "list": "list",
-  "edit": "edit",
-  "shop": "shop",
-  "blog": "blog",
-  "post": "post",
-  "mail": "mail",
-  "chat": "chat",
-  "file": "file",
-  "tour": "tour",
-  "cards": "cards",
-  "blank": "blank",
-  "order": "order",
-  "lists": "lists",
-  "create": "create",
-  "kanban": "kanban",
-  "general": "general",
-  "banking": "banking",
-  "booking": "booking",
-  "profile": "profile",
-  "account": "account",
-  "product": "product",
-  "invoice": "invoice",
-  "details": "details",
-  "checkout": "checkout",
-  "calendar": "calendar",
-  "overview": "overview",
-  "analytics": "analytics",
-  "ecommerce": "e-commerce",
-  "management": "management",
-  "menu_level": "menu level",
-  "item_label": "item label",
-  "description": "description",
-  "other_cases": "other cases",
-  "item_caption": "item caption",
-  "file_manager": "File Manager",
-  "menu_level_1a": "menu level 1a",
-  "menu_level_1b": "menu level 1b",
-  "menu_level_2a": "menu level 2a",
-  "menu_level_2b": "menu level 2b",
-  "menu_level_3a": "menu level 3a",
-  "menu_level_3b": "menu level 4b",
-  "item_disabled": "item disabled",
-  "item_by_roles": "item by roles",
-  "item_external_link": "item external link",
-  "only_admin_can_see_this_item": "Only admin can see this item",
-  "upgrade_to_pro": "Upgrade to Pro",
-  "demo": {
-    "title": "English"
+  "common": {
+    "words": {
+      "home": "Home",
+      "max": "MAX",
+      "available": "available",
+      "to": "to",
+      "receive": "Recieve",
+      "send": "Send",
+      "dashboard": "Dashboard",
+      "settings": "Settings",
+      "account": "Account",
+      "transactions": "Transactions",
+      "general": "General",
+      "billing": "Billing",
+      "english": "english",
+      "mode": "Mode",
+      "wallet": "Wallet",
+      "blockchain": "Blockchain",
+      "batch": "Batch",
+      "methods": "Methods",
+      "token": "Token",
+      "balance": "Balance",
+      "balances": "Balances",
+      "deposit": "Deposit",
+      "withdrawal": "Withdrawal",
+      "internal": "Internal",
+      "external": "External",
+      "connected": "Connected",
+      "all": "All",
+      "new": "New",
+      "pending": "Pending",
+      "completed": "Completed",
+      "failed": "Failed",
+      "of": "of",
+      "dense": "Dense",
+      "block": "Block",
+      "category": "Category",
+      "from": "From",
+      "value": "Value",
+      "asset": "Asset",
+      "priority": "Priority",
+      "status": "Status",
+      "created": "Created"
+    },
+    "actions": {
+      "close": "Close",
+      "clear": "Clear",
+      "cancel": "Cancel",
+      "approve": "Approve",
+      "connect": "Connect",
+      "connectWallet": "Connect wallet",
+      "disconnect": "Disconnect",
+      "saveChanges": "Save changes",
+      "managePaymentMethods": "Manage payment methods",
+      "viewRecentInvoices": "View recent invoices",
+      "deposit": "Deposit",
+      "updateEmail": "Update email",
+      "viewAll": "View all",
+      "viewDetails": "View details",
+      "copyHash": "Copy hash",
+      "etherscan": "Etherscan",
+      "viewOnEtherscan": "View on Etherscan",
+      "makeInstant": "Make instant",
+      "switchToEthereum": "Switch to Ethereum",
+      "copyAddress": "Copy address"
+    },
+    "table": {
+      "noData": "No data",
+      "resultsFound": "results found",
+      "footer": {
+        "rowsPerPage": "Rows per page"
+      }
+    }
+  },
+  "header": {
+    "search": {
+      "placeholder": "Search...",
+      "notFound": "Not found",
+      "noResultsFoundFor": "No results found for",
+      "tryCheckingForTyposOrUsingCompleteWords": "Try checking for typos or using complete words.",
+      "pleaseEnterKeywords": "Please enter keywords"
+    }
+  },
+  "navbar": {
+    "account": {
+      "title": "Normal Address"
+    },
+    "footer": {
+      "title": "Need help?",
+      "subtitle": "We've got you covered",
+      "badge": "Support",
+      "buttons": {
+        "docs": "Read docs",
+        "chat": "Live chat"
+      }
+    }
+  },
+  "home": {
+    "statistics": {
+      "title": "Realtime Worldwide 🌎",
+      "error": "Unable to load realtime statistics. There was an error connecting to the API.",
+      "cards": {
+        "connectedClients": {
+          "title": "Connected Clients",
+          "tooltip": "Total number of people using Normal right now"
+        },
+        "pendingTransactions": {
+          "title": "Pending Transactions",
+          "tooltip": "Total number of new transactions ready to be batched"
+        },
+        "totalTransactions": {
+          "title": "Total Transactions",
+          "tooltip": "Total number of transactions batched"
+        },
+        "totalBatches": {
+          "title": "Total Batches",
+          "tooltip": "Total number of batches executed"
+        }
+      }
+    },
+    "failedCharges": {
+      "title": "🚨 You have a failed payment",
+      "subtitle": "Please resolve before submitting any new transactions.",
+      "buttonText": "Update payment methods"
+    },
+    "wrongNetwork": {
+      "title": "Wrong network",
+      "subtitle": "Please switch to Ethereum to continue."
+    },
+    "onboarding": {
+      "title": "Getting started",
+      "steps": {
+        "depositToken": {
+          "step": "Deposit tokens",
+          "title": "Step 1 | Deposit tokens",
+          "subtitle": "Move crypto into your Normal Wallet to start saving huge on gas",
+          "noTokens": "There are no tokens in your connected wallet.",
+          "ctaTitle": "Use your Normal Wallet address to deposit tokens to continue.",
+          "cta": "Show my address",
+          "modal": {
+            "errors": {
+              "contract": {
+                "prefix": "Unable to load the",
+                "suffix": "contract at this time."
+              },
+              "transfer": {
+                "prefix": "There was an error submitting your",
+                "suffix": "deposit."
+              }
+            },
+            "form": {
+              "placeholder": "Enter amount"
+            }
+          }
+        },
+        "updateEmail": {
+          "step": "Update email",
+          "title": "Step 2 | Update email",
+          "subtitle": "The email used to access your billing and receive payment notifications"
+        },
+        "addPaymentMethod": {
+          "step": "Add payment method",
+          "title": "Step 3 | Add payment method",
+          "subtitle": "This is required to batch your transactions. You will only be charged for your share of the gas used to submit a batch."
+        }
+      }
+    },
+    "getStarted": {
+      "subtitle": "Connect your wallet to access your new Normal smart wallet and enjoy all these amazing features.",
+      "features": {
+        "title": "Features",
+        "values": {
+          "reducedGas": "90%+ reduced gas",
+          "seamlessTrading": "Seamless trading",
+          "emailAndSocialRecovery": "Email & social recovery",
+          "payGasWithCreditDebitCard": "Pay gas with credit/debit card",
+          "openSource": "Open source",
+          "instantDeFiAndBeyond": "Instant DeFi and beyond"
+        }
+      }
+    },
+    "activeTransactions": {
+      "title": "Active Transactions",
+      "subtitle": "New and pending transactions you've submitted for batching",
+      "daysAgo": "days ago",
+      "modals": {
+        "cancelTransaction": {
+          "title": "Cancel transaction",
+          "subtitle": "Are you sure want to cancel this transaction? Only new and pending transactions can be cancelled. You will not be charged for any gas if cancelled."
+        }
+      }
+    },
+    "wallet": {
+      "header": {
+        "title": "Your Wallet",
+        "subtitle": "Total balance: coming soon",
+        "modals": {
+          "send": {
+            "error": "Sending crypto is not a supported feature yet. Come back later for new updates.",
+            "hashConfirmation": {
+              "title": "Hash Confirmation",
+              "subtitle": "Your transaction has been submitted! You can view its status in your History, but we recommend Etherscan for the most up to date information."
+            },
+            "batchConfirmation": {
+              "title": "Batch Confirmation",
+              "subtitle": "Your transaction has been queued for batching! You can view its status, update the priority, and cancel it entirely from your Dashboard or History."
+            }
+          },
+          "receive": {
+            "title": "Your Normal Address"
+          }
+        }
+      },
+      "dapps": {
+        "connectDapp": "Connect Dapp",
+        "modals": {
+          "missingRequestData": "Missing request data",
+          "connect": {
+            "title": "Connect with WalletConnect",
+            "body": "Do not close this window while connecting. Have a question? Follow this guide.",
+            "placeholder": "Paste link here"
+          },
+          "sessionProposal": {
+            "header": {
+              "title": "Session Proposal"
+            },
+            "body": {
+              "title": "Wants to Connect",
+              "body": "You need the Normal web app to be open to initiate transactions. You will not receive transaction requests when it is not open."
+            }
+          },
+          "signMessage": {
+            "header": {
+              "title": "Sign Message"
+            },
+            "body": {
+              "title": "Wants to Sign a Message"
+            }
+          },
+          "signTypedData": {
+            "header": {
+              "title": "Sign Typed Data"
+            },
+            "body": {
+              "title": "Wants to Sign Typed Data"
+            }
+          },
+          "sendTransaction": {
+            "header": {
+              "title": "Send / Sign a Transaction"
+            },
+            "body": {
+              "title": "Wants to Send / Sign a Transaction"
+            }
+          },
+          "unsupportedMethod": {
+            "header": {
+              "title": "Unsupported Method"
+            },
+            "body": {
+              "title": "Wants to Unsupported Method"
+            }
+          }
+        },
+        "disconnect": {
+          "title": "Are you sure you want to disconnect?"
+        }
+      },
+      "balances": {
+        "table": {
+          "error": {
+            "subtitle": "There was an error loading your wallet balances"
+          },
+          "toolbar": {
+            "searchPlaceholder": "Search by name or symbol..."
+          }
+        }
+      }
+    }
+  },
+  "transactions": {
+    "tabs": {
+      "blockchain": {
+        "table": {
+          "toolbar": {
+            "status": {
+              "contractInteraction": "Contract Interaction"
+            },
+            "date": {
+              "startDate": "Start date",
+              "endDate": "End date"
+            },
+            "search": {
+              "placeholder": "Search to, from, token, or value..."
+            }
+          }
+        }
+      },
+      "batch": {
+        "table": {
+          "toolbar": {
+            "date": {
+              "startDate": "Start date",
+              "endDate": "End date"
+            },
+            "search": {
+              "placeholder": "Search to, from, token, or value..."
+            }
+          }
+        }
+      }
+    }
+  },
+  "settings": {
+    "tabs": {
+      "general": {
+        "email": {
+          "label": "Email Address",
+          "helperText": "The email used to access your billing and receive payment notifications"
+        }
+      },
+      "billing": {
+        "paymentMethods": {
+          "title": "Payment Methods",
+          "subtitle": "Debit/credit cards used to pay gas expenses"
+        },
+        "invoiceHistory": {
+          "title": "Invoice History",
+          "subtitle": "Recent charges incurred by your account"
+        }
+      }
+    }
   }
 }

@@ -9,12 +9,14 @@ import { useAlchemyContext } from 'src/contexts/AlchemyContext';
 import { OwnedToken } from 'alchemy-sdk';
 import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsContext';
 import Iconify from 'src/components/iconify/iconify';
+import { useLocales } from 'src/locales';
 import Receive from '../../wallet/header/modals/Receive';
 import DepositAsset from '../modals/DepositAsset';
 
 // ----------------------------------------------------------------------
 
 export default function DepositTokens() {
+  const { t } = useLocales();
   const { walletAddresses } = useWalletContext();
 
   const [ethereumBalance, setEthereumBalance] = useState<number>(0);
@@ -76,17 +78,17 @@ export default function DepositTokens() {
   const renderNoTokens = (
     <Box sx={{ p: 3 }}>
       <Stack spacing={2} sx={{ mb: 1 }}>
-        <Alert severity="warning">There are no tokens in your connected wallet.</Alert>
+        <Alert severity="warning">{t('home.onboarding.steps.depositToken.noTokens')}</Alert>
 
         <Typography variant="subtitle2">
-          Use your Normal Wallet address to deposit tokens to continue.
+          {t('home.onboarding.steps.depositToken.ctaTitle')}
         </Typography>
         <Button
           variant="contained"
           startIcon={<Iconify icon="mingcute:qrcode-2-line" />}
           onClick={handleOpenReceive}
         >
-          Show my address
+          {t('home.onboarding.steps.depositToken.cta')}
         </Button>
         <Receive open={openReceive} onClose={handleCloseReceive} />
       </Stack>
@@ -111,7 +113,7 @@ export default function DepositTokens() {
             </Box>
 
             <Button variant="contained" color="info" onClick={handleSelectNativeToken}>
-              Deposit
+              {t('common.actions.deposit')}
             </Button>
           </Stack>
         )}
@@ -127,7 +129,7 @@ export default function DepositTokens() {
             </Box>
 
             <Button variant="contained" color="info" onClick={() => handleSelectToken(index)}>
-              Deposit
+              {t('common.actions.deposit')}
             </Button>
           </Stack>
         ))}
@@ -139,8 +141,8 @@ export default function DepositTokens() {
     <Grid xs={12} md={12}>
       <Card sx={{ mb: 3 }}>
         <CardHeader
-          title="Step 1 | Deposit tokens"
-          subheader="Move crypto into your Normal Wallet to start saving huge on gas"
+          title={t('home.onboarding.steps.depositToken.title')}
+          subheader={t('home.onboarding.steps.depositToken.subtitle')}
           sx={{ mb: 2 }}
         />
 

@@ -15,6 +15,7 @@ import { useSelector } from 'src/redux/store';
 // components
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
 import { useWebsocketContext } from 'src/contexts/WebsocketContext';
+import { useLocales } from 'src/locales';
 
 // ----------------------------------------------------------------------
 
@@ -23,6 +24,7 @@ type FormValuesProps = {
 };
 
 export default function SettingsGeneral() {
+  const { t } = useLocales();
   const { updateEmail } = useWebsocketContext();
 
   /** REDUX */
@@ -69,14 +71,14 @@ export default function SettingsGeneral() {
             >
               <RHFTextField
                 name="email"
-                label="Email Address"
-                helperText="The email used to access your billing and receive payment notifications"
+                label={t('settings.tabs.general.email.label')}
+                helperText={t('settings.tabs.general.email.helperText')}
               />
             </Box>
 
             <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
               <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                Save Changes
+                {t('common.actions.saveChanges')}
               </LoadingButton>
             </Stack>
           </Card>

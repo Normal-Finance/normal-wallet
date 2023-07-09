@@ -17,6 +17,7 @@ import Logo from 'src/components/logo';
 import SvgColor from 'src/components/svg-color';
 import { useSettingsContext } from 'src/components/settings';
 //
+import { useLocales } from 'src/locales';
 import { HEADER, NAV } from '../config-layout';
 import { Searchbar, SettingsButton, LanguagePopover } from '../_common';
 
@@ -27,6 +28,8 @@ type Props = {
 };
 
 export default function Header({ onOpenNav }: Props) {
+  const { t } = useLocales();
+
   const theme = useTheme();
 
   const settings = useSettingsContext();
@@ -69,7 +72,7 @@ export default function Header({ onOpenNav }: Props) {
             align: 'center',
             side: 'bottom',
           }}
-          btnTitle="Connect"
+          btnTitle={t('common.actions.connect') || ''}
           theme={settings.themeMode}
         />
       </Stack>

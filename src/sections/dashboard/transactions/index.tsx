@@ -24,6 +24,7 @@ import { Transaction, TransactionPriority, TransactionStatus } from 'src/types/t
 import { CircularProgress, IconButton, Typography } from '@mui/material';
 import { useWebsocketContext } from 'src/contexts/WebsocketContext';
 import { paths } from 'src/routes/paths';
+import { useLocales } from 'src/locales';
 import TransactionPriorityListDialog from './modals/transaction-priority-list-dialog';
 
 // ----------------------------------------------------------------------
@@ -33,6 +34,7 @@ interface Props extends CardProps {
 }
 
 export default function TransactionsOverview({ transactions, ...other }: Props) {
+  const { t } = useLocales();
   const { updateTransactionPriority, cancelTransaction } = useWebsocketContext();
 
   const onUpdatePriority = async (transactionId: string, priority: TransactionPriority) => {
@@ -46,8 +48,8 @@ export default function TransactionsOverview({ transactions, ...other }: Props) 
   return (
     <Card {...other}>
       <CardHeader
-        title="Active Transactions"
-        subheader={"New and pending transactions you've submitted for batching"}
+        title={t('home.activeTransactions.title')}
+        subheader={t('home.activeTransactions.subtitle')}
         sx={{ mb: 1 }}
       />
 
@@ -77,7 +79,7 @@ export default function TransactionsOverview({ transactions, ...other }: Props) 
           endIcon={<Iconify icon="eva:arrow-ios-forward-fill" width={18} sx={{ ml: -0.5 }} />}
           href={paths.transactions}
         >
-          View All
+          {t('common.actions.viewAll')}
         </Button>
       </Box>
     </Card>
@@ -93,6 +95,7 @@ type TransactionItemProps = {
 };
 
 function TransactionItem({ transaction, onCancel, onUpdatePriority }: TransactionItemProps) {
+  const { t } = useLocales();
   const { transactionId, target, priority, current_status, createdAt } = transaction;
 
   const router = useRouter();
@@ -131,7 +134,7 @@ function TransactionItem({ transaction, onCancel, onUpdatePriority }: Transactio
       />
 
       <ListItemText
-        primary={`To: ${target}`}
+        primary={`${t('common.words.to')}: ${target}`}
         secondary={
           <Stack direction="row" alignItems="center" sx={{ mt: 0.5, color: 'text.secondary' }}>
             <Typography variant="caption" sx={{ ml: 0.5, mr: 1 }}>
@@ -139,7 +142,7 @@ function TransactionItem({ transaction, onCancel, onUpdatePriority }: Transactio
             </Typography>
 
             <Label color={current_status === TransactionStatus.NEW ? 'success' : 'info'}>
-              {current_status}
+              {t(`common.words.${current_status.toLowerCase()}`)}
             </Label>
 
             {current_status === TransactionStatus.PENDING && (
@@ -174,13 +177,13 @@ function TransactionItem({ transaction, onCancel, onUpdatePriority }: Transactio
       >
         <MenuItem onClick={handleOnViewDetails}>
           <Iconify icon="solar:document-text-bold" />
-          View details
+          {t('common.actions.viewDetails')}
         </MenuItem>
 
         {priority === TransactionPriority.GTC && (
           <MenuItem onClick={handleOnChangePriority}>
             <Iconify icon="solar:running-2-bold" />
-            Make instant
+            {t('common.actions.makeInstant')}
           </MenuItem>
         )}
 
@@ -196,7 +199,7 @@ function TransactionItem({ transaction, onCancel, onUpdatePriority }: Transactio
               sx={{ color: 'error.main' }}
             >
               <Iconify icon="solar:trash-bin-trash-bold" />
-              Cancel
+              {t('common.actions.cancel')}
             </MenuItem>
           </>
         )}
@@ -213,11 +216,11 @@ function TransactionItem({ transaction, onCancel, onUpdatePriority }: Transactio
         <ConfirmDialog
           open={confirm.value}
           onClose={confirm.onFalse}
-          title="Cancel transaction"
-          content="Are you sure want to cancel this transaction? Only new and pending transactions can be cancelled. You will not be charged for any gas if cancelled."
+          title={t('home.activeTransactions.modals.cancelTransaction.title')}
+          content={t('home.activeTransactions.modals.cancelTransaction.subtitle')}
           action={
             <Button variant="contained" color="error" onClick={handleOnCancel}>
-              Cancel
+              {t('common.actions.cancel')}
             </Button>
           }
         />

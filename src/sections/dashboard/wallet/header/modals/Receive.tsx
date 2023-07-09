@@ -9,6 +9,7 @@ import { useCopyToClipboard } from 'src/hooks/use-copy-to-clipboard';
 import { useWalletContext } from 'src/contexts/WalletContext';
 import { useSnackbar } from 'src/components/snackbar';
 import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsContext';
+import { useLocales } from 'src/locales';
 
 // ----------------------------------------------------------------------
 
@@ -18,6 +19,7 @@ type Props = {
 };
 
 export default function Receive({ open, onClose }: Props) {
+  const { t } = useLocales();
   const { enqueueSnackbar } = useSnackbar();
   const { walletAddresses } = useWalletContext();
   const { copy } = useCopyToClipboard();
@@ -42,7 +44,7 @@ export default function Receive({ open, onClose }: Props) {
         <QRCode value={walletAddresses.smart} />
 
         <Typography variant="subtitle1" sx={{ mt: 2 }}>
-          Your Normal Address
+          {t('home.wallet.header.modals.receive.title')}
         </Typography>
 
         <Stack direction="row" alignItems="center" spacing={1}>
@@ -50,7 +52,7 @@ export default function Receive({ open, onClose }: Props) {
             {walletAddresses.smart}
           </Typography>
 
-          <Tooltip title="Copy Address">
+          <Tooltip title={t('common.actions.copyAddress')}>
             <Iconify
               icon="eva:copy-outline"
               onClick={handleCopyAddress}

@@ -8,6 +8,7 @@ import Stack, { StackProps } from '@mui/material/Stack';
 import { IWalletTableFilters, IWalletTableFilterValue } from 'src/types/wallet';
 // components
 import Iconify from 'src/components/iconify';
+import { useLocales } from 'src/locales';
 
 // ----------------------------------------------------------------------
 
@@ -29,6 +30,8 @@ export default function TableFiltersResult({
   results,
   ...other
 }: Props) {
+  const { t } = useLocales();
+
   const handleRemoveStatus = () => {
     onFilters('status', 'all');
   };
@@ -38,7 +41,7 @@ export default function TableFiltersResult({
       <Box sx={{ typography: 'body2' }}>
         <strong>{results}</strong>
         <Box component="span" sx={{ color: 'text.secondary', ml: 0.25 }}>
-          results found
+          {t('home.wallet.balances.table.toolbar.resultsFound')}
         </Box>
       </Box>
 
@@ -54,7 +57,7 @@ export default function TableFiltersResult({
           onClick={onResetFilters}
           startIcon={<Iconify icon="solar:trash-bin-trash-bold" />}
         >
-          Clear
+          {t('common.actions.table.clear')}
         </Button>
       </Stack>
     </Stack>

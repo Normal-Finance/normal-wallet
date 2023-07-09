@@ -15,6 +15,7 @@ import {
 import { OwnedToken } from 'alchemy-sdk';
 import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsContext';
 import { useSnackbar } from 'src/components/snackbar';
+import { useLocales } from 'src/locales';
 
 // ----------------------------------------------------------------------
 
@@ -26,6 +27,7 @@ type Props = {
 };
 
 export default function DepositAsset({ open, token, toAddress, onClose }: Props) {
+  const { t } = useLocales();
   const { contractAddress, logo, name, symbol, balance } = token;
 
   const { enqueueSnackbar } = useSnackbar();
@@ -79,23 +81,35 @@ export default function DepositAsset({ open, token, toAddress, onClose }: Props)
     if (contractLoading) return <CircularProgress />;
 
     if (contractError)
-      return <Alert severity="error">Unable to load the {symbol} contract at this time.</Alert>;
+      return (
+        <Alert severity="error">
+          {t('home.onboarding.depositToken.modal.errors.contract.prefix') +
+            symbol +
+            t('home.onboarding.depositToken.modal.errors.contract.suffix')}{' '}
+        </Alert>
+      );
 
     if (transferTokenError)
-      return <Alert severity="error">There was an error submitting your {symbol} deposit.</Alert>;
+      return (
+        <Alert severity="error">
+          {t('home.onboarding.depositToken.modal.errors.transfer.prefix') +
+            symbol +
+            t('home.onboarding.depositToken.modal.errors.transfer.suffix')}
+        </Alert>
+      );
 
     return (
       <>
         <TextField
           value={amount}
           onChange={handleAmount}
-          placeholder="Enter amount"
+          placeholder={t('home.onboarding.depositToken.modal.form.placeholder') || ''}
           disabled={transferTokenLoading}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end" onClick={selectMax}>
                 <Typography variant="body1" sx={{ color: 'text.disabled' }}>
-                  MAX
+                  {t('common.words.max').toUpperCase()}
                 </Typography>
               </InputAdornment>
             ),
@@ -108,7 +122,7 @@ export default function DepositAsset({ open, token, toAddress, onClose }: Props)
           isDisabled={amount === '' || amount > balance! || transferTokenLoading}
           action={handleOnSubmit}
         >
-          Deposit {symbol}
+          {t('common.actions.deposit') + symbol}
         </Web3Button>
       </>
     );
@@ -128,7 +142,7 @@ export default function DepositAsset({ open, token, toAddress, onClose }: Props)
 
       <Stack sx={{ p: 2.5 }}>
         <Typography variant="body1" sx={{ mb: 2 }}>
-          {`${balance} ${symbol}`} available
+          {`${balance} ${symbol}`} {t('common.words.available')}
         </Typography>
 
         {renderContent()}

@@ -7,6 +7,7 @@ import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Drawer, { drawerClasses } from '@mui/material/Drawer';
+import { useLocales } from 'src/locales';
 // theme
 import { paper } from 'src/theme/css';
 //
@@ -19,6 +20,7 @@ import BaseOptions from './base-option';
 // ----------------------------------------------------------------------
 
 export default function SettingsDrawer() {
+  const { t } = useLocales();
   const theme = useTheme();
 
   const settings = useSettingsContext();
@@ -37,16 +39,8 @@ export default function SettingsDrawer() {
       sx={{ py: 2, pr: 1, pl: 2.5 }}
     >
       <Typography variant="h6" sx={{ flexGrow: 1 }}>
-        Settings
+        {t('common.words.settings')}
       </Typography>
-
-      {/* <Tooltip title="Reset">
-        <IconButton onClick={settings.onReset}>
-          <Badge color="error" variant="dot" invisible={!settings.canReset}>
-            <Iconify icon="solar:restart-bold" />
-          </Badge>
-        </IconButton>
-      </Tooltip> */}
 
       <IconButton onClick={settings.onClose}>
         <Iconify icon="mingcute:close-line" />
@@ -57,7 +51,7 @@ export default function SettingsDrawer() {
   const renderMode = (
     <div>
       <Typography variant="caption" component="div" sx={{ ...labelStyles }}>
-        Mode
+        {t('common.words.mode')}
       </Typography>
 
       <BaseOptions

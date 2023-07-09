@@ -8,6 +8,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar/scrollbar';
 import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsContext';
+import { useLocales } from 'src/locales';
 import ConnectionCard from './connection-card';
 import ConnectDapp from './modals/ConnectDapp';
 
@@ -21,6 +22,7 @@ type Props = {
 };
 
 export default function Dapps({ connections, connect, disconnect, isWcConnecting }: Props) {
+  const { t } = useLocales();
   const { trackEvent } = useAnalyticsContext();
 
   const [openConnect, setOpenConnect] = useState(false);
@@ -71,7 +73,7 @@ export default function Dapps({ connections, connect, disconnect, isWcConnecting
               startIcon={<Iconify icon="eva:plus-fill" />}
               onClick={handleOpenConnect}
             >
-              Connect Dapp
+              {t('home.wallet.dapps.connectDapp')}
               <Box
                 component="img"
                 src="/assets/icons/walletConnect.svg"

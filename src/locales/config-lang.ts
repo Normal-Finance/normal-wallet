@@ -1,5 +1,20 @@
 // @mui
-import { enUS, frFR, zhCN, viVN, arSA } from '@mui/material/locale';
+import {
+  enUS,
+  frFR,
+  zhCN,
+  esES,
+  arSA,
+  ptPT,
+  jaJP,
+  viVN,
+  ruRU,
+  itIT,
+  deDE,
+  koKR,
+  hiIN,
+  trTR,
+} from '@mui/material/locale';
 
 // PLEASE REMOVE `LOCAL STORAGE` WHEN YOU CHANGE SETTINGS.
 // ----------------------------------------------------------------------
@@ -12,16 +27,16 @@ export const allLangs = [
     icon: 'flagpack:us',
   },
   {
+    label: 'Spanish',
+    value: 'es',
+    systemValue: esES,
+    icon: 'flagpack:es',
+  },
+  {
     label: 'French',
     value: 'fr',
     systemValue: frFR,
     icon: 'flagpack:fr',
-  },
-  {
-    label: 'Vietnamese',
-    value: 'vi',
-    systemValue: viVN,
-    icon: 'flagpack:vn',
   },
   {
     label: 'Chinese',
@@ -34,6 +49,60 @@ export const allLangs = [
     value: 'ar',
     systemValue: arSA,
     icon: 'flagpack:sa',
+  },
+  {
+    label: 'Portuguese',
+    value: 'pt',
+    systemValue: ptPT,
+    icon: 'flagpack:pt',
+  },
+  {
+    label: 'Japanese',
+    value: 'ja',
+    systemValue: jaJP,
+    icon: 'flagpack:jp',
+  },
+  {
+    label: 'Vietnamese',
+    value: 'vi',
+    systemValue: viVN,
+    icon: 'flagpack:vn',
+  },
+  {
+    label: 'Russian',
+    value: 'ru',
+    systemValue: ruRU,
+    icon: 'flagpack:ru',
+  },
+  {
+    label: 'Italian',
+    value: 'it',
+    systemValue: itIT,
+    icon: 'flagpack:it',
+  },
+  {
+    label: 'German',
+    value: 'de',
+    systemValue: deDE,
+    icon: 'flagpack:de',
+  },
+  {
+    label: 'Korean',
+    value: 'ko',
+    systemValue: koKR,
+    icon: 'flagpack:kr',
+  },
+  {
+    label: 'Hindi',
+    value: 'hi',
+    systemValue: hiIN,
+    icon: 'flagpack:in',
+  },
+  {
+    label: 'Turkish',
+    value: 'tr',
+    systemValue: trTR,
+    icon: 'flagpack:tr',
   },
 ];
 

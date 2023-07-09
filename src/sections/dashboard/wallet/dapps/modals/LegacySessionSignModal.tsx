@@ -23,8 +23,11 @@ import {
 import { getSignParamsMessage } from 'src/utils/walletConnect/HelperUtil';
 import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsContext';
 import { TransactionPriority } from 'src/types/transaction';
+import { useLocales } from 'src/locales';
 
 export default function LegacySessionSignModal() {
+  const { t } = useLocales();
+
   const { smartWallet } = useWalletContext();
   const { newTransaction } = useWebsocketContext();
   const { trackEvent } = useAnalyticsContext();
@@ -38,7 +41,7 @@ export default function LegacySessionSignModal() {
 
   // Ensure request and wallet are defined
   if (!requestEvent || !requestSession) {
-    return <Typography>Missing request data</Typography>;
+    return <Typography> {t('home.wallet.dapps.modals.signTypedData.body.title')}</Typography>;
   }
 
   // Get required request data
@@ -122,14 +125,14 @@ export default function LegacySessionSignModal() {
 
   return (
     <Dialog maxWidth="sm" open>
-      <DialogTitle> Sign Message </DialogTitle>
+      <DialogTitle> {t('home.wallet.dapps.modals.signMessage.header.title')} </DialogTitle>
 
       <DialogContent sx={{ overflow: 'unset' }}>
         <Stack spacing={2.5} alignItems="center">
           <Avatar src={requestSession.peerMeta!.icons[0]} />
 
           <Typography variant="h6">
-            {requestSession.peerMeta!.name} Wants to Sign a Message
+            {requestSession.peerMeta!.name} {t('home.wallet.dapps.modals.signMessage.body.title')}
           </Typography>
 
           <Divider />
@@ -139,7 +142,7 @@ export default function LegacySessionSignModal() {
           <Divider />
 
           <Stack spacing={2} direction="row">
-            <Typography variant="h6">Blockchain(s)</Typography>
+            <Typography variant="h6">{t('common.words.blockchain')}</Typography>
             <Stack direction="row" alignItems="center" spacing={1}>
               {[`eip155:${chainId}`].map((chain) => (
                 <Chip
@@ -151,7 +154,7 @@ export default function LegacySessionSignModal() {
               ))}
             </Stack>
 
-            <Typography variant="h6">Methods</Typography>
+            <Typography variant="h6">{t('common.words.methods')}</Typography>
             <Stack direction="row" alignItems="center" spacing={1}>
               {[method].map((m) => (
                 <Chip key={m} label={m} variant="soft" color="warning" />
@@ -165,10 +168,10 @@ export default function LegacySessionSignModal() {
 
       <DialogActions>
         <Button color="inherit" variant="outlined" onClick={onReject}>
-          Cancel
+          {t('common.actions.cancel')}
         </Button>
         <Button variant="contained" color="success" onClick={onApprove}>
-          Approve
+          {t('common.actions.approve')}
         </Button>
       </DialogActions>
     </Dialog>

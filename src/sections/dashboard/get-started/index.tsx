@@ -3,28 +3,27 @@ import { Typography, Stack, Box } from '@mui/material';
 import { ConnectWallet } from '@thirdweb-dev/react';
 import Iconify from 'src/components/iconify/iconify';
 import { useSettingsContext } from 'src/components/settings';
+import { useLocales } from 'src/locales';
 
 export default function GetStarted() {
+  const { t } = useLocales();
   const { themeMode } = useSettingsContext();
 
   const FEATURES = [
-    { value: '90%+ reduced gas', label: '90%+ reduced gas' },
-    { value: 'Seamless trading', label: 'Seamless trading' },
-    { value: 'Email & social recovery', label: 'Email & social recovery' },
-    { value: 'Pay gas with credit/debit card', label: 'Pay gas with credit/debit card' },
-    { value: 'Open source', label: 'Open source' },
-    { value: 'Instant DeFi and beyond', label: 'Instant DeFi and beyond' },
+    t('home.getStarted.features.values.reducedGas'),
+    t('home.getStarted.features.values.seamlessTrading'),
+    t('home.getStarted.features.values.emailAndSocialRecovery'),
+    t('home.getStarted.features.values.payGasWithCreditDebitCard'),
+    t('home.getStarted.features.values.openSource'),
+    t('home.getStarted.features.values.instantDeFiAndBeyond'),
   ];
 
   return (
     <Stack sx={{ maxWidth: 720, mx: 'auto' }}>
       <Stack spacing={2} sx={{ mt: 2, mb: 2 }}>
-        <Typography variant="body1">
-          Connect your wallet to access your new Normal smart wallet and enjoy all these amazing
-          features.
-        </Typography>
+        <Typography variant="body1">{t('home.getStarted.subtitle')}</Typography>
 
-        <Typography variant="h6">Features</Typography>
+        <Typography variant="h6">{t('home.getStarted.features.title')}</Typography>
 
         <Box
           rowGap={2}
@@ -36,7 +35,7 @@ export default function GetStarted() {
         >
           {FEATURES.map((feature) => (
             <Stack
-              key={feature.label}
+              key={feature}
               spacing={1}
               direction="row"
               alignItems="center"
@@ -51,7 +50,7 @@ export default function GetStarted() {
                   // color: 'text.disabled',
                 }}
               />
-              {feature.label}
+              {feature}
             </Stack>
           ))}
         </Box>
@@ -62,7 +61,7 @@ export default function GetStarted() {
           align: 'center',
           side: 'bottom',
         }}
-        btnTitle="Connect wallet"
+        btnTitle={t('common.actions.connectWallet') || ''}
         theme={themeMode}
       />
     </Stack>

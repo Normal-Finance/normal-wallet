@@ -15,6 +15,7 @@ import { Avatar, Button, Tooltip } from '@mui/material';
 import Label from 'src/components/label/label';
 import { RouterLink } from 'src/routes/components';
 import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsContext';
+import { useLocales } from 'src/locales';
 //
 
 // ----------------------------------------------------------------------
@@ -25,6 +26,7 @@ interface Props extends StackProps {
 }
 
 export default function ConnectionCard({ connection, onDisconnect, sx, ...other }: Props) {
+  const { t } = useLocales();
   const { trackEvent } = useAnalyticsContext();
 
   const theme = useTheme();
@@ -64,7 +66,7 @@ export default function ConnectionCard({ connection, onDisconnect, sx, ...other 
         <Iconify icon="eva:external-link-fill" />
       </IconButton>
 
-      <Tooltip title="Disconnect">
+      <Tooltip title={t('common.actions.disconnect')}>
         <IconButton color={confirm.value ? 'inherit' : 'default'} onClick={confirm.onTrue}>
           <Iconify icon="eva:close-fill" />
         </IconButton>
@@ -78,7 +80,7 @@ export default function ConnectionCard({ connection, onDisconnect, sx, ...other 
       primary={connection.session.peerMeta.name}
       secondary={
         <Label variant={isLight ? 'soft' : 'filled'} color="success">
-          Connected
+          {t('common.words.connected')}
         </Label>
       }
       primaryTypographyProps={{
@@ -134,10 +136,10 @@ export default function ConnectionCard({ connection, onDisconnect, sx, ...other 
       <ConfirmDialog
         open={confirm.value}
         onClose={confirm.onFalse}
-        title="Are you sure you want to disconnect?"
+        title={t('home.wallet.dapps.disconnect.title')}
         action={
           <Button variant="contained" color="error" onClick={handleOnDisconnect}>
-            Disconnect
+            {t('common.actions.disconnect')}
           </Button>
         }
       />

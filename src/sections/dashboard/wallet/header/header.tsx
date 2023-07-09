@@ -12,6 +12,7 @@ import { useSnackbar } from 'src/components/snackbar';
 import { OwnedToken } from 'alchemy-sdk';
 import { CircularProgress } from '@mui/material';
 import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsContext';
+import { useLocales } from 'src/locales';
 import Receive from './modals/Receive';
 import Send from './modals/Send';
 
@@ -24,6 +25,7 @@ type Props = {
 };
 
 export default function Header({ loading, ethereumBalance, tokenBalances }: Props) {
+  const { t } = useLocales();
   const { enqueueSnackbar } = useSnackbar();
   const { trackEvent } = useAnalyticsContext();
 
@@ -57,11 +59,11 @@ export default function Header({ loading, ethereumBalance, tokenBalances }: Prop
       <Stack direction="row" alignItems="center">
         <Box sx={{ flexGrow: 1 }}>
           <Typography variant="h4" gutterBottom>
-            Your Wallet
+            {t('home.wallet.header.title')}
           </Typography>
 
           <Typography variant="body1" gutterBottom>
-            Total balance: coming soon
+            {t('home.wallet.header.subtitle')}
           </Typography>
 
           {loading && <CircularProgress />}
@@ -74,7 +76,7 @@ export default function Header({ loading, ethereumBalance, tokenBalances }: Prop
             startIcon={<Iconify icon="mingcute:send-fill" />}
             onClick={handleOpenSend}
           >
-            Send
+            {t('common.words.send')}
           </Button>
           {canSend && (
             <Send
@@ -91,7 +93,7 @@ export default function Header({ loading, ethereumBalance, tokenBalances }: Prop
             startIcon={<Iconify icon="mingcute:qrcode-2-line" />}
             onClick={handleOpenReceive}
           >
-            Receive
+            {t('common.words.receive')}
           </Button>
           <Receive open={openReceive} onClose={handleCloseReceive} />
         </Stack>

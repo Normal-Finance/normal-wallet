@@ -1,0 +1,288 @@
+{
+  "common": {
+    "words": {
+      "home": "Heim",
+      "max": ".MAX",
+      "available": "verfügbar",
+      "to": "An",
+      "receive": "Empfangen",
+      "send": "Senden",
+      "dashboard": "Instrumententafel",
+      "settings": "Einstellungen",
+      "account": "Konto",
+      "transactions": "Transaktionen",
+      "general": "Allgemein",
+      "billing": "Abrechnung",
+      "english": "Englisch",
+      "mode": "Modus",
+      "wallet": "Brieftasche",
+      "blockchain": "Blockchain (Blockchain)",
+      "batch": "Stapel",
+      "methods": "Methodik",
+      "token": "Zeichen",
+      "balance": "Gleichgewicht",
+      "balances": "Salden",
+      "deposit": "Deponieren",
+      "withdrawal": "Entzug",
+      "internal": "Intern",
+      "external": "Äußerlich",
+      "connected": "Verbunden",
+      "all": "Alle",
+      "new": "Neu",
+      "pending": "Anhängig",
+      "completed": "Abgeschlossen",
+      "failed": "Misslungen",
+      "of": "von",
+      "dense": "Dicht",
+      "block": "Block",
+      "category": "Kategorie",
+      "from": "Von",
+      "value": "Wert",
+      "asset": "Vermögenswert",
+      "priority": "Priorität",
+      "status": "Status",
+      "created": "Erstellt"
+    },
+    "actions": {
+      "close": "Schließen",
+      "clear": "Klar",
+      "cancel": "Abbrechen",
+      "approve": "Billigen",
+      "connect": "Verbinden",
+      "connectWallet": "Wallet verbinden",
+      "disconnect": "Trennen",
+      "saveChanges": "Änderungen speichern",
+      "managePaymentMethods": "Zahlungsmethoden verwalten",
+      "viewRecentInvoices": "Aktuelle Rechnungen anzeigen",
+      "deposit": "Deponieren",
+      "updateEmail": "E-Mail aktualisieren",
+      "viewAll": "Alles anzeigen",
+      "viewDetails": "Details anzeigen",
+      "copyHash": "Hash kopieren",
+      "etherscan": "Etherscan",
+      "viewOnEtherscan": "Auf Etherscan ansehen",
+      "makeInstant": "Sofort machen",
+      "switchToEthereum": "Wechseln Sie zu Ethereum",
+      "copyAddress": "Adresse kopieren"
+    },
+    "table": {
+      "noData": "Keine Daten",
+      "resultsFound": "Ergebnisse gefunden",
+      "footer": { "rowsPerPage": "Zeilen pro Seite" }
+    }
+  },
+  "header": {
+    "search": {
+      "placeholder": "Suchen...",
+      "notFound": "Nicht gefunden",
+      "noResultsFoundFor": "Keine Ergebnisse gefunden für",
+      "tryCheckingForTyposOrUsingCompleteWords": "Versuchen Sie, nach Tippfehlern zu suchen oder vollständige Wörter zu verwenden.",
+      "pleaseEnterKeywords": "Bitte geben Sie Stichworte ein"
+    }
+  },
+  "navbar": {
+    "account": { "title": "Normale Adresse" },
+    "footer": {
+      "title": "Brauchen Sie Hilfe?",
+      "subtitle": "Wir haben das Richtige für Sie",
+      "badge": "Unterstützen",
+      "buttons": { "docs": "Dokumente lesen", "chat": "Live-Chat" }
+    }
+  },
+  "home": {
+    "statistics": {
+      "title": "Echtzeit weltweit 🌎",
+      "error": "Echtzeitstatistiken können nicht geladen werden. Beim Herstellen einer Verbindung mit der API ist ein Fehler aufgetreten.",
+      "cards": {
+        "connectedClients": {
+          "title": "Verbundene Clients",
+          "tooltip": "Gesamtzahl der Personen, die Normal derzeit verwenden"
+        },
+        "pendingTransactions": {
+          "title": "Ausstehende Transaktionen",
+          "tooltip": "Gesamtzahl der neuen Transaktionen, die für die Batchverarbeitung bereit sind"
+        },
+        "totalTransactions": {
+          "title": "Transaktionen gesamt",
+          "tooltip": "Gesamtzahl der Transaktionen, die in Batches verarbeitet wurden"
+        },
+        "totalBatches": {
+          "title": "Chargen gesamt",
+          "tooltip": "Gesamtzahl der ausgeführten Batches"
+        }
+      }
+    },
+    "failedCharges": {
+      "title": "🚨 Sie haben eine fehlgeschlagene Zahlung",
+      "subtitle": "Bitte lösen Sie das Problem, bevor Sie neue Transaktionen einreichen.",
+      "buttonText": "Zahlungsmethoden aktualisieren"
+    },
+    "wrongNetwork": {
+      "title": "Falsches Netzwerk",
+      "subtitle": "Bitte wechseln Sie zu Ethereum, um fortzufahren."
+    },
+    "onboarding": {
+      "title": "Erste Schritte",
+      "steps": {
+        "depositToken": {
+          "step": "Token einzahlen",
+          "title": "Schritt 1 | Token einzahlen",
+          "subtitle": "Verschieben Sie Krypto in Ihre normale Brieftasche, um enorm Benzin zu sparen",
+          "noTokens": "Es befinden sich keine Token in Ihrer verbundenen Wallet.",
+          "ctaTitle": "Verwenden Sie Ihre normale Wallet-Adresse, um Token einzuzahlen, um fortzufahren.",
+          "cta": "Meine Adresse anzeigen",
+          "modal": {
+            "errors": {
+              "contract": {
+                "prefix": "Die Datei kann nicht geladen werden",
+                "suffix": "Vertrag zu diesem Zeitpunkt."
+              },
+              "transfer": {
+                "prefix": "Beim Senden Ihrer Daten ist ein Fehler aufgetreten.",
+                "suffix": "deponieren."
+              }
+            },
+            "form": { "placeholder": "Betrag eingeben" }
+          }
+        },
+        "updateEmail": {
+          "step": "E-Mail aktualisieren",
+          "title": "Schritt 2 | E-Mail aktualisieren",
+          "subtitle": "Die E-Mail-Adresse, die für den Zugriff auf Ihre Abrechnung und den Empfang von Zahlungsbenachrichtigungen verwendet wird"
+        },
+        "addPaymentMethod": {
+          "step": "Zahlungsmethode hinzufügen",
+          "title": "Schritt 3 | Zahlungsmethode hinzufügen",
+          "subtitle": "Dies ist erforderlich, um Ihre Transaktionen zu stapeln. Ihnen wird nur Ihr Anteil am Gas in Rechnung gestellt, der für die Einreichung einer Charge verwendet wurde."
+        }
+      }
+    },
+    "getStarted": {
+      "subtitle": "Verbinden Sie Ihre Brieftasche, um auf Ihre neue normale Smart Wallet zuzugreifen und all diese erstaunlichen Funktionen zu genießen.",
+      "features": {
+        "title": "Funktionen",
+        "values": {
+          "reducedGas": "90%+ weniger Gas",
+          "seamlessTrading": "Nahtloser Handel",
+          "emailAndSocialRecovery": "E-Mail- und Social-Media-Wiederherstellung",
+          "payGasWithCreditDebitCard": "Bezahlen Sie Benzin mit Kredit-/Debitkarte",
+          "openSource": "Quelloffen",
+          "instantDeFiAndBeyond": "Instant DeFi und mehr"
+        }
+      }
+    },
+    "activeTransactions": {
+      "title": "Aktive Transaktionen",
+      "subtitle": "Neue und ausstehende Transaktionen, die Sie für die Batchverarbeitung übermittelt haben",
+      "daysAgo": "Tage",
+      "modals": {
+        "cancelTransaction": {
+          "title": "Transaktion abbrechen",
+          "subtitle": "Sind Sie sicher, dass Sie diese Transaktion stornieren möchten? Nur neue und ausstehende Transaktionen können storniert werden. Im Falle einer Stornierung wird Ihnen kein Benzin in Rechnung gestellt."
+        }
+      }
+    },
+    "wallet": {
+      "header": {
+        "title": "Ihr Portemonnaie",
+        "subtitle": "Gesamtsaldo: demnächst verfügbar",
+        "modals": {
+          "send": {
+            "error": "Das Senden von Krypto wird noch nicht unterstützt. Kommen Sie später wieder, um neue Updates zu erhalten.",
+            "hashConfirmation": {
+              "title": "Hash-Bestätigung",
+              "subtitle": "Ihre Transaktion wurde übermittelt! Sie können den Status in Ihrer Historie einsehen, aber wir empfehlen Etherscan, um die aktuellsten Informationen zu erhalten."
+            },
+            "batchConfirmation": {
+              "title": "Chargenbestätigung",
+              "subtitle": "Ihre Transaktion wurde für die Batchverarbeitung in die Warteschlange gestellt! Sie können den Status anzeigen, die Priorität aktualisieren und ihn vollständig über Ihr Dashboard oder Ihren Verlauf stornieren."
+            }
+          },
+          "receive": { "title": "Ihre normale Adresse" }
+        }
+      },
+      "dapps": {
+        "connectDapp": "Dapp verbinden",
+        "modals": {
+          "missingRequestData": "Fehlende Anforderungsdaten",
+          "connect": {
+            "title": "Verbinden Sie sich mit WalletConnect",
+            "body": "Schließen Sie dieses Fenster nicht, während Sie eine Verbindung herstellen. Haben Sie eine Frage? Folgen Sie dieser Anleitung.",
+            "placeholder": "Link hier einfügen"
+          },
+          "sessionProposal": {
+            "header": { "title": "Session-Vorschlag" },
+            "body": {
+              "title": "Möchte eine Verbindung herstellen",
+              "body": "Die normale Web-App muss geöffnet sein, um Transaktionen zu initiieren. Sie erhalten keine Transaktionsanforderungen, wenn es nicht geöffnet ist."
+            }
+          },
+          "signMessage": {
+            "header": { "title": "Nachricht signieren" },
+            "body": { "title": "Möchte eine Nachricht signieren" }
+          },
+          "signTypedData": {
+            "header": { "title": "Getippte Daten signieren" },
+            "body": { "title": "Möchte typisierte Daten signieren" }
+          },
+          "sendTransaction": {
+            "header": { "title": "Senden / Signieren einer Transaktion" },
+            "body": { "title": "Möchte eine Transaktion senden / signieren" }
+          },
+          "unsupportedMethod": {
+            "header": { "title": "Nicht unterstützte Methode" },
+            "body": { "title": "Möchte nicht unterstützte Methode" }
+          }
+        },
+        "disconnect": { "title": "Sind Sie sicher, dass Sie die Verbindung trennen möchten?" }
+      },
+      "balances": {
+        "table": {
+          "error": { "subtitle": "Beim Laden Ihres Wallet-Guthabens ist ein Fehler aufgetreten" },
+          "toolbar": { "searchPlaceholder": "Suche nach Namen oder Symbolen..." }
+        }
+      }
+    }
+  },
+  "transactions": {
+    "tabs": {
+      "blockchain": {
+        "table": {
+          "toolbar": {
+            "status": { "contractInteraction": "Interaktion mit Verträgen" },
+            "date": { "startDate": "Startdatum", "endDate": "Enddatum" },
+            "search": { "placeholder": "Suchen nach, von, Token oder Wert..." }
+          }
+        }
+      },
+      "batch": {
+        "table": {
+          "toolbar": {
+            "date": { "startDate": "Startdatum", "endDate": "Enddatum" },
+            "search": { "placeholder": "Suchen nach, von, Token oder Wert..." }
+          }
+        }
+      }
+    }
+  },
+  "settings": {
+    "tabs": {
+      "general": {
+        "email": {
+          "label": "E-Mail-Adresse",
+          "helperText": "Die E-Mail-Adresse, die für den Zugriff auf Ihre Abrechnung und den Empfang von Zahlungsbenachrichtigungen verwendet wird"
+        }
+      },
+      "billing": {
+        "paymentMethods": {
+          "title": "Zahlungsmethoden",
+          "subtitle": "Debit-/Kreditkarten zur Bezahlung der Gaskosten"
+        },
+        "invoiceHistory": {
+          "title": "Rechnungshistorie",
+          "subtitle": "Kürzlich angefallene Gebühren für Ihr Konto"
+        }
+      }
+    }
+  }
+}

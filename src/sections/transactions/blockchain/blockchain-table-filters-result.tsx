@@ -9,6 +9,7 @@ import { IOrderTableFilters, IOrderTableFilterValue } from 'src/types/order';
 // components
 import Iconify from 'src/components/iconify';
 import { shortDateLabel } from 'src/components/custom-date-range-picker';
+import { useLocales } from 'src/locales';
 
 // ----------------------------------------------------------------------
 
@@ -30,6 +31,7 @@ export default function BlockchainTableFiltersResult({
   results,
   ...other
 }: Props) {
+  const { t } = useLocales();
   const shortLabel = shortDateLabel(filters.startDate, filters.endDate);
 
   const handleRemoveStatus = () => {
@@ -46,14 +48,22 @@ export default function BlockchainTableFiltersResult({
       <Box sx={{ typography: 'body2' }}>
         <strong>{results}</strong>
         <Box component="span" sx={{ color: 'text.secondary', ml: 0.25 }}>
-          results found
+          {t('common.table.resultsFound')}
         </Box>
       </Box>
 
       <Stack flexGrow={1} spacing={1} direction="row" flexWrap="wrap" alignItems="center">
         {filters.status !== 'all' && (
           <Block label="Status:">
-            <Chip size="small" label={filters.status} onDelete={handleRemoveStatus} />
+            <Chip
+              size="small"
+              label={
+                filters.status === 'contract_interaction'
+                  ? t('transactions.tabs.blockchain.table.toolbar.status.contractInteraction')
+                  : t(`common.words.${filters.status}`)
+              }
+              onDelete={handleRemoveStatus}
+            />
           </Block>
         )}
 
@@ -68,7 +78,7 @@ export default function BlockchainTableFiltersResult({
           onClick={onResetFilters}
           startIcon={<Iconify icon="solar:trash-bin-trash-bold" />}
         >
-          Clear
+          {t('common.actions.clear')}
         </Button>
       </Stack>
     </Stack>

@@ -3,10 +3,12 @@ import { Card, CardHeader, Box, Button, Stack } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import { APP_STUFF } from 'src/config-global';
 import { AnalyticsEvents, useAnalyticsContext } from 'src/contexts/AnalyticsContext';
+import { useLocales } from 'src/locales';
 
 // ----------------------------------------------------------------------
 
 export default function SettingsBilling() {
+  const { t } = useLocales();
   const { trackEvent } = useAnalyticsContext();
 
   return (
@@ -15,8 +17,8 @@ export default function SettingsBilling() {
         {/* Payment methods */}
         <Card>
           <CardHeader
-            title="Payment methods"
-            subheader="Debit/credit cards used to pay gas expenses"
+            title={t('settings.tabs.billing.paymentMethods.title')}
+            subheader={t('settings.tabs.billing.paymentMethods.subtitle')}
           />
           <Box sx={{ p: 3 }}>
             <Button
@@ -25,7 +27,7 @@ export default function SettingsBilling() {
               href={APP_STUFF.billingLink}
               onClick={() => trackEvent(AnalyticsEvents.OPENED_BILLING)}
             >
-              Manage payment methods
+              {t('common.actions.managePaymentMethods')}
             </Button>
           </Box>
         </Card>
@@ -34,7 +36,10 @@ export default function SettingsBilling() {
       <Grid xs={12} md={4}>
         {/* Invoices */}
         <Card>
-          <CardHeader title="Invoice History" subheader="Recent charges incurred by your account" />
+          <CardHeader
+            title={t('settings.tabs.billing.invoiceHistory.title')}
+            subheader={t('settings.tabs.billing.invoiceHistory.subtitle')}
+          />
 
           <Stack spacing={1.5} sx={{ px: 3, pt: 3, pb: 3 }}>
             <Button
@@ -43,7 +48,7 @@ export default function SettingsBilling() {
               href={APP_STUFF.billingLink}
               onClick={() => trackEvent(AnalyticsEvents.OPENED_BILLING)}
             >
-              View recent invoices
+              {t('common.actions.viewRecentInvoices')}
             </Button>
           </Stack>
         </Card>
