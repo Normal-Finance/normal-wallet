@@ -42,14 +42,6 @@ export default function SettingsDrawer() {
         {t('common.words.settings')}
       </Typography>
 
-      {/* <Tooltip title="Reset">
-        <IconButton onClick={settings.onReset}>
-          <Badge color="error" variant="dot" invisible={!settings.canReset}>
-            <Iconify icon="solar:restart-bold" />
-          </Badge>
-        </IconButton>
-      </Tooltip> */}
-
       <IconButton onClick={settings.onClose}>
         <Iconify icon="mingcute:close-line" />
       </IconButton>

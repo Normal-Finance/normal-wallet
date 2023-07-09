@@ -85,5 +85,6 @@ module.exports = {
         argsIgnorePattern: '^_',
       },
     ],
+    "import/no-cycle": "off"
   },
 };
