@@ -103,7 +103,10 @@
           "tooltip": "Toplu hale getirilmeye hazır yeni hareketlerin toplam sayısı"
         },
         "totalTransactions": { "title": "Toplam İşlem Sayısı", "tooltip": "Toplu işlem sayısı" },
-        "totalBatches": { "title": "Toplam Banyo", "tooltip": "Yürütülen toplam toplu iş sayısı" }
+        "totalBatches": {
+          "title": "Toplam Parti Sayısı",
+          "tooltip": "Yürütülen toplam toplu iş sayısı"
+        }
       }
     },
     "failedCharges": {
@@ -113,7 +116,7 @@
     },
     "wrongNetwork": {
       "title": "Yanlış ağ",
-      "subtitle": "Devam etmek için lütfen Ethereum veya Goerli'ye geçin."
+      "subtitle": "Devam etmek için lütfen Ethereum'a geçin."
     },
     "onboarding": {
       "title": "Başlarken",
@@ -183,7 +186,7 @@
             },
             "batchConfirmation": {
               "title": "Toplu İş Onayı",
-              "subtitle": "İşleminiz toplu işlem için sıraya alındı! Durumunu görüntüleyebilir, önceliğini güncelleyebilir ve Kontrol Panelinizden veya Geçmişinizden tamamen iptal edebilirsiniz."
+              "subtitle": "İşleminiz toplu işlem için kuyruğa alındı! Durumunu görüntüleyebilir, önceliğini güncelleyebilir ve Kontrol Panelinizden veya Geçmişinizden tamamen iptal edebilirsiniz."
             }
           },
           "receive": { "title": "Normal Adresiniz" }

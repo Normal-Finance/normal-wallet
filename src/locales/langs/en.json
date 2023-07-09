@@ -114,8 +114,8 @@
           "tooltip": "Total number of transactions batched"
         },
         "totalBatches": {
-          "title": "Total Bathces",
-          "tooltip": "Total number of batched executed"
+          "title": "Total Batches",
+          "tooltip": "Total number of batches executed"
         }
       }
     },
@@ -126,7 +126,7 @@
     },
     "wrongNetwork": {
       "title": "Wrong network",
-      "subtitle": "Please switch to Ethereum or Goerli to continue."
+      "subtitle": "Please switch to Ethereum to continue."
     },
     "onboarding": {
       "title": "Getting started",
@@ -204,7 +204,7 @@
             },
             "batchConfirmation": {
               "title": "Batch Confirmation",
-              "subtitle": "Your transaction has been queud for batching! You can view its status, update the priority, and cancel it entirely from your Dashboard or History."
+              "subtitle": "Your transaction has been queued for batching! You can view its status, update the priority, and cancel it entirely from your Dashboard or History."
             }
           },
           "receive": {

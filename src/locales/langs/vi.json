@@ -106,7 +106,7 @@
           "title": "Tổng số giao dịch",
           "tooltip": "Tổng số giao dịch theo lô"
         },
-        "totalBatches": { "title": "Tổng số bồn tắm", "tooltip": "Tổng số đợt thực hiện" }
+        "totalBatches": { "title": "Tổng số lô", "tooltip": "Tổng số lô đã thực hiện" }
       }
     },
     "failedCharges": {
@@ -116,7 +116,7 @@
     },
     "wrongNetwork": {
       "title": "Mạng sai",
-      "subtitle": "Vui lòng chuyển sang Ethereum hoặc Goerli để tiếp tục."
+      "subtitle": "Vui lòng chuyển sang Ethereum để tiếp tục."
     },
     "onboarding": {
       "title": "Bắt đầu",

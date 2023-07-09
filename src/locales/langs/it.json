@@ -106,7 +106,7 @@
           "title": "Totale transazioni",
           "tooltip": "Numero totale di transazioni in batch"
         },
-        "totalBatches": { "title": "Totale bagni", "tooltip": "Numero totale di batch eseguiti" }
+        "totalBatches": { "title": "Lotti totali", "tooltip": "Numero totale di lotti eseguiti" }
       }
     },
     "failedCharges": {
@@ -116,7 +116,7 @@
     },
     "wrongNetwork": {
       "title": "Rete sbagliata",
-      "subtitle": "Si prega di passare a Ethereum o Goerli per continuare."
+      "subtitle": "Si prega di passare a Ethereum per continuare."
     },
     "onboarding": {
       "title": "Introduttiva",
@@ -192,7 +192,7 @@
             },
             "batchConfirmation": {
               "title": "Conferma batch",
-              "subtitle": "La tua transazione è stata accodata per il batching! È possibile visualizzarne lo stato, aggiornare la priorità e annullarla completamente dalla dashboard o dalla cronologia."
+              "subtitle": "La transazione è stata messa in coda per l'invio in batch! È possibile visualizzarne lo stato, aggiornare la priorità e annullarla completamente dalla dashboard o dalla cronologia."
             }
           },
           "receive": { "title": "Il tuo indirizzo normale" }

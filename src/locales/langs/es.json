@@ -2,36 +2,36 @@
   "common": {
     "words": {
       "home": "Hogar",
-      "max": "MÁX.",
+      "max": ".MAX",
       "available": "disponible",
-      "to": "a",
-      "receive": "recibir",
+      "to": "Para",
+      "receive": "Recibir",
       "send": "Enviar",
-      "dashboard": "Panel",
-      "settings": "Ajustes",
+      "dashboard": "Salpicadero",
+      "settings": "Configuración",
       "account": "Cuenta",
-      "transactions": "Actas",
+      "transactions": "Transacciones",
       "general": "General",
       "billing": "Facturación",
-      "english": "inglés",
+      "english": "Inglés",
       "mode": "Modo",
       "wallet": "Billetera",
-      "blockchain": "cadena de bloques",
+      "blockchain": "Cadena de bloques",
       "batch": "Lote",
       "methods": "Métodos",
-      "token": "Simbólico",
-      "balance": "Balance",
+      "token": "Seña",
+      "balance": "Equilibrar",
       "balances": "Saldos",
       "deposit": "Depósito",
-      "withdrawal": "Retiro",
+      "withdrawal": "Retirada",
       "internal": "Interno",
       "external": "Externo",
-      "connected": "Conectado",
+      "connected": "Conexo",
       "all": "Todo",
       "new": "Nuevo",
       "pending": "Pendiente",
-      "completed": "Terminado",
-      "failed": "Fallido",
+      "completed": "Completado",
+      "failed": "Fracasado",
       "of": "de",
       "dense": "Denso",
       "block": "Bloquear",
@@ -44,12 +44,12 @@
       "created": "Creado"
     },
     "actions": {
-      "close": "Cerca",
+      "close": "Cerrar",
       "clear": "Claro",
       "cancel": "Cancelar",
       "approve": "Aprobar",
       "connect": "Conectar",
-      "connectWallet": "Conectar billetera",
+      "connectWallet": "Conectar monedero",
       "disconnect": "Desconectar",
       "saveChanges": "Guardar cambios",
       "managePaymentMethods": "Administrar métodos de pago",
@@ -59,25 +59,25 @@
       "viewAll": "Ver todo",
       "viewDetails": "Ver detalles",
       "copyHash": "Copiar hash",
-      "etherscan": "Etherscan",
+      "etherscan": "Escaneo de éter",
       "viewOnEtherscan": "Ver en Etherscan",
-      "makeInstant": "hacer instantáneo",
+      "makeInstant": "Hacer instantáneo",
       "switchToEthereum": "Cambiar a Ethereum",
       "copyAddress": "Copiar dirección"
     },
     "table": {
       "noData": "Sin datos",
-      "resultsFound": "resultados encontrados",
+      "resultsFound": "Resultados encontrados",
       "footer": { "rowsPerPage": "Filas por página" }
     }
   },
   "header": {
     "search": {
       "placeholder": "Buscar...",
-      "notFound": "Extraviado",
+      "notFound": "No encontrado",
       "noResultsFoundFor": "No se encontraron resultados para",
-      "tryCheckingForTyposOrUsingCompleteWords": "Intente verificar errores tipográficos o usar palabras completas.",
-      "pleaseEnterKeywords": "Por favor ingrese palabras clave"
+      "tryCheckingForTyposOrUsingCompleteWords": "Intenta comprobar si hay errores tipográficos o usar palabras completas.",
+      "pleaseEnterKeywords": "Por favor, introduzca palabras clave"
     }
   },
   "navbar": {
@@ -92,51 +92,54 @@
   "home": {
     "statistics": {
       "title": "En tiempo real en todo el mundo 🌎",
-      "error": "No se pueden cargar las estadísticas en tiempo real. Hubo un error al conectarse a la API.",
+      "error": "No se pueden cargar estadísticas en tiempo real. Se ha producido un error al conectarse a la API.",
       "cards": {
         "connectedClients": {
-          "title": "Clientes Conectados",
+          "title": "Clientes conectados",
           "tooltip": "Número total de personas que usan Normal en este momento"
         },
         "pendingTransactions": {
-          "title": "transacciones pendientes",
-          "tooltip": "Número total de nuevas transacciones listas para ser procesadas por lotes"
+          "title": "Transacciones pendientes",
+          "tooltip": "Número total de nuevas transacciones listas para ser agrupadas"
         },
         "totalTransactions": {
-          "title": "Transacciones totales",
-          "tooltip": "Número total de transacciones por lotes"
+          "title": "Total de transacciones",
+          "tooltip": "Número total de transacciones agrupadas"
         },
-        "totalBatches": { "title": "Baños totales", "tooltip": "Número total de lotes ejecutados" }
+        "totalBatches": { "title": "Total de lotes", "tooltip": "Número total de lotes ejecutados" }
       }
     },
     "failedCharges": {
       "title": "🚨 Tienes un pago fallido",
-      "subtitle": "Resuelva antes de enviar nuevas transacciones.",
+      "subtitle": "Por favor, resuelva antes de enviar cualquier transacción nueva.",
       "buttonText": "Actualizar métodos de pago"
     },
     "wrongNetwork": {
-      "title": "red incorrecta",
-      "subtitle": "Cambie a Ethereum o Goerli para continuar."
+      "title": "Red incorrecta",
+      "subtitle": "Por favor, cambie a Ethereum para continuar."
     },
     "onboarding": {
-      "title": "Empezando",
+      "title": "Empezar",
       "steps": {
         "depositToken": {
-          "step": "Fichas de depósito",
-          "title": "Paso 1 | Fichas de depósito",
+          "step": "Depositar tokens",
+          "title": "Paso 1 | Depositar tokens",
           "subtitle": "Mueva criptografía a su billetera normal para comenzar a ahorrar mucho en gasolina",
           "noTokens": "No hay tokens en su billetera conectada.",
           "ctaTitle": "Use su dirección de billetera normal para depositar tokens para continuar.",
-          "cta": "mostrar mi dirección",
+          "cta": "Mostrar mi dirección",
           "modal": {
             "errors": {
               "contract": {
                 "prefix": "No se puede cargar el",
                 "suffix": "contrato en este momento."
               },
-              "transfer": { "prefix": "Hubo un error al enviar su", "suffix": "depósito." }
+              "transfer": {
+                "prefix": "Se ha producido un error al enviar su",
+                "suffix": "depósito."
+              }
             },
-            "form": { "placeholder": "Ingrese la cantidad" }
+            "form": { "placeholder": "Introduzca el importe" }
           }
         },
         "updateEmail": {
@@ -145,51 +148,51 @@
           "subtitle": "El correo electrónico utilizado para acceder a su facturación y recibir notificaciones de pago"
         },
         "addPaymentMethod": {
-          "step": "Añadir método de pago",
-          "title": "Paso 3 | Añadir método de pago",
-          "subtitle": "Esto es necesario para procesar por lotes sus transacciones. Solo se le cobrará por su parte del gas utilizado para enviar un lote."
+          "step": "Agregar método de pago",
+          "title": "Paso 3 | Agregar método de pago",
+          "subtitle": "Esto es necesario para agrupar sus transacciones. Solo se le cobrará por su parte del gas utilizado para enviar un lote."
         }
       }
     },
     "getStarted": {
       "subtitle": "Conecte su billetera para acceder a su nueva billetera inteligente Normal y disfrute de todas estas increíbles funciones.",
       "features": {
-        "title": "Características",
+        "title": "Funciones",
         "values": {
           "reducedGas": "90%+ gas reducido",
-          "seamlessTrading": "Comercio sin problemas",
+          "seamlessTrading": "Comercio sin fisuras",
           "emailAndSocialRecovery": "Correo electrónico y recuperación social",
-          "payGasWithCreditDebitCard": "Pagar gasolina con tarjeta de crédito/débito",
-          "openSource": "Fuente abierta",
+          "payGasWithCreditDebitCard": "Pagar gas con tarjeta de crédito/débito",
+          "openSource": "Código abierto",
           "instantDeFiAndBeyond": "DeFi instantáneo y más allá"
         }
       }
     },
     "activeTransactions": {
       "title": "Transacciones activas",
-      "subtitle": "Transacciones nuevas y pendientes que ha enviado para procesamiento por lotes",
-      "daysAgo": "hace días",
+      "subtitle": "Transacciones nuevas y pendientes que ha enviado para el procesamiento por lotes",
+      "daysAgo": "días atrás",
       "modals": {
         "cancelTransaction": {
           "title": "Cancelar transacción",
-          "subtitle": "¿Está seguro de que desea cancelar esta transacción? Solo se pueden cancelar transacciones nuevas y pendientes. No se le cobrará ninguna gasolina si cancela."
+          "subtitle": "¿Está seguro de que desea cancelar esta transacción? Solo se pueden cancelar las transacciones nuevas y pendientes. No se le cobrará por ningún gas si se cancela."
         }
       }
     },
     "wallet": {
       "header": {
-        "title": "tu billetera",
+        "title": "Tu monedero",
         "subtitle": "Saldo total: próximamente",
         "modals": {
           "send": {
-            "error": "El envío de criptografía aún no es una función compatible. Vuelve más tarde para nuevas actualizaciones.",
+            "error": "El envío de criptomonedas aún no es una característica compatible. Vuelva más tarde para nuevas actualizaciones.",
             "hashConfirmation": {
               "title": "Confirmación de hash",
-              "subtitle": "¡Su transacción ha sido enviada! Puede ver su estado en su Historial, pero le recomendamos Etherscan para obtener la información más actualizada."
+              "subtitle": "¡Su transacción ha sido enviada! Puede ver su estado en su historial, pero recomendamos Etherscan para obtener la información más actualizada."
             },
             "batchConfirmation": {
-              "title": "Confirmación de lote",
-              "subtitle": "¡Su transacción se ha puesto en cola para el procesamiento por lotes! Puede ver su estado, actualizar la prioridad y cancelarlo por completo desde su Tablero o Historial."
+              "title": "Confirmación del lote",
+              "subtitle": "¡Su transacción ha sido puesta en cola para el procesamiento por lotes! Puede ver su estado, actualizar la prioridad y cancelarla por completo desde su panel o historial."
             }
           },
           "receive": { "title": "Su dirección normal" }
@@ -198,17 +201,17 @@
       "dapps": {
         "connectDapp": "Conectar Dapp",
         "modals": {
-          "missingRequestData": "Faltan datos de la solicitud",
+          "missingRequestData": "Faltan datos de solicitud",
           "connect": {
-            "title": "Conéctate con WalletConnect",
-            "body": "No cierre esta ventana mientras se conecta. ¿Tengo una pregunta? Siga esta guía.",
-            "placeholder": "Pegar enlace aquí"
+            "title": "Conéctese con WalletConnect",
+            "body": "No cierre esta ventana mientras se conecta. ¿Tiene alguna pregunta? Siga esta guía.",
+            "placeholder": "Pega el enlace aquí"
           },
           "sessionProposal": {
             "header": { "title": "Propuesta de sesión" },
             "body": {
-              "title": "quiere conectarse",
-              "body": "Necesita que la aplicación web Normal esté abierta para iniciar transacciones. No recibirá solicitudes de transacciones cuando no esté abierto."
+              "title": "Quiere conectarse",
+              "body": "Necesita que la aplicación web Normal esté abierta para iniciar transacciones. No recibirá solicitudes de transacción cuando no esté abierto."
             }
           },
           "signMessage": {
@@ -216,23 +219,23 @@
             "body": { "title": "Quiere firmar un mensaje" }
           },
           "signTypedData": {
-            "header": { "title": "Signo de datos escritos" },
-            "body": { "title": "Quiere firmar datos escritos" }
+            "header": { "title": "Firmar datos escritos" },
+            "body": { "title": "Desea firmar datos escritos" }
           },
           "sendTransaction": {
-            "header": { "title": "Enviar/firmar una transacción" },
-            "body": { "title": "Quiere enviar/firmar una transacción" }
+            "header": { "title": "Enviar / Firmar una transacción" },
+            "body": { "title": "Quiere enviar / firmar una transacción" }
           },
           "unsupportedMethod": {
-            "header": { "title": "Método no admitido" },
+            "header": { "title": "Método no compatible" },
             "body": { "title": "Quiere un método no compatible" }
           }
         },
-        "disconnect": { "title": "¿Seguro que quieres desconectarte?" }
+        "disconnect": { "title": "¿Estás seguro de que quieres desconectar?" }
       },
       "balances": {
         "table": {
-          "error": { "subtitle": "Hubo un error al cargar los saldos de su billetera" },
+          "error": { "subtitle": "Se ha producido un error al cargar los saldos de tu monedero" },
           "toolbar": { "searchPlaceholder": "Buscar por nombre o símbolo..." }
         }
       }
@@ -243,7 +246,7 @@
       "blockchain": {
         "table": {
           "toolbar": {
-            "status": { "contractInteraction": "Interacción del contrato" },
+            "status": { "contractInteraction": "Interacción contractual" },
             "date": { "startDate": "Fecha de inicio", "endDate": "Fecha final" },
             "search": { "placeholder": "Buscar hacia, desde, token o valor..." }
           }
@@ -270,7 +273,7 @@
       "billing": {
         "paymentMethods": {
           "title": "Métodos de pago",
-          "subtitle": "Tarjetas de débito/crédito utilizadas para pagar los gastos de gasolina"
+          "subtitle": "Tarjetas de débito/crédito utilizadas para pagar gastos de gas"
         },
         "invoiceHistory": {
           "title": "Historial de facturas",

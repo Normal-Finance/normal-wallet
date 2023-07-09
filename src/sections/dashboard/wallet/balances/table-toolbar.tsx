@@ -52,7 +52,7 @@ Props) {
           fullWidth
           value={filters.name}
           onChange={handleFilterName}
-          placeholder={t('home.wallet.balances.table.toolbar.searchPlaceholder')}
+          placeholder={t('home.wallet.balances.table.toolbar.searchPlaceholder') || ''}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">

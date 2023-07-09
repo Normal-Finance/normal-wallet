@@ -1,44 +1,44 @@
 {
   "common": {
     "words": {
-      "home": "Maison",
-      "max": "MAX",
+      "home": "Domicile",
+      "max": ".MAX",
       "available": "disponible",
-      "to": "pour",
+      "to": "À",
       "receive": "Recevoir",
       "send": "Envoyer",
       "dashboard": "Tableau de bord",
       "settings": "Paramètres",
       "account": "Compte",
       "transactions": "Transactions",
-      "general": "Général",
+      "general": "Généralités",
       "billing": "Facturation",
       "english": "Anglais",
       "mode": "Mode",
       "wallet": "Portefeuille",
       "blockchain": "Chaîne de blocs",
-      "batch": "Grouper",
-      "methods": "Méthodes",
+      "batch": "Lot",
+      "methods": "Méthode",
       "token": "Jeton",
-      "balance": "Équilibre",
+      "balance": "Balance",
       "balances": "Soldes",
       "deposit": "Dépôt",
       "withdrawal": "Retrait",
       "internal": "Interne",
       "external": "Externe",
-      "connected": "Connecté",
-      "all": "Tous",
+      "connected": "Relié",
+      "all": "Tout",
       "new": "Nouveau",
-      "pending": "En attente",
-      "completed": "Complété",
-      "failed": "Échoué",
+      "pending": "En instance",
+      "completed": "Terminé",
+      "failed": "Raté",
       "of": "de",
       "dense": "Dense",
-      "block": "Bloc",
+      "block": "Bloquer",
       "category": "Catégorie",
-      "from": "Depuis",
+      "from": "De",
       "value": "Valeur",
-      "asset": "Actif",
+      "asset": "Atout",
       "priority": "Priorité",
       "status": "Statut",
       "created": "Créé"
@@ -48,51 +48,51 @@
       "clear": "Clair",
       "cancel": "Annuler",
       "approve": "Approuver",
-      "connect": "Connecter",
+      "connect": "Relier",
       "connectWallet": "Connecter le portefeuille",
       "disconnect": "Déconnecter",
-      "saveChanges": "Sauvegarder les modifications",
+      "saveChanges": "Enregistrer les modifications",
       "managePaymentMethods": "Gérer les modes de paiement",
       "viewRecentInvoices": "Afficher les factures récentes",
       "deposit": "Dépôt",
-      "updateEmail": "Mettre à jour l'e-mail",
+      "updateEmail": "Mettre à jour l’e-mail",
       "viewAll": "Voir tout",
       "viewDetails": "Voir les détails",
       "copyHash": "Copier le hachage",
-      "etherscan": "Étherscan",
+      "etherscan": "Etherscan",
       "viewOnEtherscan": "Voir sur Etherscan",
       "makeInstant": "Rendre instantané",
       "switchToEthereum": "Passer à Ethereum",
-      "copyAddress": "Copier l'adresse"
+      "copyAddress": "Copier l’adresse"
     },
     "table": {
-      "noData": "Pas de données",
-      "resultsFound": "résultats trouvés",
+      "noData": "Aucune donnée",
+      "resultsFound": "Résultats trouvés",
       "footer": { "rowsPerPage": "Lignes par page" }
     }
   },
   "header": {
     "search": {
-      "placeholder": "Recherche...",
-      "notFound": "Pas trouvé",
-      "noResultsFoundFor": "Aucun résultat trouvé pour",
-      "tryCheckingForTyposOrUsingCompleteWords": "Essayez de vérifier les fautes de frappe ou d'utiliser des mots complets.",
-      "pleaseEnterKeywords": "Veuillez entrer les mots clés"
+      "placeholder": "Rechercher...",
+      "notFound": "Introuvable",
+      "noResultsFoundFor": "Aucun résultat n’a été trouvé pour",
+      "tryCheckingForTyposOrUsingCompleteWords": "Essayez de vérifier les fautes de frappe ou d’utiliser des mots complets.",
+      "pleaseEnterKeywords": "Veuillez saisir des mots-clés"
     }
   },
   "navbar": {
     "account": { "title": "Adresse normale" },
     "footer": {
-      "title": "Besoin d'aide?",
-      "subtitle": "Nous avons ce qu'il vous faut",
+      "title": "Besoin d’aide ?",
+      "subtitle": "Nous avons ce qu’il vous faut",
       "badge": "Soutien",
-      "buttons": { "docs": "Lire des documents", "chat": "Chat en direct" }
+      "buttons": { "docs": "Lire la documentation", "chat": "Chat en direct" }
     }
   },
   "home": {
     "statistics": {
-      "title": "En temps réel dans le monde 🌎",
-      "error": "Impossible de charger les statistiques en temps réel. Une erreur s'est produite lors de la connexion à l'API.",
+      "title": "Temps réel dans le monde 🌎 entier",
+      "error": "Impossible de charger les statistiques en temps réel. Une erreur s’est produite lors de la connexion à l’API.",
       "cards": {
         "connectedClients": {
           "title": "Clients connectés",
@@ -100,23 +100,26 @@
         },
         "pendingTransactions": {
           "title": "Transactions en attente",
-          "tooltip": "Nombre total de nouvelles transactions prêtes à être regroupées"
+          "tooltip": "Nombre total de nouvelles transactions prêtes à être traitées par lots"
         },
         "totalTransactions": {
-          "title": "Transactions totales",
+          "title": "Total Transactions",
           "tooltip": "Nombre total de transactions groupées"
         },
-        "totalBatches": { "title": "Total des bains", "tooltip": "Nombre total de batch exécutés" }
+        "totalBatches": {
+          "title": "Nombre total de lots",
+          "tooltip": "Nombre total de lots exécutés"
+        }
       }
     },
     "failedCharges": {
       "title": "🚨 Vous avez un échec de paiement",
-      "subtitle": "Veuillez résoudre le problème avant de soumettre de nouvelles transactions.",
-      "buttonText": "Mettre à jour les méthodes de paiement"
+      "subtitle": "Veuillez résoudre avant de soumettre de nouvelles transactions.",
+      "buttonText": "Mettre à jour les modes de paiement"
     },
     "wrongNetwork": {
-      "title": "Mauvais réseau",
-      "subtitle": "Veuillez passer à Ethereum ou Goerli pour continuer."
+      "title": "Réseau incorrect",
+      "subtitle": "Veuillez passer à Ethereum pour continuer."
     },
     "onboarding": {
       "title": "Commencer",
@@ -124,28 +127,28 @@
         "depositToken": {
           "step": "Jetons de dépôt",
           "title": "Étape 1 | Jetons de dépôt",
-          "subtitle": "Déplacez la crypto dans votre portefeuille normal pour commencer à économiser énormément sur le gaz",
-          "noTokens": "Il n'y a pas de jetons dans votre portefeuille connecté.",
-          "ctaTitle": "Utilisez votre adresse de portefeuille normal pour déposer des jetons pour continuer.",
+          "subtitle": "Déplacez la crypto dans votre portefeuille normal pour commencer à économiser énormément d’essence",
+          "noTokens": "Il n’y a pas de jetons dans votre portefeuille connecté.",
+          "ctaTitle": "Utilisez votre adresse de portefeuille normal pour déposer des jetons afin de continuer.",
           "cta": "Afficher mon adresse",
           "modal": {
             "errors": {
               "contract": {
                 "prefix": "Impossible de charger le",
-                "suffix": "contrat à ce moment."
+                "suffix": "contrat en ce moment."
               },
               "transfer": {
-                "prefix": "Une erreur s'est produite lors de l'envoi de votre",
+                "prefix": "Une erreur s’est produite lors de l’envoi de votre",
                 "suffix": "dépôt."
               }
             },
-            "form": { "placeholder": "Entrer le montant" }
+            "form": { "placeholder": "Entrez le montant" }
           }
         },
         "updateEmail": {
-          "step": "Mettre à jour l'e-mail",
-          "title": "Étape 2 | Mettre à jour l'e-mail",
-          "subtitle": "L'e-mail utilisé pour accéder à votre facturation et recevoir des notifications de paiement"
+          "step": "Mettre à jour l’e-mail",
+          "title": "Étape 2 | Mettre à jour l’e-mail",
+          "subtitle": "L’adresse e-mail utilisée pour accéder à votre facturation et recevoir des notifications de paiement"
         },
         "addPaymentMethod": {
           "step": "Ajouter un mode de paiement",
@@ -155,44 +158,44 @@
       }
     },
     "getStarted": {
-      "subtitle": "Connectez votre portefeuille pour accéder à votre nouveau portefeuille intelligent Normal et profitez de toutes ces fonctionnalités étonnantes.",
+      "subtitle": "Connectez votre portefeuille pour accéder à votre nouveau portefeuille intelligent Normal et profiter de toutes ces fonctionnalités étonnantes.",
       "features": {
-        "title": "Caractéristiques",
+        "title": "Fonctionnalités",
         "values": {
-          "reducedGas": "90 %+ de gaz en moins",
-          "seamlessTrading": "Négociation transparente",
-          "emailAndSocialRecovery": "E-mail et récupération sociale",
-          "payGasWithCreditDebitCard": "Payer l'essence avec une carte de crédit/débit",
-          "openSource": "Open source",
-          "instantDeFiAndBeyond": "DeFi instantané et au-delà"
+          "reducedGas": "90%+ gaz réduit",
+          "seamlessTrading": "Trading transparent",
+          "emailAndSocialRecovery": "Email et récupération sociale",
+          "payGasWithCreditDebitCard": "Payer l’essence avec une carte de crédit / débit",
+          "openSource": "Libre",
+          "instantDeFiAndBeyond": "DeFi instantanée et au-delà"
         }
       }
     },
     "activeTransactions": {
       "title": "Transactions actives",
-      "subtitle": "Transactions nouvelles et en attente que vous avez soumises pour le regroupement",
-      "daysAgo": "il y a quelques jours",
+      "subtitle": "Transactions nouvelles et en attente que vous avez soumises pour traitement par lots",
+      "daysAgo": "Jours",
       "modals": {
         "cancelTransaction": {
-          "title": "annuler la transaction",
-          "subtitle": "Voulez-vous vraiment annuler cette transaction ? Seules les transactions nouvelles et en attente peuvent être annulées. Aucun gaz ne vous sera facturé en cas d'annulation."
+          "title": "Annuler la transaction",
+          "subtitle": "Voulez-vous vraiment annuler cette transaction? Seules les transactions nouvelles et en attente peuvent être annulées. Vous ne serez pas facturé pour l’essence en cas d’annulation."
         }
       }
     },
     "wallet": {
       "header": {
-        "title": "Ton portefeuille",
-        "subtitle": "Solde total : bientôt disponible",
+        "title": "Votre portefeuille",
+        "subtitle": "Solde total : à venir",
         "modals": {
           "send": {
-            "error": "L'envoi de crypto n'est pas encore une fonctionnalité prise en charge. Revenez plus tard pour de nouvelles mises à jour.",
+            "error": "L’envoi de crypto n’est pas encore une fonctionnalité prise en charge. Revenez plus tard pour de nouvelles mises à jour.",
             "hashConfirmation": {
               "title": "Confirmation de hachage",
-              "subtitle": "Votre transaction a été soumise ! Vous pouvez voir son statut dans votre historique, mais nous recommandons Etherscan pour les informations les plus récentes."
+              "subtitle": "Votre transaction a été soumise! Vous pouvez afficher son statut dans votre historique, mais nous recommandons Etherscan pour les informations les plus récentes."
             },
             "batchConfirmation": {
-              "title": "Confirmation de lot",
-              "subtitle": "Votre transaction a été mise en file d'attente pour le traitement par lots ! Vous pouvez afficher son statut, mettre à jour la priorité et l'annuler entièrement à partir de votre tableau de bord ou de votre historique."
+              "title": "Confirmation du lot",
+              "subtitle": "Votre transaction a été mise en file d’attente pour traitement par lots ! Vous pouvez afficher son état, mettre à jour la priorité et l’annuler entièrement à partir de votre tableau de bord ou de votre historique."
             }
           },
           "receive": { "title": "Votre adresse habituelle" }
@@ -203,40 +206,40 @@
         "modals": {
           "missingRequestData": "Données de demande manquantes",
           "connect": {
-            "title": "Connectez-vous avec Wallet Connect",
-            "body": "Ne fermez pas cette fenêtre pendant la connexion. Avoir une question? Suivez ce guide.",
-            "placeholder": "Collez le lien ici"
+            "title": "Connectez-vous avec WalletConnect",
+            "body": "Ne fermez pas cette fenêtre lors de la connexion. Vous avez une question? Suivez ce guide.",
+            "placeholder": "Coller le lien ici"
           },
           "sessionProposal": {
-            "header": { "title": "Proposition de séance" },
+            "header": { "title": "Proposition de session" },
             "body": {
               "title": "Veut se connecter",
-              "body": "Vous avez besoin que l'application Web normale soit ouverte pour initier des transactions. Vous ne recevrez pas de demandes de transaction lorsqu'il n'est pas ouvert."
+              "body": "Vous devez que l’application web normale soit ouverte pour lancer des transactions. Vous ne recevrez pas de demandes de transaction lorsqu’il n’est pas ouvert."
             }
           },
           "signMessage": {
             "header": { "title": "Signer le message" },
-            "body": { "title": "Veut signer un message" }
+            "body": { "title": "Souhaite signer un message" }
           },
           "signTypedData": {
-            "header": { "title": "Signer les données typées" },
-            "body": { "title": "Veut signer des données saisies" }
+            "header": { "title": "Données typées de signe" },
+            "body": { "title": "Souhaite signer des données typées" }
           },
           "sendTransaction": {
-            "header": { "title": "Envoyer/Signer une Transaction" },
-            "body": { "title": "Veut envoyer/signer une transaction" }
+            "header": { "title": "Envoyer / signer une transaction" },
+            "body": { "title": "Veut envoyer / signer une transaction" }
           },
           "unsupportedMethod": {
             "header": { "title": "Méthode non prise en charge" },
-            "body": { "title": "Veut utiliser une méthode non prise en charge" }
+            "body": { "title": "Méthode non prise en charge" }
           }
         },
-        "disconnect": { "title": "Voulez-vous vraiment vous déconnecter ?" }
+        "disconnect": { "title": "Êtes-vous sûr de vouloir vous déconnecter ?" }
       },
       "balances": {
         "table": {
           "error": {
-            "subtitle": "Une erreur s'est produite lors du chargement des soldes de votre portefeuille"
+            "subtitle": "Une erreur s’est produite lors du chargement des soldes de votre portefeuille"
           },
           "toolbar": { "searchPlaceholder": "Recherche par nom ou symbole..." }
         }
@@ -249,16 +252,16 @@
         "table": {
           "toolbar": {
             "status": { "contractInteraction": "Interaction contractuelle" },
-            "date": { "startDate": "Date de début", "endDate": "Date de fin" },
-            "search": { "placeholder": "Rechercher vers, depuis, jeton ou valeur..." }
+            "date": { "startDate": "Date de début", "endDate": "Date de clôture" },
+            "search": { "placeholder": "Recherche vers, de, jeton ou valeur..." }
           }
         }
       },
       "batch": {
         "table": {
           "toolbar": {
-            "date": { "startDate": "Date de début", "endDate": "Date de fin" },
-            "search": { "placeholder": "Rechercher vers, depuis, jeton ou valeur..." }
+            "date": { "startDate": "Date de début", "endDate": "Date de clôture" },
+            "search": { "placeholder": "Recherche vers, de, jeton ou valeur..." }
           }
         }
       }
@@ -268,14 +271,14 @@
     "tabs": {
       "general": {
         "email": {
-          "label": "Adresse e-mail",
-          "helperText": "L'e-mail utilisé pour accéder à votre facturation et recevoir des notifications de paiement"
+          "label": "Adresse courriel",
+          "helperText": "L’adresse e-mail utilisée pour accéder à votre facturation et recevoir des notifications de paiement"
         }
       },
       "billing": {
         "paymentMethods": {
-          "title": "méthodes de payement",
-          "subtitle": "Cartes de débit/crédit utilisées pour payer les frais d'essence"
+          "title": "Modes de paiement",
+          "subtitle": "Cartes de débit/crédit utilisées pour payer les frais d’essence"
         },
         "invoiceHistory": {
           "title": "Historique des factures",

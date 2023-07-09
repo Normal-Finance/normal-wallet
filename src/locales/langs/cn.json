@@ -24,6 +24,9 @@
       "balances": "平衡",
       "deposit": "存款",
       "withdrawal": "提款",
+      "internal": "内部",
+      "external": "外部",
+      "connected": "连接",
       "all": "都",
       "new": "新增功能",
       "pending": "待定",
@@ -41,6 +44,7 @@
       "created": "创建"
     },
     "actions": {
+      "close": "关闭",
       "clear": "清楚",
       "cancel": "取消",
       "approve": "批准",
@@ -93,7 +97,7 @@
         "connectedClients": { "title": "连接的客户端", "tooltip": "现在使用普通的总人数" },
         "pendingTransactions": { "title": "待处理交易", "tooltip": "准备批处理的新事务总数" },
         "totalTransactions": { "title": "总交易", "tooltip": "批处理的事务总数" },
-        "totalBatches": { "title": "总浴场", "tooltip": "执行的批处理总数" }
+        "totalBatches": { "title": "总批次数", "tooltip": "执行的批次总数" }
       }
     },
     "failedCharges": {
@@ -101,7 +105,7 @@
       "subtitle": "请在提交任何新交易之前解决。",
       "buttonText": "更新付款方式"
     },
-    "wrongNetwork": { "title": "错误的网络", "subtitle": "请切换到以太坊或戈尔利继续。" },
+    "wrongNetwork": { "title": "错误的网络", "subtitle": "请切换到以太坊继续。" },
     "onboarding": {
       "title": "开始",
       "steps": {
@@ -170,7 +174,7 @@
             },
             "batchConfirmation": {
               "title": "批次确认",
-              "subtitle": "您的交易已被排队进行批处理！您可以查看其状态、更新优先级以及从仪表板或历史记录中完全取消它。"
+              "subtitle": "您的事务已排队等待批处理！您可以查看其状态、更新优先级以及从仪表板或历史记录中完全取消它。"
             }
           },
           "receive": { "title": "您的正常地址" }
@@ -179,6 +183,7 @@
       "dapps": {
         "connectDapp": "连接达普",
         "modals": {
+          "missingRequestData": "缺少请求数据",
           "connect": {
             "title": "连接钱包连接",
             "body": "连接时请勿关闭此窗口。有问题吗？请遵循本指南。",
@@ -191,9 +196,18 @@
               "body": "需要打开普通 Web 应用才能启动事务。当它未打开时，您将不会收到交易请求。"
             }
           },
+          "signMessage": { "header": { "title": "签署消息" }, "body": { "title": "想要签署邮件" } },
+          "signTypedData": {
+            "header": { "title": "对键入的数据进行签名" },
+            "body": { "title": "想要对类型化数据进行签名" }
+          },
           "sendTransaction": {
             "header": { "title": "发送/签署交易" },
             "body": { "title": "想要发送/签署交易" }
+          },
+          "unsupportedMethod": {
+            "header": { "title": "不支持的方法" },
+            "body": { "title": "想要不支持的方法" }
           }
         },
         "disconnect": { "title": "是否确实要断开连接？" }

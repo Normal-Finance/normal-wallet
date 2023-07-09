@@ -24,6 +24,9 @@
       "balances": "Saldos",
       "deposit": "Depósito",
       "withdrawal": "Cancelamento",
+      "internal": "interno",
+      "external": "Externo",
+      "connected": "Conectado",
       "all": "Todos",
       "new": "Novo",
       "pending": "Pendente",
@@ -41,6 +44,7 @@
       "created": "Criada"
     },
     "actions": {
+      "close": "Fechar",
       "clear": "Claro",
       "cancel": "Cancelar",
       "approve": "Aprovar",
@@ -102,18 +106,15 @@
           "title": "Total de Transações",
           "tooltip": "Número total de transações agrupadas"
         },
-        "totalBatches": { "title": "Banhos Totais", "tooltip": "Número total de lotes executados" }
+        "totalBatches": { "title": "Total de Lotes", "tooltip": "Número total de lotes executados" }
       }
     },
     "failedCharges": {
       "title": "🚨 Você tem um pagamento falhado",
-      "subtitle": "Resolva antes de enviar qualquer nova transação.",
+      "subtitle": "Por favor, resolva antes de enviar qualquer nova transação.",
       "buttonText": "Atualizar formas de pagamento"
     },
-    "wrongNetwork": {
-      "title": "rede errada",
-      "subtitle": "Mude para Ethereum ou Goerli para continuar."
-    },
+    "wrongNetwork": { "title": "rede errada", "subtitle": "Mude para Ethereum para continuar." },
     "onboarding": {
       "title": "Começando",
       "steps": {
@@ -194,6 +195,7 @@
       "dapps": {
         "connectDapp": "Conectar Dapp",
         "modals": {
+          "missingRequestData": "Dados de solicitação ausentes",
           "connect": {
             "title": "Conecte-se com a WalletConnect",
             "body": "Não feche esta janela durante a conexão. Ter uma questão? Siga este guia.",
@@ -206,9 +208,21 @@
               "body": "Você precisa que o aplicativo da Web Normal esteja aberto para iniciar as transações. Você não receberá solicitações de transação quando não estiver aberto."
             }
           },
+          "signMessage": {
+            "header": { "title": "Mensagem de assinatura" },
+            "body": { "title": "Quer assinar uma mensagem" }
+          },
+          "signTypedData": {
+            "header": { "title": "Dados digitados com sinal" },
+            "body": { "title": "Quer assinar dados digitados" }
+          },
           "sendTransaction": {
             "header": { "title": "Enviar / assinar uma transação" },
             "body": { "title": "Quer enviar/assinar uma transação" }
+          },
+          "unsupportedMethod": {
+            "header": { "title": "Método não suportado" },
+            "body": { "title": "Quer método não suportado" }
           }
         },
         "disconnect": { "title": "Tem certeza de que deseja desconectar?" }
